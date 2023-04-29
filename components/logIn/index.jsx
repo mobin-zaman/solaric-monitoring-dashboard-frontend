@@ -3,8 +3,37 @@ import logInPageBg from "@/public/logInPageBg.png";
 import logo from "@/public/logo.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
+import { useState, useEffect } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { authentication } from "@/config/firebase";
+import { useRouter } from "next/router";
 
 export default function LogIn() {
+
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailPassNotMatch, setEmailPassNotMatch] = useState(false);
+
+  const handleSignUp = async () => {
+    try {
+      const response = await signInWithEmailAndPassword(
+        authentication,
+        email,
+        password
+      );
+      sessionStorage.setItem("Token", response.user.accessToken);
+      router.push("/users");
+      console.log(response.user);
+      setEmailPassNotMatch(false);
+    } catch (error) {
+      setEmailPassNotMatch(true);
+      setEmail("");
+      setPassword("");
+    }
+  };
+
   return (
     <div className="flex items-center justify-center w-screen h-screen bg-[url('/logInPageBg.png')] bg-cover bg-center select-none">
       <div className="flex flex-col justify-between w-[20rem] h-[30rem] sm:w-[26rem] sm:h-[34rem] bg-[#D9D9D9] rounded-md bg-opacity-60 p-6">
@@ -32,6 +61,8 @@ export default function LogIn() {
               className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
               type="text"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             /></div>
           </div>
           <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
@@ -41,6 +72,8 @@ export default function LogIn() {
               className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
               type="password"
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             /></div>
           </div>
           <div className="flex items-center justify-between text-[#373737] font-medium text-sm py-3 space-x-1">
@@ -54,9 +87,14 @@ export default function LogIn() {
               Forgot password?
             </button>
           </div>
+          {emailPassNotMatch &&           <div className="flex items-center justify-center py-3 space-x-1">
+            <span className="text-[#ff0e0e] font-medium text-sm">
+              Email & Password not match.
+            </span>
+            </div> }
         </div>
         <div className="flex items-center justify-end">
-            <button className="w-32 h-11 mt-5 text-xl text-white font-semibold bg-[#39B54A] rounded-md">
+            <button className="w-32 h-11 text-xl text-white font-semibold bg-[#39B54A] rounded-md" onClick={handleSignUp}>
             Sign In
             </button>
           </div>
