@@ -26,6 +26,7 @@ export const getUsers = async () => {
 
 // Api calls for post user to backend
 export const postUser = async (data) => {
+  console.log({data});
   const response = await todoApi.post(`/user`, data, {
     headers: {
       "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
@@ -37,6 +38,16 @@ export const postUser = async (data) => {
 // Api calls for delete user from backend
 export const deleteUser = async (id) => {
   const response = await todoApi.delete(`/user/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// APi calls for current user data
+export const getCurrentUser = async () => {
+  const response = await todoApi.get(`/auth/current-user`, {
     headers: {
       "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
     },

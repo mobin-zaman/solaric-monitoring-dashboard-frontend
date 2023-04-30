@@ -1,5 +1,8 @@
-import '@/styles/globals.css'
+import "@/styles/globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,10 +16,21 @@ const queryClient = new QueryClient({
 });
 
 export default function App({ Component, pageProps }) {
-
-  if(Component.getLayout) {
-    return Component.getLayout(<QueryClientProvider client={queryClient}><Component {...pageProps} /></QueryClientProvider>)
+  if (Component.getLayout) {
+    return Component.getLayout(
+      <QueryClientProvider client={queryClient}>
+        <div className={`${inter.className}`}>
+          <Component {...pageProps} />{" "}
+        </div>
+      </QueryClientProvider>
+    );
   }
-  
-  return  <QueryClientProvider client={queryClient}><Component {...pageProps} /></QueryClientProvider>
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div className={`${inter.className}`}>
+        <Component {...pageProps} />{" "}
+      </div>
+    </QueryClientProvider>
+  );
 }

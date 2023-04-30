@@ -23,7 +23,7 @@ export default function Users() {
       <div className="w-full pb-80 bg-white rounded-md p-4">
         <div className="space-y-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 select-none">
               <h1 className="text-[#373737] font-semibold text-xl">
                 User Management
               </h1>
@@ -32,7 +32,7 @@ export default function Users() {
               </p>
             </div>
             <button
-              className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md"
+              className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none"
               onClick={() => setAddUserModalOpen(true)}
             >
               Add User
@@ -41,7 +41,7 @@ export default function Users() {
               <AddUserModal addUserModalOpen={setAddUserModalOpen} />
             )}
           </div>
-          <div className="space-y-1 border-y-[0.1rem] border-[#C1C0C0]">
+          <div className="space-y-1 border-y-[0.1rem] border-[#C1C0C0] select-none">
             <div className="grid grid-cols-5 items-center h-9">
               <div className="flex justify-center font-medium">Name</div>
               <div className="flex items-center justify-center font-medium space-x-1.5">
@@ -62,7 +62,7 @@ export default function Users() {
             key={Math.random()}
           >
             <div className="grid grid-cols-5 items-center h-9">
-              <div className="flex justify-center font-semibold">
+              <div className="flex justify-center font-semibold select-text">
                 {user.name}
               </div>
               <div className="flex justify-center">

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import logInPageBg from "@/public/logInPageBg.png";
 import logo from "@/public/logo.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
