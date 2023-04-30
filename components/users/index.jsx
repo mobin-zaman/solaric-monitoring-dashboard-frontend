@@ -27,6 +27,8 @@ export default function Users() {
   console.log(search, "search");
   const [searchOn, setSearchOn] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
+  const [searchResult1, setSearchResult1] = useState([]);
+
 
 
   const { data, isLoading, isFetching } = useQuery("users", () => getUsers(), {
@@ -70,6 +72,28 @@ export default function Users() {
 
     console.log(searchResult, "searchResult");
 
+    const handleSearch = (e) => {
+      console.log(e.target.value, "e.target.value");
+      const searchPromise = searchUser(e.target.value);
+      setSearchResult(searchPromise);
+    
+      if (e.target.value.length < 0) {
+        setSearchResult1(null);
+      } else {
+        setSearchOn(false);
+    
+        if (searchPromise instanceof Promise) {
+          searchPromise.then((data) => {
+            setSearchResult1(data);
+            console.log(searchResult1, "searchResult1");
+          }).catch((error) => {
+            console.log(error);
+          });
+        }
+      }
+    };
+
+
 
   return (
     <>
@@ -85,7 +109,7 @@ export default function Users() {
               </p>
             </div>
             <div className="space-x-5">
-              <input type={"text"} placeholder={"Search"} className="px-2 py-1.5 text-md text-[#373737] font-semibold bg-gray-200 rounded-md select-none placeholder:text-sm ring-0 focus:ring-0 focus:outline-none" onChange={(e) => searchUser(e.target.value)} />
+              <input type={"text"} placeholder={"Search"} className="px-2 py-1.5 text-md text-[#373737] font-semibold bg-gray-200 rounded-md select-none placeholder:text-sm ring-0 focus:ring-0 focus:outline-none" onChange={handleSearch} />
             <button
               className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none"
               onClick={() => setAddUserModalOpen(true)}
@@ -123,7 +147,58 @@ export default function Users() {
           </div>
         </div>
         <div className="space-y-1">
-          {data?.map((user) => (
+          {searchResult1.length > 0 ? searchResult1?.map((user) => (
+            <div className="bg-white rounded-md p-2" key={Math.random()}>
+              <div className="grid grid-cols-5 items-center h-9">
+                <div className="flex items-center font-medium space-x-2 px-5">
+                  <Image
+                    src={placeholderImage}
+                    alt="logo"
+                    className="w-10 rounded-full border border-[#373737]"
+                  />
+                  <span className="select-text">{user.name}</span>
+                </div>
+                <div className="flex justify-center">
+                  {user.status === "ACTIVE" ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
+                      <span className="text-[#38EB1A] font-medium">Active</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
+                      <span className="text-[#9EA09E] font-semibold">
+                        Inactive
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-center select-all">
+                  {user.email}
+                </div>
+                <div className="flex justify-center items-center">
+                  {user.role === "ADMIN" ? (
+                    <div className="px-2 py-1 bg-[#66C38B] text-white font-medium rounded-md">
+                      Admin
+                    </div>
+                  ) : null}
+                  {user.role === "ENGINEER" ? (
+                    <div className="px-2 py-1 bg-[#C36666] font-medium text-white rounded-md">
+                      Engineer
+                    </div>
+                  ) : null}
+                </div>
+                <div className="flex justify-center space-x-20">
+                <button onClick={() => handleEditUser(user)}>
+                    <FontAwesomeIcon icon={faPenToSquare} /> Edit
+                    </button>
+                  <button onClick={() => handleDeleteUser(user)}>
+                    <FontAwesomeIcon icon={faTrashCan} /> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )) : data?.map((user) => (
             <div className="bg-white rounded-md p-2" key={Math.random()}>
               <div className="grid grid-cols-5 items-center h-9">
                 <div className="flex items-center font-medium space-x-2 px-5">
