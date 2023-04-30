@@ -6,7 +6,7 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation } from "react-query";
-import { getUsers, deleteUser } from "@/lib/Helper";
+import { getUsers, searchUser } from "@/lib/Helper";
 import AddUserModal from "./addUserModal";
 import { useState } from "react";
 import Image from "next/image";
@@ -23,6 +23,10 @@ export default function Users() {
   const [userEdited, setUserEdited] = useState(false);
   const [deleteUser, setDeleteUser] = useState({});
   const [editUser, setEditUser] = useState({});
+  const [search, setSearch] = useState("");
+  console.log(search, "search");
+  const [searchOn, setSearchOn] = useState(false);
+  const [searchResult, setSearchResult] = useState([]);
 
 
   const { data, isLoading, isFetching } = useQuery("users", () => getUsers(), {
@@ -57,6 +61,16 @@ export default function Users() {
     setEditUser(user);
     };
 
+    const searchData = useQuery(() => searchUser(search), {
+      enabled: searchOn,
+      onSuccess: (data) => {
+        setSearchResult(data);
+      },
+    });
+
+    console.log(searchResult, "searchResult");
+
+
   return (
     <>
       <div className="w-full rounded-md">
@@ -70,12 +84,15 @@ export default function Users() {
                 {data?.length} {data?.length < 2 ? "user" : "users"}
               </p>
             </div>
+            <div className="space-x-5">
+              <input type={"text"} placeholder={"Search"} className="px-2 py-1.5 text-md text-[#373737] font-semibold bg-gray-200 rounded-md select-none placeholder:text-sm ring-0 focus:ring-0 focus:outline-none" onChange={(e) => searchUser(e.target.value)} />
             <button
               className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none"
               onClick={() => setAddUserModalOpen(true)}
             >
               Add User <FontAwesomeIcon icon={faPlus} />
             </button>
+            </div>
             {addUserModalOpen && (
               <AddUserModal
                 addUserModalOpen={setAddUserModalOpen}

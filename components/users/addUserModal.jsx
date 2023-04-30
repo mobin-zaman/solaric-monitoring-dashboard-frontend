@@ -83,7 +83,7 @@ export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
             <div className="flex items-center border-b-2 border-[#168636]">
             <input
               className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-              type="text"
+              type="password"
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -94,7 +94,7 @@ export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
             <div className="flex items-center border-b-2 border-[#168636]">
             <input
               className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-              type="text"
+              type="password"
               placeholder="Enter confirm password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

@@ -75,3 +75,14 @@ export const updateUser = async (data) => {
   });
   return response.data;
 }
+
+// Api calls for user search
+export const searchUser = async (data) => {
+  console.log({data});
+  const response = await todoApi.get(`/user?search=${data}`, {
+    headers: {
+      "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
