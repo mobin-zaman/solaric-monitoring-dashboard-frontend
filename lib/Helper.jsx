@@ -9,8 +9,7 @@ const todoApi = axios.create({
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    'Content-Type': 'multipart/form-data',
+    "Access-Control-Allow-Origin": "*", 
   },
 });
 
@@ -48,6 +47,28 @@ export const deleteUser = async (id) => {
 // APi calls for current user data
 export const getCurrentUser = async () => {
   const response = await todoApi.get(`/auth/current-user`, {
+    headers: {
+      "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for update user data
+export const updateUser = async (data) => {
+
+  const id = data.id;
+  const d = {
+    name: data.name,
+    email: data.email,
+    role: data.role,
+    status: data.status,
+    address: data.address,
+  }
+
+  console.log({d}, {id});
+
+  const response = await todoApi.put(`/user/${id}`, d, {
     headers: {
       "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
     },

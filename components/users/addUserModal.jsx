@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import { postUser } from "@/lib/Helper";
 
-export default function AddUserModal({ addUserModalOpen }) {
+export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -12,23 +12,37 @@ export default function AddUserModal({ addUserModalOpen }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState("ADMIN");
   const [address, setAddress] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  console.log(name, email, password, confirmPassword, role, address);
-
-  const { mutate } = useMutation(postUser);
-
-  console.log(mutate);
+  const mutation = useMutation(postUser, {
+    onSuccess: () => {
+      newUserCreated(true);
+      addUserModalOpen(false);
+    },
+    onError: (error) => {
+      setErrorMessage(error.response.data.message);
+    },
+  });
 
   const addNewUser = (e) => {
-    mutate({
-      name: "rubiyet",
-      email: "rubiyetfardous@adi.com",
-      password: "Adminisking1!",
-      role: "ENGINEER",
-      address: "Dhaka"
+    newUserCreated(false);
+    setErrorMessage('');
+    if(!name || !email || !password || !confirmPassword || !role || !address) {
+      setErrorMessage("Please fill all the fields");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setErrorMessage("Password do not match");
+      return;
+    }
+    mutation.mutate({
+      name,
+      email,
+      password,
+      role,
+      address,
     });
   };
-
 
 
   return (
@@ -105,7 +119,8 @@ export default function AddUserModal({ addUserModalOpen }) {
             /></div>
           </div>
             </div>
-            <div className="flex justify-end items-center">
+            <div className="flex justify-between items-center">
+              <div className="text-red-700 text-sm">{errorMessage === "The email address is already in use by another account." ? "The email address is already used." : errorMessage}</div>
               <button className="px-2.5 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md" onClick={addNewUser}>
                 Add User
               </button>

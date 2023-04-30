@@ -3,26 +3,65 @@ import {
   faTrashCan,
   faPenToSquare,
   faArrowDown,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation } from "react-query";
 import { getUsers, deleteUser } from "@/lib/Helper";
 import AddUserModal from "./addUserModal";
 import { useState } from "react";
+import Image from "next/image";
+import placeholderImage from "@/public/placeholderImage.jpg";
+import DeleteUserModal from "./deleteUserModal";
+import EditUserModal from "./editUserModal";
 
 export default function Users() {
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
   const [deleteUserModalOpen, setDeleteUserModalOpen] = useState(false);
+  const [editUserModalOpen, setEditUserModalOpen] = useState(false);
+  const [newUserCreated, setNewUserCreated] = useState(false);
+  const [userDeleted, setUserDeleted] = useState(false);
+  const [userEdited, setUserEdited] = useState(false);
+  const [deleteUser, setDeleteUser] = useState({});
+  const [editUser, setEditUser] = useState({});
 
-  const { data, isLoading } = useQuery("users", () => getUsers(), {
+
+  const { data, isLoading, isFetching } = useQuery("users", () => getUsers(), {
     enabled: true, //enable query
   });
 
-  console.log(data, isLoading);
+  //when new user is created, refetch the data
+  useQuery("users", () => getUsers(), {
+    enabled: newUserCreated, //enable query
+    onSuccess: () => setNewUserCreated(false),
+  });
+
+  //when user is deleted, refetch the data
+  useQuery("users", () => getUsers(), {
+    enabled: userDeleted, //enable query
+    onSuccess: () => setUserDeleted(false),
+  });
+
+  //when user is edited, refetch the data
+  useQuery("users", () => getUsers(), {
+    enabled: userEdited, //enable query
+    onSuccess: () => setUserEdited(false),
+  });
+
+  const handleDeleteUser = (user) => {
+    setDeleteUserModalOpen(true);
+    setDeleteUser(user);
+  };
+
+  const handleEditUser = (user) => {
+    setEditUserModalOpen(true);
+    setEditUser(user);
+    };
+
   return (
     <>
-      <div className="w-full pb-80 bg-white rounded-md p-4">
-        <div className="space-y-5">
-          <div className="flex items-center justify-between">
+      <div className="w-full rounded-md">
+        <div className="space-y-1 pb-1">
+          <div className="flex items-center justify-between bg-white rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
               <h1 className="text-[#373737] font-semibold text-xl">
                 User Management
@@ -35,76 +74,111 @@ export default function Users() {
               className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none"
               onClick={() => setAddUserModalOpen(true)}
             >
-              Add User
+              Add User <FontAwesomeIcon icon={faPlus} />
             </button>
             {addUserModalOpen && (
-              <AddUserModal addUserModalOpen={setAddUserModalOpen} />
+              <AddUserModal
+                addUserModalOpen={setAddUserModalOpen}
+                newUserCreated={setNewUserCreated}
+              />
+            )}
+            {newUserCreated && (
+              <div className="toast toast-end">
+                <div className="alert alert-success">
+                  <div>
+                    <span>User Created successfully.</span>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
-          <div className="space-y-1 border-y-[0.1rem] border-[#C1C0C0] select-none">
+          <div className="space-y-1 select-none bg-white rounded-md p-1.5">
             <div className="grid grid-cols-5 items-center h-9">
               <div className="flex justify-center font-medium">Name</div>
               <div className="flex items-center justify-center font-medium space-x-1.5">
                 <span>Status</span>
                 <FontAwesomeIcon icon={faArrowDown} />
               </div>
-              <div className="flex justify-center font-medium">
-                Email
-              </div>
+              <div className="flex justify-center font-medium">Email</div>
               <div className="flex justify-center font-medium">Role(s)</div>
               <div className=""></div>
             </div>
           </div>
         </div>
-        {data?.map((user) => (
-          <div
-            className="space-y-2 border-b-[0.1rem] border-[#C1C0C0]"
-            key={Math.random()}
-          >
-            <div className="grid grid-cols-5 items-center h-9">
-              <div className="flex justify-center font-semibold select-text">
-                {user.name}
-              </div>
-              <div className="flex justify-center">
-                {user.status ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
-                    <span className="text-[#38EB1A] font-medium">Active</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
-                    <span className="text-[#9EA09E] font-semibold">
-                      Inactive
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="flex justify-center">{user.email}</div>
-              <div className="flex justify-center">
-                {user.role === "ADMIN" ? (
-                  <div className="px-2 bg-[#9AA95C] text-white font-medium rounded-md">
-                    Admin
-                  </div>
-                ) : null}
-                {user.role === "ENGINEER" ? (
-                  <div className="px-2 bg-[#BC4880] font-medium text-white rounded-md">
-                    Engineer
-                  </div>
-                ) : null}
-              </div>
-              <div className="flex justify-center space-x-20">
-                <button onClick={() => deleteUser(user.id)}>
-                  <FontAwesomeIcon icon={faTrashCan} /> Delete
-                </button>
-                {deleteUserModalOpen && <deleteUserModalOpen deleteUserModalOpen={setDeleteUserModalOpen} />}
-                <div>
-                  <FontAwesomeIcon icon={faPenToSquare} /> Edit
+        <div className="space-y-1">
+          {data?.map((user) => (
+            <div className="bg-white rounded-md p-2" key={Math.random()}>
+              <div className="grid grid-cols-5 items-center h-9">
+                <div className="flex items-center font-medium space-x-2 px-5">
+                  <Image
+                    src={placeholderImage}
+                    alt="logo"
+                    className="w-10 rounded-full border border-[#373737]"
+                  />
+                  <span className="select-text">{user.name}</span>
+                </div>
+                <div className="flex justify-center">
+                  {user.status === "ACTIVE" ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
+                      <span className="text-[#38EB1A] font-medium">Active</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
+                      <span className="text-[#9EA09E] font-semibold">
+                        Inactive
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-center select-all">
+                  {user.email}
+                </div>
+                <div className="flex justify-center items-center">
+                  {user.role === "ADMIN" ? (
+                    <div className="px-2 py-1 bg-[#66C38B] text-white font-medium rounded-md">
+                      Admin
+                    </div>
+                  ) : null}
+                  {user.role === "ENGINEER" ? (
+                    <div className="px-2 py-1 bg-[#C36666] font-medium text-white rounded-md">
+                      Engineer
+                    </div>
+                  ) : null}
+                </div>
+                <div className="flex justify-center space-x-20">
+                <button onClick={() => handleEditUser(user)}>
+                    <FontAwesomeIcon icon={faPenToSquare} /> Edit
+                    </button>
+                  <button onClick={() => handleDeleteUser(user)}>
+                    <FontAwesomeIcon icon={faTrashCan} /> Delete
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+        {editUserModalOpen && <EditUserModal editUserModalOpen={setEditUserModalOpen} editUserData={editUser} userEdited={setUserEdited}/>}
+        {userEdited && (
+              <div className="toast toast-end">
+                <div className="alert alert-success">
+                  <div>
+                    <span>User edited successfully.</span>
+                  </div>
+                </div>
+              </div>
+            )}
+        {deleteUserModalOpen && <DeleteUserModal deleteUserModalOpen={setDeleteUserModalOpen} deleteUserData={deleteUser} userDeleted={setUserDeleted}/>}
+        {userDeleted && (
+              <div className="toast toast-end">
+                <div className="alert alert-success">
+                  <div>
+                    <span>User deleted successfully.</span>
+                  </div>
+                </div>
+              </div>
+            )}
       </div>
     </>
   );
