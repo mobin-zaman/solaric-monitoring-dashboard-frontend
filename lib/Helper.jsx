@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //local url
-export const BASE_URL = "http://127.0.0.1:3789"; // API URL
+export const BASE_URL = "http://localhost:3789"; // API URL
 
 //axios instance for api calls with base url and headers
 const todoApi = axios.create({
