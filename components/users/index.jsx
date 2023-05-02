@@ -4,6 +4,7 @@ import {
   faPenToSquare,
   faArrowDown,
   faPlus,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation } from "react-query";
 import { getUsers, searchUser } from "@/lib/Helper";
@@ -108,8 +109,18 @@ export default function Users() {
                 {data?.length} {data?.length < 2 ? "user" : "users"}
               </p>
             </div>
-            <div className="space-x-5">
-              <input type={"text"} placeholder={"Search"} className="px-2 py-1.5 text-md text-[#373737] font-semibold bg-gray-200 rounded-md select-none placeholder:text-sm ring-0 focus:ring-0 focus:outline-none" onChange={handleSearch} />
+            <div className="space-x-5 flex items-center">
+              <div className="relative">
+                <input
+                  type="text"
+                  className="w-72 h-9 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
+                  placeholder="Search by name or email"
+                  onChange={handleSearch}
+                />
+                <div className="absolute top-1.5 right-2.5">
+                  <FontAwesomeIcon icon={faMagnifyingGlass} className="text-gray-400" />
+                </div>
+              </div>
             <button
               className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none"
               onClick={() => setAddUserModalOpen(true)}
@@ -134,7 +145,7 @@ export default function Users() {
             )}
           </div>
           <div className="space-y-1 select-none bg-white rounded-md p-1.5">
-            <div className="grid grid-cols-5 items-center h-9">
+            <div className="grid grid-cols-6 items-center h-9">
               <div className="flex justify-center font-medium">Name</div>
               <div className="flex items-center justify-center font-medium space-x-1.5">
                 <span>Status</span>
@@ -142,6 +153,7 @@ export default function Users() {
               </div>
               <div className="flex justify-center font-medium">Email</div>
               <div className="flex justify-center font-medium">Role(s)</div>
+              <div className="flex justify-center font-medium">Address</div>
               <div className=""></div>
             </div>
           </div>
@@ -149,7 +161,7 @@ export default function Users() {
         <div className="space-y-1">
           {searchResult1.length > 0 ? searchResult1?.map((user) => (
             <div className="bg-white rounded-md p-2" key={Math.random()}>
-              <div className="grid grid-cols-5 items-center h-9">
+              <div className="grid grid-cols-6 items-center h-9">
                 <div className="flex items-center font-medium space-x-2 px-5">
                   <Image
                     src={placeholderImage}
@@ -187,6 +199,9 @@ export default function Users() {
                       Engineer
                     </div>
                   ) : null}
+                </div>
+                <div className="flex justify-center select-all">
+                  {user.address}
                 </div>
                 <div className="flex justify-center space-x-20">
                 <button onClick={() => handleEditUser(user)}>
@@ -200,7 +215,7 @@ export default function Users() {
             </div>
           )) : data?.map((user) => (
             <div className="bg-white rounded-md p-2" key={Math.random()}>
-              <div className="grid grid-cols-5 items-center h-9">
+              <div className="grid grid-cols-6 items-center h-9">
                 <div className="flex items-center font-medium space-x-2 px-5">
                   <Image
                     src={placeholderImage}
@@ -238,6 +253,9 @@ export default function Users() {
                       Engineer
                     </div>
                   ) : null}
+                </div>
+                <div className="flex justify-center select-all">
+                  {user.address}
                 </div>
                 <div className="flex justify-center space-x-20">
                 <button onClick={() => handleEditUser(user)}>

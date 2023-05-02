@@ -105,6 +105,7 @@ export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
             <select className="w-1/2 h-10 border border-[#168636] rounded-md p-2 ring-0 focus:ring-0 focus:outline-none" onChange={(e) => setRole(e.target.value)}>
                 <option value="ADMIN">Admin</option>
                 <option value="ENGINEER">Engineer</option>
+                <option value="USER">User</option>
               </select>
           </div>
           <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">

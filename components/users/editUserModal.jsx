@@ -138,6 +138,9 @@ export default function AddUserModal({
                 <option value="ENGINEER" selected={role === "ENGINEER"}>
                   Engineer
                 </option>
+                <option value="USER" selected={role === "USER"}>
+                  User
+                </option>
               </select>
             </div>
             <div className="flex items-center space-x-3 text-[#373737] font-medium text-sm py-2">
