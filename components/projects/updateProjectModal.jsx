@@ -1,8 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "react-query";
 import { updateUser } from "@/lib/Helper";
+import Image from "next/image";
+import placeholderImage from "@/public/placeholderImage.jpg";
 
 export default function AddUserModal({
   editUserModalOpen,
@@ -18,6 +20,11 @@ export default function AddUserModal({
   console.log(statusValue);
   const [address, setAddress] = useState(editUserData?.address || "");
   const [errorMessage, setErrorMessage] = useState("");
+  const [userTab, setUserTab] = useState(true);
+  const [companyTab, setCompanyTab] = useState(false);
+  const [editTab, setEditTab] = useState(false);
+  const [users, setUsers] = useState(editUserData?.users || []);
+  console.log(users);
 
   const mutation = useMutation(updateUser, {
     onSuccess: () => {
@@ -52,12 +59,39 @@ export default function AddUserModal({
     });
   };
 
+  const handleUserTab = (value) => {
+    setUserTab(value);
+    setCompanyTab(false);
+    setEditTab(false);
+  };
+
+  const handleCompanyTab = (value) => {
+    setUserTab(false);
+    setCompanyTab(value);
+    setEditTab(false);
+  };
+
+  const handleEditTab = (value) => {
+    setUserTab(false);
+    setCompanyTab(false);
+    setEditTab(value);
+  };
+
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = () => {
+    setIsClicked(true);
+    setTimeout(() => {
+      setIsClicked(false);
+    }, 5000);
+  };
+
   return (
     <>
       <div className="flex items-center bg-opacity-70 bg-gray-300 fixed inset-0 z-50">
         <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] h-[30rem] sm:w-[26rem] sm:h-[30rem]">
           <div className="flex justify-between pb-3">
-            <span className="text-[#373737] font-semibold text-2xl">
+            <span className="text-[#373737] font-semibold text-xl">
               Project Update
             </span>
             <button
@@ -67,7 +101,7 @@ export default function AddUserModal({
               <FontAwesomeIcon icon={faXmark} />
             </button>
           </div>
-          <div className="dropdown">
+          {/* <div className="dropdown">
             <label tabIndex={0} className="btn m-1">
               Click
             </label>
@@ -82,8 +116,95 @@ export default function AddUserModal({
                 <a>Item 2</a>
               </li>
             </ul>
+          </div> */}
+          <div>
+            <div className="grid grid-cols-3 gap-3">
+              <button
+                className={`${
+                  userTab
+                    ? "bg-[#6121c9] text-white font-medium py-1 rounded-t-md"
+                    : ""
+                } w-full flex justify-center`}
+                onClick={() => handleUserTab(true)}
+              >
+                Users
+              </button>
+              <button
+                className={`${
+                  companyTab
+                    ? "bg-[#6121c9] text-white font-medium py-1 rounded-t-md"
+                    : ""
+                } w-full flex justify-center`}
+                onClick={() => handleCompanyTab(true)}
+              >
+                Companies
+              </button>
+              <button
+                className={`${
+                  editTab
+                    ? "bg-[#6121c9] text-white font-medium py-1 rounded-t-md"
+                    : ""
+                } w-full flex justify-center`}
+                onClick={() => handleEditTab(true)}
+              >
+                Edit
+              </button>
+            </div>
+            {userTab && (
+              <div className="flex border-2 rounded-b-md rounded-tr-md border-[#6121c9] h-64 bg-gray-200">
+                <div className="flex flex-col w-full h-full overflow-y-auto">
+                  {users.map((user) => (
+                    <div
+                      className="flex justify-between bg-white"
+                      key={Math.random()}
+                    >
+                      <div className="flex space-x-1">
+                        <Image
+                          src={placeholderImage}
+                          alt="logo"
+                          className="w-14 rounded-full border border-[#373737]"
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-[#373737] font-semibold text-md">
+                            {user.user.name}
+                          </span>
+                          <span className="text-[#373737] font-semibold text-xs">
+                            Id: {user.userId}
+                          </span>
+                          <span className="text-[#373737] font-semibold text-xs">
+                            Status: {user.user.status}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <p
+                          onMouseDown={handleClick}
+                          onMouseUp={() => setIsClicked(false)}
+                          style={{
+                            backgroundColor: isClicked ? "gray" : "white",
+                          }}
+                        >
+                          delete
+                        </p>
+                        {isClicked && <p>Clicked for 5 seconds!</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {companyTab && (
+              <div className="flex border-2 rounded-md border-[#6121c9] w-full h-64">
+                Hi company
+              </div>
+            )}
+            {editTab && (
+              <div className="flex border-2 rounded-b-md rounded-tl-md border-[#6121c9] w-full h-64">
+                Hi edit
+              </div>
+            )}
           </div>
-          <div className="flex flex-col">
+          {/* <div className="flex flex-col">
             <div className=" text-[#373737] font-medium text-sm space-x-1">
               <div className="font-medium text-lg">Name</div>
               <div className="flex items-center border-b-2 border-[#168636]">
@@ -108,28 +229,6 @@ export default function AddUserModal({
                 />
               </div>
             </div>
-            {/* <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
-            <div className="font-medium text-lg">Password</div>
-            <div className="flex items-center border-b-2 border-[#168636]">
-            <input
-              className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-              type="text"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            /></div>
-          </div> */}
-            {/* <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
-            <div className="font-medium text-lg">Confirm Password</div>
-            <div className="flex items-center border-b-2 border-[#168636]">
-            <input
-              className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-              type="text"
-              placeholder="Enter confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            /></div>
-          </div> */}
             <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
               <div className="font-medium text-lg">Address</div>
               <div className="flex items-center border-b-2 border-[#168636]">
@@ -168,7 +267,7 @@ export default function AddUserModal({
                 checked={statusValue}
               />
             </div>
-          </div>
+          </div> */}
           <div className="flex justify-between items-center">
             <div className="text-red-700 text-sm">
               {errorMessage ===

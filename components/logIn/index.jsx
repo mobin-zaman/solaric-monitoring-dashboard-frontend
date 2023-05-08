@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { authentication } from "@/config/firebase";
 import { useRouter } from "next/router";
-import jwtDecode from 'jwt-decode';
 
 
 export default function LogIn() {
@@ -24,8 +23,6 @@ export default function LogIn() {
 
   const auth = getAuth();
 
-const MINUTES_BEFORE_EXPIRATION = 59;
-
   const handleSignUp = async () => {
     try {
       const response = await signInWithEmailAndPassword(
@@ -35,21 +32,13 @@ const MINUTES_BEFORE_EXPIRATION = 59;
       );
       localStorage.setItem("Token", response.user.accessToken);
 
-      const decodedToken = jwtDecode(response.user.accessToken);
-      const expirationTime = decodedToken.exp * 1000;
-  
-      const timeUntilExpiration = expirationTime - Date.now() - MINUTES_BEFORE_EXPIRATION * 60 * 1000;
-
-      setTimeout(() => {
-        auth.currentUser.getIdToken(true);
-        localStorage.setItem("Token", auth.currentUser.accessToken);
-        //need to console new accessToken
-        console.log(auth.currentUser.accessToken);
+      setInterval(async () => {
+        const refreshedToken = await auth.currentUser.getIdToken(true);
+        localStorage.setItem("Token", refreshedToken);
         console.log("Token refreshed");
-      }, timeUntilExpiration);
+      }, 55 * 60 * 1000);
 
       router.push("/users");
-      console.log(response.user.accessToken);
       setEmailPassNotMatch(false);
     } catch (error) {
       setEmailPassNotMatch(true);

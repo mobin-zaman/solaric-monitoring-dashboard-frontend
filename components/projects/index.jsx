@@ -20,6 +20,7 @@ import UpdateProjectModal from "./updateProjectModal";
 import Id from "@/public/icons/Id.png";
 import Location from "@/public/icons/Location.png";
 import TimestampConverter from "@/lib/TimestampConverter";
+import Router from "next/router";
 
 
 export default function Users() {
@@ -65,8 +66,9 @@ export default function Users() {
   };
 
   const handleEditUser = (user) => {
-    setEditUserModalOpen(true);
-    setEditUser(user);
+    // setEditUserModalOpen(true);
+    // setEditUser(user);
+    Router.push(`/projects/${user.id}`);
   };
 
   const searchData = useQuery(() => searchUser(search), {
@@ -112,7 +114,7 @@ export default function Users() {
           <div className="flex items-center justify-between bg-white rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
               <h1 className="text-[#373737] font-semibold text-xl">
-                Project
+                Projects Management
               </h1>
               <p className="text-[#373737] text-sm bg-gray-200 p-1 rounded-md">
                 {data?.length} {data?.length < 2 ? "project" : "projects"}
@@ -178,7 +180,7 @@ export default function Users() {
               <div className="grid grid-cols-9 items-center py-[0.001rem]">
                 <div className="flex items-center font-medium space-x-2 px-5 col-span-2">
                   <Image
-                    src={user.meta.stationImage}
+                    src={user?.meta?.stationImage}
                     width={1000}
                     height={1000}
                     alt="logo"
@@ -207,13 +209,13 @@ export default function Users() {
                   )}
                 </div>
                 <div className="flex justify-center select-all text-sm">
-                  {user.meta.installedCapacity}
+                  {user?.meta?.installedCapacity}
                 </div>
                 <div className="flex justify-center select-all text-sm">
                   {user.meta.contactPhone ? user.meta.contactPhone : "N/A"}
                 </div>
                 <div className="flex justify-center select-all text-sm">
-                  <TimestampConverter timestamp={user.meta.lastUpdateTime} />
+                  <TimestampConverter timestamp={user?.meta?.lastUpdateTime} />
                 </div>
                 <div className="flex justify-center space-x-10 col-span-2">
                 <button onClick={() => handleDeleteUser(user)}>
@@ -234,7 +236,7 @@ export default function Users() {
                   <div className="grid grid-cols-9 items-center py-[0.001rem]">
                     <div className="flex items-center font-medium space-x-2 px-5 col-span-2">
                       <Image
-                        src={user?.meta?.stationImage}
+                        src={user?.meta?.stationImage ? user?.meta?.stationImage : "/Placeholder.png"}
                         width={1000}
                         height={1000}
                         alt="logo"
@@ -255,9 +257,9 @@ export default function Users() {
                         </div>
                       ) : (
                         <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
-                          <span className="text-[#9EA09E] font-semibold text-sm">
-                            Inactive
+                          <div className="w-2 h-2 bg-[#148bf4] rounded-full"></div>
+                          <span className="text-[#148bf4] font-semibold text-sm">
+                          Normal
                           </span>
                         </div>
                       )}
@@ -272,9 +274,6 @@ export default function Users() {
                       <TimestampConverter timestamp={user?.meta?.lastUpdateTime} />
                     </div>
                     <div className="flex justify-center space-x-10 col-span-2">
-                    <button onClick={() => handleDeleteUser(user)}>
-                      <FontAwesomeIcon icon={faEye} /> View
-                      </button>
                       <button onClick={() => handleEditUser(user)}>
                         <FontAwesomeIcon icon={faPenToSquare} /> Edit
                       </button>
