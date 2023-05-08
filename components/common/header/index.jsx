@@ -12,7 +12,7 @@ export default function Header() {
   const { data } = useQuery("currentUser", getCurrentUser);
 
   const handleSignOut = () => {
-    sessionStorage.removeItem("Token");
+    localStorage.removeItem("Token");
     window.location.href = "/";
   };
 

@@ -1,19 +1,30 @@
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faLock, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { authentication } from "@/config/firebase";
 import { useRouter } from "next/router";
+import jwtDecode from 'jwt-decode';
+
 
 export default function LogIn() {
 
   const router = useRouter();
 
+  if (typeof window !== "undefined" && localStorage.getItem("Token") !== null) {
+    router.push("/users");
+  }
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailPassNotMatch, setEmailPassNotMatch] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const auth = getAuth();
+
+const MINUTES_BEFORE_EXPIRATION = 59;
 
   const handleSignUp = async () => {
     try {
@@ -22,15 +33,33 @@ export default function LogIn() {
         email,
         password
       );
-      sessionStorage.setItem("Token", response.user.accessToken);
+      localStorage.setItem("Token", response.user.accessToken);
+
+      const decodedToken = jwtDecode(response.user.accessToken);
+      const expirationTime = decodedToken.exp * 1000;
+  
+      const timeUntilExpiration = expirationTime - Date.now() - MINUTES_BEFORE_EXPIRATION * 60 * 1000;
+
+      setTimeout(() => {
+        auth.currentUser.getIdToken(true);
+        localStorage.setItem("Token", auth.currentUser.accessToken);
+        //need to console new accessToken
+        console.log(auth.currentUser.accessToken);
+        console.log("Token refreshed");
+      }, timeUntilExpiration);
+
       router.push("/users");
-      console.log(response.user);
+      console.log(response.user.accessToken);
       setEmailPassNotMatch(false);
     } catch (error) {
       setEmailPassNotMatch(true);
       setEmail("");
       setPassword("");
     }
+  };
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -69,19 +98,29 @@ export default function LogIn() {
             <div className="flex items-center border-b-2 border-[#168636]"><FontAwesomeIcon icon={faLock} />
             <input
               className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-            /></div>
+            />
+                    <button
+          className="bg-transparent focus:outline-none"
+          onClick={handleShowPassword}
+        >
+          <FontAwesomeIcon
+            icon={showPassword ? faEyeSlash : faEye}
+            className="text-[#373737] hover:text-[#168636] ml-2"
+          />
+        </button>
+            </div>
           </div>
-          <div className="flex items-center justify-between text-[#373737] font-medium text-sm py-3 space-x-1">
-            <div className="space-x-1 flex items-center">
+          <div className="flex items-center justify-end text-[#373737] font-medium text-sm py-3 space-x-1">
+            {/* <div className="space-x-1 flex items-center">
               <input type="checkbox" className="w-4 h-4 border border-pink-950" />
               <span className="text-[#373737] font-medium text-sm">
                 Remember me
               </span>
-            </div>
+            </div> */}
             <button className="text-[#373737] font-medium text-sm">
               Forgot password?
             </button>

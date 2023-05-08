@@ -13,32 +13,32 @@ const todoApi = axios.create({
   },
 });
 
-// Api calls for  get users data from backend
+// Api calls for  get users data
 export const getUsers = async () => {
   const response = await todoApi.get(`/user`, {
     headers: {
-      "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
+      "Authorization": `Bearer ${localStorage.getItem("Token")}`,
     },
   });
   return response.data;
 }
 
-// Api calls for post user to backend
+// Api calls for post user
 export const postUser = async (data) => {
   console.log({data});
   const response = await todoApi.post(`/user`, data, {
     headers: {
-      "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
+      "Authorization": `Bearer ${localStorage.getItem("Token")}`,
     },
   });
   return response.data;
 }
 
-// Api calls for delete user from backend
+// Api calls for delete user
 export const deleteUser = async (id) => {
   const response = await todoApi.delete(`/user/${id}`, {
     headers: {
-      "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
+      "Authorization": `Bearer ${localStorage.getItem("Token")}`,
     },
   });
   return response.data;
@@ -48,7 +48,7 @@ export const deleteUser = async (id) => {
 export const getCurrentUser = async () => {
   const response = await todoApi.get(`/auth/current-user`, {
     headers: {
-      "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
+      "Authorization": `Bearer ${localStorage.getItem("Token")}`,
     },
   });
   return response.data;
@@ -66,11 +66,9 @@ export const updateUser = async (data) => {
     address: data.address,
   }
 
-  console.log({d}, {id});
-
   const response = await todoApi.put(`/user/${id}`, d, {
     headers: {
-      "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
+      "Authorization": `Bearer ${localStorage.getItem("Token")}`,
     },
   });
   return response.data;
@@ -81,7 +79,38 @@ export const searchUser = async (data) => {
   console.log({data});
   const response = await todoApi.get(`/user?search=${data}`, {
     headers: {
-      "Authorization": `Bearer ${sessionStorage.getItem("Token")}`,
+      "Authorization": `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get projects data 
+export const getProjects = async () => {
+  const response = await todoApi.get(`/project`, {
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for post project
+export const postProject = async (data) => {
+  console.log({data});
+  const response = await todoApi.post(`/project`, data, {
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for delete project
+export const deleteProject = async (id) => {
+  const response = await todoApi.delete(`/project/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("Token")}`,
     },
   });
   return response.data;

@@ -5,16 +5,22 @@ import {
   faArrowDown,
   faPlus,
   faMagnifyingGlass,
+  faEye,
+  faCopy,
+  faIdCard,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation } from "react-query";
-import { getUsers, searchUser } from "@/lib/Helper";
-import AddUserModal from "./addUserModal";
+import { getProjects, searchUser } from "@/lib/Helper";
+import CreateProjectModal from "./createProjectModal";
 import { useState } from "react";
 import Image from "next/image";
 import placeholderImage from "@/public/placeholderImage.jpg";
-import DeleteUserModal from "./deleteUserModal";
-import EditUserModal from "./editUserModal";
+import DeleteProjectModal from "./deleteProjectModal";
+import UpdateProjectModal from "./updateProjectModal";
 import Id from "@/public/icons/Id.png";
+import Location from "@/public/icons/Location.png";
+import TimestampConverter from "@/lib/TimestampConverter";
+
 
 export default function Users() {
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
@@ -26,11 +32,12 @@ export default function Users() {
   const [deleteUser, setDeleteUser] = useState({});
   const [editUser, setEditUser] = useState({});
   const [search, setSearch] = useState("");
+  console.log(search, "search");
   const [searchOn, setSearchOn] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
   const [searchResult1, setSearchResult1] = useState([]);
 
-  const { data, isLoading, isFetching } = useQuery("users", () => getUsers(), {
+  const { data, isLoading, isFetching } = useQuery("projects", () => getProjects(), {
     enabled: true, //enable query
   });
 
@@ -69,6 +76,8 @@ export default function Users() {
     },
   });
 
+  console.log(searchResult, "searchResult");
+
   const handleSearch = (e) => {
     console.log(e.target.value, "e.target.value");
     const searchPromise = searchUser(e.target.value);
@@ -92,6 +101,10 @@ export default function Users() {
     }
   };
 
+  const handleSolarmanPlantIdCopy = (id) => {
+    navigator.clipboard.writeText(id);
+  };
+
   return (
     <>
       <div className="w-full rounded-md">
@@ -99,10 +112,10 @@ export default function Users() {
           <div className="flex items-center justify-between bg-white rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
               <h1 className="text-[#373737] font-semibold text-xl">
-                User Management
+                Project
               </h1>
               <p className="text-[#373737] text-sm bg-gray-200 p-1 rounded-md">
-                {data?.length} {data?.length < 2 ? "user" : "users"}
+                {data?.length} {data?.length < 2 ? "project" : "projects"}
               </p>
             </div>
             <div className="space-x-5 flex items-center">
@@ -128,7 +141,7 @@ export default function Users() {
               </button>
             </div>
             {addUserModalOpen && (
-              <AddUserModal
+              <CreateProjectModal
                 addUserModalOpen={setAddUserModalOpen}
                 newUserCreated={setNewUserCreated}
               />
@@ -144,135 +157,124 @@ export default function Users() {
             )}
           </div>
           <div className="space-y-1 select-none bg-white rounded-md p-1.5">
-            <div className="grid grid-cols-6 items-center h-9">
-              <div className="flex justify-center font-medium">Name</div>
+            <div className="grid grid-cols-9 items-center h-9">
+              <div className="flex justify-center font-medium col-span-2">Name</div>
+              <div className="flex justify-center font-medium">Solarman Plant Id</div>
               <div className="flex items-center justify-center font-medium space-x-1.5">
                 <span>Status</span>
                 <FontAwesomeIcon icon={faArrowDown} />
               </div>
-              <div className="flex justify-center font-medium">Email</div>
-              <div className="flex justify-center font-medium">Role(s)</div>
-              <div className="flex justify-center font-medium">Address</div>
-              <div className=""></div>
+              <div className="flex justify-center font-medium">Capacity (Wp)</div>
+              <div className="flex justify-center font-medium">Contact</div>
+              <div className="flex justify-center font-medium">Last Update</div>
+              <div className=""></div><div className=""></div>
             </div>
           </div>
         </div>
         <div className="space-y-1">
           {searchResult1.length > 0
             ? searchResult1?.map((user) => (
-                <div className="bg-white rounded-md p-2" key={Math.random()}>
-                  <div className="grid grid-cols-6 items-center py-[0.001rem]">
-                    <div className="flex items-center font-medium space-x-2 px-5">
-                      <Image
-                        src={placeholderImage}
-                        alt="logo"
-                        className="w-10 rounded-full border border-[#373737]"
-                      />
-                      <div><div className="select-text">{user.name}</div><div className="select-text flex items-center"><Image src={Id} alt="Id" className="w-4 h-3" />&nbsp;{user.id}</div></div>
-                    </div>
-                    <div className="flex justify-center">
-                      {user.status === "ACTIVE" ? (
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
-                          <span className="text-[#38EB1A] font-medium">
-                            Active
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
-                          <span className="text-[#9EA09E] font-semibold">
-                            Inactive
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex justify-center select-all">
-                      {user.email}
-                    </div>
-                    <div className="flex justify-center items-center">
-                      {user.role === "ADMIN" ? (
-                        <div className="px-2 py-1 bg-[#66C38B] text-white font-medium rounded-md">
-                          Admin
-                        </div>
-                      ) : null}
-                      {user.role === "ENGINEER" ? (
-                        <div className="px-2 py-1 bg-[#C36666] font-medium text-white rounded-md">
-                          Engineer
-                        </div>
-                      ) : null}
-                      {user.role === "USER" ? (
-                        <div className="px-2 py-1 bg-[#C3C366] font-medium text-white rounded-md">
-                          User
-                        </div>
-                      ) : null}
-                    </div>
-                    <div className="flex justify-center select-all">
-                      {user.address}
-                    </div>
-                    <div className="flex justify-center space-x-20">
-                      <button onClick={() => handleEditUser(user)}>
-                        <FontAwesomeIcon icon={faPenToSquare} /> Edit
-                      </button>
-                      <button onClick={() => handleDeleteUser(user)}>
-                        <FontAwesomeIcon icon={faTrashCan} /> Delete
-                      </button>
-                    </div>
-                  </div>
+              <div className="bg-white rounded-md p-2" key={Math.random()}>
+              <div className="grid grid-cols-9 items-center py-[0.001rem]">
+                <div className="flex items-center font-medium space-x-2 px-5 col-span-2">
+                  <Image
+                    src={user.meta.stationImage}
+                    width={1000}
+                    height={1000}
+                    alt="logo"
+                    className="w-14 h-14 rounded-full"
+                  />
+                  <div><div className="select-text">{user.name}</div><div className="select-none text-xs flex items-center"><FontAwesomeIcon icon={faIdCard} />&nbsp;{user.id}</div><div className="text-xs flex items-center sm: w-40 xl:w-44 truncate select-none"><Image src={Location} alt="Id" className="w-3 h-3.5" />&nbsp;{user.meta.locationAddress}</div></div>
                 </div>
+                <div className="flex justify-center select-none space-x-1 text-sm">
+                <span>{user.solarmanPlantId}</span> <button onClick={() => handleSolarmanPlantIdCopy(user.solarmanPlantId)}><FontAwesomeIcon icon={faCopy} /></button>
+                </div>
+                <div className="flex justify-center">
+                  {user.meta.networkStatus === "PARTIAL_OFFLINE" ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-[#EAA724] rounded-full"></div>
+                      <span className="text-[#EAA724] font-medium text-sm">
+                        Partial Offline
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
+                      <span className="text-[#9EA09E] font-semibold text-sm">
+                        Inactive
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-center select-all text-sm">
+                  {user.meta.installedCapacity}
+                </div>
+                <div className="flex justify-center select-all text-sm">
+                  {user.meta.contactPhone ? user.meta.contactPhone : "N/A"}
+                </div>
+                <div className="flex justify-center select-all text-sm">
+                  <TimestampConverter timestamp={user.meta.lastUpdateTime} />
+                </div>
+                <div className="flex justify-center space-x-10 col-span-2">
+                <button onClick={() => handleDeleteUser(user)}>
+                  <FontAwesomeIcon icon={faEye} /> View
+                  </button>
+                  <button onClick={() => handleEditUser(user)}>
+                    <FontAwesomeIcon icon={faPenToSquare} /> Edit
+                  </button>
+                  <button onClick={() => handleDeleteUser(user)}>
+                    <FontAwesomeIcon icon={faTrashCan} /> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
               ))
             : data?.map((user) => (
                 <div className="bg-white rounded-md p-2" key={Math.random()}>
-                  <div className="grid grid-cols-6 items-center py-[0.001rem]">
-                    <div className="flex items-center font-medium space-x-2 px-5">
+                  <div className="grid grid-cols-9 items-center py-[0.001rem]">
+                    <div className="flex items-center font-medium space-x-2 px-5 col-span-2">
                       <Image
-                        src={placeholderImage}
+                        src={user?.meta?.stationImage}
+                        width={1000}
+                        height={1000}
                         alt="logo"
-                        className="w-12 rounded-full border border-[#373737]"
+                        className="w-14 h-14 rounded-full"
                       />
-                      <div><div className="select-text">{user.name}</div><div className="select-text flex items-center"><Image src={Id} alt="Id" className="w-4 h-3" />&nbsp;{user.id}</div></div>
+                      <div><div className="select-text">{user.name}</div><div className="select-none text-xs flex items-center"><FontAwesomeIcon icon={faIdCard} />&nbsp;{user.id}</div><div className="text-xs flex items-center sm: w-40 xl:w-44 truncate select-none"><Image src={Location} alt="Id" className="w-3 h-3.5" />&nbsp;{user?.meta?.locationAddress}</div></div>
+                    </div>
+                    <div className="flex justify-center select-none space-x-1 text-sm">
+                    <span>{user.solarmanPlantId}</span> <button onClick={() => handleSolarmanPlantIdCopy(user.solarmanPlantId)}><FontAwesomeIcon icon={faCopy} /></button>
                     </div>
                     <div className="flex justify-center">
-                      {user.status === "ACTIVE" ? (
+                      {user?.meta?.networkStatus === "PARTIAL_OFFLINE" ? (
                         <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
-                          <span className="text-[#38EB1A] font-medium">
-                            Active
+                          <div className="w-2 h-2 bg-[#EAA724] rounded-full"></div>
+                          <span className="text-[#EAA724] font-medium text-sm">
+                            Partial Offline
                           </span>
                         </div>
                       ) : (
                         <div className="flex items-center space-x-2">
                           <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
-                          <span className="text-[#9EA09E] font-semibold">
+                          <span className="text-[#9EA09E] font-semibold text-sm">
                             Inactive
                           </span>
                         </div>
                       )}
                     </div>
-                    <div className="flex justify-center select-all">
-                      {user.email}
+                    <div className="flex justify-center select-all text-sm">
+                      {user?.meta?.installedCapacity}
                     </div>
-                    <div className="flex justify-center items-center">
-                      {user.role === "ADMIN" ? (
-                        <div className="px-2 py-1 bg-[#66C38B] text-white font-medium rounded-md">
-                          Admin
-                        </div>
-                      ) : null}
-                      {user.role === "ENGINEER" ? (
-                        <div className="px-2 py-1 bg-[#C36666] font-medium text-white rounded-md">
-                          Engineer
-                        </div>
-                      ) : null}
-                      {user.role === "USER" ? (
-                        <div className="px-2 py-1 bg-[#e18b13] font-medium text-white rounded-md">
-                          User
-                        </div>
-                      ) : null}
+                    <div className="flex justify-center select-all text-sm">
+                      {user?.meta?.contactPhone ? user.meta.contactPhone : "N/A"}
                     </div>
-                    <div className="flex justify-center select-all">
-                      {user.address}
+                    <div className="flex justify-center select-all text-sm">
+                      <TimestampConverter timestamp={user?.meta?.lastUpdateTime} />
                     </div>
-                    <div className="flex justify-center space-x-20">
+                    <div className="flex justify-center space-x-10 col-span-2">
+                    <button onClick={() => handleDeleteUser(user)}>
+                      <FontAwesomeIcon icon={faEye} /> View
+                      </button>
                       <button onClick={() => handleEditUser(user)}>
                         <FontAwesomeIcon icon={faPenToSquare} /> Edit
                       </button>
@@ -285,7 +287,7 @@ export default function Users() {
               ))}
         </div>
         {editUserModalOpen && (
-          <EditUserModal
+          <UpdateProjectModal
             editUserModalOpen={setEditUserModalOpen}
             editUserData={editUser}
             userEdited={setUserEdited}
@@ -301,7 +303,7 @@ export default function Users() {
           </div>
         )}
         {deleteUserModalOpen && (
-          <DeleteUserModal
+          <DeleteProjectModal
             deleteUserModalOpen={setDeleteUserModalOpen}
             deleteUserData={deleteUser}
             userDeleted={setUserDeleted}

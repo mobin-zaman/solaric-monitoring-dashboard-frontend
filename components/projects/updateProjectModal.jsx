@@ -58,7 +58,7 @@ export default function AddUserModal({
         <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] h-[30rem] sm:w-[26rem] sm:h-[30rem]">
           <div className="flex justify-between pb-3">
             <span className="text-[#373737] font-semibold text-2xl">
-              Edit User
+              Project Update
             </span>
             <button
               className="opacity-80"
@@ -66,6 +66,22 @@ export default function AddUserModal({
             >
               <FontAwesomeIcon icon={faXmark} />
             </button>
+          </div>
+          <div className="dropdown">
+            <label tabIndex={0} className="btn m-1">
+              Click
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <a>Item 1</a>
+              </li>
+              <li>
+                <a>Item 2</a>
+              </li>
+            </ul>
           </div>
           <div className="flex flex-col">
             <div className=" text-[#373737] font-medium text-sm space-x-1">
