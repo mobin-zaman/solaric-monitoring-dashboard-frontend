@@ -50,7 +50,7 @@ export default function Project({ projectId }) {
   const handleCopy = (data) => {
     console.log(data.projectId);
     let valueToCopy = "";
-    if (data.projectId) { 
+    if (data.projectId) {
       valueToCopy = data?.projectId;
       setProjectIdCopy(true);
       setSolarmanPlantIdCopy(false);
@@ -74,9 +74,7 @@ export default function Project({ projectId }) {
         <div className="space-y-1 pb-1">
           <div className="flex items-center justify-between bg-white rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-[#373737] font-semibold text-xl">
-                Overview
-              </h1>
+              <h1 className="text-[#373737] font-semibold text-xl">Overview</h1>
               <div className="text-[#373737] text-md bg-gray-200 py-1 px-2 rounded-md space-x-1 flex items-center">
                 <span>{projectData?.name}</span>
               </div>
@@ -107,14 +105,21 @@ export default function Project({ projectId }) {
                   <div className="flex flex-col justify-center">
                     <div className="flex justify-between text-sm border-b p-1.5">
                       <span className="text-blue-800">Solarman Plant Id:</span>
-                      <div className="space-x-1"><span>{projectData?.solarmanPlantId}</span>
-                      <button onClick={() => handleCopy({ solarmanPlantId: projectData?.solarmanPlantId })}>
-                  {solarmanPlantIdCopy ? (
-                    <FontAwesomeIcon icon={faCopy} />
-                  ) : (
-                    <FontAwesomeIcon icon={faClipboard} />
-                  )}
-                </button>
+                      <div className="space-x-1">
+                        <span>{projectData?.solarmanPlantId}</span>
+                        <button
+                          onClick={() =>
+                            handleCopy({
+                              solarmanPlantId: projectData?.solarmanPlantId,
+                            })
+                          }
+                        >
+                          {solarmanPlantIdCopy ? (
+                            <FontAwesomeIcon icon={faCopy} />
+                          ) : (
+                            <FontAwesomeIcon icon={faClipboard} />
+                          )}
+                        </button>
                       </div>
                     </div>
                     <div className="flex justify-between text-sm border-b p-1.5">
@@ -151,7 +156,9 @@ export default function Project({ projectId }) {
                       )}
                     </div>
                     <div className="flex justify-between text-sm p-1.5">
-                      <span className="text-blue-800">Installed Capacity (Wp):</span>
+                      <span className="text-blue-800">
+                        Installed Capacity (Wp):
+                      </span>
                       <span>
                         {projectData?.meta?.installedCapacity || "N/A"}
                       </span>
@@ -181,15 +188,15 @@ export default function Project({ projectId }) {
               </div>
             </div>
           </div>
-          <div className="space-y-1 select-none bg-white rounded-md">
-            <div className="grid grid-cols-2 h-80 gap">
-              <div className="font-medium border-r-2 h-full p-1.5">
-                <div className="flex justify-between items-center pb-1.5">
-                  <span className="flex items-start justify-center space-x-1">
+          <div className="space-y-1 select-none rounded-md">
+            <div className="grid grid-cols-2 gap-1">
+              <div className="p-3 space-y-3 bg-white rounded-md">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-medium">
                     Users
                   </span>
                   <button
-                    className="px-2 py-1 text-sm text-white font-semibold bg-[#39B54A] rounded-md select-none"
+                    className="px-2.5 py-1.5 text-sm text-white font-semibold bg-[#39B54A] rounded-md select-none"
                     onClick={() => setAddUserModalOpen(true)}
                   >
                     Add User <FontAwesomeIcon icon={faPlus} />
@@ -201,51 +208,55 @@ export default function Project({ projectId }) {
                     />
                   )}
                 </div>
-                <div className="space-y-1.5">
-                {projectData?.users?.map((user) => (
-                  <div
-                    className="flex justify-between bg-[#d1d9d2] rounded-md p-1.5"
-                    key={Math.random()}
-                  >
-                    <div className="flex space-x-1.5">
-                      <Image
-                        src={
-                          user?.meta?.stationImage || "/placeholderImage.jpg"
-                        }
-                        width={500}
-                        height={500}
-                        alt="logo"
-                        className="w-14 h-14 rounded-full border border-[#373737]"
-                      />
-                      <div className="flex flex-col justify-center">
-                        <span className="text-blue-800 font-semibold text-md">
-                          {user.user.name}
-                        </span>
-                        <span className="text-blue-800 font-semibold text-xs">
-                          Status: {user.user.status} | Id: {user.userId}
-                        </span>
+                <div className="space-y-1.5 h-64 overflow-y-auto">
+                  {projectData?.users?.map((user) => (
+                    <div
+                      className="flex justify-between bg-[#d1d9d2] rounded-md p-1.5"
+                      key={Math.random()}
+                    >
+                      <div className="flex space-x-1.5">
+                        <Image
+                          src={
+                            user?.meta?.stationImage || "/placeholderImage.jpg"
+                          }
+                          width={500}
+                          height={500}
+                          alt="logo"
+                          className="w-14 h-14 rounded-full border border-[#373737]"
+                        />
+                        <div className="flex flex-col justify-center">
+                          <span className="text-blue-800 font-semibold text-md">
+                            {user.user.name}
+                          </span>
+                          <span className="text-blue-800 font-semibold text-xs">
+                            Status: {user.user.status} | Id: {user.userId}
+                          </span>
+                        </div>
                       </div>
+                      <button
+                        className="text-[#ff2f2f] text-lg mr-2"
+                        onClick={() => setDisableUserModalOpen(true)}
+                      >
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </button>
+                      {disableUserModalOpen && (
+                        <DisableUserModal
+                          projectId={projectId}
+                          userId={user.userId}
+                          disableUserModalOpen={setDisableUserModalOpen}
+                        />
+                      )}
                     </div>
-                    <button className="text-[#ff2f2f] text-lg mr-2" onClick={() => setDisableUserModalOpen(true)}>
-                      <FontAwesomeIcon icon={faTrashCan} />
-                    </button>
-                    {disableUserModalOpen && (
-                      <DisableUserModal
-                        projectId={projectId}
-                        userId={user.userId}
-                        disableUserModalOpen={setDisableUserModalOpen}
-                      />
-                    )}
-                  </div>
-                ))}</div>
+                  ))}
+                </div>
               </div>
-              <div className="font-medium border-r-2 h-full p-1.5">
-                <div className="flex justify-between items-center pb-1.5">
-                  <span className="flex items-start justify-center space-x-1">
-                    Companies
+              <div className="p-3 space-y-3 bg-white  rounded-md">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-medium">
+                  Companies
                   </span>
                   <button
-                    className="px-2 py-1 text-sm text-white font-semibold bg-[#39B54A] rounded-md select-none"
+                    className="px-2.5 py-1.5 text-sm text-white font-semibold bg-[#39B54A] rounded-md select-none"
                     onClick={() => setAddCompanyModalOpen(true)}
                   >
                     Add Company <FontAwesomeIcon icon={faPlus} />
@@ -257,40 +268,45 @@ export default function Project({ projectId }) {
                     />
                   )}
                 </div>
-                {projectData?.companies?.map((user) => (
-                  <div
-                    className="flex justify-between bg-[#d1d9d2] rounded-md p-1.5"
-                    key={Math.random()}
-                  >
-                    <div className="flex space-x-1.5">
-                      <Image
-                        src={user?.meta?.stationImage || "/Placeholder.png"}
-                        width={500}
-                        height={500}
-                        alt="logo"
-                        className="w-14 h-14 rounded-full border border-[#373737]"
-                      />
-                      <div className="flex flex-col justify-center">
-                        <span className="text-blue-800 font-semibold text-md">
-                          {user.name}
-                        </span>
-                        <span className="text-blue-800 font-semibold text-xs">
-                          Code: {user.code}
-                        </span>
+                <div className="space-y-1.5 h-64 overflow-y-auto">
+                  {projectData?.companies?.map((user) => (
+                    <div
+                      className="flex justify-between bg-[#d1d9d2] rounded-md p-1.5"
+                      key={Math.random()}
+                    >
+                      <div className="flex space-x-1.5">
+                        <Image
+                          src={user?.meta?.stationImage || "/Placeholder.png"}
+                          width={500}
+                          height={500}
+                          alt="logo"
+                          className="w-14 h-14 rounded-full border border-[#373737]"
+                        />
+                        <div className="flex flex-col justify-center">
+                          <span className="text-blue-800 font-semibold text-md">
+                            {user.name}
+                          </span>
+                          <span className="text-blue-800 font-semibold text-xs">
+                            Code: {user.code}
+                          </span>
+                        </div>
                       </div>
+                      <button
+                        className="text-[#ff2f2f] text-lg mr-2"
+                        onClick={() => setDisableCompanyModalOpen(true)}
+                      >
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </button>
+                      {disableCompanyModalOpen && (
+                        <DisableCompanyModal
+                          projectId={projectId}
+                          companyId={user.id}
+                          disableCompanyModalOpen={setDisableCompanyModalOpen}
+                        />
+                      )}
                     </div>
-                    <button className="text-[#ff2f2f] text-lg mr-2" onClick={() => setDisableCompanyModalOpen(true)}>
-                      <FontAwesomeIcon icon={faTrashCan} />
-                    </button>
-                    {disableCompanyModalOpen && (
-                      <DisableCompanyModal
-                        projectId={projectId}
-                        companyId={user.id}
-                        disableCompanyModalOpen={setDisableCompanyModalOpen}
-                      />
-                    )}
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
