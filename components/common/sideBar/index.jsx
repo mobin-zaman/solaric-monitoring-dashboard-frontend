@@ -28,7 +28,9 @@ export default function SideBar() {
         <div className="flex flex-col items-center space-y-10">
           <Image src={Home} alt="Home" className="w-5" />
           {data?.role === "ADMIN" && (
-            <Image src={Users} alt="Users" className="w-5" />
+            <Link href="/users">
+              <Image src={Users} alt="Users" className="w-5" />
+            </Link>
           )}
           {data?.role === "ADMIN" && (
             <Link href="/projects">
