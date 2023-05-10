@@ -18,7 +18,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="w-full h-16 bg-white flex justify-end items-center px-5">
+      <div className="w-full h-16 bg-white flex justify-end items-center px-5 border-b-2 border-gray-300">
         {/* <h1 className="text-[#39B54A] font-semibold text-md">
           Monitoring DashBoard
         </h1> */}

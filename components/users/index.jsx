@@ -150,14 +150,14 @@ export default function Users() {
           </div>
           <div className="space-y-1 select-none bg-white text-[#25476A] font-semibold rounded-md p-1.5">
             <div className="grid grid-cols-6 items-center h-9">
-              <div className="flex justify-center">Name</div>
+              <div className="flex justify-center col-span-2 xl:col-span-1">Name</div>
               <div className="flex items-center justify-center space-x-1.5">
                 <span>Status</span>
                 <FontAwesomeIcon icon={faArrowDown} />
               </div>
               <div className="flex justify-center">Email</div>
               <div className="flex justify-center">Role</div>
-              <div className="flex justify-center">Address</div>
+              <div className="hidden xl:block"><div className="flex justify-center">Address</div></div>
               <div className=""></div>
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function Users() {
             ? searchResult1?.map((user) => (
               <div className="bg-white rounded-md p-2 text-gray-700" key={Math.random()}>
               <div className="grid grid-cols-6 items-center py-[0.001rem]">
-                <div className="flex items-center font-medium space-x-2 px-5">
+                <div className="flex items-center font-medium space-x-2 px-5 col-span-2 xl:col-span-1">
                   <Image
                     src={placeholderImage}
                     alt="logo"
@@ -212,24 +212,27 @@ export default function Users() {
                     </div>
                   ) : null}
                 </div>
-                <div className="flex justify-center select-all">
+                <div className="select-all text-sm hidden xl:block">
+              <div className="flex justify-center">
                   {user.address}
                 </div>
-                <div className="flex justify-center space-x-20">
-                  <button onClick={() => handleEditUser(user)}>
-                    <FontAwesomeIcon icon={faPenToSquare} /> Edit
-                  </button>
-                  <button onClick={() => handleDeleteUser(user)}>
-                    <FontAwesomeIcon icon={faTrashCan} /> Delete
-                  </button>
                 </div>
+                <div className="flex justify-center space-x-16 xl:space-x-10">
+              <button className="flex items-center space-x-1" onClick={() => handleEditUser(user)}>
+                <FontAwesomeIcon icon={faPenToSquare} /><span className="hidden xl:block">Edit</span>
+              </button>
+              <button className="flex items-center space-x-1" onClick={() => handleDeleteUser(user)}>
+                <FontAwesomeIcon icon={faTrashCan} /><span className="hidden xl:block">Delete</span>
+              </button>
+            </div>
+
               </div>
             </div>
               ))
             : data?.map((user) => (
                 <div className="bg-white rounded-md p-2 text-gray-700" key={Math.random()}>
                   <div className="grid grid-cols-6 items-center py-[0.001rem]">
-                    <div className="flex items-center font-medium space-x-2 px-5">
+                    <div className="flex items-center font-medium space-x-2 px-5 col-span-2 xl:col-span-1">
                       <Image
                         src={placeholderImage}
                         alt="logo"
@@ -274,17 +277,20 @@ export default function Users() {
                         </div>
                       ) : null}
                     </div>
-                    <div className="flex justify-center select-all">
+                    <div className="select-all text-sm hidden xl:block">
+                  <div className="flex justify-center">
                       {user.address}
                     </div>
-                    <div className="flex justify-center space-x-20">
-                      <button onClick={() => handleEditUser(user)}>
-                        <FontAwesomeIcon icon={faPenToSquare} /> Edit
-                      </button>
-                      <button onClick={() => handleDeleteUser(user)}>
-                        <FontAwesomeIcon icon={faTrashCan} /> Delete
-                      </button>
                     </div>
+                    <div className="flex justify-center space-x-16 xl:space-x-10">
+                  <button className="flex items-center space-x-1" onClick={() => handleEditUser(user)}>
+                    <FontAwesomeIcon icon={faPenToSquare} /><span className="hidden xl:block">Edit</span>
+                  </button>
+                  <button className="flex items-center space-x-1" onClick={() => handleDeleteUser(user)}>
+                    <FontAwesomeIcon icon={faTrashCan} /><span className="hidden xl:block">Delete</span>
+                  </button>
+                </div>
+
                   </div>
                 </div>
               ))}

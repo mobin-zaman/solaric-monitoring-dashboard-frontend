@@ -168,7 +168,7 @@ export default function Users() {
               <div className="flex justify-center col-span-2">
                 Solarman Plant Id
               </div>
-              <div className="flex justify-center">Capacity (Wp)</div>
+              <div className="hidden xl:block"><div className="flex justify-center">Capacity</div></div>
               <div className="flex justify-center col-span-2">Contact</div>
               <div className="flex justify-center col-span-2">Address</div>
               <div className=""></div>
@@ -216,25 +216,30 @@ export default function Users() {
                     <FontAwesomeIcon icon={faCopy} />
                   </button>
                 </div>
-                <div className="flex justify-center select-all text-sm">
-                  {user?.meta?.installedCapacity}
+                <div className="select-all text-sm hidden xl:block">
+                  <div className="flex justify-center">
+                  {user?.meta?.installedCapacity ? (
+                    <span>{user?.meta?.installedCapacity} kWp</span>
+                  ) : (
+                    "N/A"
+                  )}</div>
                 </div>
                 <div className="flex justify-center select-all text-sm col-span-2">
                   {user?.meta?.contactPhone
                     ? user.meta.contactPhone
                     : "N/A"}
                 </div>
-                <div className="flex col-span-2">
+                <div className="flex lg:col-span-2 col-span-3 xl:col-span-2">
                   <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                     {user?.meta?.locationAddress || "N/A"}
                   </span>
                 </div>
-                <div className="flex justify-center space-x-10 col-span-2">
-                  <button onClick={() => handleEditUser(user)}>
-                    <FontAwesomeIcon icon={faPenToSquare} /> Edit
+                <div className="flex justify-center space-x-16 xl:space-x-10 col-span-3 xl:col-span-2">
+                  <button className="flex items-center space-x-1" onClick={() => handleEditUser(user)}>
+                    <FontAwesomeIcon icon={faPenToSquare} /><span className="hidden xl:block">Edit</span>
                   </button>
-                  <button onClick={() => handleDeleteUser(user)}>
-                    <FontAwesomeIcon icon={faTrashCan} /> Delete
+                  <button className="flex items-center space-x-1" onClick={() => handleDeleteUser(user)}>
+                    <FontAwesomeIcon icon={faTrashCan} /><span className="hidden xl:block">Delete</span>
                   </button>
                 </div>
               </div>
@@ -278,25 +283,30 @@ export default function Users() {
                         <FontAwesomeIcon icon={faCopy} />
                       </button>
                     </div>
-                    <div className="flex justify-center select-all text-sm">
-                      {user?.meta?.installedCapacity}
+                    <div className="select-all text-sm hidden xl:block">
+                      <div className="flex justify-center">
+                      {user?.meta?.installedCapacity ? (
+                        <span>{user?.meta?.installedCapacity} kWp</span>
+                      ) : (
+                        "N/A"
+                      )}</div>
                     </div>
                     <div className="flex justify-center select-all text-sm col-span-2">
                       {user?.meta?.contactPhone
                         ? user.meta.contactPhone
                         : "N/A"}
                     </div>
-                    <div className="flex col-span-2">
+                    <div className="flex lg:col-span-2 col-span-3 xl:col-span-2">
                       <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                         {user?.meta?.locationAddress || "N/A"}
                       </span>
                     </div>
-                    <div className="flex justify-center space-x-10 col-span-2">
-                      <button onClick={() => handleEditUser(user)}>
-                        <FontAwesomeIcon icon={faPenToSquare} /> Edit
+                    <div className="flex justify-center space-x-16 xl:space-x-10 col-span-3 xl:col-span-2">
+                      <button className="flex items-center space-x-1" onClick={() => handleEditUser(user)}>
+                        <FontAwesomeIcon icon={faPenToSquare} /><span className="hidden xl:block">Edit</span>
                       </button>
-                      <button onClick={() => handleDeleteUser(user)}>
-                        <FontAwesomeIcon icon={faTrashCan} /> Delete
+                      <button className="flex items-center space-x-1" onClick={() => handleDeleteUser(user)}>
+                        <FontAwesomeIcon icon={faTrashCan} /><span className="hidden xl:block">Delete</span>
                       </button>
                     </div>
                   </div>
