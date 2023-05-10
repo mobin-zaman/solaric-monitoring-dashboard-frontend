@@ -1,3 +1,5 @@
+import { async } from "@firebase/util";
+import { data } from "autoprefixer";
 import axios from "axios";
 
 //local url
@@ -182,6 +184,16 @@ export const deleteCompanyFromProject = async (data) => {
   const projectId = data.projectId;
   const companyId = data.companyId;
   const response = await todoApi.delete(`project/${projectId}/company/${companyId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for project search
+export const searchProject = async (data) => {
+  const response = await todoApi.get(`/project?search=${data}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
     },

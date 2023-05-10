@@ -10,7 +10,7 @@ import {
   faIdCard,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation } from "react-query";
-import { getProjects, searchUser } from "@/lib/Helper";
+import { getProjects, searchProject } from "@/lib/Helper";
 import CreateProjectModal from "./createProjectModal";
 import { useState } from "react";
 import Image from "next/image";
@@ -21,7 +21,6 @@ import Id from "@/public/icons/Id.png";
 import Location from "@/public/icons/Location.png";
 import TimestampConverter from "@/lib/TimestampConverter";
 import Router from "next/router";
-
 
 export default function Users() {
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
@@ -38,9 +37,13 @@ export default function Users() {
   const [searchResult, setSearchResult] = useState([]);
   const [searchResult1, setSearchResult1] = useState([]);
 
-  const { data, isLoading, isFetching } = useQuery("projects", () => getProjects(), {
-    enabled: true, //enable query
-  });
+  const { data, isLoading, isFetching } = useQuery(
+    "projects",
+    () => getProjects(),
+    {
+      enabled: true, //enable query
+    }
+  );
 
   //when new user is created, refetch the data
   useQuery("users", () => getUsers(), {
@@ -71,18 +74,18 @@ export default function Users() {
     Router.push(`/projects/${user.id}`);
   };
 
-  const searchData = useQuery(() => searchUser(search), {
+  const searchData = useQuery(() => searchProject(search), {
     enabled: searchOn,
     onSuccess: (data) => {
       setSearchResult(data);
     },
   });
 
-  console.log(searchResult, "searchResult");
+  // console.log(searchResult, "searchResult");
 
   const handleSearch = (e) => {
     console.log(e.target.value, "e.target.value");
-    const searchPromise = searchUser(e.target.value);
+    const searchPromise = searchProject(e.target.value);
     setSearchResult(searchPromise);
 
     if (e.target.value.length < 0) {
@@ -110,13 +113,13 @@ export default function Users() {
   return (
     <>
       <div className="w-full rounded-md">
-        <div className="space-y-1 pb-1">
-          <div className="flex items-center justify-between bg-white rounded-md p-3">
+        <div className="space-y-1.5 pb-1.5">
+          <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-[#373737] font-semibold text-xl">
+              <h1 className="text-xl font-semibold text-white tracking-wide">
                 Projects Management
               </h1>
-              <p className="text-[#373737] text-sm bg-gray-200 p-1 rounded-md">
+              <p className="text-[#373737] text-sm bg-gray-200 px-3 py-1 rounded-md">
                 {data?.length} {data?.length < 2 ? "project" : "projects"}
               </p>
             </div>
@@ -124,7 +127,7 @@ export default function Users() {
               <div className="relative">
                 <input
                   type="text"
-                  className="w-72 h-9 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
+                  className="w-72 h-8 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
                   placeholder="Search by name or email"
                   onChange={handleSearch}
                 />
@@ -136,10 +139,11 @@ export default function Users() {
                 </div>
               </div>
               <button
-                className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none"
+                className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none space-x-1"
                 onClick={() => setAddUserModalOpen(true)}
               >
-                Add User <FontAwesomeIcon icon={faPlus} />
+                <span>Add User</span>
+                <FontAwesomeIcon icon={faPlus} />
               </button>
             </div>
             {addUserModalOpen && (
@@ -158,69 +162,74 @@ export default function Users() {
               </div>
             )}
           </div>
-          <div className="space-y-1 select-none bg-white rounded-md p-1.5">
-            <div className="grid grid-cols-9 items-center h-9">
-              <div className="flex justify-center font-medium col-span-2">Name</div>
-              <div className="flex justify-center font-medium">Solarman Plant Id</div>
-              <div className="flex items-center justify-center font-medium space-x-1.5">
-                <span>Status</span>
-                <FontAwesomeIcon icon={faArrowDown} />
+          <div className="space-y-1 select-none bg-white rounded-md p-1.5 text-[#25476A] font-semibold">
+            <div className="grid grid-cols-12 items-center h-9">
+              <div className="flex justify-center col-span-3">Name</div>
+              <div className="flex justify-center col-span-2">
+                Solarman Plant Id
               </div>
-              <div className="flex justify-center font-medium">Capacity (Wp)</div>
-              <div className="flex justify-center font-medium">Contact</div>
-              <div className="flex justify-center font-medium">Last Update</div>
-              <div className=""></div><div className=""></div>
+              <div className="flex justify-center">Capacity (Wp)</div>
+              <div className="flex justify-center col-span-2">Contact</div>
+              <div className="flex justify-center col-span-2">Address</div>
+              <div className=""></div>
+              <div className=""></div>
             </div>
           </div>
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {searchResult1.length > 0
             ? searchResult1?.map((user) => (
-              <div className="bg-white rounded-md p-2" key={Math.random()}>
-              <div className="grid grid-cols-9 items-center py-[0.001rem]">
-                <div className="flex items-center font-medium space-x-2 px-5 col-span-2">
+              <div
+              className="bg-white rounded-md p-2 text-gray-700"
+              key={Math.random()}
+            >
+              <div className="grid grid-cols-12 items-center py-[0.001rem]">
+                <div className="flex items-center font-medium space-x-2 px-5 col-span-3">
                   <Image
-                    src={user?.meta?.stationImage}
+                    src={
+                      user?.meta?.stationImage
+                        ? user?.meta?.stationImage
+                        : "/Placeholder.png"
+                    }
                     width={1000}
                     height={1000}
                     alt="logo"
                     className="w-14 h-14 rounded-full"
                   />
-                  <div><div className="select-text">{user.name}</div><div className="select-none text-xs flex items-center"><FontAwesomeIcon icon={faIdCard} />&nbsp;{user.id}</div><div className="text-xs flex items-center sm: w-40 xl:w-44 truncate select-none"><Image src={Location} alt="Id" className="w-3 h-3.5" />&nbsp;{user.meta.locationAddress}</div></div>
-                </div>
-                <div className="flex justify-center select-none space-x-1 text-sm">
-                <span>{user.solarmanPlantId}</span> <button onClick={() => handleSolarmanPlantIdCopy(user.solarmanPlantId)}><FontAwesomeIcon icon={faCopy} /></button>
-                </div>
-                <div className="flex justify-center">
-                  {user.meta.networkStatus === "PARTIAL_OFFLINE" ? (
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-[#EAA724] rounded-full"></div>
-                      <span className="text-[#EAA724] font-medium text-sm">
-                        Partial Offline
-                      </span>
+                  <div>
+                    <div className="select-text font-semibold">
+                      {user.name}
                     </div>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
-                      <span className="text-[#9EA09E] font-semibold text-sm">
-                        Inactive
-                      </span>
+                    <div className="select-none text-xs flex items-center space-x-1">
+                      <span>Id:</span>
+                      <span>{user.id}</span>
                     </div>
-                  )}
+                  </div>
+                </div>
+                <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
+                  <span>{user.solarmanPlantId}</span>{" "}
+                  <button
+                    onClick={() =>
+                      handleSolarmanPlantIdCopy(user.solarmanPlantId)
+                    }
+                  >
+                    <FontAwesomeIcon icon={faCopy} />
+                  </button>
                 </div>
                 <div className="flex justify-center select-all text-sm">
                   {user?.meta?.installedCapacity}
                 </div>
-                <div className="flex justify-center select-all text-sm">
-                  {user.meta.contactPhone ? user.meta.contactPhone : "N/A"}
+                <div className="flex justify-center select-all text-sm col-span-2">
+                  {user?.meta?.contactPhone
+                    ? user.meta.contactPhone
+                    : "N/A"}
                 </div>
-                <div className="flex justify-center select-all text-sm">
-                  <TimestampConverter timestamp={user?.meta?.lastUpdateTime} />
+                <div className="flex col-span-2">
+                  <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                    {user?.meta?.locationAddress || "N/A"}
+                  </span>
                 </div>
                 <div className="flex justify-center space-x-10 col-span-2">
-                <button onClick={() => handleDeleteUser(user)}>
-                  <FontAwesomeIcon icon={faEye} /> View
-                  </button>
                   <button onClick={() => handleEditUser(user)}>
                     <FontAwesomeIcon icon={faPenToSquare} /> Edit
                   </button>
@@ -232,46 +241,55 @@ export default function Users() {
             </div>
               ))
             : data?.map((user) => (
-                <div className="bg-white rounded-md p-2" key={Math.random()}>
-                  <div className="grid grid-cols-9 items-center py-[0.001rem]">
-                    <div className="flex items-center font-medium space-x-2 px-5 col-span-2">
+                <div
+                  className="bg-white rounded-md p-2 text-gray-700"
+                  key={Math.random()}
+                >
+                  <div className="grid grid-cols-12 items-center py-[0.001rem]">
+                    <div className="flex items-center font-medium space-x-2 px-5 col-span-3">
                       <Image
-                        src={user?.meta?.stationImage ? user?.meta?.stationImage : "/Placeholder.png"}
+                        src={
+                          user?.meta?.stationImage
+                            ? user?.meta?.stationImage
+                            : "/Placeholder.png"
+                        }
                         width={1000}
                         height={1000}
                         alt="logo"
                         className="w-14 h-14 rounded-full"
                       />
-                      <div><div className="select-text">{user.name}</div><div className="select-none text-xs flex items-center"><FontAwesomeIcon icon={faIdCard} />&nbsp;{user.id}</div><div className="text-xs flex items-center sm: w-40 xl:w-44 truncate select-none"><Image src={Location} alt="Id" className="w-3 h-3.5" />&nbsp;{user?.meta?.locationAddress}</div></div>
-                    </div>
-                    <div className="flex justify-center select-none space-x-1 text-sm">
-                    <span>{user.solarmanPlantId}</span> <button onClick={() => handleSolarmanPlantIdCopy(user.solarmanPlantId)}><FontAwesomeIcon icon={faCopy} /></button>
-                    </div>
-                    <div className="flex justify-center">
-                      {user?.meta?.networkStatus === "PARTIAL_OFFLINE" ? (
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-[#EAA724] rounded-full"></div>
-                          <span className="text-[#EAA724] font-medium text-sm">
-                            Partial Offline
-                          </span>
+                      <div>
+                        <div className="select-text font-semibold">
+                          {user.name}
                         </div>
-                      ) : (
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-[#148bf4] rounded-full"></div>
-                          <span className="text-[#148bf4] font-semibold text-sm">
-                          Normal
-                          </span>
+                        <div className="select-none text-xs flex items-center space-x-1">
+                          <span>Id:</span>
+                          <span>{user.id}</span>
                         </div>
-                      )}
+                      </div>
+                    </div>
+                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
+                      <span>{user.solarmanPlantId}</span>{" "}
+                      <button
+                        onClick={() =>
+                          handleSolarmanPlantIdCopy(user.solarmanPlantId)
+                        }
+                      >
+                        <FontAwesomeIcon icon={faCopy} />
+                      </button>
                     </div>
                     <div className="flex justify-center select-all text-sm">
                       {user?.meta?.installedCapacity}
                     </div>
-                    <div className="flex justify-center select-all text-sm">
-                      {user?.meta?.contactPhone ? user.meta.contactPhone : "N/A"}
+                    <div className="flex justify-center select-all text-sm col-span-2">
+                      {user?.meta?.contactPhone
+                        ? user.meta.contactPhone
+                        : "N/A"}
                     </div>
-                    <div className="flex justify-center select-all text-sm">
-                      <TimestampConverter timestamp={user?.meta?.lastUpdateTime} />
+                    <div className="flex col-span-2">
+                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                        {user?.meta?.locationAddress || "N/A"}
+                      </span>
                     </div>
                     <div className="flex justify-center space-x-10 col-span-2">
                       <button onClick={() => handleEditUser(user)}>
