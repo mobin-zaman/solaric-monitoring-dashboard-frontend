@@ -151,7 +151,7 @@ export default function Users() {
                 <FontAwesomeIcon icon={faArrowDown} />
               </div>
               <div className="flex justify-center font-medium">Email</div>
-              <div className="flex justify-center font-medium">Role(s)</div>
+              <div className="flex justify-center font-medium">Role</div>
               <div className="flex justify-center font-medium">Address</div>
               <div className=""></div>
             </div>
