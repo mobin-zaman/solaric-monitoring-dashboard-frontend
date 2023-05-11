@@ -18,11 +18,11 @@ export default function Header() {
 
   return (
     <>
-      <div className="w-full h-16 bg-white flex justify-end items-center px-5 border-b-2 border-gray-300">
+      <div className="w-full h-16 bg-white flex justify-end items-center px-5 border-b-2 border-gray-300 text-[#25476A] font-semibold tracking-wide">
         {/* <h1 className="text-[#39B54A] font-semibold text-md">
           Monitoring DashBoard
         </h1> */}
-        <div className="flex justify-center items-center space-x-3.5">
+        <div className="flex justify-center items-center space-x-6">
           <button onClick={handleSignOut}>
             <FontAwesomeIcon icon={faRightFromBracket} />
           </button>

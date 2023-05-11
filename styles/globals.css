@@ -4,3 +4,16 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+[data-tooltip]::before {
+  content: attr(title);
+  background-color: #38EB1A;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  white-space: nowrap;
+}
