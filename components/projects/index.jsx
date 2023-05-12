@@ -248,6 +248,7 @@ export default function Users() {
                   key={Math.random()}
                 >
                   <div className="grid grid-cols-12 items-center py-[0.001rem]">
+                    <div className="grid grid-cols-11 col-span-11 items-center" onClick={() => handleEditUser(user)}>
                     <div className="flex items-center font-medium space-x-2 px-5 col-span-3">
                       <Image
                         src={
@@ -298,10 +299,8 @@ export default function Users() {
                         {user?.meta?.locationAddress || "N/A"}
                       </span>
                     </div>
-                    <div className="flex justify-center space-x-16 xl:space-x-10 col-span-3 xl:col-span-2">
-                      <button className="flex items-center space-x-1" onClick={() => handleEditUser(user)}>
-                        <FontAwesomeIcon icon={faPenToSquare} /><span className="hidden xl:block">Edit</span>
-                      </button>
+                    </div>
+                    <div className="flex justify-center space-x-16 xl:space-x-10 col-span-2 xl:col-span-1">
                       <button className="flex items-center space-x-1" onClick={() => handleDeleteUser(user)}>
                         <FontAwesomeIcon icon={faTrashCan} /><span className="hidden xl:block">Delete</span>
                       </button>
