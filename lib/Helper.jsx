@@ -4,6 +4,7 @@ import axios from "axios";
 
 //local url
 export const BASE_URL = "http://localhost:3789"; // API URL
+// export const BASE_URL = "http://localhost:3789"; // IMAGE URL
 
 //axios instance for api calls with base url and headers
 const todoApi = axios.create({
@@ -194,6 +195,109 @@ export const deleteCompanyFromProject = async (data) => {
 // Api calls for project search
 export const searchProject = async (data) => {
   const response = await todoApi.get(`/project?search=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get company data
+export const getCompany = async (id) => {
+  const response = await todoApi.get(`/company/get-one/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for building add to company
+export const addBuildingToCompany = async (data) => {
+  const companyId = data.companyId;
+  const buildingData = {
+    name: data.buildingName,
+    code: data.buildingCode,
+  };
+  const response = await todoApi.post(`/company/${companyId}/building`, buildingData, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for delete building from company
+export const deleteBuildingFromCompany = async (data) => {
+  const buildingId = data.buildingId;
+  const response = await todoApi.delete(`/company/building/${buildingId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+//Api calls for company search
+export const searchCompany = async (data) => {
+  const searchValue = data.search;
+  const projectId = data.projectId;
+  const response = await todoApi.get(`/company/${projectId}?search=${searchValue}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get building data
+export const getBuilding = async (id) => {
+  const response = await todoApi.get(`/building/find-one/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for inverter add to building
+export const addInverterToBuilding = async (data) => {
+  const buildingId = data.buildingId;
+  const inverterId = data.inverterId;
+  const response = await todoApi.post(`/building/${buildingId}/inverter/${inverterId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for delete inverter from building
+export const deleteInverterFromBuilding = async (data) => {
+  const inverterId = data.inverterId;
+  const response = await todoApi.delete(`/building/inverter/${inverterId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+//Api calls for building search
+export const searchBuilding = async (data) => {
+  const searchValue = data.search;
+  const companyId = data.companyId;
+  const response = await todoApi.get(`/building/${companyId}?search=${searchValue}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get inverter data
+export const getInverter = async (id) => {
+  const response = await todoApi.get(`/inverter/find-one/${id}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
     },

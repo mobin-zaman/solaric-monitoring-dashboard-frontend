@@ -64,9 +64,6 @@ export default function Users() {
 
   const searchData = useQuery(() => searchUser(search), {
     enabled: searchOn,
-    onSuccess: (data) => {
-      setSearchResult(data);
-    },
   });
 
   const handleSearch = (e) => {

@@ -12,46 +12,46 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "react-query";
-import { getProjects, getProject, searchCompany } from "@/lib/Helper";
+import { getProjects, getCompany, searchBuilding } from "@/lib/Helper";
 import Image from "next/image";
 import TimestampConverter from "@/lib/TimestampConverter";
-import AddUserModal from "./addUserModal";
-import AddCompanyModal from "./addCompanyModal";
-import DisableUserModal from "./disableUserModal";
+import AddCompanyModal from "./addBuildingModal";
 import DisableCompanyModal from "./disableCompanyModal";
 import placeholderImage from "@/public/placeholderImage.jpg";
 import Id from "@/public/icons/Id.png";
 import Placeholder from "@/public/Placeholder.png";
 import { useRouter } from "next/router";
+import FormatDateTime from "@/lib/FormatDateTime";
 
-export default function Project({ projectId }) {
+export default function Project({ companyId }) {
   const router = useRouter();
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
   const [addCompanyModalOpen, setAddCompanyModalOpen] = useState(false);
   const [disableUserModalOpen, setDisableUserModalOpen] = useState(false);
   const [disableCompanyModalOpen, setDisableCompanyModalOpen] = useState(false);
   const [searchResult1, setSearchResult1] = useState(null);
-  
+
   const { data, isLoading, isFetching } = useQuery(
-    ["project", projectId],
-    () => getProject(projectId),
+    ["project", companyId],
+    () => getCompany(companyId),
     {
-      enabled: projectId ? true : false,
+      enabled: companyId ? true : false,
     }
   );
 
   const [projectIdCopy, setProjectIdCopy] = useState(false);
   const [solarmanPlantIdCopy, setSolarmanPlantIdCopy] = useState(false);
+  const [buildingId, setBuildingId] = useState(null);
 
   const handleCopy = (data) => {
     console.log(data.projectId);
     let valueToCopy = "";
-    if (data.projectId) {
-      valueToCopy = data?.projectId;
+    if (data.companyId) {
+      valueToCopy = data?.companyId;
       setProjectIdCopy(true);
       setSolarmanPlantIdCopy(false);
-    } else if (data.solarmanPlantId) {
-      valueToCopy = data?.solarmanPlantId;
+    } else if (data.code) {
+      valueToCopy = data?.code;
       setProjectIdCopy(false);
       setSolarmanPlantIdCopy(true);
     }
@@ -64,16 +64,18 @@ export default function Project({ projectId }) {
     }, 2000);
   };
 
-  const handleCompanyClick = (companyId) => {
-    router.push(`/company/${companyId}`);
+  const handleBuildingClick = (buildingId) => {
+    router.push(`/building/${buildingId}`);
   };
 
-  // const searchData = useQuery(() => searchCompany(), {
-  //   enabled: searchOn,
-  // });
+  const handleDelete = (id) => {
+    console.log(id);
+    setDisableCompanyModalOpen(true);
+    setBuildingId(id);
+  };
 
   const handleSearch = (e) => {
-    const searchPromise = searchCompany({ search: e.target.value, projectId });
+    const searchPromise = searchBuilding({ search: e.target.value, companyId });
 
     if (e.target.value.length < 0) {
       setSearchResult1(null);
@@ -81,8 +83,8 @@ export default function Project({ projectId }) {
       if (searchPromise instanceof Promise) {
         searchPromise
           .then((data) => {
+            console.log(data);
             setSearchResult1(data);
-            console.log(searchResult1, "searchResult1");
           })
           .catch((error) => {
             console.log(error);
@@ -97,7 +99,7 @@ export default function Project({ projectId }) {
         <div className="bg-[#25476A] rounded-md p-3.5">
           <div className="flex items-center justify-between space-x-3 select-none">
             <h1 className="text-xl font-semibold text-white tracking-wide">
-              Project Overview
+              Company Overview
             </h1>
             <div className="flex space-x-2">
               <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
@@ -105,8 +107,8 @@ export default function Project({ projectId }) {
               </div>
               <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
                 <span>Id:</span>
-                <span>{projectId}</span>
-                <button onClick={() => handleCopy({ projectId: data?.id })}>
+                <span>{companyId}</span>
+                <button onClick={() => handleCopy({ companyId: data?.id })}>
                   {projectIdCopy ? (
                     <FontAwesomeIcon icon={faCopy} />
                   ) : (
@@ -114,6 +116,13 @@ export default function Project({ projectId }) {
                   )}
                 </button>
               </div>
+              {/* TODO */}
+              {/* <button
+                  className="px-3 py-1 text-white font-semibold bg-[#39B54A] rounded-md select-none"
+                  onClick={() => setAddCompanyModalOpen(true)}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} /> Edit 
+                </button> */}
             </div>
           </div>
         </div>
@@ -125,23 +134,19 @@ export default function Project({ projectId }) {
                 width={2000}
                 height={2000}
                 alt="logo"
-                className="w-40 h-40 rounded-full object-cover"
+                className="w-28 h-28 rounded-full object-cover"
               />
               <div className="grid grid-cols-2 gap-20 w-full">
                 <div className="flex flex-col justify-center">
                   <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Solarman Plant Id:
-                    </span>
+                    <span className="text-[#25476A] font-semibold">Code:</span>
                     <div className="space-x-1">
-                      <span className="text-gray-700">
-                        {data?.solarmanPlantId}
-                      </span>
+                      <span className="text-gray-700">{data?.code}</span>
                       <button
                         className="text-[#25476A]"
                         onClick={() =>
                           handleCopy({
-                            solarmanPlantId: data?.solarmanPlantId,
+                            code: data?.code,
                           })
                         }
                       >
@@ -154,67 +159,45 @@ export default function Project({ projectId }) {
                     </div>
                   </div>
                   <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Type:</span>
+                    <span className="text-[#25476A] font-semibold">
+                      Project Id:
+                    </span>
                     <span className="text-gray-700">
-                      {data?.meta?.type
-                        .replace(/_/g, " ") // Replace all '_' with ' '
-                        .split(" ")
-                        .map(
-                          (word) =>
-                            word.charAt(0).toUpperCase() +
-                            word.slice(1).toLowerCase()
-                        )
-                        .join(" ")}
+                      {data?.projectId || "N/A"}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm border-b p-1.5">
                     <span className="text-[#25476A] font-semibold">
-                      Installed Capacity (Wp):
+                      Project Name:
                     </span>
                     <span className="text-gray-700">
-                      {data?.meta?.installedCapacity || "N/A"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Owner Name:
-                    </span>
-                    <span className="text-gray-700">
-                      {data?.meta?.ownerName || "N/A"}
+                      {data?.project?.meta?.name || "N/A"}
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col justify-center px-2">
                   <div className="flex justify-between text-sm border-b p-1.5">
                     <span className="text-[#25476A] font-semibold">
-                      Contact:
+                      Total Buildings:
                     </span>
                     <span className="text-gray-700">
-                      {data?.meta?.Contact || "N/A"}
+                      {data?.buildings?.length || 0}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm border-b p-1.5">
                     <span className="text-[#25476A] font-semibold">
-                      Address:
+                      Created Date & Time:
                     </span>
                     <span className="text-gray-700">
-                      {data?.meta?.locationAddress || "N/A"}
+                      <FormatDateTime dateString={data?.createdAt} />
                     </span>
                   </div>
                   <div className="flex justify-between text-sm border-b p-1.5">
                     <span className="text-[#25476A] font-semibold">
-                      Total Users:
+                      Updated Date & Time:
                     </span>
                     <span className="text-gray-700">
-                      {data?.users?.length || 0}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Total Companies:
-                    </span>
-                    <span className="text-gray-700">
-                      {data?.companies?.length || 0}
+                      <FormatDateTime dateString={data?.updatedAt} />
                     </span>
                   </div>
                 </div>
@@ -224,138 +207,10 @@ export default function Project({ projectId }) {
         </div>
         <div className="space-y-1 select-none rounded-md">
           <div className="grid grid-cols-1 gap-2.5">
-            <div className="p-3 space-y-3 bg-white rounded-md">
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold tracking-wide text-[#25476A]">
-                  Users
-                </span>
-                <button
-                  className="px-3 py-1.5 text-white font-semibold bg-[#39B54A] rounded-md select-none"
-                  onClick={() => setAddUserModalOpen(true)}
-                >
-                  Add User <FontAwesomeIcon icon={faPlus} />
-                </button>
-                {addUserModalOpen && (
-                  <AddUserModal
-                    projectId={projectId}
-                    addUserModalOpen={setAddUserModalOpen}
-                  />
-                )}
-              </div>
-              <div className="space-y-1 select-none bg-gray-200 rounded-md p-1.5 border-y-2 text-[#25476A]">
-                <div className="grid grid-cols-12 items-center h-9">
-                  <div className="flex justify-center font-semibold tracking-wide col-span-3">
-                    Name
-                  </div>
-                  <div className="flex items-center justify-center font-semibold tracking-wide space-x-1.5 col-span-2">
-                    <span>Status</span>
-                    <FontAwesomeIcon icon={faArrowDown} />
-                  </div>
-                  <div className="flex justify-center font-semibold tracking-wide col-span-2">
-                    Email
-                  </div>
-                  <div className="flex justify-center font-semibold tracking-wide col-span-2">
-                    Role
-                  </div>
-                  <div className="flex justify-center font-semibold tracking-wide col-span-2">
-                    Address
-                  </div>
-                  <div className=""></div>
-                </div>
-              </div>
-              <div className="space-y-1 h-64 overflow-y-auto">
-                {data?.users?.map((user) => (
-                  <div
-                    className="bg-gray-200 rounded-md p-2"
-                    key={Math.random()}
-                  >
-                    <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                      <div className="flex items-center font-medium space-x-2 px-5 col-span-3">
-                        <Image
-                          src={placeholderImage}
-                          alt="logo"
-                          className="w-10 h-10 rounded-full"
-                        />
-                        <div>
-                          <div className="select-text text-gray-700 font-semibold">
-                            {user?.user?.name}
-                          </div>
-                          <div className="select-text flex items-center text-gray-700 text-xs space-x-1">
-                            <span>ID:</span>
-                            <span>{user.userId}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-center col-span-2">
-                        {user?.user?.status === "ACTIVE" ? (
-                          <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
-                            <span className="text-[#38EB1A] font-medium text-sm">
-                              Active
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
-                            <span className="text-[#9EA09E] font-semibold">
-                              Inactive
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex col-span-2">
-                        <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                          {user?.user?.email || "N/A"}
-                        </span>
-                      </div>
-                      <div className="flex justify-center items-center col-span-2">
-                        {user?.user?.role === "ADMIN" ? (
-                          <div className="px-2 py-1 bg-[#66C38B] text-white font-medium rounded-md text-sm">
-                            Admin
-                          </div>
-                        ) : null}
-                        {user?.user?.role === "ENGINEER" ? (
-                          <div className="px-2 py-1 bg-[#C36666] font-medium text-white rounded-md text-sm">
-                            Engineer
-                          </div>
-                        ) : null}
-                        {user?.user?.role === "USER" ? (
-                          <div className="px-2 py-1 bg-[#C3C366] font-medium text-white rounded-md text-sm">
-                            User
-                          </div>
-                        ) : null}
-                      </div>
-                      <div className="flex col-span-2">
-                        <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                          {user?.user?.address || "N/A"}
-                        </span>
-                      </div>
-                      <div className="flex justify-center">
-                        <button
-                          className="text-sm text-gray-700"
-                          onClick={() => {
-                            setDisableUserModalOpen(true);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} /> Delete
-                        </button>
-                      </div>
-                    </div>
-                    {disableUserModalOpen && (
-                      <DisableUserModal
-                        projectId={projectId}
-                        userId={user.userId}
-                        disableUserModalOpen={setDisableUserModalOpen}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
             <div className="p-3 space-y-2 bg-white rounded-md">
               <div className="flex justify-between items-center">
                 <span className="text-lg font-semibold tracking-wide text-[#25476A]">
-                  Companies
+                  Buildings
                 </span>
                 <div className="space-x-5 flex items-center">
                   <div className="relative">
@@ -376,17 +231,17 @@ export default function Project({ projectId }) {
                     className="px-3 py-1.5 text-white font-semibold bg-[#39B54A] rounded-md select-none"
                     onClick={() => setAddCompanyModalOpen(true)}
                   >
-                    Add Company <FontAwesomeIcon icon={faPlus} />
+                    Add Building <FontAwesomeIcon icon={faPlus} />
                   </button>
                 </div>
                 {addCompanyModalOpen && (
                   <AddCompanyModal
-                    projectId={projectId}
+                    companyId={companyId}
                     addCompanyModalOpen={setAddCompanyModalOpen}
                   />
                 )}
               </div>
-              <div className="space-y-1 select-none bg-white p-1.5 border-y-2 text-[#25476A]">
+              <div className="space-y-1 select-none bg-gray-200 rounded-md p-1.5 border-y-2 text-[#25476A]">
                 <div className="grid grid-cols-12 items-center h-9">
                   <div className="flex justify-center font-semibold tracking-wide col-span-9">
                     Name
@@ -398,8 +253,8 @@ export default function Project({ projectId }) {
                 </div>
               </div>
               <div className="space-y-1.5 h-64 overflow-y-auto">
-                {searchResult1?.length >= 0  
-                  ? searchResult1?.map((company) => (
+                {searchResult1?.length >= 0
+                  ? searchResult1?.map((building) => (
                       <div
                         className="bg-gray-200 rounded-md p-2"
                         key={Math.random()}
@@ -408,7 +263,7 @@ export default function Project({ projectId }) {
                           <div
                             className="grid grid-cols-11 col-span-11"
                             onClick={() => {
-                              handleCompanyClick(company.id);
+                              handleBuildingClick(building.id);
                             }}
                           >
                             <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
@@ -419,39 +274,32 @@ export default function Project({ projectId }) {
                               />
                               <div>
                                 <div className="select-text text-gray-700 font-semibold">
-                                  {company.name}
+                                  {building.name}
                                 </div>
                                 <div className="select-text flex items-center text-gray-700 text-xs space-x-1">
                                   <span>ID:</span>
-                                  <span>{company.id}</span>
+                                  <span>{building.id}</span>
                                 </div>
                               </div>
                             </div>
                             <div className="flex items-center col-span-2">
                               <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                                {company.code}
+                                {building.code}
                               </span>
                             </div>
                           </div>
                           <div className="flex justify-center">
                             <button
                               className="text-sm text-gray-700"
-                              onClick={() => setDisableCompanyModalOpen(true)}
+                              onClick={() => handleDelete(building.id)}
                             >
                               <FontAwesomeIcon icon={faTrashCan} /> Delete
                             </button>
                           </div>
                         </div>
-                        {disableCompanyModalOpen && (
-                          <DisableCompanyModal
-                            projectId={projectId}
-                            companyId={company.id}
-                            disableCompanyModalOpen={setDisableCompanyModalOpen}
-                          />
-                        )}
                       </div>
                     ))
-                  : data?.companies?.map((company) => (
+                  : data?.buildings?.map((building) => (
                       <div
                         className="bg-gray-200 rounded-md p-2"
                         key={Math.random()}
@@ -460,7 +308,7 @@ export default function Project({ projectId }) {
                           <div
                             className="grid grid-cols-11 col-span-11"
                             onClick={() => {
-                              handleCompanyClick(company.id);
+                              handleBuildingClick(building.id);
                             }}
                           >
                             <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
@@ -471,42 +319,42 @@ export default function Project({ projectId }) {
                               />
                               <div>
                                 <div className="select-text text-gray-700 font-semibold">
-                                  {company.name}
+                                  {building.name}
                                 </div>
                                 <div className="select-text flex items-center text-gray-700 text-xs space-x-1">
                                   <span>ID:</span>
-                                  <span>{company.id}</span>
+                                  <span>{building.id}</span>
                                 </div>
                               </div>
                             </div>
                             <div className="flex items-center col-span-2">
                               <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                                {company.code}
+                                {building.code}
                               </span>
                             </div>
                           </div>
                           <div className="flex justify-center">
                             <button
                               className="text-sm text-gray-700"
-                              onClick={() => setDisableCompanyModalOpen(true)}
+                              onClick={() => handleDelete(building.id)}
                             >
                               <FontAwesomeIcon icon={faTrashCan} /> Delete
                             </button>
                           </div>
                         </div>
-                        {disableCompanyModalOpen && (
-                          <DisableCompanyModal
-                            projectId={projectId}
-                            companyId={company.id}
-                            disableCompanyModalOpen={setDisableCompanyModalOpen}
-                          />
-                        )}
                       </div>
                     ))}
               </div>
             </div>
           </div>
         </div>
+        {disableCompanyModalOpen && (
+          <DisableCompanyModal
+            companyId={companyId}
+            buildingId={buildingId}
+            disableCompanyModalOpen={setDisableCompanyModalOpen}
+          />
+        )}
       </div>
     </>
   );

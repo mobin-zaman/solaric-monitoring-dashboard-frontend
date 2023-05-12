@@ -1,5 +1,3 @@
-import React from "react";
-
 function TimestampConverter({ timestamp }) {
   const date = new Date(timestamp * 1000);
   const options = {

@@ -22,8 +22,6 @@ export default function SideBar() {
   const { data } = useQuery("currentUser", getCurrentUser);
 
   const link = useRouter().pathname;
-  //i need page name to change color of icon
-  console.log(link);
 
   return (
     <>
@@ -47,14 +45,14 @@ export default function SideBar() {
             </Link>
           )}
           {data?.role === "ADMIN" && (
-            <Link href="/projects">
+            <Link href="/project">
               {/* <Image src={Projects} alt="Projects" className="w-6" /> */}
               <FontAwesomeIcon
                 icon={faDiagramProject}
                 className={`w-5 h-5 ${
-                  link === "/projects"
+                  link === "/project"
                     ? "text-[#38EB1A]"
-                    : link === "/projects/[projectId]"
+                    : link === "/project/[projectId]"
                     ? "text-[#38EB1A]"
                     : ""
                 }`}
