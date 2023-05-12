@@ -276,10 +276,10 @@ export default function Project({ buildingId }) {
                                 className="w-10 h-10 rounded-full"
                               />
                               <div>
-                                <div className="select-text text-gray-700 font-semibold">
+                                <div className="select-none text-gray-700 font-semibold">
                                   {inverter.deviceSn}
                                 </div>
-                                <div className="select-text flex items-center text-gray-700 text-xs space-x-1">
+                                <div className="select-none flex items-center text-gray-700 text-xs space-x-1">
                                   <span>ID:</span>
                                   <span>{inverter.id}</span>
                                 </div>
@@ -321,10 +321,10 @@ export default function Project({ buildingId }) {
                                 className="w-10 h-10 rounded-full"
                               />
                               <div>
-                                <div className="select-text text-gray-700 font-semibold">
+                                <div className="select-none text-gray-700 font-semibold">
                                   {inverter.deviceSn}
                                 </div>
-                                <div className="select-text flex items-center text-gray-700 text-xs space-x-1">
+                                <div className="select-none flex items-center text-gray-700 text-xs space-x-1">
                                   <span>ID:</span>
                                   <span>{inverter.id}</span>
                                 </div>
