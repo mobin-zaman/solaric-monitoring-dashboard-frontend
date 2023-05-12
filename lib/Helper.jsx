@@ -304,3 +304,15 @@ export const getInverter = async (id) => {
   });
   return response.data;
 }
+
+// Api calls for inverter search
+export const searchInverter = async (data) => {
+  const searchValue = data.search;
+  const buildingId = data.buildingId;
+  const response = await todoApi.get(`/building/${buildingId}/inverter/search?search=${searchValue}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}

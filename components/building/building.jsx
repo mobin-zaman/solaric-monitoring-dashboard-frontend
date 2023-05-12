@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "react-query";
-import { getProjects, getBuilding } from "@/lib/Helper";
+import { getProjects, getBuilding, searchInverter } from "@/lib/Helper";
 import Image from "next/image";
 import TimestampConverter from "@/lib/TimestampConverter";
 import AddCompanyModal from "./addBuildingModal";
@@ -24,12 +24,12 @@ import { useRouter } from "next/router";
 import FormatDateTime from "@/lib/FormatDateTime";
 
 export default function Project({ buildingId }) {
-
   const router = useRouter();
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
   const [addCompanyModalOpen, setAddCompanyModalOpen] = useState(false);
   const [disableUserModalOpen, setDisableUserModalOpen] = useState(false);
   const [disableCompanyModalOpen, setDisableCompanyModalOpen] = useState(false);
+  const [searchResult1, setSearchResult1] = useState(null);
 
   const { data, isLoading, isFetching } = useQuery(
     ["project", buildingId],
@@ -74,13 +74,35 @@ export default function Project({ buildingId }) {
     setInverterId(id);
   };
 
+  const handleSearch = (e) => {
+    const searchPromise = searchInverter({
+      search: e.target.value,
+      buildingId,
+    });
+
+    if (e.target.value.length < 0) {
+      setSearchResult1(null);
+    } else {
+      if (searchPromise instanceof Promise) {
+        searchPromise
+          .then((data) => {
+            console.log(data);
+            setSearchResult1(data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
+  };
+
   return (
     <>
       <div className="space-y-2.5">
         <div className="bg-[#25476A] rounded-md p-3.5">
           <div className="flex items-center justify-between space-x-3 select-none">
             <h1 className="text-xl font-semibold text-white tracking-wide">
-            Building Overview
+              Building Overview
             </h1>
             <div className="flex space-x-2">
               <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
@@ -122,9 +144,7 @@ export default function Project({ buildingId }) {
                   <div className="flex justify-between text-sm border-b p-1.5">
                     <span className="text-[#25476A] font-semibold">Code:</span>
                     <div className="space-x-1">
-                      <span className="text-gray-700">
-                        {data?.code}
-                      </span>
+                      <span className="text-gray-700">{data?.code}</span>
                       <button
                         className="text-[#25476A]"
                         onClick={() =>
@@ -142,33 +162,43 @@ export default function Project({ buildingId }) {
                     </div>
                   </div>
                   <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Company Id:</span>
+                    <span className="text-[#25476A] font-semibold">
+                      Company Id:
+                    </span>
                     <span className="text-gray-700">
                       {data?.company?.id || "N/A"}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Company Name:</span>
+                    <span className="text-[#25476A] font-semibold">
+                      Company Name:
+                    </span>
                     <span className="text-gray-700">
                       {data?.company?.name || "N/A"}
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col justify-center px-2">
-                <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Total Inverters:</span>
+                  <div className="flex justify-between text-sm border-b p-1.5">
+                    <span className="text-[#25476A] font-semibold">
+                      Total Inverters:
+                    </span>
                     <span className="text-gray-700">
                       {data?.inverters?.length || 0}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Created Date & Time:</span>
+                    <span className="text-[#25476A] font-semibold">
+                      Created Date & Time:
+                    </span>
                     <span className="text-gray-700">
                       <FormatDateTime dateString={data?.createdAt} />
                     </span>
                   </div>
                   <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Updated Date & Time:</span>
+                    <span className="text-[#25476A] font-semibold">
+                      Updated Date & Time:
+                    </span>
                     <span className="text-gray-700">
                       <FormatDateTime dateString={data?.updatedAt} />
                     </span>
@@ -185,15 +215,31 @@ export default function Project({ buildingId }) {
                 <span className="text-lg font-semibold tracking-wide text-[#25476A]">
                   Inverters
                 </span>
-                <button
-                  className="px-3 py-1.5 text-white font-semibold bg-[#39B54A] rounded-md select-none"
-                  onClick={() => setAddCompanyModalOpen(true)}
-                >
-                  Add Inverter <FontAwesomeIcon icon={faPlus} />
-                </button>
+                <div className="space-x-5 flex items-center">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      className="w-72 h-8 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
+                      placeholder="Search by device serial number"
+                      onChange={handleSearch}
+                    />
+                    <div className="absolute top-1.5 right-2.5">
+                      <FontAwesomeIcon
+                        icon={faMagnifyingGlass}
+                        className="text-gray-400"
+                      />
+                    </div>
+                  </div>
+                  <button
+                    className="px-3 py-1.5 text-white font-semibold bg-[#39B54A] rounded-md select-none"
+                    onClick={() => setAddCompanyModalOpen(true)}
+                  >
+                    Add Inverter <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                </div>
                 {addCompanyModalOpen && (
                   <AddCompanyModal
-                  buildingId={buildingId}
+                    buildingId={buildingId}
                     addCompanyModalOpen={setAddCompanyModalOpen}
                   />
                 )}
@@ -201,65 +247,116 @@ export default function Project({ buildingId }) {
               <div className="space-y-1 select-none bg-gray-200 rounded-md p-1.5 border-y-2 text-[#25476A]">
                 <div className="grid grid-cols-12 items-center h-9">
                   <div className="flex justify-center font-semibold tracking-wide col-span-9">
-                  Device Serial Number
+                    Device Serial Number
                   </div>
                   <div className="flex justify-center font-semibold tracking-wide col-span-2">
-                  Device Id
+                    Device Id
                   </div>
                   <div className=""></div>
                 </div>
               </div>
               <div className="space-y-1.5 h-64 overflow-y-auto">
-                {data?.inverters?.map((inverter) => (
-                  <div
-                    className="bg-gray-200 rounded-md p-2"
-                    key={Math.random()}
-                  >
-                    <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                      <div className="grid grid-cols-11 col-span-11" onClick={() => {handleInverterClick(inverter.id)}}>
-                      <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
-                        <Image
-                          src={Placeholder}
-                          alt="logo"
-                          className="w-10 h-10 rounded-full"
-                        />
-                        <div>
-                          <div className="select-text text-gray-700 font-semibold">
-                            {inverter.deviceSn}
+                {searchResult1?.length >= 0
+                  ? searchResult1?.map((inverter) => (
+                      <div
+                        className="bg-gray-200 rounded-md p-2"
+                        key={Math.random()}
+                      >
+                        <div className="grid grid-cols-12 items-center py-[0.001rem]">
+                          <div
+                            className="grid grid-cols-11 col-span-11"
+                            onClick={() => {
+                              handleInverterClick(inverter.id);
+                            }}
+                          >
+                            <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                              <Image
+                                src={Placeholder}
+                                alt="logo"
+                                className="w-10 h-10 rounded-full"
+                              />
+                              <div>
+                                <div className="select-text text-gray-700 font-semibold">
+                                  {inverter.deviceSn}
+                                </div>
+                                <div className="select-text flex items-center text-gray-700 text-xs space-x-1">
+                                  <span>ID:</span>
+                                  <span>{inverter.id}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center col-span-2">
+                              <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                                {inverter.deviceId}
+                              </span>
+                            </div>
                           </div>
-                          <div className="select-text flex items-center text-gray-700 text-xs space-x-1">
-                            <span>ID:</span>
-                            <span>{inverter.id}</span>
+                          <div className="flex justify-center">
+                            <button
+                              className="text-sm text-gray-700"
+                              onClick={() => handleDelete(inverter.id)}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} /> Delete
+                            </button>
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center col-span-2">
-                        <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                          {inverter.deviceId}
-                        </span>
+                    ))
+                  : data?.inverters?.map((inverter) => (
+                      <div
+                        className="bg-gray-200 rounded-md p-2"
+                        key={Math.random()}
+                      >
+                        <div className="grid grid-cols-12 items-center py-[0.001rem]">
+                          <div
+                            className="grid grid-cols-11 col-span-11"
+                            onClick={() => {
+                              handleInverterClick(inverter.id);
+                            }}
+                          >
+                            <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                              <Image
+                                src={Placeholder}
+                                alt="logo"
+                                className="w-10 h-10 rounded-full"
+                              />
+                              <div>
+                                <div className="select-text text-gray-700 font-semibold">
+                                  {inverter.deviceSn}
+                                </div>
+                                <div className="select-text flex items-center text-gray-700 text-xs space-x-1">
+                                  <span>ID:</span>
+                                  <span>{inverter.id}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center col-span-2">
+                              <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                                {inverter.deviceId}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex justify-center">
+                            <button
+                              className="text-sm text-gray-700"
+                              onClick={() => handleDelete(inverter.id)}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} /> Delete
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      </div>
-                      <div className="flex justify-center">
-                        <button
-                          className="text-sm text-gray-700"
-                          onClick={() => handleDelete(inverter.id)}
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} /> Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    ))}
               </div>
             </div>
           </div>
         </div>
         {disableCompanyModalOpen && (
-                      <DisableCompanyModal
-                      inverterId={inverterId}
-                        disableCompanyModalOpen={setDisableCompanyModalOpen}
-                      />
-                    )}
+          <DisableCompanyModal
+            inverterId={inverterId}
+            disableCompanyModalOpen={setDisableCompanyModalOpen}
+          />
+        )}
       </div>
     </>
   );
