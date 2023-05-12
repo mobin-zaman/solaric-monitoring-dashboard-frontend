@@ -248,7 +248,7 @@ export default function Users() {
                   key={Math.random()}
                 >
                   <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                    <div className="grid grid-cols-11 col-span-11 items-center border-r-2" onClick={() => handleEditUser(user)}>
+                    <div className="grid grid-cols-11 col-span-11 items-center border-r-2 hover:cursor-pointer" onClick={() => handleEditUser(user)}>
                     <div className="flex items-center font-medium space-x-2 px-5 col-span-3">
                       <Image
                         src={
