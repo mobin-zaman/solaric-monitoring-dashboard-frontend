@@ -3,11 +3,11 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { deleteInverterFromBuilding } from "@/lib/Helper";
 import { useMutation } from "react-query";
 
-export default function DeleteProjectModal({ disableCompanyModalOpen , inverterId }) {
+export default function DeleteProjectModal({ disableCompanyModalOpen , inverterId, inverterDeleted }) {
 
   const mutation = useMutation(deleteInverterFromBuilding, {
     onSuccess: () => {
-      userDeleted(true);
+      inverterDeleted(true);
       disableCompanyModalOpen(false);
     },
   });

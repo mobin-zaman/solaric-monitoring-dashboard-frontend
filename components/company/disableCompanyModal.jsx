@@ -3,12 +3,12 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { deleteBuildingFromCompany } from "@/lib/Helper";
 import { useMutation } from "react-query";
 
-export default function DeleteProjectModal({ disableCompanyModalOpen , buildingId, companyId }) {
+export default function DeleteProjectModal({ disableCompanyModalOpen , buildingId, companyId, buildingDisabled }) {
   console.log(buildingId, companyId);
 
   const mutation = useMutation(deleteBuildingFromCompany, {
     onSuccess: () => {
-      userDeleted(true);
+      buildingDisabled(true);
       disableCompanyModalOpen(false);
     },
   });

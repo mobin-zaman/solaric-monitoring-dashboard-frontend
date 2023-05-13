@@ -30,14 +30,28 @@ export default function Project({ buildingId }) {
   const [disableUserModalOpen, setDisableUserModalOpen] = useState(false);
   const [disableCompanyModalOpen, setDisableCompanyModalOpen] = useState(false);
   const [searchResult1, setSearchResult1] = useState(null);
+  const [inverterAdded, setInverterAdded] = useState(false);
+  const [inverterDeleted, setInverterDeleted] = useState(false);
 
-  const { data, isLoading, isFetching } = useQuery(
+  const { data, isLoading, isError, refetch } = useQuery(
     ["project", buildingId],
     () => getBuilding(buildingId),
     {
       enabled: buildingId ? true : false,
     }
   );
+
+  //when a new inverter is added, we need to refetch the data
+  useEffect(() => {
+    if (inverterAdded) {
+      refetch();
+      setInverterAdded(false);
+    } else if (inverterDeleted) {
+      refetch();
+      setInverterDeleted(false);
+    }
+  }, [inverterAdded, inverterDeleted, refetch]);
+
 
   const [projectIdCopy, setProjectIdCopy] = useState(false);
   const [solarmanPlantIdCopy, setSolarmanPlantIdCopy] = useState(false);
@@ -240,6 +254,7 @@ export default function Project({ buildingId }) {
                 {addCompanyModalOpen && (
                   <AddCompanyModal
                     buildingId={buildingId}
+                    inverterAdded={setInverterAdded}
                     addCompanyModalOpen={setAddCompanyModalOpen}
                   />
                 )}
@@ -354,6 +369,7 @@ export default function Project({ buildingId }) {
         {disableCompanyModalOpen && (
           <DisableCompanyModal
             inverterId={inverterId}
+            inverterDeleted={setInverterDeleted}
             disableCompanyModalOpen={setDisableCompanyModalOpen}
           />
         )}

@@ -13,7 +13,7 @@ import placeholderImage from "@/public/Placeholder.png";
 export default function AddUserModal({
   addCompanyModalOpen,
   buildingId,
-  userAdded,
+  inverterAdded,
 }) {
   const [inverterId, setInverterId] = useState();
   const [inverterSerialNumber, setInverterSerialNumber] = useState("");
@@ -22,7 +22,7 @@ export default function AddUserModal({
 
   const mutation = useMutation(addInverterToBuilding, {
     onSuccess: () => {
-      userEdited(true);
+      inverterAdded(true);
       addCompanyModalOpen(false);
     },
     onError: (error) => {

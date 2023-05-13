@@ -4,14 +4,14 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import { addBuildingToCompany } from "@/lib/Helper";
 
-export default function AddUserModal({ addCompanyModalOpen, companyId, userAdded }) {
+export default function AddUserModal({ addCompanyModalOpen, companyId, buildingAdded }) {
   const [buildingName, setBuildingName] = useState("");
   const [buildingCode, setBuildingCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const mutation = useMutation(addBuildingToCompany, {
     onSuccess: () => {
-      userEdited(true);
+      buildingAdded(true);
       addCompanyModalOpen(false);
     },
     onError: (error) => {

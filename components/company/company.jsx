@@ -30,14 +30,28 @@ export default function Project({ companyId }) {
   const [disableUserModalOpen, setDisableUserModalOpen] = useState(false);
   const [disableCompanyModalOpen, setDisableCompanyModalOpen] = useState(false);
   const [searchResult1, setSearchResult1] = useState(null);
+  const [buildingAdded, setBuildingAdded] = useState(false);
+  const [buildingDeleted, setBuildingDeleted] = useState(false);
 
-  const { data, isLoading, isFetching } = useQuery(
+  const { data, isLoading, error, refetch } = useQuery(
     ["project", companyId],
     () => getCompany(companyId),
     {
       enabled: companyId ? true : false,
     }
   );
+
+  //when a new building is added, refetch the data
+  useEffect(() => {
+    if (buildingAdded) {
+      refetch();
+      setBuildingAdded(false);
+    } else if (buildingDeleted) {
+      refetch();
+      setBuildingDeleted(false);
+    }
+  }, [buildingAdded, refetch, buildingDeleted]);
+
 
   const [projectIdCopy, setProjectIdCopy] = useState(false);
   const [solarmanPlantIdCopy, setSolarmanPlantIdCopy] = useState(false);
@@ -237,6 +251,7 @@ export default function Project({ companyId }) {
                 {addCompanyModalOpen && (
                   <AddCompanyModal
                     companyId={companyId}
+                    buildingAdded={setBuildingAdded}
                     addCompanyModalOpen={setAddCompanyModalOpen}
                   />
                 )}
@@ -352,6 +367,7 @@ export default function Project({ companyId }) {
           <DisableCompanyModal
             companyId={companyId}
             buildingId={buildingId}
+            buildingDisabled={setBuildingDeleted}
             disableCompanyModalOpen={setDisableCompanyModalOpen}
           />
         )}
