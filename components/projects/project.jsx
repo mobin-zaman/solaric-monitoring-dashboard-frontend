@@ -124,6 +124,11 @@ export default function Project({ projectId }) {
     setDisableCompanyModalId(id);
   };
 
+  const handleInverterClick = (inverterId) => {
+    router.push(`/inverter/${inverterId}`);
+  };
+
+
   return (
     <>
       <div className="space-y-2.5 relative p-1.5">

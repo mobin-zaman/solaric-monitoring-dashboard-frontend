@@ -18,27 +18,29 @@ export default function Header() {
 
   return (
     <>
-      <div className="w-full h-16 bg-white flex justify-end items-center px-5 border-b-2 border-gray-300 text-[#25476A] font-semibold tracking-wide">
+      <div className="w-full h-16 bg-white flex justify-between items-center px-5 border-b-2 border-gray-300 text-[#25476A] font-semibold tracking-wide">
         {/* <h1 className="text-[#39B54A] font-semibold text-md">
           Monitoring DashBoard
         </h1> */}
-        <div className="flex justify-center items-center space-x-6">
-          <button onClick={handleSignOut}>
-            <FontAwesomeIcon icon={faRightFromBracket} />
-          </button>
-          <div className="relative">
-            <div className="absolute -top-1 left-2 w-2 h-2 bg-[#38EB1A] rounded-full"></div>
-            <Image src={Notification} alt="Settings" className="w-4" />
-          </div>
-          <span>{data?.name}</span>
-          <div className="relative">
+        <div className="flex items-center space-x-3">
+        <div className="relative">
             <div className="absolute top-7 left-0 w-3 h-3 bg-[#38EB1A] rounded-full"></div>
             <Image
               src={placeholderImage}
               alt="logo"
-              className="w-10 rounded-full border border-[#373737]"
+              className="w-10 rounded-full border-2 border-[#25476A]"
             />
           </div>
+          <span className="text-lg">{data?.name}</span>
+        </div>
+        <div className="flex justify-center items-center space-x-6">
+          {/* <div className="relative">
+            <div className="absolute -top-1 left-2 w-2 h-2 bg-[#38EB1A] rounded-full"></div>
+            <Image src={Notification} alt="Settings" className="w-4" />
+          </div> */}
+          <button onClick={handleSignOut} className="border-2 px-2 py-1.5 bg-[#25476A] rounded-md text-sm text-white flex items-center justify-center space-x-1">
+            <FontAwesomeIcon icon={faRightFromBracket} /> <span>Sign Out</span>
+          </button>
         </div>
       </div>
     </>
