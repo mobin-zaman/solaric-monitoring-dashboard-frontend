@@ -38,8 +38,9 @@ export default function Header() {
             <div className="absolute -top-1 left-2 w-2 h-2 bg-[#38EB1A] rounded-full"></div>
             <Image src={Notification} alt="Settings" className="w-4" />
           </div> */}
-          <button onClick={handleSignOut} className="border-2 px-2 py-1.5 bg-[#25476A] rounded-md text-sm text-white flex items-center justify-center space-x-1">
-            <FontAwesomeIcon icon={faRightFromBracket} /> <span>Sign Out</span>
+          <button onClick={handleSignOut} className="border-2 p-2 bg-[#25476A] rounded-md text-sm text-white flex items-center justify-center space-x-1">
+            <FontAwesomeIcon icon={faRightFromBracket} /> 
+            {/* <span>Sign Out</span> */}
           </button>
         </div>
       </div>

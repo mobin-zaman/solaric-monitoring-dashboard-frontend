@@ -9,7 +9,7 @@ import {
 import { useQuery, useMutation } from "react-query";
 import { getUsers, searchUser } from "@/lib/Helper";
 import AddUserModal from "./addUserModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import placeholderImage from "@/public/placeholderImage.jpg";
 import DeleteUserModal from "./deleteUserModal";
@@ -25,26 +25,28 @@ export default function Users() {
   const [userEdited, setUserEdited] = useState(false);
   const [deleteUser, setDeleteUser] = useState({});
   const [editUser, setEditUser] = useState({});
-  const [search, setSearch] = useState("");
+  const [searchResult1, setSearchResult1] = useState(null);
   const [searchOn, setSearchOn] = useState(false);
-  const [searchResult, setSearchResult] = useState([]);
-  const [searchResult1, setSearchResult1] = useState([]);
+  const [searchResultEmpty, setSearchResultEmpty] = useState(false);
 
-  const { data, isLoading, isFetching } = useQuery("users", () => getUsers(), {
-    enabled: true, //enable query
-  });
+  const { data, isLoading, isError, refetch } = useQuery(
+    "users",
+    () => getUsers(),
+    {
+      enabled: true, //enable query
+    }
+  );
 
   //when new user is created, refetch the data
-  useQuery("users", () => getUsers(), {
-    enabled: newUserCreated, //enable query
-    onSuccess: () => setNewUserCreated(false),
-  });
-
-  //when user is deleted, refetch the data
-  useQuery("users", () => getUsers(), {
-    enabled: userDeleted, //enable query
-    onSuccess: () => setUserDeleted(false),
-  });
+  useEffect(() => {
+    if (newUserCreated) {
+      refetch();
+      setNewUserCreated(false);
+    } else if (userDeleted) {
+      refetch();
+      setUserDeleted(false);
+    }
+  }, [newUserCreated, refetch, userDeleted]);
 
   //when user is edited, refetch the data
   useQuery("users", () => getUsers(), {
@@ -62,24 +64,24 @@ export default function Users() {
     setEditUser(user);
   };
 
-  const searchData = useQuery(() => searchUser(search), {
-    enabled: searchOn,
-  });
-
   const handleSearch = (e) => {
+    setSearchOn(true);
     console.log(e.target.value, "e.target.value");
     const searchPromise = searchUser(e.target.value);
-    setSearchResult(searchPromise);
 
-    if (e.target.value.length < 0) {
+    if (e.target.value.length < 1) {
       setSearchResult1(null);
-    } else {
       setSearchOn(false);
-
+    } else {
       if (searchPromise instanceof Promise) {
         searchPromise
           .then((data) => {
-            setSearchResult1(data);
+            if (data.length < 1) {
+              setSearchResultEmpty(true);
+            } else {
+              setSearchResultEmpty(false);
+              setSearchResult1(data);
+            }
             console.log(searchResult1, "searchResult1");
           })
           .catch((error) => {
@@ -93,7 +95,11 @@ export default function Users() {
     <>
       <div className="space-y-1.5">
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
+          <div
+            className={`flex items-center justify-between bg-[#25476A] rounded-md p-3.5 ${
+              isLoading ? "animate-pulse" : ""
+            }`}
+          >
             <div className="flex items-center space-x-3 select-none">
               <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
                 Users
@@ -141,31 +147,36 @@ export default function Users() {
               </div>
             )}
           </div>
-          <div className="space-y-1 select-none bg-white text-[#25476A] font-semibold rounded-md p-1.5">
-            <div className="grid grid-cols-12 items-center h-9">
-              <div className="grid grid-cols-10 col-span-11">
-                <div className="flex justify-center col-span-6 lg:col-span-4">
-                  Name
+          {!isLoading && !isError && (
+            <div className="space-y-1 select-none bg-white text-[#25476A] font-semibold rounded-md p-1.5">
+              <div className="grid grid-cols-12 items-center h-9">
+                <div className="grid grid-cols-10 col-span-11">
+                  <div className="flex justify-center col-span-6 lg:col-span-4">
+                    Name
+                  </div>
+                  <div className="flex items-center justify-center space-x-1.5 col-span-2 lg:col-span-1">
+                    <span>Status</span>
+                    {/* <FontAwesomeIcon icon={faArrowDown} /> */}
+                  </div>
+                  <div className="hidden lg:block lg:col-span-4">
+                    <div className="flex justify-center">Email</div>
+                  </div>
+                  <div className="flex justify-center col-span-2 lg:col-span-1">
+                    Role
+                  </div>
+                  {/* <div className="hidden xl:block"><div className="flex justify-center">Address</div></div> */}
                 </div>
-                <div className="flex items-center justify-center space-x-1.5 col-span-2 lg:col-span-1">
-                  <span>Status</span>
-                  {/* <FontAwesomeIcon icon={faArrowDown} /> */}
-                </div>
-                <div className="hidden lg:block lg:col-span-4">
-                  <div className="flex justify-center">Email</div>
-                </div>
-                <div className="flex justify-center col-span-2 lg:col-span-1">
-                  Role
-                </div>
-                {/* <div className="hidden xl:block"><div className="flex justify-center">Address</div></div> */}
+                <div className="col-span-1"></div>
               </div>
-              <div className="col-span-1"></div>
             </div>
-          </div>
+          )}
         </div>
-        <div className="space-y-1.5">
-          {searchResult1.length > 0
-            ? searchResult1?.map((user) => (
+        {!isLoading && !isError && (
+          <div className="space-y-1.5">
+            {!searchResultEmpty &&
+              searchResult1?.length > 0 &&
+              searchOn &&
+              searchResult1?.map((user) => (
                 <div
                   className="bg-white rounded-md p-1.5 text-[#25476A]"
                   key={Math.random()}
@@ -247,91 +258,104 @@ export default function Users() {
                     </div>
                   </div>
                 </div>
-              ))
-            : data?.map((user) => (
+              ))}
+
+            {searchResultEmpty ? (
+              <div className="flex justify-center items-center h-44">
+                <div className="text-xl font-semibold text-[#25476A]">
+                  No user found ! &#x1F61E;
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {!searchResultEmpty &&
+              !searchOn &&
+              data?.map((user) => (
                 <div
-                  className="bg-white rounded-md p-2 text-[#25476A]"
                   key={Math.random()}
+                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
                 >
-                  <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                    <div
-                      className="grid grid-cols-10 col-span-11 border-r items-center"
-                      onClick={() => handleEditUser(user)}
-                    >
-                      <div className="flex items-center font-medium space-x-2 px-5 col-span-6 lg:col-span-4">
-                        <Image
-                          src={placeholderImage}
-                          alt="logo"
-                          className="w-12 rounded-full"
-                        />
-                        <div>
-                          <div className="select-text font-semibold">
-                            {user.name}
-                          </div>
-                          <div className="select-text text-sm flex items-center space-x-1">
-                            <span>Id:</span>
-                            <span>{user.id}</span>
-                          </div>
+                  <div
+                    className="grid grid-cols-10 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    onClick={() => handleEditUser(user)}
+                  >
+                    <div className="flex items-center font-medium space-x-2 px-5 col-span-6 lg:col-span-4">
+                      <Image
+                        src={placeholderImage}
+                        alt="logo"
+                        className="w-12 rounded-full"
+                      />
+                      <div>
+                        <div className="select-text font-semibold">
+                          {user.name}
                         </div>
-                      </div>
-                      <div className="flex justify-center col-span-2 lg:col-span-1">
-                        {user.status === "ACTIVE" ? (
-                          <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
-                            <span className="text-[#38EB1A] font-medium text-sm">
-                              Active
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
-                            <span className="text-[#9EA09E] font-semibold text-sm">
-                              Inactive
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="hidden lg:block lg:col-span-4">
-                        <div className="flex items-center justify-center select-all text-sm">
-                          {user?.email || "N/A"}
+                        <div className="select-text text-sm flex items-center space-x-1">
+                          <span>Id:</span>
+                          <span>{user.id}</span>
                         </div>
-                      </div>
-                      <div className="flex justify-center items-center col-span-2 lg:col-span-1">
-                        {user.role === "ADMIN" ? (
-                          <div className="px-2 py-1 bg-[#66C38B] text-white text-sm font-medium rounded-md">
-                            Admin
-                          </div>
-                        ) : null}
-                        {user.role === "ENGINEER" ? (
-                          <div className="px-2 py-1 bg-[#C36666] font-medium text-sm text-white rounded-md">
-                            Engineer
-                          </div>
-                        ) : null}
-                        {user.role === "USER" ? (
-                          <div className="px-2 py-1 bg-[#e18b13] font-medium text-sm text-white rounded-md">
-                            User
-                          </div>
-                        ) : null}
                       </div>
                     </div>
-                    {/* <div className="select-all text-sm hidden xl:block">
+                    <div className="flex justify-center col-span-2 lg:col-span-1">
+                      {user.status === "ACTIVE" ? (
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
+                          <span className="text-[#38EB1A] font-medium text-sm">
+                            Active
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
+                          <span className="text-[#9EA09E] font-semibold text-sm">
+                            Inactive
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="hidden lg:block lg:col-span-4">
+                      <div className="flex items-center justify-center select-all text-sm">
+                        {user?.email || "N/A"}
+                      </div>
+                    </div>
+                    <div className="flex justify-center items-center col-span-2 lg:col-span-1">
+                      {user.role === "ADMIN" ? (
+                        <div className="px-2 py-1 bg-[#66C38B] text-white text-sm font-medium rounded-md">
+                          Admin
+                        </div>
+                      ) : null}
+                      {user.role === "ENGINEER" ? (
+                        <div className="px-2 py-1 bg-[#C36666] font-medium text-sm text-white rounded-md">
+                          Engineer
+                        </div>
+                      ) : null}
+                      {user.role === "USER" ? (
+                        <div className="px-2 py-1 bg-[#e18b13] font-medium text-sm text-white rounded-md">
+                          User
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                  {/* <div className="select-all text-sm hidden xl:block">
                   <div className="flex justify-center">
                       {user.address}
                     </div>
                     </div> */}
-                    <div className="flex justify-center col-span-1">
-                      <button
-                        className="flex items-center space-x-1 text-sm"
-                        onClick={() => handleDeleteUser(user)}
-                      >
-                        <FontAwesomeIcon icon={faTrashCan} />
-                        <span className="hidden xl:block">Delete</span>
-                      </button>
-                    </div>
+                  <div className="flex justify-center col-span-1">
+                    <button
+                      className="flex items-center space-x-1 text-sm"
+                      onClick={() => handleDeleteUser(user)}
+                      title="Delete"
+                    >
+                      <FontAwesomeIcon icon={faTrashCan} />
+                      <span className="hidden xl:block">Delete</span>
+                    </button>
                   </div>
                 </div>
               ))}
-        </div>
+          </div>
+        )}
         {editUserModalOpen && (
           <EditUserModal
             editUserModalOpen={setEditUserModalOpen}

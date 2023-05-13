@@ -39,7 +39,7 @@ export default function SideBar() {
               <FontAwesomeIcon
                 icon={faUserGroup}
                 className={`w-5 h-5 ${
-                  link === "/users" ? "text-[#38EB1A]" : ""
+                  link === "/user" ? "text-[#38EB1A]" : ""
                 }`}
                 title="Users"
               />
