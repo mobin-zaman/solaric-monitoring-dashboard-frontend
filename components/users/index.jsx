@@ -66,12 +66,12 @@ export default function Users() {
 
   const handleSearch = (e) => {
     setSearchOn(true);
-    console.log(e.target.value, "e.target.value");
     const searchPromise = searchUser(e.target.value);
 
     if (e.target.value.length < 1) {
       setSearchResult1(null);
       setSearchOn(false);
+      setSearchResultEmpty(false);
     } else {
       if (searchPromise instanceof Promise) {
         searchPromise
@@ -82,7 +82,6 @@ export default function Users() {
               setSearchResultEmpty(false);
               setSearchResult1(data);
             }
-            console.log(searchResult1, "searchResult1");
           })
           .catch((error) => {
             console.log(error);
@@ -147,7 +146,7 @@ export default function Users() {
               </div>
             )}
           </div>
-          {!isLoading && !isError && (
+          {!isLoading && !isError && !searchResultEmpty && (
             <div className="space-y-1 select-none bg-white text-[#25476A] font-semibold rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
                 <div className="grid grid-cols-10 col-span-11">
@@ -284,7 +283,7 @@ export default function Users() {
                       <Image
                         src={placeholderImage}
                         alt="logo"
-                        className="w-12 rounded-full"
+                        className="w-14 h-14 rounded-full"
                       />
                       <div>
                         <div className="select-text font-semibold">

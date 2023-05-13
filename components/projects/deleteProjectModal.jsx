@@ -34,7 +34,10 @@ export default function DeleteProjectModal({ deleteUserModalOpen, deleteUserData
           </div>
           <div className="flex justify-center items-center flex-col">
             <div className="font-medium text-lg text-white">
-            Are you sure you want to delete project {deleteUserData?.name?.toUpperCase()}?
+            Are you sure you want to delete project
+            </div>
+            <div className="font-medium text-lg text-white">
+            {deleteUserData?.name?.toUpperCase()}?
             </div>
           </div>
           <div className="flex justify-center items-center">
