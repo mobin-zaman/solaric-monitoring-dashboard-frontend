@@ -125,7 +125,7 @@ export default function Users() {
                 <input
                   type="text"
                   className="w-72 h-8 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
-                  placeholder="Search by name or email"
+                  placeholder="Search by name"
                   onChange={handleSearch}
                 />
                 <div className="absolute top-1.5 right-2.5">
@@ -139,7 +139,7 @@ export default function Users() {
                 className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none space-x-1"
                 onClick={() => setAddUserModalOpen(true)}
               >
-                <span>Add User</span>
+                <span>Add Project</span>
                 <FontAwesomeIcon icon={faPlus} />
               </button>
             </div>

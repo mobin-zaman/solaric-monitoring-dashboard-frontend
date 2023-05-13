@@ -238,6 +238,7 @@ export default function Project({ projectId }) {
                 {addUserModalOpen && (
                   <AddUserModal
                     projectId={projectId}
+                    projectName={data?.name}
                     addUserModalOpen={setAddUserModalOpen}
                   />
                 )}

@@ -316,3 +316,26 @@ export const searchInverter = async (data) => {
   });
   return response.data;
 }
+
+//Api calls for search user as user-role
+export const searchUserAsUserRole = async (data) => {
+  const searchValue = data;
+  const response = await todoApi.get(`/user/user-role?search=${searchValue}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+//Api calls for search inverter for assign in building
+export const searchInverterForAssignInBuilding = async (data) => {
+  const searchValue = data.search;
+  const buildingId = data.buildingId;
+  const response = await todoApi.get(`/building/inverter/${buildingId}/search?search=${searchValue}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
