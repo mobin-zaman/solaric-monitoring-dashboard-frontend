@@ -178,84 +178,83 @@ export default function Users() {
               searchOn &&
               searchResult1?.map((user) => (
                 <div
-                  className="bg-white rounded-md p-1.5 text-[#25476A]"
                   key={Math.random()}
+                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
                 >
-                  <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                    <div
-                      className="grid grid-cols-10 col-span-11 border-r items-center"
-                      onClick={() => handleEditUser(user)}
-                    >
-                      <div className="flex items-center font-medium space-x-2 px-5 col-span-6 lg:col-span-4">
-                        <Image
-                          src={placeholderImage}
-                          alt="logo"
-                          className="w-12 rounded-full"
-                        />
-                        <div>
-                          <div className="select-text font-semibold">
-                            {user.name}
-                          </div>
-                          <div className="select-text text-sm flex items-center space-x-1">
-                            <span>Id:</span>
-                            <span>{user.id}</span>
-                          </div>
+                  <div
+                    className="grid grid-cols-10 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    onClick={() => handleEditUser(user)}
+                  >
+                    <div className="flex items-center font-medium space-x-2 px-5 col-span-6 lg:col-span-4">
+                      <Image
+                        src={placeholderImage}
+                        alt="logo"
+                        className="w-12 rounded-full"
+                      />
+                      <div>
+                        <div className="select-text font-semibold">
+                          {user.name}
                         </div>
-                      </div>
-                      <div className="flex justify-center col-span-2 lg:col-span-1">
-                        {user.status === "ACTIVE" ? (
-                          <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
-                            <span className="text-[#38EB1A] font-medium text-sm">
-                              Active
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
-                            <span className="text-[#9EA09E] font-semibold text-sm">
-                              Inactive
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="hidden lg:block lg:col-span-4">
-                        <div className="flex items-center justify-center select-all text-sm">
-                          {user?.email || "N/A"}
+                        <div className="select-text text-sm flex items-center space-x-1">
+                          <span>Id:</span>
+                          <span>{user.id}</span>
                         </div>
-                      </div>
-                      <div className="flex justify-center items-center col-span-2 lg:col-span-1">
-                        {user.role === "ADMIN" ? (
-                          <div className="px-2 py-1 bg-[#66C38B] text-white font-medium rounded-md">
-                            Admin
-                          </div>
-                        ) : null}
-                        {user.role === "ENGINEER" ? (
-                          <div className="px-2 py-1 bg-[#C36666] font-medium text-white rounded-md">
-                            Engineer
-                          </div>
-                        ) : null}
-                        {user.role === "USER" ? (
-                          <div className="px-2 py-1 bg-[#e18b13] font-medium text-white rounded-md">
-                            User
-                          </div>
-                        ) : null}
                       </div>
                     </div>
-                    {/* <div className="select-all text-sm hidden xl:block">
+                    <div className="flex justify-center col-span-2 lg:col-span-1">
+                      {user.status === "ACTIVE" ? (
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
+                          <span className="text-[#38EB1A] font-medium text-sm">
+                            Active
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-[#9EA09E] rounded-full"></div>
+                          <span className="text-[#9EA09E] font-semibold text-sm">
+                            Inactive
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="hidden lg:block lg:col-span-4">
+                      <div className="flex items-center justify-center select-all text-sm">
+                        {user?.email || "N/A"}
+                      </div>
+                    </div>
+                    <div className="flex justify-center items-center col-span-2 lg:col-span-1">
+                      {user.role === "ADMIN" ? (
+                        <div className="px-2 py-1 bg-[#66C38B] text-white text-sm font-medium rounded-md">
+                          Admin
+                        </div>
+                      ) : null}
+                      {user.role === "ENGINEER" ? (
+                        <div className="px-2 py-1 bg-[#C36666] font-medium text-sm text-white rounded-md">
+                          Engineer
+                        </div>
+                      ) : null}
+                      {user.role === "USER" ? (
+                        <div className="px-2 py-1 bg-[#e18b13] font-medium text-sm text-white rounded-md">
+                          User
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                  {/* <div className="select-all text-sm hidden xl:block">
                   <div className="flex justify-center">
                       {user.address}
                     </div>
                     </div> */}
-                    <div className="flex justify-center col-span-1">
-                      <button
-                        className="flex items-center space-x-1 text-sm"
-                        onClick={() => handleDeleteUser(user)}
-                      >
-                        <FontAwesomeIcon icon={faTrashCan} />
-                        <span className="hidden xl:block">Delete</span>
-                      </button>
-                    </div>
+                  <div className="flex justify-center col-span-1">
+                    <button
+                      className="flex items-center space-x-1 text-sm hover:text-red-500"
+                      onClick={() => handleDeleteUser(user)}
+                      title="Delete"
+                    >
+                      <FontAwesomeIcon icon={faTrashCan} />
+                      <span className="hidden xl:block">Delete</span>
+                    </button>
                   </div>
                 </div>
               ))}
@@ -344,7 +343,7 @@ export default function Users() {
                     </div> */}
                   <div className="flex justify-center col-span-1">
                     <button
-                      className="flex items-center space-x-1 text-sm"
+                      className="flex items-center space-x-1 text-sm hover:text-red-500"
                       onClick={() => handleDeleteUser(user)}
                       title="Delete"
                     >

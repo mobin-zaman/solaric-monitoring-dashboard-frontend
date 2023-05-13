@@ -34,14 +34,14 @@ export default function SideBar() {
           {/* <Image src={Home} alt="Home" className="w-5" /> */}
           <FontAwesomeIcon icon={faHouse} className="w-5 h-5" />
           {data?.role === "ADMIN" && (
-            <Link href="/users">
+            <Link href="/user">
               {/* <Image src={Users} alt="Users" className="w-5" /> */}
               <FontAwesomeIcon
                 icon={faUserGroup}
                 className={`w-5 h-5 ${
                   link === "/user" ? "text-[#38EB1A]" : ""
                 }`}
-                title="Users"
+                title="User"
               />
             </Link>
           )}
@@ -57,7 +57,7 @@ export default function SideBar() {
                     ? "text-[#38EB1A]"
                     : ""
                 }`}
-                title="Projects"
+                title="Project"
               />
             </Link>
           )}
