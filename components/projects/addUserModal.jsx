@@ -19,7 +19,6 @@ export default function AddUserModal({
 
   const mutation = useMutation(addUserToProject, {
     onSuccess: () => {
-      userEdited(true);
       addUserModalOpen(false);
     },
     onError: (error) => {
@@ -29,7 +28,6 @@ export default function AddUserModal({
 
   const handleAddUser = (e) => {
     e.preventDefault();
-    // userEdited(false);
     setErrorMessage("");
     if (!userId) {
       setErrorMessage("Please fill all the fields");

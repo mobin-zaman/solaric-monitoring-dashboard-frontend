@@ -19,7 +19,7 @@ export default function AddUserModal({ deleteUserModalOpen, deleteUserData, user
   return (
     <>
       <div className="flex items-center bg-opacity-70 bg-gray-300 fixed inset-0 z-50 select-none">
-        <div className="grid grid-cols-1 bg-indigo-950 rounded-md items-center relative mx-auto p-5 space-y-4">
+        <div className="grid grid-cols-1 bg-[#25476A] rounded-md items-center relative mx-auto p-5 space-y-4">
           <div className="flex justify-end">
             {/* <span className="text-[#373737] font-semibold text-2xl">
               Delete User
@@ -33,7 +33,7 @@ export default function AddUserModal({ deleteUserModalOpen, deleteUserData, user
           </div>
           <div className="flex justify-center items-center flex-col">
             <div className="font-medium text-lg text-white">
-            Are you sure you want to delete {deleteUserData?.name?.toUpperCase()}?
+            Are you sure you want to delete user {deleteUserData?.name?.toUpperCase()}?
             </div>
           </div>
           <div className="flex justify-center items-center">
