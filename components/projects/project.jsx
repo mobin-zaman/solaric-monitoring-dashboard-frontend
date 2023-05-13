@@ -31,14 +31,37 @@ export default function Project({ projectId }) {
   const [disableUserModalOpen, setDisableUserModalOpen] = useState(false);
   const [disableCompanyModalOpen, setDisableCompanyModalOpen] = useState(false);
   const [searchResult1, setSearchResult1] = useState(null);
+  const [userAdded, setUserAdded] = useState(false);
+  const [companyAdded, setCompanyAdded] = useState(false);
+  const [disableUserModalId, setDisableUserModalId] = useState(null);
+  const [disableCompanyModalId, setDisableCompanyModalId] = useState(null);
+  const [userDisabled, setUserDisabled] = useState(false);
+  const [companyDisabled, setCompanyDisabled] = useState(false);
   
-  const { data, isLoading, isFetching } = useQuery(
+  const { data, isLoading, error, refetch } = useQuery(
     ["project", projectId],
     () => getProject(projectId),
     {
       enabled: projectId ? true : false,
     }
   );
+
+  //when user is added, refetch the data
+  useEffect(() => {
+    if (userAdded) {
+      refetch();
+      setUserAdded(false);
+    } else if (companyAdded) {
+      refetch();
+      setCompanyAdded(false);
+    } else if (userDisabled) {
+      refetch();
+      setUserDisabled(false);
+    } else if (companyDisabled) {
+      refetch();
+      setCompanyDisabled(false);
+    }
+  }, [refetch, userAdded, companyAdded, userDisabled, companyDisabled]);
 
   const [projectIdCopy, setProjectIdCopy] = useState(false);
   const [solarmanPlantIdCopy, setSolarmanPlantIdCopy] = useState(false);
@@ -91,10 +114,20 @@ export default function Project({ projectId }) {
     }
   };
 
+  const handleDisableUser = (id) => {
+    setDisableUserModalOpen(true);
+    setDisableUserModalId(id);
+  };
+
+  const handleDisableCompany = (id) => {
+    setDisableCompanyModalOpen(true);
+    setDisableCompanyModalId(id);
+  };
+
   return (
     <>
-      <div className="space-y-2.5">
-        <div className="bg-[#25476A] rounded-md p-3.5">
+      <div className="space-y-2.5 relative p-1.5">
+        <div className="bg-[#25476A] rounded-md p-3.5 sticky -top-1.5 z-50">
           <div className="flex items-center justify-between space-x-3 select-none">
             <h1 className="text-xl font-semibold text-white tracking-wide">
               Project Overview
@@ -239,6 +272,7 @@ export default function Project({ projectId }) {
                   <AddUserModal
                     projectId={projectId}
                     projectName={data?.name}
+                    userAdded={setUserAdded}
                     addUserModalOpen={setAddUserModalOpen}
                   />
                 )}
@@ -334,24 +368,23 @@ export default function Project({ projectId }) {
                       <div className="flex justify-center">
                         <button
                           className="text-sm text-gray-700"
-                          onClick={() => {
-                            setDisableUserModalOpen(true);
-                          }}
+                          onClick={() => handleDisableUser(user.userId)}
                         >
                           <FontAwesomeIcon icon={faTrashCan} /> Delete
                         </button>
                       </div>
                     </div>
-                    {disableUserModalOpen && (
-                      <DisableUserModal
-                        projectId={projectId}
-                        userId={user.userId}
-                        disableUserModalOpen={setDisableUserModalOpen}
-                      />
-                    )}
                   </div>
                 ))}
               </div>
+              {disableUserModalOpen && (
+                      <DisableUserModal
+                        projectId={projectId}
+                        userId={disableUserModalId}
+                        userDisabled={setUserDisabled}
+                        disableUserModalOpen={setDisableUserModalOpen}
+                      />
+                    )}
             </div>
             <div className="p-3 space-y-2 bg-white rounded-md">
               <div className="flex justify-between items-center">
@@ -383,6 +416,7 @@ export default function Project({ projectId }) {
                 {addCompanyModalOpen && (
                   <AddCompanyModal
                     projectId={projectId}
+                    companyAdded={setCompanyAdded}
                     addCompanyModalOpen={setAddCompanyModalOpen}
                   />
                 )}
@@ -489,19 +523,161 @@ export default function Project({ projectId }) {
                           <div className="flex justify-center">
                             <button
                               className="text-sm text-gray-700"
-                              onClick={() => setDisableCompanyModalOpen(true)}
+                              onClick={() => handleDisableCompany(company.id)}
                             >
                               <FontAwesomeIcon icon={faTrashCan} /> Delete
                             </button>
                           </div>
                         </div>
-                        {disableCompanyModalOpen && (
+                      </div>
+                    ))}
+              </div>
+              {disableCompanyModalOpen && (
                           <DisableCompanyModal
                             projectId={projectId}
-                            companyId={company.id}
+                            companyId={disableCompanyModalId}
+                            companyDisabled={setCompanyDisabled}
                             disableCompanyModalOpen={setDisableCompanyModalOpen}
                           />
                         )}
+            </div>
+            <div className="p-3 space-y-2 bg-white rounded-md">
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-semibold tracking-wide text-[#25476A]">
+                  Inverters
+                </span>
+                {/* <div className="space-x-5 flex items-center">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      className="w-72 h-8 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
+                      placeholder="Search by device serial number"
+                      onChange={handleSearch}
+                    />
+                    <div className="absolute top-1.5 right-2.5">
+                      <FontAwesomeIcon
+                        icon={faMagnifyingGlass}
+                        className="text-gray-400"
+                      />
+                    </div>
+                  </div>
+                  <button
+                    className="px-3 py-1.5 text-white font-semibold bg-[#39B54A] rounded-md select-none"
+                    onClick={() => setAddCompanyModalOpen(true)}
+                  >
+                    Add Inverter <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                </div>
+                {addCompanyModalOpen && (
+                  <AddCompanyModal
+                    buildingId={buildingId}
+                    addCompanyModalOpen={setAddCompanyModalOpen}
+                  />
+                )} */}
+              </div>
+              <div className="space-y-1 select-none bg-gray-200 rounded-md p-1.5 border-y-2 text-[#25476A]">
+                <div className="grid grid-cols-12 items-center h-9">
+                  <div className="flex justify-center font-semibold tracking-wide col-span-9">
+                    Device Serial Number
+                  </div>
+                  <div className="flex justify-center font-semibold tracking-wide col-span-3">
+                    Device Id
+                  </div>
+                  {/* <div className=""></div> */}
+                </div>
+              </div>
+              <div className="space-y-1.5 h-64 overflow-y-auto">
+                {
+                // searchResult1?.length >= 0
+                //   ? searchResult1?.map((inverter) => (
+                //       <div
+                //         className="bg-gray-200 rounded-md p-2"
+                //         key={Math.random()}
+                //       >
+                //         <div className="grid grid-cols-12 items-center py-[0.001rem]">
+                //           <div
+                //             className="grid grid-cols-11 col-span-11"
+                //             onClick={() => {
+                //               handleInverterClick(inverter.id);
+                //             }}
+                //           >
+                //             <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                //               <Image
+                //                 src={Placeholder}
+                //                 alt="logo"
+                //                 className="w-10 h-10 rounded-full"
+                //               />
+                //               <div>
+                //                 <div className="select-none text-gray-700 font-semibold">
+                //                   {inverter.deviceSn}
+                //                 </div>
+                //                 <div className="select-none flex items-center text-gray-700 text-xs space-x-1">
+                //                   <span>ID:</span>
+                //                   <span>{inverter.id}</span>
+                //                 </div>
+                //               </div>
+                //             </div>
+                //             <div className="flex items-center col-span-2">
+                //               <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                //                 {inverter.deviceId}
+                //               </span>
+                //             </div>
+                //           </div>
+                //           <div className="flex justify-center">
+                //             <button
+                //               className="text-sm text-gray-700"
+                //               onClick={() => handleDelete(inverter.id)}
+                //             >
+                //               <FontAwesomeIcon icon={faTrashCan} /> Delete
+                //             </button>
+                //           </div>
+                //         </div>
+                //       </div>
+                //     ))
+                //   : 
+                  data?.inverters?.map((inverter) => (
+                      <div
+                        className="bg-gray-200 rounded-md p-2"
+                        key={Math.random()}
+                      >
+                        <div className="grid grid-cols-12 items-center py-[0.001rem]">
+                          <div
+                            className="grid grid-cols-12 col-span-12"
+                            onClick={() => {
+                              handleInverterClick(inverter.id);
+                            }}
+                          >
+                            <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                              <Image
+                                src={Placeholder}
+                                alt="logo"
+                                className="w-10 h-10 rounded-full"
+                              />
+                              <div>
+                                <div className="select-none text-gray-700 font-semibold">
+                                  {inverter.deviceSn}
+                                </div>
+                                <div className="select-none flex items-center text-gray-700 text-xs space-x-1">
+                                  <span>ID:</span>
+                                  <span>{inverter.id}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center col-span-3">
+                              <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                                {inverter.deviceId}
+                              </span>
+                            </div>
+                          </div>
+                          {/* <div className="flex justify-center">
+                            <button
+                              className="text-sm text-gray-700"
+                              onClick={() => handleDelete(inverter.id)}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} /> Delete
+                            </button>
+                          </div> */}
+                        </div>
                       </div>
                     ))}
               </div>

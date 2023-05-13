@@ -19,6 +19,7 @@ export default function AddUserModal({
 
   const mutation = useMutation(addUserToProject, {
     onSuccess: () => {
+      userAdded(true);
       addUserModalOpen(false);
     },
     onError: (error) => {

@@ -7,6 +7,7 @@ import {
   faEnvelope,
   faGear,
   faDiagramProject,
+  faCubesStacked,
 } from "@fortawesome/free-solid-svg-icons";
 import Home from "@/public/icons/Home.png";
 import Users from "@/public/icons/Users.png";
@@ -48,7 +49,7 @@ export default function SideBar() {
             <Link href="/project">
               {/* <Image src={Projects} alt="Projects" className="w-6" /> */}
               <FontAwesomeIcon
-                icon={faDiagramProject}
+                icon={faCubesStacked}
                 className={`w-5 h-5 ${
                   link === "/project"
                     ? "text-[#38EB1A]"
