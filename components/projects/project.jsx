@@ -284,23 +284,24 @@ export default function Project({ projectId }) {
               </div>
               <div className="space-y-1 select-none bg-gray-200 rounded-md p-1.5 border-y-2 text-[#25476A]">
                 <div className="grid grid-cols-12 items-center h-9">
-                  <div className="flex justify-center font-semibold tracking-wide col-span-3">
+                  <div className="flex justify-center font-semibold tracking-wide col-span-6 md:col-span-5 lg:col-span-4">
                     Name
                   </div>
-                  <div className="flex items-center justify-center font-semibold tracking-wide space-x-1.5 col-span-2">
+                  <div className="flex items-center justify-center font-semibold tracking-wide space-x-1.5 col-span-2 lg:col-span-1">
                     <span>Status</span>
                     <FontAwesomeIcon icon={faArrowDown} />
                   </div>
-                  <div className="flex justify-center font-semibold tracking-wide col-span-2">
+                  <div className="lg:col-span-4 xl:col-span-3 hidden lg:block">
+                  <div className="flex justify-center font-semibold tracking-wide">
                     Email
-                  </div>
-                  <div className="flex justify-center font-semibold tracking-wide col-span-2">
+                  </div></div>
+                  <div className="flex justify-center font-semibold tracking-wide col-span-2 lg:col-span-1">
                     Role
                   </div>
-                  <div className="flex justify-center font-semibold tracking-wide col-span-2">
+                  {/* <div className="flex justify-center font-semibold tracking-wide col-span-2">
                     Address
-                  </div>
-                  <div className=""></div>
+                  </div> */}
+                  <div className="md:col-span-3 lg:col-span-2 xl:col-span-3"></div>
                 </div>
               </div>
               <div className="space-y-1 h-64 overflow-y-auto">
@@ -310,7 +311,7 @@ export default function Project({ projectId }) {
                     key={Math.random()}
                   >
                     <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                      <div className="flex items-center font-medium space-x-2 px-5 col-span-3">
+                    <div className="flex items-center font-medium space-x-2 px-5 col-span-6 md:col-span-5 lg:col-span-4">
                         <Image
                           src={placeholderImage}
                           alt="logo"
@@ -326,7 +327,7 @@ export default function Project({ projectId }) {
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-center col-span-2">
+                      <div className="flex justify-center col-span-2 lg:col-span-1">
                         {user?.user?.status === "ACTIVE" ? (
                           <div className="flex items-center space-x-2">
                             <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
@@ -343,12 +344,15 @@ export default function Project({ projectId }) {
                           </div>
                         )}
                       </div>
-                      <div className="flex col-span-2">
-                        <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                      <div className="lg:col-span-4 xl:col-span-3 hidden lg:block">
+                        {/* <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                           {user?.user?.email || "N/A"}
-                        </span>
+                        </span> */}
+                        <div className="flex justify-center select-all">
+                        {user?.user?.email || "N/A"}
+                    </div>
                       </div>
-                      <div className="flex justify-center items-center col-span-2">
+                      <div className="flex justify-center items-center col-span-2 lg:col-span-1">
                         {user?.user?.role === "ADMIN" ? (
                           <div className="px-2 py-1 bg-[#66C38B] text-white font-medium rounded-md text-sm">
                             Admin
@@ -365,17 +369,16 @@ export default function Project({ projectId }) {
                           </div>
                         ) : null}
                       </div>
-                      <div className="flex col-span-2">
+                      {/* <div className="flex col-span-2">
                         <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                           {user?.user?.address || "N/A"}
                         </span>
-                      </div>
-                      <div className="flex justify-center">
-                        <button
-                          className="text-sm text-gray-700"
+                      </div> */}
+                    <div className="flex justify-center col-span-2 md:col-span-3 lg:col-span-2 xl:col-span-3">                        <button
+                          className="flex items-center space-x-1 text-sm"
                           onClick={() => handleDisableUser(user.userId)}
                         >
-                          <FontAwesomeIcon icon={faTrashCan} /> Delete
+                          <FontAwesomeIcon icon={faTrashCan} /> <span className="hidden xl:block">Delete</span>
                         </button>
                       </div>
                     </div>
@@ -446,7 +449,7 @@ export default function Project({ projectId }) {
                       >
                         <div className="grid grid-cols-12 items-center py-[0.001rem]">
                           <div
-                            className="grid grid-cols-11 col-span-11"
+                            className="grid grid-cols-11 col-span-11 border-gray-300 hover:cursor-pointer"
                             onClick={() => {
                               handleCompanyClick(company.id);
                             }}
@@ -498,7 +501,7 @@ export default function Project({ projectId }) {
                       >
                         <div className="grid grid-cols-12 items-center py-[0.001rem]">
                           <div
-                            className="grid grid-cols-11 col-span-11"
+                            className="grid grid-cols-11 col-span-11 border-r border-gray-300 hover:cursor-pointer"
                             onClick={() => {
                               handleCompanyClick(company.id);
                             }}
@@ -647,7 +650,7 @@ export default function Project({ projectId }) {
                       >
                         <div className="grid grid-cols-12 items-center py-[0.001rem]">
                           <div
-                            className="grid grid-cols-12 col-span-12"
+                            className="grid grid-cols-12 col-span-12 border-r-2 hover:cursor-pointer"
                             onClick={() => {
                               handleInverterClick(inverter.id);
                             }}

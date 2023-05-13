@@ -33,7 +33,10 @@ export default function AddUserModal({ deleteUserModalOpen, deleteUserData, user
           </div>
           <div className="flex justify-center items-center flex-col">
             <div className="font-medium text-lg text-white">
-            Are you sure you want to delete user {deleteUserData?.name?.toUpperCase()}?
+            Are you sure you want to delete user
+            </div>
+            <div className="font-medium text-lg text-white">
+            {deleteUserData?.name}?
             </div>
           </div>
           <div className="flex justify-center items-center">

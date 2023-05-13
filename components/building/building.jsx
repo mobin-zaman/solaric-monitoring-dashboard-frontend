@@ -279,7 +279,7 @@ export default function Project({ buildingId }) {
                       >
                         <div className="grid grid-cols-12 items-center py-[0.001rem]">
                           <div
-                            className="grid grid-cols-11 col-span-11"
+                            className="grid grid-cols-11 col-span-11 hover:cursor-pointer"
                             onClick={() => {
                               handleInverterClick(inverter.id);
                             }}
@@ -324,7 +324,7 @@ export default function Project({ buildingId }) {
                       >
                         <div className="grid grid-cols-12 items-center py-[0.001rem]">
                           <div
-                            className="grid grid-cols-11 col-span-11"
+                            className="grid grid-cols-11 col-span-11 hover:cursor-pointer"
                             onClick={() => {
                               handleInverterClick(inverter.id);
                             }}

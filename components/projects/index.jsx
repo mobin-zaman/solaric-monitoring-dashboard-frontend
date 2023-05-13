@@ -322,7 +322,7 @@ export default function Users() {
                       </div>
                       <div className="hidden lg:block col-span-3">
                         <div className="flex">
-                          <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                          <span className="w-full truncate text-center select-all text-sm">
                             {user?.meta?.locationAddress || "N/A"}
                           </span>
                         </div>

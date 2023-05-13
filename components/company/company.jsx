@@ -321,7 +321,7 @@ export default function Project({ companyId }) {
                       >
                         <div className="grid grid-cols-12 items-center py-[0.001rem]">
                           <div
-                            className="grid grid-cols-11 col-span-11"
+                            className="grid grid-cols-11 col-span-11 border-r border-gray-300 hover:cursor-pointer"
                             onClick={() => {
                               handleBuildingClick(building.id);
                             }}
