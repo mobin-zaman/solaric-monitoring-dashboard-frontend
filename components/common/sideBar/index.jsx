@@ -32,7 +32,13 @@ export default function SideBar() {
         </div>
         <div className="flex flex-col items-center space-y-10">
           {/* <Image src={Home} alt="Home" className="w-5" /> */}
-          <FontAwesomeIcon icon={faHouse} className="w-5 h-5" />
+          <Link href="/dashboard">
+            <FontAwesomeIcon
+              icon={faHouse}
+              className={`w-5 h-5 ${link === "/dashboard" ? "text-[#38EB1A]" : ""}`}
+              title="Home"
+            />
+          </Link>
           {data?.role === "ADMIN" && (
             <Link href="/user">
               {/* <Image src={Users} alt="Users" className="w-5" /> */}
