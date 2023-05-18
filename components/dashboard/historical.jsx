@@ -113,27 +113,27 @@ export default function Historical() {
             className="flex justify-center items-start"
             style={{ width: "45%", height: "100%" }}
           >
-            <table className="table-fixed w-full border rounded-md select-none">
+            <table className="table-fixed w-full border rounded-md select-none text-[#25476A]">
               <tbody className="text-center">
-                <tr className="bg-gray-200 text-black h-10 font-semibold">
+                <tr className="bg-gray-200 h-10 font-semibold">
                   <td></td>
                   <td>Prod</td>
                   <td>Export</td>
                   <td>Sun-Hrs</td>
                 </tr>
-                <tr className=" text-black h-16">
+                <tr className="h-16">
                   <td>Today</td>
                   <td>100 KW</td>
                   <td>2.59</td>
                   <td>5.21</td>
                 </tr>
-                <tr className=" text-black h-16">
+                <tr className="h-16">
                   <td>Month</td>
                   <td>100 KW</td>
                   <td>2.59</td>
                   <td>5.21</td>
                 </tr>
-                <tr className=" text-black h-16">
+                <tr className="h-16">
                   <td>Year</td>
                   <td>100 KW</td>
                   <td>2.59</td>

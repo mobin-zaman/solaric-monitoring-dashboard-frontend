@@ -19,7 +19,7 @@ export default function Impact() {
       <div className="w-full h-96 bg-white p-3 rounded-md space-y-5">
         <div className="flex items-center justify-between">
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
-            impact
+            Impact
           </span>
           <div className="flex rounded-md bg-gray-200">
             <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-l-md select-none border-r">

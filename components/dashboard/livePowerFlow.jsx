@@ -30,6 +30,7 @@ export default function LivePowerFlow() {
             </button>
           </div>
         </div>
+        <div className="w-full h-[19.5rem] grid">
         <div className="grid grid-cols-7">
           <div className="flex items-center justify-center">
             <Image
@@ -40,27 +41,27 @@ export default function LivePowerFlow() {
             />
           </div>
           <div className="flex flex-col items-center justify-center col-span-2 space-y-5">
-            <div className="flex items-center justify-center">
-              <div className="relative transition-transform duration-500 ease-in-out animate-flowX">
-                <div
+          <div className="flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:animate-flowX2 lg:animate-flowX1 xl:animate-flowX">
+            <span>1</span>
+              <div className="relative"><div
                   class="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-red-500
   border-b-[8px] border-b-transparent rotate-180 absolute -top-1 -right-3.5"
                 ></div>
-                <div className="h-2 w-28 bg-red-500"></div>
+                <div className="h-2 w-12 lg:w-14 xl:w-16 2xl:w-24 bg-red-500"></div>
               </div>
             </div>
-            <div className="flex items-center justify-center">
-              <div className="relative transition-transform duration-500 ease-in-out animate-flowReverseX">
-                <div
+            <div className="flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:animate-flowReverseX2 lg:animate-flowReverseX1 xl:animate-flowReverseX">
+              <div className="relative"> <div
                   class="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-green-500
   border-b-[8px] border-b-transparent rotate-0 absolute -top-1 -left-3.5"
                 ></div>
-                <div className="h-2 w-28 bg-green-500"></div>
+                <div className="h-2 w-12 lg:w-14 xl:w-16 2xl:w-24 bg-green-500"></div>
               </div>
+              <span>5</span>
             </div>
           </div>
           <div className="flex items-center justify-center">
@@ -72,16 +73,17 @@ export default function LivePowerFlow() {
             />
           </div>
           <div className="flex items-center justify-center col-span-2">
-            <div className="h-20 flex items-center justify-center">
-              <div className="relative transition-transform duration-500 ease-in-out animate-flowReverseX">
-                <div
+          <div className="flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:animate-flowReverseX2 lg:animate-flowReverseX1 xl:animate-flowReverseX">
+              <div className="relative">
+              <div
                   class="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-green-500
   border-b-[8px] border-b-transparent rotate-0 absolute -top-1 -left-3.5"
                 ></div>
-                <div className="h-2 w-28 bg-green-500"></div>
+                <div className="h-2 w-12 lg:w-14 xl:w-16 2xl:w-24 bg-green-500"></div>
               </div>
+              <span>8</span>
             </div>
           </div>
           <div className="flex items-center justify-center">
@@ -95,27 +97,29 @@ export default function LivePowerFlow() {
         </div>
         <div className="grid grid-cols-7 items-center justify-center">
           <div className="col-span-7 flex items-center justify-center space-x-5">
-            <div className="h-20">
-              <div className="relative transition-transform duration-500 ease-in-out animate-flowY">
+            <div className="flex space-x-2 transition-transform duration-500 ease-in-out animate-flowY">
+            <span>8</span>
+              <div className="relative">
                 <div
                   class="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-red-500
-  border-b-[8px] border-b-transparent rotate-90 absolute -top-3.5 -left-[0.13rem]"
+  border-b-[8px] border-b-transparent rotate-90 absolute -top-3.5 -left-[0.158rem]"
                 ></div>
                 <div className="h-10 w-2 bg-red-500"></div>
               </div>
             </div>
-            <div className="h-20">
-              <div className="relative transition-transform duration-500 ease-in-out animate-flowReverseY">
+            <div className="flex space-x-2 transition-transform duration-500 ease-in-out animate-flowReverseY">
+              <div className="relative">
                 <div
                   class="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-green-500
-  border-b-[8px] border-b-transparent -rotate-90 absolute -bottom-3.5 -left-[0.13rem]"
+  border-b-[8px] border-b-transparent -rotate-90 absolute -bottom-3.5 -left-[0.16rem]"
                 ></div>
                 <div className="h-10 w-2 bg-green-500"></div>
               </div>
+              <span>3</span>
             </div>
           </div>
         </div>
@@ -130,6 +134,7 @@ export default function LivePowerFlow() {
               />
             </div>
           </div>
+        </div>
         </div>
         {/* <div className="flex  items-center justify-center">
           <div className="relative h-2">
