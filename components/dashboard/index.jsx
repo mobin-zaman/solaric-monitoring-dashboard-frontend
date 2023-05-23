@@ -26,7 +26,7 @@ export default function Index() {
   });
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Project");
+  const [selectedOption, setSelectedOption] = useState("Select Project");
   const [selectedOptionId, setSelectedOptionId] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [searchOn, setSearchOn] = useState(false);
@@ -279,7 +279,7 @@ export default function Index() {
     <>
       <div className="flex flex-col w-full h-full space-y-1.5">
         <div
-          className={`flex items-center justify-between bg-[#25476A] rounded-md p-3.5 `}
+          className={`flex items-center justify-between bg-[#25476A] rounded-md p-3.5 select-none`}
         >
           <div className="flex items-center space-x-3 select-none">
             <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
@@ -290,19 +290,33 @@ export default function Index() {
             <div className="relative select-none" ref={dropdownRef}>
               <input
                 type="text"
-                className="w-36 p-1 border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
+                className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer"
                 value={selectedOption}
                 readOnly
                 onClick={toggleDropdown}
               />
+              <svg
+                className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
               {isOpen && (
-                <ul className="absolute mt-2 py-2 w-full bg-white border border-gray-300 rounded-md z-50">
-                  <li className="px-4 py-2">
+                <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
+                  <li className="px-2 p-1">
                     <input
                       type="text"
                       // value={inputValue}
                       onChange={handleProjectSearch}
-                      className="border border-gray-300 w-28 p-1 rounded-md"
+                      className="border border-gray-300 w-full p-1 text-sm rounded-md"
                       placeholder="Search..."
                     />
                   </li>
@@ -312,7 +326,7 @@ export default function Index() {
                     searchResult1.map((option) => (
                       <li
                         key={option.id}
-                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
                         onClick={() => selectOption(option?.id, option?.name)}
                       >
                         {option?.name}
@@ -323,7 +337,7 @@ export default function Index() {
                     allProject?.map((option) => (
                       <li
                         key={option.id}
-                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
                         onClick={() => selectOption(option?.id, option?.name)}
                       >
                         {option?.name}
@@ -336,19 +350,33 @@ export default function Index() {
               <div className="relative select-none" ref={dropdownRefCompany}>
                 <input
                   type="text"
-                  className="w-36 p-1 border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
+                  className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
                   value={selectedOptionCompany}
                   readOnly
                   onClick={toggleDropdownCompany}
                 />
+                <svg
+                  className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
                 {isOpenCompany && (
-                  <ul className="absolute mt-2 py-2 w-full bg-white border border-gray-300 rounded-md z-50">
-                    <li className="px-4 py-2">
+                  <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
+                    <li className="px-2 p-1">
                       <input
                         type="text"
                         // value={inputValue}
                         onChange={handleCompanySearch}
-                        className="border border-gray-300 w-28 p-1 rounded-md"
+                        className="border border-gray-300 w-full p-1 text-sm rounded-md"
                         placeholder="Search..."
                       />
                     </li>
@@ -358,7 +386,7 @@ export default function Index() {
                       searchResult1Company.map((option) => (
                         <li
                           key={option.id}
-                          className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
                           onClick={() =>
                             selectOptionCompany(option?.id, option?.name)
                           }
@@ -371,7 +399,7 @@ export default function Index() {
                       project?.data?.companies?.map((option) => (
                         <li
                           key={option.id}
-                          className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
                           onClick={() =>
                             selectOptionCompany(option?.id, option?.name)
                           }
@@ -387,19 +415,33 @@ export default function Index() {
               <div className="relative select-none" ref={dropdownRefBuilding}>
                 <input
                   type="text"
-                  className="w-36 p-1 border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
+                  className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
                   value={selectedOptionBuilding}
                   readOnly
                   onClick={toggleDropdownBuilding}
                 />
+                <svg
+                  className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
                 {isOpenBuilding && (
-                  <ul className="absolute mt-2 py-2 w-full bg-white border border-gray-300 rounded-md z-50">
-                    <li className="px-4 py-2">
+                  <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
+                    <li className="px-2 p-1">
                       <input
                         type="text"
                         // value={inputValue}
                         onChange={handleBuildingSearch}
-                        className="border border-gray-300 w-28 p-1 rounded-md"
+                        className="border border-gray-300 w-full p-1 text-sm rounded-md"
                         placeholder="Search..."
                       />
                     </li>
@@ -409,7 +451,7 @@ export default function Index() {
                       searchResult1Building.map((option) => (
                         <li
                           key={option.id}
-                          className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
                           onClick={() =>
                             selectOptionBuilding(option?.id, option?.name)
                           }
@@ -422,7 +464,7 @@ export default function Index() {
                       company?.data?.buildings?.map((option) => (
                         <li
                           key={option.id}
-                          className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
                           onClick={() =>
                             selectOptionBuilding(option?.id, option?.name)
                           }
