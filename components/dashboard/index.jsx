@@ -44,10 +44,10 @@ export default function Index() {
     setSelectedOption(name);
     setIsOpen(false);
     setInputValue("");
-    setSelectedOptionCompany("Company");
+    setSelectedOptionCompany("Select Company");
     setSelectedOptionIdCompany(null);
     setInputValueCompany("");
-    setSelectedOptionBuilding("Building");
+    setSelectedOptionBuilding("Select Building");
     setSelectedOptionIdBuilding(null);
     setInputValueBuilding("");
   };
@@ -133,7 +133,7 @@ export default function Index() {
     setSelectedOptionCompany(name);
     setIsOpenCompany(false);
     setInputValueCompany("");
-    setSelectedOptionBuilding("Building");
+    setSelectedOptionBuilding("Select Building");
     setSelectedOptionIdBuilding(null);
     setInputValueBuilding("");
   };
