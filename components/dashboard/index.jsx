@@ -114,7 +114,7 @@ export default function Index() {
   // console.log(project.data, "project data");
 
   const [isOpenCompany, setIsOpenCompany] = useState(false);
-  const [selectedOptionCompany, setSelectedOptionCompany] = useState("Company");
+  const [selectedOptionCompany, setSelectedOptionCompany] = useState("Select Company");
   const [selectedOptionIdCompany, setSelectedOptionIdCompany] = useState(null);
   const [inputValueCompany, setInputValueCompany] = useState("");
   const [searchOnCompany, setSearchOnCompany] = useState(false);
@@ -207,7 +207,7 @@ export default function Index() {
 
   const [isOpenBuilding, setIsOpenBuilding] = useState(false);
   const [selectedOptionBuilding, setSelectedOptionBuilding] =
-    useState("Building");
+    useState("Select Building");
   const [selectedOptionIdBuilding, setSelectedOptionIdBuilding] =
     useState(null);
   const [inputValueBuilding, setInputValueBuilding] = useState("");
