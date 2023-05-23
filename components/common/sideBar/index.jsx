@@ -68,9 +68,9 @@ export default function SideBar() {
             </Link>
           )}
           {/* <Image src={Message} alt="Message" className="w-5" /> */}
-          <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5" />
+          {/* <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5" /> */}
           {/* <Image src={Settings} alt="Settings" className="w-5" /> */}
-          <FontAwesomeIcon icon={faGear} className="w-5 h-5" />
+          {/* <FontAwesomeIcon icon={faGear} className="w-5 h-5" /> */}
         </div>
       </div>
     </>
