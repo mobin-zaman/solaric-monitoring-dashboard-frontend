@@ -44,7 +44,7 @@ export default function LivePowerFlow() {
           <div className="flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:animate-flowX2 lg:animate-flowX1 xl:animate-flowX">
             <span>1</span>
               <div className="relative"><div
-                  class="w-0 h-0 
+                  className="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-red-500
   border-b-[8px] border-b-transparent rotate-180 absolute -top-1 -right-3.5"
@@ -54,7 +54,7 @@ export default function LivePowerFlow() {
             </div>
             <div className="flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:animate-flowReverseX2 lg:animate-flowReverseX1 xl:animate-flowReverseX">
               <div className="relative"> <div
-                  class="w-0 h-0 
+                  className="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-green-500
   border-b-[8px] border-b-transparent rotate-0 absolute -top-1 -left-3.5"
@@ -76,7 +76,7 @@ export default function LivePowerFlow() {
           <div className="flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:animate-flowReverseX2 lg:animate-flowReverseX1 xl:animate-flowReverseX">
               <div className="relative">
               <div
-                  class="w-0 h-0 
+                  className="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-green-500
   border-b-[8px] border-b-transparent rotate-0 absolute -top-1 -left-3.5"
@@ -101,7 +101,7 @@ export default function LivePowerFlow() {
             <span>8</span>
               <div className="relative">
                 <div
-                  class="w-0 h-0 
+                  className="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-red-500
   border-b-[8px] border-b-transparent rotate-90 absolute -top-3.5 -left-[0.158rem]"
@@ -112,7 +112,7 @@ export default function LivePowerFlow() {
             <div className="flex space-x-2 transition-transform duration-500 ease-in-out animate-flowReverseY">
               <div className="relative">
                 <div
-                  class="w-0 h-0 
+                  className="w-0 h-0 
   border-t-[8px] border-t-transparent
   border-r-[14px] border-r-green-500
   border-b-[8px] border-b-transparent -rotate-90 absolute -bottom-3.5 -left-[0.16rem]"
