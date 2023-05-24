@@ -31,7 +31,7 @@ export default function Header() {
               className="w-10 rounded-full border-2 border-[#25476A]"
             />
           </div>
-          <span className="text-lg">{data?.name}</span>
+          <span className="text-sm">{data?.name}</span>
         </div>
         <div className="flex justify-center items-center space-x-6">
           {/* <div className="relative">

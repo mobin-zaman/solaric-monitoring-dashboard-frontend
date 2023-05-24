@@ -13,7 +13,7 @@ export default function LogIn() {
   const router = useRouter();
 
   if (typeof window !== "undefined" && localStorage.getItem("Token") !== null) {
-    router.push("/user");
+    router.push("/dashboard");
   }
 
   const [email, setEmail] = useState("");
@@ -38,7 +38,7 @@ export default function LogIn() {
         console.log("Token refreshed");
       }, 55 * 60 * 1000);
 
-      router.push("/user");
+      router.push("/dashboard");
       setEmailPassNotMatch(false);
     } catch (error) {
       setEmailPassNotMatch(true);

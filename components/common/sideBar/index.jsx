@@ -8,6 +8,7 @@ import {
   faGear,
   faDiagramProject,
   faCubesStacked,
+  faMicrochip,
 } from "@fortawesome/free-solid-svg-icons";
 import Home from "@/public/icons/Home.png";
 import Users from "@/public/icons/Users.png";
@@ -36,7 +37,7 @@ export default function SideBar() {
             <FontAwesomeIcon
               icon={faHouse}
               className={`w-5 h-5 ${link === "/dashboard" ? "text-[#38EB1A]" : ""}`}
-              title="Home"
+              title="Dashboard"
             />
           </Link>
           {data?.role === "ADMIN" && (
@@ -64,6 +65,21 @@ export default function SideBar() {
                     : ""
                 }`}
                 title="Project"
+              />
+            </Link>
+          )}
+                    {data?.role === "ADMIN" && (
+            <Link href="/inverter">
+              <FontAwesomeIcon
+                icon={faMicrochip}
+                className={`w-5 h-5 ${
+                  link === "/inverter"
+                    ? "text-[#38EB1A]"
+                    : link === "/inverter/[inverterId]"
+                    ? "text-[#38EB1A]"
+                    : ""
+                }`}
+                title="Inverter"
               />
             </Link>
           )}

@@ -1,5 +1,5 @@
 import Header from "@/components/common/header";
-import AllProjects from "@/components/projects";
+import AllInverter from "@/components/inverter";
 import SideBar from "@/components/common/sideBar";
 
 export default function Projects() {
@@ -9,7 +9,7 @@ export default function Projects() {
         <SideBar />
         <div className="w-full">
         <Header />
-        <div className="p-2"><AllProjects /></div>
+        <div className="p-2"><AllInverter /></div>
         </div>
       </div>
     </>

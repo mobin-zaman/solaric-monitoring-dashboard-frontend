@@ -339,3 +339,16 @@ export const searchInverterForAssignInBuilding = async (data) => {
   });
   return response.data;
 }
+
+
+//Inverter
+
+// Api calls for get inverters data
+export const getInverters = async () => {
+  const response = await todoApi.get(`/inverter`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}

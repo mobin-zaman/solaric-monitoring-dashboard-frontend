@@ -279,7 +279,7 @@ export default function Index() {
     <>
       <div className="flex flex-col w-full h-full space-y-1.5">
         <div
-          className={`flex items-center justify-between bg-[#25476A] rounded-md p-3.5 select-none`}
+          className={`flex items-center justify-start space-x-5 bg-[#25476A] rounded-md p-3.5 select-none`}
         >
           <div className="flex items-center space-x-3 select-none">
             <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
