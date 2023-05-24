@@ -7,9 +7,14 @@ export default function Projects() {
     <>
       <div className="flex h-screen bg-gray-200">
         <SideBar />
-        <div className="w-full">
-        <Header />
-        <div className="p-2"><AllInverter /></div>
+        <div className="w-full h-full">
+          <Header />
+          <div
+            className="p-1.5 overflow-y-auto"
+            style={{ height: "calc(100vh - 4rem)" }}
+          >
+            <AllInverter />
+          </div>
         </div>
       </div>
     </>

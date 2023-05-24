@@ -20,9 +20,10 @@ import UpdateProjectModal from "./updateProjectModal";
 import Id from "@/public/icons/Id.png";
 import Location from "@/public/icons/Location.png";
 import TimestampConverter from "@/lib/TimestampConverter";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 export default function Users() {
+  const router = useRouter();
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
   const [deleteUserModalOpen, setDeleteUserModalOpen] = useState(false);
   const [editUserModalOpen, setEditUserModalOpen] = useState(false);
@@ -68,10 +69,8 @@ export default function Users() {
     setDeleteUser(user);
   };
 
-  const handleEditUser = (user) => {
-    // setEditUserModalOpen(true);
-    // setEditUser(user);
-    Router.push(`/project/${user.id}`);
+  const handleEditUser = (inverterId) => {
+    router.push(`/inverter/${inverterId}`);
   };
 
   const searchData = useQuery(() => searchProject(search), {
@@ -262,7 +261,7 @@ export default function Users() {
                 >
                   <div
                     className="grid grid-cols-12 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
-                    onClick={() => handleEditUser(inverter)}
+                    onClick={() => handleEditUser(inverter?.id)}
                   >
                     <div className="flex items-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
                       <Image
