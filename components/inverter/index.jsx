@@ -161,17 +161,17 @@ export default function Users() {
           </div>
           <div className="space-y-1 select-none bg-white rounded-md p-1.5 text-[#25476A] font-semibold">
             <div className="grid grid-cols-12 items-center h-9">
-              <div className="grid grid-cols-10 col-span-11">
-                <div className="flex justify-center col-span-2">Name</div>
+              <div className="grid grid-cols-12 col-span-11">
+                <div className="flex justify-center col-span-4 xl:col-span-3">Name</div>
+                <div className="flex justify-center col-span-2">Device Id</div>
+                <div className="flex justify-center col-span-2">Capacity</div>
+                <div className="hidden xl:block col-span-1">
+                  <div className="flex justify-center">Code</div>
+                </div>
+                <div className="flex justify-center col-span-2">Project Id</div>
                 <div className="flex justify-center col-span-2">
-                Device Id
+                  Building Id
                 </div>
-                <div className="hidden xl:block col-span-2">
-                  <div className="flex justify-center">Capacity</div>
-                </div>
-                <div className="flex justify-center col-span-2">Code</div>
-                <div className="flex justify-center col-span-1">Project Id</div>
-                <div className="flex justify-center col-span-1">Building Id</div>
               </div>
               <div className=""></div>
             </div>
@@ -261,10 +261,10 @@ export default function Users() {
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
                 >
                   <div
-                    className="grid grid-cols-10 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    className="grid grid-cols-12 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
                     onClick={() => handleEditUser(inverter)}
                   >
-                    <div className="flex items-center font-medium space-x-2 px-5 col-span-2">
+                    <div className="flex items-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
                       <Image
                         src={"/Placeholder.png"}
                         width={1000}
@@ -285,24 +285,24 @@ export default function Users() {
                     <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
                       <span>{inverter?.deviceId}</span>
                     </div>
-                    <div className="select-all text-sm hidden xl:block col-span-2">
+                    <div className="flex justify-center select-all text-sm col-span-2">
+                      {inverter?.capacity ? (
+                        <span>{inverter?.capacity} kWp</span>
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                    <div className="select-all text-sm hidden xl:block col-span-1">
                       <div className="flex justify-center">
-                        {inverter?.capacity ? (
-                          <span>{inverter?.capacity} kWp</span>
-                        ) : (
-                          "N/A"
-                        )}
+                        {inverter?.code ? inverter.code : "N/A"}
                       </div>
                     </div>
-                    <div className="flex justify-center select-all text-sm col-span-2">
-                      {inverter?.code ? inverter.code : "N/A"}
-                    </div>
-                    <div className="flex col-span-1">
+                    <div className="flex col-span-2">
                       <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                         {inverter?.projectId || "N/A"}
                       </span>
                     </div>
-                    <div className="flex col-span-1">
+                    <div className="flex col-span-2">
                       <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                         {inverter?.buildingId || "N/A"}
                       </span>
