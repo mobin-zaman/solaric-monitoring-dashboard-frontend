@@ -10,7 +10,7 @@ import {
   faIdCard,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation } from "react-query";
-import { getInverters, searchProject } from "@/lib/Helper";
+import { getInverters, searchInverter } from "@/lib/Helper";
 import CreateProjectModal from "./createProjectModal";
 import { useState } from "react";
 import Image from "next/image";
@@ -73,7 +73,7 @@ export default function Users() {
     router.push(`/inverter/${inverterId}`);
   };
 
-  const searchData = useQuery(() => searchProject(search), {
+  const searchData = useQuery(() => searchInverter(search), {
     enabled: searchOn,
   });
 
@@ -81,7 +81,7 @@ export default function Users() {
 
   const handleSearch = (e) => {
     console.log(e.target.value, "e.target.value");
-    const searchPromise = searchProject(e.target.value);
+    const searchPromise = searchInverter(e.target.value);
     setSearchResult(searchPromise);
 
     if (e.target.value.length < 0) {
@@ -138,7 +138,7 @@ export default function Users() {
                 className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none space-x-1"
                 onClick={() => setAddUserModalOpen(true)}
               >
-                <span>Add User</span>
+                <span>Add Inverter</span>
                 <FontAwesomeIcon icon={faPlus} />
               </button>
             </div>
@@ -178,81 +178,71 @@ export default function Users() {
         </div>
         <div className="space-y-1.5">
           {searchResult1.length > 0
-            ? searchResult1?.map((user) => (
-                <div
-                  className="bg-white rounded-md p-2 text-gray-700"
-                  key={Math.random()}
-                >
-                  <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                    <div className="flex items-center font-medium space-x-2 px-5 col-span-3">
-                      <Image
-                        src={
-                          user?.meta?.stationImage
-                            ? user?.meta?.stationImage
-                            : "/Placeholder.png"
-                        }
-                        width={1000}
-                        height={1000}
-                        alt="logo"
-                        className="w-14 h-14 rounded-full"
-                      />
-                      <div>
-                        <div className="select-text font-semibold">
-                          {user.name}
-                        </div>
-                        <div className="select-none text-xs flex items-center space-x-1">
-                          <span>Id:</span>
-                          <span>{user.id}</span>
-                        </div>
-                      </div>
+            ? searchResult1?.map((inverter) => (
+              <div
+              key={Math.random()}
+              className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
+            >
+              <div
+                className="grid grid-cols-12 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                onClick={() => handleEditUser(inverter?.id)}
+              >
+                <div className="flex items-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
+                  <Image
+                    src={"/Placeholder.png"}
+                    width={1000}
+                    height={1000}
+                    alt="logo"
+                    className="w-14 h-14 rounded-full"
+                  />
+                  <div>
+                    <div className="select-text font-semibold">
+                      {inverter.deviceSn}
                     </div>
-                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                      <span>{user.solarmanPlantId}</span>{" "}
-                      <button
-                        onClick={() =>
-                          handleSolarmanPlantIdCopy(user.solarmanPlantId)
-                        }
-                      >
-                        <FontAwesomeIcon icon={faCopy} />
-                      </button>
-                    </div>
-                    <div className="select-all text-sm hidden xl:block">
-                      <div className="flex justify-center">
-                        {user?.meta?.installedCapacity ? (
-                          <span>{user?.meta?.installedCapacity} kWp</span>
-                        ) : (
-                          "N/A"
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex justify-center select-all text-sm col-span-2">
-                      {user?.meta?.contactPhone
-                        ? user.meta.contactPhone
-                        : "N/A"}
-                    </div>
-                    <div className="flex lg:col-span-2 col-span-3 xl:col-span-2">
-                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                        {user?.meta?.locationAddress || "N/A"}
-                      </span>
-                    </div>
-                    <div className="flex justify-center space-x-16 xl:space-x-10 col-span-3 xl:col-span-2">
-                      <button
-                        className="flex items-center space-x-1"
-                        onClick={() => handleEditUser(user)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                        <span className="hidden xl:block">Edit</span>
-                      </button>
-                      <button
-                        className="flex items-center space-x-1"
-                        onClick={() => handleDeleteUser(user)}
-                      >
-                        <FontAwesomeIcon icon={faTrashCan} />
-                        <span className="hidden xl:block">Delete</span>
-                      </button>
+                    <div className="select-none text-xs flex items-center space-x-1">
+                      <span>Id:</span>
+                      <span>{inverter.id}</span>
                     </div>
                   </div>
                 </div>
+                <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
+                  <span>{inverter?.deviceId}</span>
+                </div>
+                <div className="flex justify-center select-all text-sm col-span-2">
+                  {inverter?.capacity ? (
+                    <span>{inverter?.capacity} kWp</span>
+                  ) : (
+                    "N/A"
+                  )}
+                </div>
+                <div className="select-all text-sm hidden xl:block col-span-1">
+                  <div className="flex justify-center">
+                    {inverter?.code ? inverter.code : "N/A"}
+                  </div>
+                </div>
+                <div className="flex col-span-2">
+                  <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                    {inverter?.projectId || "N/A"}
+                  </span>
+                </div>
+                <div className="flex col-span-2">
+                  <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                    {inverter?.buildingId || "N/A"}
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-center col-span-1">
+                <button
+                  className="flex items-center space-x-1 text-sm hover:text-red-500"
+                  onClick={() => handleDeleteUser(inverter)}
+                  title="Delete"
+                  disabled
+                >
+                  <FontAwesomeIcon icon={faTrashCan} />
+                  <span className="hidden xl:block">Delete</span>
+                </button>
+              </div>
+            </div>
               ))
             : data?.map((inverter) => (
                 <div
@@ -312,6 +302,7 @@ export default function Users() {
                       className="flex items-center space-x-1 text-sm hover:text-red-500"
                       onClick={() => handleDeleteUser(inverter)}
                       title="Delete"
+                      disabled
                     >
                       <FontAwesomeIcon icon={faTrashCan} />
                       <span className="hidden xl:block">Delete</span>

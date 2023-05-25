@@ -306,7 +306,7 @@ export const getInverter = async (id) => {
 }
 
 // Api calls for inverter search
-export const searchInverter = async (data) => {
+export const searchInverterForBuilding = async (data) => {
   const searchValue = data.search;
   const buildingId = data.buildingId;
   const response = await todoApi.get(`/building/${buildingId}/inverter/search?search=${searchValue}`, {
@@ -346,6 +346,17 @@ export const searchInverterForAssignInBuilding = async (data) => {
 // Api calls for get inverters data
 export const getInverters = async () => {
   const response = await todoApi.get(`/inverter`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for inverter search
+export const searchInverter = async (data) => {
+  const searchValue = data;
+  const response = await todoApi.get(`/inverter?search=${searchValue}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
     },

@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "react-query";
-import { getProjects, getBuilding, searchInverter } from "@/lib/Helper";
+import { getProjects, getBuilding, searchInverterForBuilding } from "@/lib/Helper";
 import Image from "next/image";
 import TimestampConverter from "@/lib/TimestampConverter";
 import AddCompanyModal from "./addBuildingModal";
@@ -89,7 +89,7 @@ export default function Project({ buildingId }) {
   };
 
   const handleSearch = (e) => {
-    const searchPromise = searchInverter({
+    const searchPromise = searchInverterForBuilding({
       search: e.target.value,
       buildingId,
     });
