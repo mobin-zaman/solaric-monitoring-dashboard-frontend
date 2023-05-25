@@ -32,9 +32,12 @@ export default function Users() {
       <>
         <div className="flex h-screen bg-gray-200">
           <SideBar />
-          <div className="w-full">
+          <div className="w-full h-full">
             <Header />
-            <div className="p-2">
+            <div
+              className="p-1.5 overflow-y-auto"
+              style={{ height: "calc(100vh - 4rem)" }}
+            >
               <AllUsers />
             </div>
           </div>

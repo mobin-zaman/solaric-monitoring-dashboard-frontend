@@ -123,7 +123,7 @@ export default function Users() {
                 </div>
               </div>
               <button
-                className="flex h-8 items-center justify-center p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-md select-none space-x-1"
+                className="flex h-8 items-center justify-center px-2.5 text-sm text-white font-semibold bg-[#39B54A] rounded-md select-none space-x-1"
                 onClick={() => setAddUserModalOpen(true)}
               >
                 <span className="">Add User</span>

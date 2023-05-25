@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 
 export default function Users() {
   const router = useRouter();
-  const [addUserModalOpen, setAddUserModalOpen] = useState(false);
+  const [addInverterModalOpen, setAddInverterModalOpen] = useState(false);
   const [deleteUserModalOpen, setDeleteUserModalOpen] = useState(false);
   const [editUserModalOpen, setEditUserModalOpen] = useState(false);
   const [newUserCreated, setNewUserCreated] = useState(false);
@@ -37,8 +37,9 @@ export default function Users() {
   const [searchOn, setSearchOn] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
   const [searchResult1, setSearchResult1] = useState([]);
+  const [searchResultEmpty, setSearchResultEmpty] = useState(false);
 
-  const { data, isLoading, isFetching } = useQuery(
+  const { data, isLoading, isError } = useQuery(
     "inverters",
     () => getInverters(),
     {
@@ -80,20 +81,23 @@ export default function Users() {
   // console.log(searchResult, "searchResult");
 
   const handleSearch = (e) => {
-    console.log(e.target.value, "e.target.value");
+    setSearchOn(true);
     const searchPromise = searchInverter(e.target.value);
-    setSearchResult(searchPromise);
 
-    if (e.target.value.length < 0) {
+    if (e.target.value.length < 1) {
       setSearchResult1(null);
-    } else {
       setSearchOn(false);
-
+      setSearchResultEmpty(false);
+    } else {
       if (searchPromise instanceof Promise) {
         searchPromise
           .then((data) => {
-            setSearchResult1(data);
-            console.log(searchResult1, "searchResult1");
+            if (data.length < 1) {
+              setSearchResultEmpty(true);
+            } else {
+              setSearchResultEmpty(false);
+              setSearchResult1(data);
+            }
           })
           .catch((error) => {
             console.log(error);
@@ -108,167 +112,85 @@ export default function Users() {
 
   return (
     <>
-      <div className="w-full rounded-md">
-        <div className="space-y-1.5 pb-1.5">
-          <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
+      <div className="space-y-1.5 relative select-none">
+        <div className="space-y-1.5 sticky -top-1.5 z-50 bg-gray-200 pt-0.5">
+          <div
+            className={`flex items-center justify-between bg-[#25476A] rounded-md p-3.5 ${
+              isLoading ? "animate-pulse" : "animate-pulse"
+            }`}
+          >
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-xl font-semibold text-white tracking-wide">
+              <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
                 Inverter
               </h1>
-              <p className="text-[#373737] text-sm bg-gray-200 px-3 py-1 rounded-md">
-                {data?.length} {data?.length < 2 ? "inverter" : "inverters"}
-              </p>
+              {!isLoading && (
+              <p className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
+                <span>{data?.length}</span><span>{data?.length < 2 ? "inverter" : "inverters"}</span>
+              </p> 
+              )}
             </div>
-            <div className="space-x-5 flex items-center">
-              <div className="relative">
-                <input
-                  type="text"
-                  className="w-72 h-8 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
-                  placeholder="Search by name or email"
-                  onChange={handleSearch}
-                />
-                <div className="absolute top-1.5 right-2.5">
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    className="text-gray-400"
-                  />
-                </div>
-              </div>
-              <button
-                className="px-3 py-1.5 text-md text-white font-semibold bg-[#39B54A] rounded-md select-none space-x-1"
-                onClick={() => setAddUserModalOpen(true)}
-              >
-                <span>Add Inverter</span>
-                <FontAwesomeIcon icon={faPlus} />
-              </button>
-            </div>
-            {addUserModalOpen && (
-              <CreateProjectModal
-                addUserModalOpen={setAddUserModalOpen}
-                newUserCreated={setNewUserCreated}
+            <div className="relative">
+              <input
+                type="text"
+                className="w-48 md:w-56 h-8 lg:w-72 placeholder:text-xs md:placeholder:text-sm rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm focus:outline-none focus:ring-0"
+                placeholder="Search by id and serial number"
+                onChange={handleSearch}
               />
-            )}
-            {newUserCreated && (
-              <div className="toast toast-end">
-                <div className="alert alert-success">
-                  <div>
-                    <span>User Created successfully.</span>
-                  </div>
-                </div>
+              <div className="absolute top-1.5 right-2.5">
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className="text-gray-400"
+                />
               </div>
-            )}
-          </div>
-          <div className="space-y-1 select-none bg-white rounded-md p-1.5 text-[#25476A] font-semibold">
-            <div className="grid grid-cols-12 items-center h-9">
-              <div className="grid grid-cols-12 col-span-11">
-                <div className="flex justify-center col-span-4 xl:col-span-3">Name</div>
-                <div className="flex justify-center col-span-2">Device Id</div>
-                <div className="flex justify-center col-span-2">Capacity</div>
-                <div className="hidden xl:block col-span-1">
-                  <div className="flex justify-center">Code</div>
-                </div>
-                <div className="flex justify-center col-span-2">Project Id</div>
-                <div className="flex justify-center col-span-2">
-                  Building Id
-                </div>
-              </div>
-              <div className=""></div>
             </div>
           </div>
+          {!isLoading && !isError && !searchResultEmpty && (
+            <div className="text-white bg-[#25476A] font-medium rounded-md p-1.5">
+              <div className="grid grid-cols-12 items-center h-9">
+                <div className="grid grid-cols-12 col-span-11">
+                  <div className="flex justify-center col-span-4 xl:col-span-3">
+                    Serial Number
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    Device Id
+                  </div>
+                  <div className="flex justify-center col-span-2">Capacity</div>
+                  <div className="hidden xl:block col-span-1">
+                    <div className="flex justify-center">Code</div>
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    Project Id
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    Building Id
+                  </div>
+                </div>
+                <div className=""></div>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="space-y-1.5">
-          {searchResult1.length > 0
-            ? searchResult1?.map((inverter) => (
-              <div
-              key={Math.random()}
-              className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
-            >
-              <div
-                className="grid grid-cols-12 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
-                onClick={() => handleEditUser(inverter?.id)}
-              >
-                <div className="flex items-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
-                  <Image
-                    src={"/Placeholder.png"}
-                    width={1000}
-                    height={1000}
-                    alt="logo"
-                    className="w-14 h-14 rounded-full"
-                  />
-                  <div>
-                    <div className="select-text font-semibold">
-                      {inverter.deviceSn}
-                    </div>
-                    <div className="select-none text-xs flex items-center space-x-1">
-                      <span>Id:</span>
-                      <span>{inverter.id}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                  <span>{inverter?.deviceId}</span>
-                </div>
-                <div className="flex justify-center select-all text-sm col-span-2">
-                  {inverter?.capacity ? (
-                    <span>{inverter?.capacity} kWp</span>
-                  ) : (
-                    "N/A"
-                  )}
-                </div>
-                <div className="select-all text-sm hidden xl:block col-span-1">
-                  <div className="flex justify-center">
-                    {inverter?.code ? inverter.code : "N/A"}
-                  </div>
-                </div>
-                <div className="flex col-span-2">
-                  <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                    {inverter?.projectId || "N/A"}
-                  </span>
-                </div>
-                <div className="flex col-span-2">
-                  <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                    {inverter?.buildingId || "N/A"}
-                  </span>
-                </div>
-              </div>
-              <div className="flex justify-center col-span-1">
-                <button
-                  className="flex items-center space-x-1 text-sm hover:text-red-500"
-                  onClick={() => handleDeleteUser(inverter)}
-                  title="Delete"
-                  disabled
-                >
-                  <FontAwesomeIcon icon={faTrashCan} />
-                  <span className="hidden xl:block">Delete</span>
-                </button>
-              </div>
-            </div>
-              ))
-            : data?.map((inverter) => (
+        {!isLoading && !isError && (
+          <div className="space-y-1.5">
+            {!searchResultEmpty &&
+              searchResult1?.length > 0 &&
+              searchOn &&
+              searchResult1?.map((inverter) => (
                 <div
                   key={Math.random()}
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
                 >
                   <div
-                    className="grid grid-cols-12 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    className="grid grid-cols-12 col-span-11 border-r items-center p-3.5 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
                     onClick={() => handleEditUser(inverter?.id)}
                   >
-                    <div className="flex items-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
-                      <Image
-                        src={"/Placeholder.png"}
-                        width={1000}
-                        height={1000}
-                        alt="logo"
-                        className="w-14 h-14 rounded-full"
-                      />
-                      <div>
-                        <div className="select-text font-semibold">
-                          {inverter.deviceSn}
-                        </div>
-                        <div className="select-none text-xs flex items-center space-x-1">
-                          <span>Id:</span>
-                          <span>{inverter.id}</span>
-                        </div>
+                    <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
+                      <div className="select-none font-semibold">
+                        {inverter.deviceSn}
+                      </div>
+                      <div className="select-none text-xs flex items-center space-x-1">
+                        <span>Id:</span>
+                        <span>{inverter.id}</span>
                       </div>
                     </div>
                     <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
@@ -310,7 +232,78 @@ export default function Users() {
                   </div>
                 </div>
               ))}
-        </div>
+
+            {searchResultEmpty ? (
+              <div className="flex justify-center items-center h-44">
+                <div className="text-xl font-semibold text-[#25476A]">
+                  No inverter found by search ! &#x1F61E;
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {!searchResultEmpty &&
+              !searchOn &&
+              data?.map((inverter) => (
+                <div
+                  key={Math.random()}
+                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
+                >
+                  <div
+                    className="grid grid-cols-12 col-span-11 border-r items-center p-3.5 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    onClick={() => handleEditUser(inverter?.id)}
+                  >
+                    <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
+                      <div className="select-none font-semibold">
+                        {inverter.deviceSn}
+                      </div>
+                      <div className="select-none text-xs flex items-center space-x-1">
+                        <span>Id:</span>
+                        <span>{inverter.id}</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
+                      <span>{inverter?.deviceId}</span>
+                    </div>
+                    <div className="flex justify-center select-all text-sm col-span-2">
+                      {inverter?.capacity ? (
+                        <span>{inverter?.capacity} kWp</span>
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                    <div className="select-all text-sm hidden xl:block col-span-1">
+                      <div className="flex justify-center">
+                        {inverter?.code ? inverter.code : "N/A"}
+                      </div>
+                    </div>
+                    <div className="flex col-span-2">
+                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                        {inverter?.projectId || "N/A"}
+                      </span>
+                    </div>
+                    <div className="flex col-span-2">
+                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                        {inverter?.buildingId || "N/A"}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex justify-center col-span-1">
+                    <button
+                      className="flex items-center space-x-1 text-sm hover:text-red-500"
+                      onClick={() => handleDeleteUser(inverter)}
+                      title="Delete"
+                      disabled
+                    >
+                      <FontAwesomeIcon icon={faTrashCan} />
+                      <span className="hidden xl:block">Delete</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
         {editUserModalOpen && (
           <UpdateProjectModal
             editUserModalOpen={setEditUserModalOpen}
@@ -318,32 +311,32 @@ export default function Users() {
             userEdited={setUserEdited}
           />
         )}
-        {userEdited && (
-          <div className="toast toast-end">
-            <div className="alert alert-success">
-              <div>
-                <span>User edited successfully.</span>
-              </div>
-            </div>
-          </div>
-        )}
-        {deleteUserModalOpen && (
-          <DeleteProjectModal
-            deleteUserModalOpen={setDeleteUserModalOpen}
-            deleteUserData={deleteUser}
-            userDeleted={setUserDeleted}
-          />
-        )}
-        {userDeleted && (
-          <div className="toast toast-end">
-            <div className="alert alert-success">
-              <div>
-                <span>User deleted successfully.</span>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
+      {userEdited && (
+        <div className="toast toast-end">
+          <div className="alert alert-success">
+            <div>
+              <span>User edited successfully.</span>
+            </div>
+          </div>
+        </div>
+      )}
+      {deleteUserModalOpen && (
+        <DeleteProjectModal
+          deleteUserModalOpen={setDeleteUserModalOpen}
+          deleteUserData={deleteUser}
+          userDeleted={setUserDeleted}
+        />
+      )}
+      {userDeleted && (
+        <div className="toast toast-end">
+          <div className="alert alert-success">
+            <div>
+              <span>User deleted successfully.</span>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

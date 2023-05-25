@@ -15,11 +15,8 @@ import { useQuery, useMutation } from "react-query";
 import { getInverters, getInverter, searchCompany } from "@/lib/Helper";
 import Image from "next/image";
 import TimestampConverter from "@/lib/TimestampConverter";
-import AddUserModal from "./addUserModal";
-import AddCompanyModal from "./addCompanyModal";
-import DisableUserModal from "./disableUserModal";
-import DisableCompanyModal from "./disableCompanyModal";
-import placeholderImage from "@/public/placeholderImage.jpg";
+import AddUserModal from "./editInverterModal";
+import EditInverterModal from "./editInverterModal";
 import Id from "@/public/icons/Id.png";
 import Placeholder from "@/public/Placeholder.png";
 import { useRouter } from "next/router";
@@ -28,13 +25,14 @@ import FormatDateTime from "@/lib/FormatDateTime";
 export default function Project({ inverterId }) {
   console.log(inverterId);
   const router = useRouter();
-  const [addUserModalOpen, setAddUserModalOpen] = useState(false);
+  const [editInverterModalOpen, setEditInverterModalOpen] = useState(false);
   const [addCompanyModalOpen, setAddCompanyModalOpen] = useState(false);
   const [disableUserModalOpen, setDisableUserModalOpen] = useState(false);
   const [disableCompanyModalOpen, setDisableCompanyModalOpen] = useState(false);
   const [searchResult1, setSearchResult1] = useState(null);
-  
-  const { data, isLoading, isFetching } = useQuery(
+  const [inverterEdited, setInverterEdited] = useState(false);
+
+  const { data, isLoading, isFetching, refetch } = useQuery(
     ["project", inverterId],
     () => getInverter(inverterId),
     {
@@ -42,6 +40,13 @@ export default function Project({ inverterId }) {
     }
   );
 
+  useEffect(() => {
+    if (inverterEdited) {
+      refetch();
+      setInverterEdited(false);
+    }
+  }, [inverterEdited, refetch]);
+  
   const [projectIdCopy, setProjectIdCopy] = useState(false);
   const [solarmanPlantIdCopy, setSolarmanPlantIdCopy] = useState(false);
 
@@ -95,21 +100,72 @@ export default function Project({ inverterId }) {
 
   return (
     <>
-      <div className="space-y-2.5">
-        <div className="bg-[#25476A] rounded-md p-3.5">
-          <div className="flex items-center justify-between space-x-3 select-none">
-            <h1 className="text-xl font-semibold text-white tracking-wide">
-            Inverter Overview
-            </h1>
-            <div className="flex space-x-2">
-              {/* <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
+      <div className="space-y-1.5 relative">
+        <div className="sticky -top-1.5 z-50 bg-gray-200 pt-0.5 select-none shadow-md">
+          <div
+            className={`flex items-center justify-between bg-[#25476A] rounded-md py-3.5 px-6 ${
+              isLoading ? "animate-pulse" : "animate-pulse"
+            }`}
+          >
+            <div className="flex items-center space-x-3 select-none">
+              <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
+                Inverter Overview
+              </h1>
+              <div className="flex space-x-3">
+                {/* <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
                 <span>{data?.name}</span>
               </div> */}
-              <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
-                <span>Id:</span>
-                <span>{inverterId}</span>
-                <button onClick={() => handleCopy({ inverterId: data?.id })}>
-                  {projectIdCopy ? (
+                <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
+                  <span>Id:</span>
+                  <span>{inverterId}</span>
+                  <button onClick={() => handleCopy({ inverterId: data?.id })}>
+                    {projectIdCopy ? (
+                      <FontAwesomeIcon icon={faCopy} />
+                    ) : (
+                      <FontAwesomeIcon icon={faClipboard} />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button
+              className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-2"
+              onClick={() => setEditInverterModalOpen(true)}
+            >
+              <span className="">Edit</span>
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </button>
+
+            {editInverterModalOpen && (
+              <EditInverterModal
+                editInverterData={data}
+                editInverterModalOpen={setEditInverterModalOpen}
+                inverterEdited={setInverterEdited}
+              />
+            )}
+            {/* {newUserCreated && (
+              <div className="toast toast-end">
+                <div className="alert alert-success">
+                  <div>
+                    <span>User Created successfully.</span>
+                  </div>
+                </div>
+              </div>
+            )} */}
+          </div>
+        </div>
+        <div className="bg-white rounded-md shadow-md p-6">
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <p className="text-gray-700 text-sm font-medium">
+                Device Serial Number:
+              </p>
+              <div className="flex items-center space-x-2">
+                <span className="text-[#25476A] font-semibold">
+                  {data?.deviceSn}
+                </span>
+                <button className="text-[#25476A] hover:text-blue-500">
+                  {solarmanPlantIdCopy ? (
                     <FontAwesomeIcon icon={faCopy} />
                   ) : (
                     <FontAwesomeIcon icon={faClipboard} />
@@ -117,76 +173,49 @@ export default function Project({ inverterId }) {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="space-y-1 select-none bg-white rounded-md">
-          <div className="font-medium border-r-2 p-1.5">
-            <div className="flex space-x-3">
-              <Image
-                src={data?.meta?.stationImage || "/Placeholder.png"}
-                width={2000}
-                height={2000}
-                alt="logo"
-                className="w-28 h-28 rounded-full object-cover"
+            <div>
+              <p className="text-gray-700 text-sm font-medium">Device Id:</p>
+              <p className="text-gray-700">{data?.deviceId || "N/A"}</p>
+            </div>
+            <div>
+              <p className="text-gray-700 text-sm font-medium">Code:</p>
+              <p className="text-gray-700">{data?.code || "N/A"}</p>
+            </div>
+            <div>
+              <p className="text-gray-700 text-sm font-medium">Capacity:</p>
+              <p className="text-gray-700">{data?.capacity || "N/A"}</p>
+            </div>
+            <div>
+              <p className="text-gray-700 text-sm font-medium">Project Id:</p>
+              <p className="text-gray-700">{data?.projectId || "N/A"}</p>
+            </div>
+            <div>
+              <p className="text-gray-700 text-sm font-medium">Building Id:</p>
+              <p className="text-gray-700">{data?.buildingId || 0}</p>
+            </div>
+            <div>
+              <p className="text-gray-700 text-sm font-medium">
+                Created Date & Time:
+              </p>
+              <p className="text-gray-700">
+                <FormatDateTime dateString={data?.createdAt} />
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-700 text-sm font-medium">
+                Updated Date & Time:
+              </p>
+              <p className="text-gray-700">
+                <FormatDateTime dateString={data?.updatedAt} />
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-700 text-sm font-medium">Note:</p>
+              <textarea
+                className="bg-gray-200 px-2 flex w-full h-6 rounded-md text-gray-700"
+                value={data?.note || ""}
+                disabled
               />
-              <div className="grid grid-cols-2 gap-20 w-full">
-                <div className="flex flex-col justify-center">
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Device Serial Number:</span>
-                    <div className="space-x-1">
-                      <span className="text-gray-700">
-                        {data?.deviceSn}
-                      </span>
-                      <button
-                        className="text-[#25476A]"
-                        onClick={() =>
-                          handleCopy({
-                            code: data?.code,
-                          })
-                        }
-                      >
-                        {solarmanPlantIdCopy ? (
-                          <FontAwesomeIcon icon={faCopy} />
-                        ) : (
-                          <FontAwesomeIcon icon={faClipboard} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Device Id:</span>
-                    <span className="text-gray-700">
-                      {data?.deviceId || "N/A"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Project Id:</span>
-                    <span className="text-gray-700">
-                      {data?.projectId || "N/A"}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col justify-center px-2">
-                <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Building Id:</span>
-                    <span className="text-gray-700">
-                      {data?.buildingId || 0}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Created Date & Time:</span>
-                    <span className="text-gray-700">
-                      <FormatDateTime dateString={data?.createdAt} />
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Updated Date & Time:</span>
-                    <span className="text-gray-700">
-                      <FormatDateTime dateString={data?.updatedAt} />
-                    </span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

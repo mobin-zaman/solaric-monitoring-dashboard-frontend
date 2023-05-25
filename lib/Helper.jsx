@@ -363,3 +363,19 @@ export const searchInverter = async (data) => {
   });
   return response.data;
 }
+
+// Api calls for update inverter data
+export const updateInverter = async (data) => {
+  const inverterId = data.inverterId;
+  const inverterData = {
+    capacity: data.capacity,
+    code: data.code,
+    note: data.note
+  };
+  const response = await todoApi.put(`/inverter/${inverterId}`, inverterData, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
