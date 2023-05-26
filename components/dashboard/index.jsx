@@ -2,7 +2,7 @@ import DailyView from "./dailyView";
 import LivePowerFlow from "./livePowerFlow";
 import Historical from "./historical";
 import Impact from "./impact";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import { useQuery, useMutation } from "react-query";
 import {
   getProjects,
@@ -11,6 +11,7 @@ import {
   searchCompany,
   getCompany,
   searchBuilding,
+  getHistoricalDataForProject
 } from "@/lib/Helper";
 
 export default function Index() {
@@ -275,6 +276,28 @@ export default function Index() {
     };
   }, []);
 
+  const [historicalDataForProjectEnabled, setHistoricalDataForProjectEnabled] = useState(false);
+  const [historicalDataForProject, setHistoricalDataForProject] = useState(null);
+
+
+  useQuery(
+    ["historicalDataForProject", selectedOptionId],
+    () => getHistoricalDataForProject(selectedOptionId),
+    {
+      enabled: historicalDataForProjectEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForProjectEnabled(false);
+        setHistoricalDataForProject(data);
+      }
+    }
+  );
+
+
+  useEffect(() => {
+    setHistoricalDataForProjectEnabled(true);
+  }, [selectedOptionId]);
+
+
   return (
     <>
       <div className="flex flex-col w-full h-full space-y-1.5">
@@ -517,7 +540,7 @@ export default function Index() {
         </div>
         <div className="grid grid-cols-6 gap-1.5">
           <div className="col-span-4">
-            <Historical />
+            <Historical historicalDataForProject={historicalDataForProject} />
           </div>
           <div className="col-span-2">
             <Impact />

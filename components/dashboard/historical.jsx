@@ -68,7 +68,7 @@ const data = [
   },
 ];
 
-export default function Historical() {
+export default function Historical({ historicalDataForProject }) {
 
   return (
     <>
@@ -121,21 +121,27 @@ export default function Historical() {
                   <td>Export</td>
                   <td>Sun-Hrs</td>
                 </tr>
-                <tr className="h-16">
+                <tr className="h-12">
                   <td>Today</td>
-                  <td>100 KW</td>
+                  <td>{historicalDataForProject?.historicView?.historicalTableData?.production?.totalGenerationToday.toFixed(1)}</td>
                   <td>2.59</td>
                   <td>5.21</td>
                 </tr>
-                <tr className="h-16">
+                <tr className="h-12">
                   <td>Month</td>
-                  <td>100 KW</td>
+                  <td>{historicalDataForProject?.historicView?.historicalTableData?.production?.totalGenerationThisMonth.toFixed(1)}</td>
                   <td>2.59</td>
                   <td>5.21</td>
                 </tr>
-                <tr className="h-16">
+                <tr className="h-12">
                   <td>Year</td>
-                  <td>100 KW</td>
+                  <td>{historicalDataForProject?.historicView?.historicalTableData?.production?.totalGenerationThisYear.toFixed(1)}</td>
+                  <td>2.59</td>
+                  <td>5.21</td>
+                </tr>
+                <tr className="h-12">
+                  <td>All Time</td>
+                  <td>{historicalDataForProject?.historicView?.historicalTableData?.production?.totalGenerationAllTime.toFixed(1)}</td>
                   <td>2.59</td>
                   <td>5.21</td>
                 </tr>

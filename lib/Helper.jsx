@@ -379,3 +379,13 @@ export const updateInverter = async (data) => {
   });
   return response.data;
 }
+
+// Api calls for get Historical Data For Project
+export const getHistoricalDataForProject = async (id) => {
+  const response = await todoApi.get(`/dashboard/project/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}

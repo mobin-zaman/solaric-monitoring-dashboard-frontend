@@ -46,7 +46,7 @@ export default function Project({ inverterId }) {
       setInverterEdited(false);
     }
   }, [inverterEdited, refetch]);
-  
+
   const [projectIdCopy, setProjectIdCopy] = useState(false);
   const [solarmanPlantIdCopy, setSolarmanPlantIdCopy] = useState(false);
 
@@ -191,7 +191,7 @@ export default function Project({ inverterId }) {
             </div>
             <div>
               <p className="text-gray-700 text-sm font-medium">Building Id:</p>
-              <p className="text-gray-700">{data?.buildingId || 0}</p>
+              <p className="text-gray-700">{data?.buildingId || "N/A"}</p>
             </div>
             <div>
               <p className="text-gray-700 text-sm font-medium">
