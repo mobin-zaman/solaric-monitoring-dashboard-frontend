@@ -205,7 +205,7 @@ export default function Historical({
           </span>
           <div className="flex space-x-4">
             <select
-              className="flex items-center justify-center px-2.5 py-1 text-sm text-black bg-white border-2 border-gray-400 rounded-md select-none"
+              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={historicalDataForProjectSunHrsBarChartDataYearSelected}
               onChange={(e) =>
                 setHistoricalDataForProjectSunHrsBarChartDataSelected(
@@ -221,7 +221,7 @@ export default function Historical({
               )}
             </select>
             <select
-              className="flex items-center justify-center px-2.5 py-1 text-sm text-black bg-white border-2 border-gray-400 rounded-md select-none"
+              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={historicalDataForProjectSunHrsBarChartDataMonthSelected}
               onChange={(e) =>
                 setHistoricalDataForProjectSunHrsBarChartDataMonthSelected(

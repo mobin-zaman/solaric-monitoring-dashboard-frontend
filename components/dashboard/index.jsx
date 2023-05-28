@@ -24,8 +24,8 @@ import {
 } from "@/lib/Helper";
 
 export default function Index() {
-  //project dropdown
 
+  //default view
   const {
     data: allProject,
     isLoading,
@@ -35,8 +35,21 @@ export default function Index() {
     enabled: true, //enable query
   });
 
+  const [selectedOption, setSelectedOption] = useState();
+  const [firstProjectForDefaultViewId, setFirstProjectForDefaultViewId] =
+    useState(null);
+
+  useEffect(() => {
+    if (allProject) {
+      console.log(allProject[0]?.name, "all project");
+      setSelectedOption(allProject[0]?.name);
+      setFirstProjectForDefaultViewId(allProject[0]?.id);
+    }
+  }, [allProject]);
+
+  //project dropdown
+
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Select Project");
   const [selectedOptionId, setSelectedOptionId] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [searchOn, setSearchOn] = useState(false);
@@ -376,6 +389,45 @@ export default function Index() {
     };
   }, []);
 
+  //default
+  const [historicalDataForDefaultEnabled, setHistoricalDataForDefaultEnabled] = useState(false);
+  const [historicalDataForDefault, setHistoricalDataForDefault] = useState(null);
+
+  useQuery(
+    ["historicalDataForDefault", firstProjectForDefaultViewId],
+    () => getHistoricalDataForProject(firstProjectForDefaultViewId),
+    {
+      enabled: historicalDataForDefaultEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForDefaultEnabled(false);
+        setHistoricalDataForDefault(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setHistoricalDataForDefaultEnabled(true);
+  }, [firstProjectForDefaultViewId]);
+
+  const [historicalDataForDefaultSunHrsBarChartDataEnabled, setHistoricalDataForDefaultSunHrsBarChartDataEnabled] = useState(false);
+  const [historicalDataForDefaultSunHrsBarChartData, setHistoricalDataForDefaultSunHrsBarChartData] = useState(null);
+
+  useQuery(
+    ["historicalDataForDefaultSunHrsBarChartData", firstProjectForDefaultViewId],
+    () => getHistoricalDataForProjectSunHrsBarChartData(firstProjectForDefaultViewId),
+    {
+      enabled: historicalDataForDefaultSunHrsBarChartDataEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForDefaultSunHrsBarChartDataEnabled(false);
+        setHistoricalDataForDefaultSunHrsBarChartData(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setHistoricalDataForDefaultSunHrsBarChartDataEnabled(true);
+  }, [firstProjectForDefaultViewId]);
+
   //project
   const [historicalDataForProjectEnabled, setHistoricalDataForProjectEnabled] = useState(false);
   const [historicalDataForProject, setHistoricalDataForProject] = useState(null);
@@ -552,8 +604,11 @@ export default function Index() {
     } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && selectedOptionIdInverter) {
       setMainHistoricalTableData(historicalDataForInverter);
       setMainHistoricalSunHrsBarChartData(historicalDataForInverterSunHrsBarChartData);
+    } else if (!selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainHistoricalTableData(historicalDataForDefault);
+      setMainHistoricalSunHrsBarChartData(historicalDataForDefaultSunHrsBarChartData);
     }
-  }, [historicalDataForProject, historicalDataForProjectSunHrsBarChartData, historicalDataForCompany, historicalDataForCompanySunHrsBarChartData, selectedOptionId, selectedOptionIdCompany, historicalDataForBuilding, historicalDataForBuildingSunHrsBarChartData, selectedOptionIdBuilding, historicalDataForInverter, historicalDataForInverterSunHrsBarChartData, selectedOptionIdInverter]);
+  }, [historicalDataForProject, historicalDataForProjectSunHrsBarChartData, historicalDataForCompany, historicalDataForCompanySunHrsBarChartData, selectedOptionId, selectedOptionIdCompany, historicalDataForBuilding, historicalDataForBuildingSunHrsBarChartData, selectedOptionIdBuilding, historicalDataForInverter, historicalDataForInverterSunHrsBarChartData, selectedOptionIdInverter, historicalDataForDefault, historicalDataForDefaultSunHrsBarChartData]);
 
 
   return (
