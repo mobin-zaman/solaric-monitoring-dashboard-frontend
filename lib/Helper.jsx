@@ -461,3 +461,43 @@ export const getHistoricalDataForInverterSunHrsBarChartData = async (id) => {
   return response.data;
 }
 
+// Api calls for get impact data for project
+export const getImpactDataForProject = async (id) => {
+  const response = await todoApi.get(`/dashboard/project/environment-impact/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get impact data for company
+export const getImpactDataForCompany = async (id) => {
+  const response = await todoApi.get(`/dashboard/company/environment-impact/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get impact data for building
+export const getImpactDataForBuilding = async (id) => {
+  const response = await todoApi.get(`/dashboard/building/environment-impact/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get impact data for inverter
+export const getImpactDataForInverter = async (id) => {
+  const response = await todoApi.get(`/dashboard/inverter/environment-impact/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+

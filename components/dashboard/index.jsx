@@ -21,6 +21,10 @@ import {
   getHistoricalDataForCompanySunHrsBarChartData,
   getHistoricalDataForBuildingSunHrsBarChartData,
   getHistoricalDataForInverterSunHrsBarChartData,
+  getImpactDataForProject,
+  getImpactDataForCompany,
+  getImpactDataForBuilding,
+  getImpactDataForInverter,
 } from "@/lib/Helper";
 
 export default function Index() {
@@ -43,6 +47,7 @@ export default function Index() {
     if (allProject) {
       console.log(allProject[0]?.name, "all project");
       setSelectedOption(allProject[0]?.name);
+      setSelectedOptionId(allProject[0]?.id);
       setFirstProjectForDefaultViewId(allProject[0]?.id);
     }
   }, [allProject]);
@@ -611,6 +616,119 @@ export default function Index() {
   }, [historicalDataForProject, historicalDataForProjectSunHrsBarChartData, historicalDataForCompany, historicalDataForCompanySunHrsBarChartData, selectedOptionId, selectedOptionIdCompany, historicalDataForBuilding, historicalDataForBuildingSunHrsBarChartData, selectedOptionIdBuilding, historicalDataForInverter, historicalDataForInverterSunHrsBarChartData, selectedOptionIdInverter, historicalDataForDefault, historicalDataForDefaultSunHrsBarChartData]);
 
 
+  //impact data
+  const [impactDataForDefaultEnabled, setImpactDataForDefaultEnabled] = useState(false);
+  const [impactDataForDefault, setImpactDataForDefault] = useState(null);
+
+  useQuery(
+    ["impactDataForDefault", firstProjectForDefaultViewId],
+    () => getImpactDataForProject(firstProjectForDefaultViewId),
+    {
+      enabled: impactDataForDefaultEnabled,
+      onSuccess: (data) => {
+        setImpactDataForDefaultEnabled(false);
+        setImpactDataForDefault(data);
+        console.log("impactDataForDefault", data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setImpactDataForDefaultEnabled(true);
+  }, [firstProjectForDefaultViewId]);
+
+  const [impactDataForProjectEnabled, setImpactDataForProjectEnabled] = useState(false);
+  const [impactDataForProject, setImpactDataForProject] = useState(null);
+
+  useQuery(
+    ["impactDataForProject", selectedOptionId],
+    () => getImpactDataForProject(selectedOptionId),
+    {
+      enabled: impactDataForProjectEnabled,
+      onSuccess: (data) => {
+        setImpactDataForProjectEnabled(false);
+        setImpactDataForProject(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setImpactDataForProjectEnabled(true);
+  }, [selectedOptionId]);
+
+  const [impactDataForCompanyEnabled, setImpactDataForCompanyEnabled] = useState(false);
+  const [impactDataForCompany, setImpactDataForCompany] = useState(null);
+
+  useQuery(
+    ["impactDataForCompany", selectedOptionIdCompany],
+    () => getImpactDataForCompany(selectedOptionIdCompany),
+    {
+      enabled: impactDataForCompanyEnabled,
+      onSuccess: (data) => {
+        setImpactDataForCompanyEnabled(false);
+        setImpactDataForCompany(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setImpactDataForCompanyEnabled(true);
+  }, [selectedOptionIdCompany]);
+
+  const [impactDataForBuildingEnabled, setImpactDataForBuildingEnabled] = useState(false);
+  const [impactDataForBuilding, setImpactDataForBuilding] = useState(null);
+
+  useQuery(
+    ["impactDataForBuilding", selectedOptionIdBuilding],
+    () => getImpactDataForBuilding(selectedOptionIdBuilding),
+    {
+      enabled: impactDataForBuildingEnabled,
+      onSuccess: (data) => {
+        setImpactDataForBuildingEnabled(false);
+        setImpactDataForBuilding(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setImpactDataForBuildingEnabled(true);
+  }, [selectedOptionIdBuilding]);
+
+  const [impactDataForInverterEnabled, setImpactDataForInverterEnabled] = useState(false);
+  const [impactDataForInverter, setImpactDataForInverter] = useState(null);
+
+  useQuery(
+    ["impactDataForInverter", selectedOptionIdInverter],
+    () => getImpactDataForInverter(selectedOptionIdInverter),
+    {
+      enabled: impactDataForInverterEnabled,
+      onSuccess: (data) => {
+        setImpactDataForInverterEnabled(false);
+        setImpactDataForInverter(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setImpactDataForInverterEnabled(true);
+  }, [selectedOptionIdInverter]);
+
+  //main data
+  const [mainImpactTableData, setMainImpactTableData] = useState(null);
+
+  useEffect(() => {
+    if (selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainImpactTableData(impactDataForProject);
+    } else if (selectedOptionId && selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainImpactTableData(impactDataForCompany);
+    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainImpactTableData(impactDataForBuilding);
+    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && selectedOptionIdInverter) {
+      setMainImpactTableData(impactDataForInverter);
+    } else if (!selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainImpactTableData(impactDataForDefault);
+    }
+  }, [impactDataForProject, impactDataForCompany, impactDataForBuilding, impactDataForInverter, selectedOptionId, selectedOptionIdCompany, selectedOptionIdBuilding, selectedOptionIdInverter, impactDataForDefault]);
   return (
     <>
       <div className="flex flex-col w-full h-full space-y-1.5">
@@ -626,7 +744,7 @@ export default function Index() {
             <div className="relative select-none" ref={dropdownRef}>
               <input
                 type="text"
-                className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer"
+                className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
                 value={selectedOption}
                 readOnly
                 onClick={toggleDropdown}
@@ -921,7 +1039,7 @@ export default function Index() {
             <Historical historicalDataForProject={mainHistoricalTableData} historicalDataForProjectSunHrsBarChartData={mainHistoricalSunHrsBarChartData} />
           </div>
           <div className="col-span-2">
-            <Impact />
+            <Impact impactData={mainImpactTableData} />
           </div>
         </div>
       </div>
