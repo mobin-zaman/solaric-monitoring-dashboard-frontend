@@ -124,9 +124,10 @@ export default function Users() {
                 Inverter
               </h1>
               {!isLoading && (
-              <p className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
-                <span>{data?.length}</span><span>{data?.length < 2 ? "inverter" : "inverters"}</span>
-              </p> 
+                <p className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
+                  <span>{data?.length}</span>
+                  <span>{data?.length < 2 ? "inverter" : "inverters"}</span>
+                </p>
               )}
             </div>
             <div className="relative">
@@ -147,25 +148,18 @@ export default function Users() {
           {!isLoading && !isError && !searchResultEmpty && (
             <div className="text-white bg-[#25476A] font-medium rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
-                <div className="grid grid-cols-12 col-span-11">
-                  <div className="flex justify-center col-span-4 xl:col-span-3">
-                    Serial Number
-                  </div>
-                  <div className="flex justify-center col-span-2">
-                    Device Id
-                  </div>
-                  <div className="flex justify-center col-span-2">Capacity</div>
-                  <div className="hidden xl:block col-span-1">
-                    <div className="flex justify-center">Code</div>
-                  </div>
-                  <div className="flex justify-center col-span-2">
-                    Project Id
-                  </div>
-                  <div className="flex justify-center col-span-2">
-                    Building Id
-                  </div>
+                <div className="flex justify-center col-span-4 xl:col-span-3">
+                  Serial Number
                 </div>
-                <div className=""></div>
+                <div className="flex justify-center col-span-2">Device Id</div>
+                <div className="flex justify-center col-span-2">Capacity</div>
+                <div className="hidden xl:block col-span-1">
+                  <div className="flex justify-center">Code</div>
+                </div>
+                <div className="flex justify-center col-span-2">Project Id</div>
+                <div className="flex justify-center col-span-2">
+                  Building Id
+                </div>
               </div>
             </div>
           )}
@@ -178,57 +172,42 @@ export default function Users() {
               searchResult1?.map((inverter) => (
                 <div
                   key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
+                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-3.5 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                  onClick={() => handleEditUser(inverter?.id)}
                 >
-                  <div
-                    className="grid grid-cols-12 col-span-11 border-r items-center p-3.5 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
-                    onClick={() => handleEditUser(inverter?.id)}
-                  >
-                    <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
-                      <div className="select-none font-semibold">
-                        {inverter.deviceSn}
-                      </div>
-                      <div className="select-none text-xs flex items-center space-x-1">
-                        <span>Id:</span>
-                        <span>{inverter.id}</span>
-                      </div>
+                  <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
+                    <div className="select-none font-semibold">
+                      {inverter.deviceSn}
                     </div>
-                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                      <span>{inverter?.deviceId}</span>
-                    </div>
-                    <div className="flex justify-center select-all text-sm col-span-2">
-                      {inverter?.capacity ? (
-                        <span>{inverter?.capacity} kWp</span>
-                      ) : (
-                        "N/A"
-                      )}
-                    </div>
-                    <div className="select-all text-sm hidden xl:block col-span-1">
-                      <div className="flex justify-center">
-                        {inverter?.code ? inverter.code : "N/A"}
-                      </div>
-                    </div>
-                    <div className="flex col-span-2">
-                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                        {inverter?.projectId || "N/A"}
-                      </span>
-                    </div>
-                    <div className="flex col-span-2">
-                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                        {inverter?.buildingId || "N/A"}
-                      </span>
+                    <div className="select-none text-xs flex items-center space-x-1">
+                      <span>Id:</span>
+                      <span>{inverter.id}</span>
                     </div>
                   </div>
-                  <div className="flex justify-center col-span-1">
-                    <button
-                      className="flex items-center space-x-1 text-sm hover:text-red-500"
-                      onClick={() => handleDeleteUser(inverter)}
-                      title="Delete"
-                      disabled
-                    >
-                      <FontAwesomeIcon icon={faTrashCan} />
-                      <span className="hidden xl:block">Delete</span>
-                    </button>
+                  <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
+                    <span>{inverter?.deviceId}</span>
+                  </div>
+                  <div className="flex justify-center select-all text-sm col-span-2">
+                    {inverter?.capacity ? (
+                      <span>{inverter?.capacity} kWp</span>
+                    ) : (
+                      "N/A"
+                    )}
+                  </div>
+                  <div className="select-all text-sm hidden xl:block col-span-1">
+                    <div className="flex justify-center">
+                      {inverter?.code ? inverter.code : "N/A"}
+                    </div>
+                  </div>
+                  <div className="flex col-span-2">
+                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                      {inverter?.projectId || "N/A"}
+                    </span>
+                  </div>
+                  <div className="flex col-span-2">
+                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                      {inverter?.buildingId || "N/A"}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -248,57 +227,42 @@ export default function Users() {
               data?.map((inverter) => (
                 <div
                   key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
+                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-3.5 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                  onClick={() => handleEditUser(inverter?.id)}
                 >
-                  <div
-                    className="grid grid-cols-12 col-span-11 border-r items-center p-3.5 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
-                    onClick={() => handleEditUser(inverter?.id)}
-                  >
-                    <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
-                      <div className="select-none font-semibold">
-                        {inverter.deviceSn}
-                      </div>
-                      <div className="select-none text-xs flex items-center space-x-1">
-                        <span>Id:</span>
-                        <span>{inverter.id}</span>
-                      </div>
+                  <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
+                    <div className="select-none font-semibold">
+                      {inverter.deviceSn}
                     </div>
-                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                      <span>{inverter?.deviceId}</span>
-                    </div>
-                    <div className="flex justify-center select-all text-sm col-span-2">
-                      {inverter?.capacity ? (
-                        <span>{inverter?.capacity} kWp</span>
-                      ) : (
-                        "N/A"
-                      )}
-                    </div>
-                    <div className="select-all text-sm hidden xl:block col-span-1">
-                      <div className="flex justify-center">
-                        {inverter?.code ? inverter.code : "N/A"}
-                      </div>
-                    </div>
-                    <div className="flex col-span-2">
-                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                        {inverter?.projectId || "N/A"}
-                      </span>
-                    </div>
-                    <div className="flex col-span-2">
-                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                        {inverter?.buildingId || "N/A"}
-                      </span>
+                    <div className="select-none text-xs flex items-center space-x-1">
+                      <span>Id:</span>
+                      <span>{inverter.id}</span>
                     </div>
                   </div>
-                  <div className="flex justify-center col-span-1">
-                    <button
-                      className="flex items-center space-x-1 text-sm hover:text-red-500"
-                      onClick={() => handleDeleteUser(inverter)}
-                      title="Delete"
-                      disabled
-                    >
-                      <FontAwesomeIcon icon={faTrashCan} />
-                      <span className="hidden xl:block">Delete</span>
-                    </button>
+                  <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
+                    <span>{inverter?.deviceId}</span>
+                  </div>
+                  <div className="flex justify-center select-all text-sm col-span-2">
+                    {inverter?.capacity ? (
+                      <span>{inverter?.capacity} kWp</span>
+                    ) : (
+                      "N/A"
+                    )}
+                  </div>
+                  <div className="select-all text-sm hidden xl:block col-span-1">
+                    <div className="flex justify-center">
+                      {inverter?.code ? inverter.code : "N/A"}
+                    </div>
+                  </div>
+                  <div className="flex col-span-2">
+                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                      {inverter?.projectId || "N/A"}
+                    </span>
+                  </div>
+                  <div className="flex col-span-2">
+                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                      {inverter?.buildingId || "N/A"}
+                    </span>
                   </div>
                 </div>
               ))}

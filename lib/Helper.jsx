@@ -382,7 +382,17 @@ export const updateInverter = async (data) => {
 
 // Api calls for get Historical Data For Project
 export const getHistoricalDataForProject = async (id) => {
-  const response = await todoApi.get(`/dashboard/project/${id}`, {
+  const response = await todoApi.get(`/dashboard/project/historic-view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get Historical Data For Project sun hrs bar chart data
+export const getHistoricalDataForProjectSunHrsBarChartData = async (id) => {
+  const response = await todoApi.get(`/dashboard/project/bar-chart-view/sun-hrs/${id}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
     },

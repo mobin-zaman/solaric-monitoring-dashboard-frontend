@@ -22,6 +22,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useEffect, useState } from "react";
 
 const data = [
   {
@@ -68,7 +69,22 @@ const data = [
   },
 ];
 
-export default function Historical({ historicalDataForProject }) {
+export default function Historical({ historicalDataForProject, historicalDataForProjectSunHrsBarChartData }) {
+
+  const [historicalDataForProjectSunHrsBarChartDataYearly, setHistoricalDataForProjectSunHrsBarChartDataYearly] = useState([]);
+
+  useEffect (() => {
+    if (historicalDataForProjectSunHrsBarChartData) {
+      setHistoricalDataForProjectSunHrsBarChartDataYearly(historicalDataForProjectSunHrsBarChartData?.yearly?.['2023']?.map((item) => {
+        return {
+          name: item?.month,
+          sunHours: item?.sunHours,
+        }
+      }))
+    }
+  }, [historicalDataForProjectSunHrsBarChartData])
+
+  console.log(historicalDataForProjectSunHrsBarChartDataYearly);
 
   return (
     <>
@@ -123,27 +139,27 @@ export default function Historical({ historicalDataForProject }) {
                 </tr>
                 <tr className="h-12">
                   <td>Today</td>
-                  <td>{historicalDataForProject?.historicView?.historicalTableData?.production?.totalGenerationToday.toFixed(1)}</td>
-                  <td>2.59</td>
-                  <td>5.21</td>
+                  <td>{historicalDataForProject?.historicalTableData?.production?.totalGenerationToday.toFixed(1)}</td>
+                  <td></td>
+                  <td>{historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisMonth.toFixed(1)}</td>
                 </tr>
                 <tr className="h-12">
                   <td>Month</td>
-                  <td>{historicalDataForProject?.historicView?.historicalTableData?.production?.totalGenerationThisMonth.toFixed(1)}</td>
-                  <td>2.59</td>
-                  <td>5.21</td>
+                  <td>{historicalDataForProject?.historicalTableData?.production?.totalGenerationThisMonth.toFixed(1)}</td>
+                  <td></td>
+                  <td>{historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisYear.toFixed(1)}</td>
                 </tr>
                 <tr className="h-12">
                   <td>Year</td>
-                  <td>{historicalDataForProject?.historicView?.historicalTableData?.production?.totalGenerationThisYear.toFixed(1)}</td>
-                  <td>2.59</td>
-                  <td>5.21</td>
+                  <td>{historicalDataForProject?.historicalTableData?.production?.totalGenerationThisYear.toFixed(1)}</td>
+                  <td></td>
+                  <td>{historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursTillToday.toFixed(1)}</td>
                 </tr>
                 <tr className="h-12">
                   <td>All Time</td>
-                  <td>{historicalDataForProject?.historicView?.historicalTableData?.production?.totalGenerationAllTime.toFixed(1)}</td>
-                  <td>2.59</td>
-                  <td>5.21</td>
+                  <td>{historicalDataForProject?.historicalTableData?.production?.totalGenerationAllTime.toFixed(1)}</td>
+                  <td></td>
+                  <td>{historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursToday.toFixed(1)}</td>
                 </tr>
               </tbody>
             </table>
@@ -156,7 +172,7 @@ export default function Historical({ historicalDataForProject }) {
         <BarChart
           width={500}
           height={300}
-          data={data}
+          data={historicalDataForProjectSunHrsBarChartDataYearly}
           margin={{
             top: 5,
             right: 30,
@@ -169,8 +185,8 @@ export default function Historical({ historicalDataForProject }) {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="pv" fill="#8884d8" />
-          <Bar dataKey="uv" fill="#82ca9d" />
+          {/* <Bar dataKey="pv" fill="#8884d8" /> */}
+          <Bar dataKey="sunHours" fill="#82ca9d" />
         </BarChart>
       </ResponsiveContainer>
           </div>

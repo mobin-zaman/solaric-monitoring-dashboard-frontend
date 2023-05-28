@@ -11,7 +11,8 @@ import {
   searchCompany,
   getCompany,
   searchBuilding,
-  getHistoricalDataForProject
+  getHistoricalDataForProject,
+  getHistoricalDataForProjectSunHrsBarChartData,
 } from "@/lib/Helper";
 
 export default function Index() {
@@ -297,6 +298,24 @@ export default function Index() {
     setHistoricalDataForProjectEnabled(true);
   }, [selectedOptionId]);
 
+  const [historicalDataForProjectSunHrsBarChartDataEnabled, setHistoricalDataForProjectSunHrsBarChartDataEnabled] = useState(false);
+  const [historicalDataForProjectSunHrsBarChartData, setHistoricalDataForProjectSunHrsBarChartData] = useState(null);
+
+  useQuery(
+    ["historicalDataForProjectSunHrsBarChartData", selectedOptionId],
+    () => getHistoricalDataForProjectSunHrsBarChartData(selectedOptionId),
+    {
+      enabled: historicalDataForProjectSunHrsBarChartDataEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForProjectSunHrsBarChartDataEnabled(false);
+        setHistoricalDataForProjectSunHrsBarChartData(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setHistoricalDataForProjectSunHrsBarChartDataEnabled(true);
+  }, [selectedOptionId]);
 
   return (
     <>
@@ -540,7 +559,7 @@ export default function Index() {
         </div>
         <div className="grid grid-cols-6 gap-1.5">
           <div className="col-span-4">
-            <Historical historicalDataForProject={historicalDataForProject} />
+            <Historical historicalDataForProject={historicalDataForProject} historicalDataForProjectSunHrsBarChartData={historicalDataForProjectSunHrsBarChartData} />
           </div>
           <div className="col-span-2">
             <Impact />
