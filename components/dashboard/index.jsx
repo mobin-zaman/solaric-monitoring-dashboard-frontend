@@ -12,7 +12,9 @@ import {
   getCompany,
   searchBuilding,
   getHistoricalDataForProject,
+  getHistoricalDataForCompany,
   getHistoricalDataForProjectSunHrsBarChartData,
+  getHistoricalDataForCompanySunHrsBarChartData,
 } from "@/lib/Helper";
 
 export default function Index() {
@@ -277,6 +279,8 @@ export default function Index() {
     };
   }, []);
 
+
+  //project
   const [historicalDataForProjectEnabled, setHistoricalDataForProjectEnabled] = useState(false);
   const [historicalDataForProject, setHistoricalDataForProject] = useState(null);
 
@@ -316,6 +320,66 @@ export default function Index() {
   useEffect(() => {
     setHistoricalDataForProjectSunHrsBarChartDataEnabled(true);
   }, [selectedOptionId]);
+
+  //company
+  const [historicalDataForCompanyEnabled, setHistoricalDataForCompanyEnabled] = useState(false);
+  const [historicalDataForCompany, setHistoricalDataForCompany] = useState(null);
+
+  useQuery(
+    ["historicalDataForCompany", selectedOptionIdCompany],
+    () => getHistoricalDataForCompany(selectedOptionIdCompany),
+    {
+      enabled: historicalDataForCompanyEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForCompanyEnabled(false);
+        setHistoricalDataForCompany(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setHistoricalDataForCompanyEnabled(true);
+  }, [selectedOptionIdCompany]);
+
+  const [historicalDataForCompanySunHrsBarChartDataEnabled, setHistoricalDataForCompanySunHrsBarChartDataEnabled] = useState(false);
+  const [historicalDataForCompanySunHrsBarChartData, setHistoricalDataForCompanySunHrsBarChartData] = useState(null);
+
+  useQuery(
+    ["historicalDataForCompanySunHrsBarChartData", selectedOptionIdCompany],
+    () => getHistoricalDataForCompanySunHrsBarChartData(selectedOptionIdCompany),
+    {
+      enabled: historicalDataForCompanySunHrsBarChartDataEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForCompanySunHrsBarChartDataEnabled(false);
+        setHistoricalDataForCompanySunHrsBarChartData(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setHistoricalDataForCompanySunHrsBarChartDataEnabled(true);
+  }, [selectedOptionIdCompany]);
+
+  //building
+
+  //main data
+  const [mainHistoricalTableData, setMainHistoricalTableData] = useState(null);
+  const [mainHistoricalSunHrsBarChartData, setMainHistoricalSunHrsBarChartData] = useState(null);
+
+  useEffect(() => {
+    if (selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding) {
+      setMainHistoricalTableData(historicalDataForProject);
+      setMainHistoricalSunHrsBarChartData(historicalDataForProjectSunHrsBarChartData);
+    } else if (selectedOptionId && selectedOptionIdCompany && !selectedOptionIdBuilding) {
+      console.log(historicalDataForCompanySunHrsBarChartData, "here");
+      setMainHistoricalTableData(historicalDataForCompany);
+      setMainHistoricalSunHrsBarChartData(historicalDataForCompanySunHrsBarChartData);
+    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding) {
+      setMainHistoricalTableData(historicalDataForBuilding);
+      setMainHistoricalSunHrsBarChartData(historicalDataForBuildingSunHrsBarChartData);
+    }
+  }, [historicalDataForProject, historicalDataForProjectSunHrsBarChartData, historicalDataForCompany, historicalDataForCompanySunHrsBarChartData, selectedOptionId, selectedOptionIdCompany]);
+
 
   return (
     <>
@@ -559,7 +623,7 @@ export default function Index() {
         </div>
         <div className="grid grid-cols-6 gap-1.5">
           <div className="col-span-4">
-            <Historical historicalDataForProject={historicalDataForProject} historicalDataForProjectSunHrsBarChartData={historicalDataForProjectSunHrsBarChartData} />
+            <Historical historicalDataForProject={mainHistoricalTableData} historicalDataForProjectSunHrsBarChartData={mainHistoricalSunHrsBarChartData} />
           </div>
           <div className="col-span-2">
             <Impact />

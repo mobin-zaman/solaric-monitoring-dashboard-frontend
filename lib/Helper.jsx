@@ -399,3 +399,24 @@ export const getHistoricalDataForProjectSunHrsBarChartData = async (id) => {
   });
   return response.data;
 }
+
+
+// Api calls for get Historical Data For Company
+export const getHistoricalDataForCompany = async (id) => {
+  const response = await todoApi.get(`/dashboard/company/historic-view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get Historical Data For Company sun hrs bar chart data
+export const getHistoricalDataForCompanySunHrsBarChartData = async (id) => {
+  const response = await todoApi.get(`/dashboard/company/bar-chart-view/sun-hrs/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
