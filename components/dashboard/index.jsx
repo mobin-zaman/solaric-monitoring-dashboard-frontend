@@ -78,6 +78,9 @@ export default function Index() {
     setSelectedOptionBuilding("Select Building");
     setSelectedOptionIdBuilding(null);
     setInputValueBuilding("");
+    setSelectedOptionInverter("Select Inverter");
+    setSelectedOptionIdInverter(null);
+    setInputValueInverter("");
   };
 
   const handleProjectSearch = (e) => {
@@ -164,6 +167,9 @@ export default function Index() {
     setSelectedOptionBuilding("Select Building");
     setSelectedOptionIdBuilding(null);
     setInputValueBuilding("");
+    setSelectedOptionInverter("Select Inverter");
+    setSelectedOptionIdInverter(null);
+    setInputValueInverter("");
   };
 
   const handleCompanySearch = (e) => {
@@ -255,6 +261,9 @@ export default function Index() {
     setSelectedOptionBuilding(name);
     setIsOpenBuilding(false);
     setInputValueBuilding("");
+    setSelectedOptionInverter("Select Inverter");
+    setSelectedOptionIdInverter(null);
+    setInputValueInverter("");
   };
 
   const handleBuildingSearch = (e) => {
