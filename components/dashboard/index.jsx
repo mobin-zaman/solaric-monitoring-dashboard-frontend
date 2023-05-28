@@ -11,10 +11,16 @@ import {
   searchCompany,
   getCompany,
   searchBuilding,
+  getBuilding, 
+  searchInverterForBuilding,
   getHistoricalDataForProject,
   getHistoricalDataForCompany,
+  getHistoricalDataForBuilding,
+  getHistoricalDataForInverter,
   getHistoricalDataForProjectSunHrsBarChartData,
   getHistoricalDataForCompanySunHrsBarChartData,
+  getHistoricalDataForBuildingSunHrsBarChartData,
+  getHistoricalDataForInverterSunHrsBarChartData,
 } from "@/lib/Helper";
 
 export default function Index() {
@@ -279,6 +285,96 @@ export default function Index() {
     };
   }, []);
 
+  //inverter dropdown
+
+  const building = useQuery(
+    ["building", selectedOptionIdBuilding],
+    () => getBuilding(selectedOptionIdBuilding),
+    {
+      enabled: selectedOptionIdBuilding !== null,
+    }
+  );
+
+  // const [buildingData, setBuildingData] = useState(null);
+
+  // useEffect(() => {
+  //   if (selectedOptionIdBuilding !== null) {
+  //     building.refetch();
+  //   }
+  //   setBuildingData(building.data);
+  // }, [selectedOptionIdBuilding, building]);
+
+  // console.log(building.data, "building data");
+
+  const [isOpenInverter, setIsOpenInverter] = useState(false);
+  const [selectedOptionInverter, setSelectedOptionInverter] =
+    useState("Select Inverter");
+  const [selectedOptionIdInverter, setSelectedOptionIdInverter] =
+    useState(null);
+  const [inputValueInverter, setInputValueInverter] = useState("");
+  const [searchOnInverter, setSearchOnInverter] = useState(false);
+  const [searchResult1Inverter, setSearchResult1Inverter] = useState([]);
+  const [searchResultEmptyInverter, setSearchResultEmptyInverter] =
+    useState(false);
+
+  const dropdownRefInverter = useRef(null);
+
+  const toggleDropdownInverter = () => {
+    setIsOpenInverter(!isOpenInverter);
+  };
+
+  const selectOptionInverter = (id, deviceSn) => {
+    setSelectedOptionIdInverter(id);
+    setSelectedOptionInverter(deviceSn);
+    setIsOpenInverter(false);
+    setInputValueInverter("");
+  };
+
+  const handleInverterSearch = (e) => {
+    setSearchOnInverter(true);
+    const searchPromise = searchInverterForBuilding({
+      search: e.target.value,
+      buildingId: selectedOptionIdBuilding,
+    });
+
+    if (e.target.value.length < 1) {
+      setSearchResult1Inverter(null);
+      setSearchOnInverter(false);
+      setSearchResultEmptyInverter(false);
+    } else {
+      if (searchPromise instanceof Promise) {
+        searchPromise
+          .then((data) => {
+            if (data.length < 1) {
+              setSearchResultEmptyInverter(true);
+            } else {
+              setSearchResultEmptyInverter(false);
+              setSearchResult1Inverter(data);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
+  };
+
+  const handleClickOutsideInverter = (event) => {
+    if (
+      dropdownRefInverter.current &&
+      !dropdownRefInverter.current.contains(event.target)
+    ) {
+      setIsOpenInverter(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutsideInverter);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutsideInverter);
+    };
+  }, []);
 
   //project
   const [historicalDataForProjectEnabled, setHistoricalDataForProjectEnabled] = useState(false);
@@ -361,24 +457,103 @@ export default function Index() {
   }, [selectedOptionIdCompany]);
 
   //building
+  const [historicalDataForBuildingEnabled, setHistoricalDataForBuildingEnabled] = useState(false);
+  const [historicalDataForBuilding, setHistoricalDataForBuilding] = useState(null);
+
+  useQuery(
+    ["historicalDataForBuilding", selectedOptionIdBuilding],
+    () => getHistoricalDataForBuilding(selectedOptionIdBuilding),
+    {
+      enabled: historicalDataForBuildingEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForBuildingEnabled(false);
+        setHistoricalDataForBuilding(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setHistoricalDataForBuildingEnabled(true);
+  }, [selectedOptionIdBuilding]);
+
+  const [historicalDataForBuildingSunHrsBarChartDataEnabled, setHistoricalDataForBuildingSunHrsBarChartDataEnabled] = useState(false);
+  const [historicalDataForBuildingSunHrsBarChartData, setHistoricalDataForBuildingSunHrsBarChartData] = useState(null);
+
+  useQuery(
+    ["historicalDataForBuildingSunHrsBarChartData", selectedOptionIdBuilding],
+    () => getHistoricalDataForBuildingSunHrsBarChartData(selectedOptionIdBuilding),
+    {
+      enabled: historicalDataForBuildingSunHrsBarChartDataEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForBuildingSunHrsBarChartDataEnabled(false);
+        setHistoricalDataForBuildingSunHrsBarChartData(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setHistoricalDataForBuildingSunHrsBarChartDataEnabled(true);
+  }, [selectedOptionIdBuilding]);
+
+  //inverter
+  const [historicalDataForInverterEnabled, setHistoricalDataForInverterEnabled] = useState(false);
+  const [historicalDataForInverter, setHistoricalDataForInverter] = useState(null);
+
+  useQuery(
+    ["historicalDataForInverter", selectedOptionIdInverter],
+    () => getHistoricalDataForInverter(selectedOptionIdInverter),
+    {
+      enabled: historicalDataForInverterEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForInverterEnabled(false);
+        setHistoricalDataForInverter(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setHistoricalDataForInverterEnabled(true);
+  }, [selectedOptionIdInverter]);
+
+  const [historicalDataForInverterSunHrsBarChartDataEnabled, setHistoricalDataForInverterSunHrsBarChartDataEnabled] = useState(false);
+  const [historicalDataForInverterSunHrsBarChartData, setHistoricalDataForInverterSunHrsBarChartData] = useState(null);
+
+  useQuery(
+    ["historicalDataForInverterSunHrsBarChartData", selectedOptionIdInverter],
+    () => getHistoricalDataForInverterSunHrsBarChartData(selectedOptionIdInverter),
+    {
+      enabled: historicalDataForInverterSunHrsBarChartDataEnabled,
+      onSuccess: (data) => {
+        setHistoricalDataForInverterSunHrsBarChartDataEnabled(false);
+        setHistoricalDataForInverterSunHrsBarChartData(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setHistoricalDataForInverterSunHrsBarChartDataEnabled(true);
+  }, [selectedOptionIdInverter]);
 
   //main data
   const [mainHistoricalTableData, setMainHistoricalTableData] = useState(null);
   const [mainHistoricalSunHrsBarChartData, setMainHistoricalSunHrsBarChartData] = useState(null);
 
   useEffect(() => {
-    if (selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding) {
+    if (selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
       setMainHistoricalTableData(historicalDataForProject);
       setMainHistoricalSunHrsBarChartData(historicalDataForProjectSunHrsBarChartData);
-    } else if (selectedOptionId && selectedOptionIdCompany && !selectedOptionIdBuilding) {
-      console.log(historicalDataForCompanySunHrsBarChartData, "here");
+    } else if (selectedOptionId && selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
       setMainHistoricalTableData(historicalDataForCompany);
       setMainHistoricalSunHrsBarChartData(historicalDataForCompanySunHrsBarChartData);
-    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding) {
+    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      console.log("historicalDataForBuilding", historicalDataForBuilding);
       setMainHistoricalTableData(historicalDataForBuilding);
       setMainHistoricalSunHrsBarChartData(historicalDataForBuildingSunHrsBarChartData);
+    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && selectedOptionIdInverter) {
+      setMainHistoricalTableData(historicalDataForInverter);
+      setMainHistoricalSunHrsBarChartData(historicalDataForInverterSunHrsBarChartData);
     }
-  }, [historicalDataForProject, historicalDataForProjectSunHrsBarChartData, historicalDataForCompany, historicalDataForCompanySunHrsBarChartData, selectedOptionId, selectedOptionIdCompany]);
+  }, [historicalDataForProject, historicalDataForProjectSunHrsBarChartData, historicalDataForCompany, historicalDataForCompanySunHrsBarChartData, selectedOptionId, selectedOptionIdCompany, historicalDataForBuilding, historicalDataForBuildingSunHrsBarChartData, selectedOptionIdBuilding, historicalDataForInverter, historicalDataForInverterSunHrsBarChartData, selectedOptionIdInverter]);
 
 
   return (
@@ -576,6 +751,71 @@ export default function Index() {
                           }
                         >
                           {option?.name}
+                        </li>
+                      ))}
+                  </ul>
+                )}
+              </div>
+            )}
+            {selectedOptionIdBuilding !== null && (
+              <div className="relative select-none" ref={dropdownRefInverter}>
+                <input
+                  type="text"
+                  className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
+                  value={selectedOptionInverter}
+                  readOnly
+                  onClick={toggleDropdownInverter}
+                />
+                <svg
+                  className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+                {isOpenInverter && (
+                  <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
+                    <li className="px-2 p-1">
+                      <input
+                        type="text"
+                        // value={inputValue}
+                        onChange={handleInverterSearch}
+                        className="border border-gray-300 w-full p-1 text-sm rounded-md"
+                        placeholder="Search..."
+                      />
+                    </li>
+                    {!searchResultEmptyInverter &&
+                      searchResult1Inverter?.length > 0 &&
+                      searchOnInverter &&
+                      searchResult1Inverter.map((option) => (
+                        <li
+                          key={option.id}
+                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                          onClick={() =>
+                            selectOptionInverter(option?.id, option?.deviceSn)
+                          }
+                        >
+                          {option?.deviceSn}
+                        </li>
+                      ))}
+                    {!searchResultEmptyInverter &&
+                      !searchOnInverter &&
+                      building?.data?.inverters?.map((option) => (
+                        <li
+                          key={option.id}
+                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                          onClick={() =>
+                            selectOptionInverter(option?.id, option?.deviceSn)
+                          }
+                        >
+                          {option?.deviceSn}
                         </li>
                       ))}
                   </ul>

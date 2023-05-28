@@ -420,3 +420,44 @@ export const getHistoricalDataForCompanySunHrsBarChartData = async (id) => {
   });
   return response.data;
 }
+
+// Api calls for get Historical Data For Building
+export const getHistoricalDataForBuilding = async (id) => {
+  const response = await todoApi.get(`/dashboard/building/historic-view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get Historical Data For Building sun hrs bar chart data
+export const getHistoricalDataForBuildingSunHrsBarChartData = async (id) => {
+  const response = await todoApi.get(`/dashboard/building/bar-chart-view/sun-hrs/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get Historical Data For Inverter
+export const getHistoricalDataForInverter = async (id) => {
+  const response = await todoApi.get(`/dashboard/inverter/historic-view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get Historical Data For Inverter sun hrs bar chart data
+export const getHistoricalDataForInverterSunHrsBarChartData = async (id) => {
+  const response = await todoApi.get(`/dashboard/inverter/bar-chart-view/sun-hrs/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+

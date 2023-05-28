@@ -213,7 +213,7 @@ export default function Historical({
                 )
               }
             >
-              <option>Year</option>
+              <option disabled>Year</option>
               {historicalDataForProjectSunHrsBarChartDataYearCount?.map(
                 (item, Index) => {
                   return <option key={Index}>{item}</option>;
@@ -295,13 +295,13 @@ export default function Historical({
                   <td>
                     {historicalDataForProject?.historicalTableData?.production?.totalGenerationToday.toFixed(
                       1
-                    )}
+                    ) || 0}
                   </td>
                   <td></td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisMonth.toFixed(
+                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisMonth?.toFixed(
                       1
-                    )}
+                    ) || 0}
                   </td>
                 </tr>
                 <tr className="h-12">
@@ -309,13 +309,13 @@ export default function Historical({
                   <td>
                     {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisMonth.toFixed(
                       1
-                    )}
+                    ) || 0}
                   </td>
                   <td></td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisYear.toFixed(
+                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisYear?.toFixed(
                       1
-                    )}
+                    ) || 0}
                   </td>
                 </tr>
                 <tr className="h-12">
@@ -323,13 +323,13 @@ export default function Historical({
                   <td>
                     {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisYear.toFixed(
                       1
-                    )}
+                    ) || 0}
                   </td>
                   <td></td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursTillToday.toFixed(
+                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursTillToday?.toFixed(
                       1
-                    )}
+                    ) || 0}
                   </td>
                 </tr>
                 <tr className="h-12">
@@ -337,13 +337,13 @@ export default function Historical({
                   <td>
                     {historicalDataForProject?.historicalTableData?.production?.totalGenerationAllTime.toFixed(
                       1
-                    )}
+                    ) || 0}
                   </td>
                   <td></td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursToday.toFixed(
+                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursToday?.toFixed(
                       1
-                    )}
+                    ) || 0}
                   </td>
                 </tr>
               </tbody>
