@@ -21,14 +21,6 @@ export default function LivePowerFlow() {
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
             Live Power Flow
           </span>
-          <div className="flex rounded-md bg-gray-200">
-            <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-l-md select-none border-r">
-              Plant
-            </button>
-            <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-r-md select-none">
-              KEPZ
-            </button>
-          </div>
         </div>
         <div className="w-full h-[19.5rem] grid">
         <div className="grid grid-cols-7">
