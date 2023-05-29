@@ -11,6 +11,7 @@ export default function Header() {
 
   const handleSignOut = () => {
     localStorage.removeItem("Token");
+    localStorage.removeItem("TokenExpiration");
     window.location.href = "/";
   };
 

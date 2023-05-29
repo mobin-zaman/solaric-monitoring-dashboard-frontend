@@ -31,19 +31,40 @@ export default function LogIn() {
         password
       );
       localStorage.setItem("Token", response.user.accessToken);
-
-      setInterval(async () => {
-        const refreshedToken = await auth.currentUser.getIdToken(true);
-        localStorage.setItem("Token", refreshedToken);
-        console.log("Token refreshed");
-      }, 55 * 60 * 1000);
-
+  
+      const tokenExpirationTime = 1 * 60 * 1000; // 55 minutes
+      const tokenRefreshInterval = setInterval(async () => {
+        const currentTime = new Date().getTime();
+        const tokenExpiration = parseInt(localStorage.getItem("TokenExpiration"));
+        console.log(tokenExpiration, currentTime);
+        if (tokenExpiration && currentTime >= tokenExpiration) {
+          clearInterval(tokenRefreshInterval);
+          await refreshAccessToken(tokenExpirationTime);
+          console.log("Token refreshed");
+        }
+      }, tokenExpirationTime);
+  
+      const tokenExpiration = new Date().getTime() + tokenExpirationTime;
+      localStorage.setItem("TokenExpiration", tokenExpiration.toString());
+  
       router.push("/dashboard");
       setEmailPassNotMatch(false);
     } catch (error) {
       setEmailPassNotMatch(true);
       setEmail("");
       setPassword("");
+    }
+  };
+  
+  const refreshAccessToken = async (tokenExpirationTime) => {
+    try {
+      const refreshedToken = await auth.currentUser.getIdToken(true);
+      localStorage.setItem("Token", refreshedToken);
+  
+      const tokenExpiration = new Date().getTime() + tokenExpirationTime;
+      localStorage.setItem("TokenExpiration", tokenExpiration.toString());
+    } catch (error) {
+      // Handle token refresh error
     }
   };
 
