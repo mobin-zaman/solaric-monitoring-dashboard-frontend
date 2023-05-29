@@ -251,6 +251,7 @@ export default function Project({ companyId }) {
                 {addCompanyModalOpen && (
                   <AddCompanyModal
                     companyId={companyId}
+                    companyNames={data?.name}
                     buildingAdded={setBuildingAdded}
                     addCompanyModalOpen={setAddCompanyModalOpen}
                   />

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import { addBuildingToCompany } from "@/lib/Helper";
 
-export default function AddUserModal({ addCompanyModalOpen, companyId, buildingAdded }) {
+export default function AddUserModal({ addCompanyModalOpen, companyId, buildingAdded, companyNames }) {
   const [buildingName, setBuildingName] = useState("");
   const [buildingCode, setBuildingCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -41,7 +41,7 @@ export default function AddUserModal({ addCompanyModalOpen, companyId, buildingA
         <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] sm:w-[26rem] space-y-3">
           <div className="flex justify-between">
             <span className="text-[#373737] font-semibold text-xl">
-              Add Building In Company {companyId}
+              Add Building In Company - {companyNames}
             </span>
             <button
               className="opacity-80"

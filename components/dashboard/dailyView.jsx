@@ -71,7 +71,7 @@ export default function DailyView({ dailyViewData }) {
           dailyViewDataForProjectPowerLineChartDataYearSelected
         ]?.map((item) => {
           return {
-            name: item?.day,
+            name: item?.month,
             generation: item?.generation,
           };
         })
@@ -282,9 +282,9 @@ export default function DailyView({ dailyViewData }) {
           </div>
         </div>
                 <div className="flex items-center justify-center">
-              <div className="flex items-center justify-center bg-[#25476A] rounded-md px-3 py-2 select-none space-x-1">
+              <div className="flex items-center justify-center bg-[#8884d8] rounded-md px-3 py-2 select-none space-x-1">
                 <span className="text-sm font-semibold text-white">
-                  Generation, KWh
+                  Generation, kWh
                 </span>
                 <span className="text-sm font-semibold text-white">-</span>
                 <span className="text-sm font-semibold text-white">{dailyViewDataForProjectPowerLineChartDataMonthly ? dailyViewDataForProjectPowerLineChartDataMonthly?.reduce((a, b) => a + b?.generation, 0).toFixed(1) : dailyViewDataForProjectPowerLineChartDataYearly?.reduce((a, b) => a + b?.generation, 0).toFixed(1)}</span>

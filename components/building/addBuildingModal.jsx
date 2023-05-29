@@ -14,6 +14,7 @@ export default function AddUserModal({
   addCompanyModalOpen,
   buildingId,
   inverterAdded,
+  buildingName,
 }) {
   const [inverterId, setInverterId] = useState();
   const [inverterSerialNumber, setInverterSerialNumber] = useState("");
@@ -75,7 +76,7 @@ export default function AddUserModal({
         <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] sm:w-[26rem] space-y-3">
           <div className="flex justify-between">
             <span className="text-[#373737] font-semibold text-xl">
-              Add Inverter In Building {buildingId}
+              Add Inverter In Building - {buildingName}
             </span>
             <button
               className="opacity-80"

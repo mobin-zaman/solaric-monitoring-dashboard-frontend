@@ -98,6 +98,8 @@ export default function Project({ inverterId }) {
     }
   };
 
+  console.log(data, "data");
+
   return (
     <>
       <div className="space-y-1.5 relative">
@@ -186,12 +188,12 @@ export default function Project({ inverterId }) {
               <p className="text-gray-700">{data?.capacity || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">Project Id:</p>
-              <p className="text-gray-700">{data?.projectId || "N/A"}</p>
+              <p className="text-gray-700 text-sm font-medium">Project:</p>
+              <p className="text-gray-700">{data?.project?.name || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">Building Id:</p>
-              <p className="text-gray-700">{data?.buildingId || "N/A"}</p>
+              <p className="text-gray-700 text-sm font-medium">Building:</p>
+              <p className="text-gray-700">{data?.building?.name || "N/A"}</p>
             </div>
             <div>
               <p className="text-gray-700 text-sm font-medium">

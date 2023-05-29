@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import { addCompanyToProject } from "@/lib/Helper";
 
-export default function AddUserModal({ addCompanyModalOpen, projectId, companyAdded }) {
+export default function AddUserModal({ addCompanyModalOpen, projectId, companyAdded, projectName }) {
   const [companyName, setCompanyName] = useState("");
   const [companyCode, setCompanyCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -41,7 +41,7 @@ export default function AddUserModal({ addCompanyModalOpen, projectId, companyAd
         <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] sm:w-[26rem] space-y-3">
           <div className="flex justify-between">
             <span className="text-[#373737] font-semibold text-xl">
-              Add Company In {projectId}
+              Add Company In Project - {projectName}
             </span>
             <button
               className="opacity-80"
