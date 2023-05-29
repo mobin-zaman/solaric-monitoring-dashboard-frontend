@@ -225,8 +225,8 @@ export default function DailyView({ dailyViewData }) {
             </select>
           </div>
         </div>
-        <div className="flex w-full h-full items-center justify-between">
-          <div
+        <div className="flex w-full h-72 items-center justify-center">
+          {/* <div
             className="flex justify-center items-center"
             style={{ width: "30%", height: "80%" }}
           >
@@ -238,10 +238,9 @@ export default function DailyView({ dailyViewData }) {
                 <span className="text-sm font-semibold text-white">{dailyViewDataForProjectPowerLineChartDataMonthly ? dailyViewDataForProjectPowerLineChartDataMonthly?.reduce((a, b) => a + b?.generation, 0).toFixed(1) : dailyViewDataForProjectPowerLineChartDataYearly?.reduce((a, b) => a + b?.generation, 0).toFixed(1)}</span>
               </div>
             </div>
-          </div>
+          </div> */}
           <div
-            className="flex items-center justify-center"
-            style={{ width: "70%", height: "80%" }}
+            style={{ width: "90%", height: "90%" }}
           >
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
@@ -282,6 +281,15 @@ export default function DailyView({ dailyViewData }) {
             </ResponsiveContainer>
           </div>
         </div>
+                <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center bg-[#25476A] rounded-md px-3 py-2 select-none space-x-1">
+                <span className="text-sm font-semibold text-white">
+                  Generation, KWh
+                </span>
+                <span className="text-sm font-semibold text-white">-</span>
+                <span className="text-sm font-semibold text-white">{dailyViewDataForProjectPowerLineChartDataMonthly ? dailyViewDataForProjectPowerLineChartDataMonthly?.reduce((a, b) => a + b?.generation, 0).toFixed(1) : dailyViewDataForProjectPowerLineChartDataYearly?.reduce((a, b) => a + b?.generation, 0).toFixed(1)}</span>
+              </div>
+                </div>
       </div>
     </>
   );
