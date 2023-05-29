@@ -25,6 +25,10 @@ import {
   getImpactDataForCompany,
   getImpactDataForBuilding,
   getImpactDataForInverter,
+  getDailyViewForProject,
+  getDailyViewForCompany,
+  getDailyViewForBuilding,
+  getDailyViewForInverter,
 } from "@/lib/Helper";
 
 export default function Index() {
@@ -738,6 +742,122 @@ export default function Index() {
       setMainImpactTableData(impactDataForDefault);
     }
   }, [impactDataForProject, impactDataForCompany, impactDataForBuilding, impactDataForInverter, selectedOptionId, selectedOptionIdCompany, selectedOptionIdBuilding, selectedOptionIdInverter, impactDataForDefault]);
+  
+  
+  ///daily view
+  const [dailyDataForDefaultEnabled, setDailyDataForDefaultEnabled] = useState(false);
+  const [dailyDataForDefault, setDailyDataForDefault] = useState(null);
+
+  useQuery(
+    ["dailyDataForDefault", firstProjectForDefaultViewId],
+    () => getDailyViewForProject(firstProjectForDefaultViewId),
+    {
+      enabled: dailyDataForDefaultEnabled,
+      onSuccess: (data) => {
+        setDailyDataForDefaultEnabled(false);
+        setDailyDataForDefault(data);
+        console.log("dailyDataForDefault", data); 
+      }
+    }
+  );
+
+  useEffect(() => {
+    setDailyDataForDefaultEnabled(true);
+  }, [firstProjectForDefaultViewId]);
+
+  const [dailyDataForProjectEnabled, setDailyDataForProjectEnabled] = useState(false);
+  const [dailyDataForProject, setDailyDataForProject] = useState(null);
+
+  useQuery(
+    ["dailyDataForProject", selectedOptionId],
+    () => getDailyViewForProject(selectedOptionId),
+    {
+      enabled: dailyDataForProjectEnabled,
+      onSuccess: (data) => {
+        setDailyDataForProjectEnabled(false);
+        setDailyDataForProject(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setDailyDataForProjectEnabled(true);
+  }, [selectedOptionId]);
+
+  const [dailyDataForCompanyEnabled, setDailyDataForCompanyEnabled] = useState(false);
+  const [dailyDataForCompany, setDailyDataForCompany] = useState(null);
+
+  useQuery(
+    ["dailyDataForCompany", selectedOptionIdCompany],
+    () => getDailyViewForCompany(selectedOptionIdCompany),
+    {
+      enabled: dailyDataForCompanyEnabled,
+      onSuccess: (data) => {
+        setDailyDataForCompanyEnabled(false);
+        setDailyDataForCompany(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setDailyDataForCompanyEnabled(true);
+  }, [selectedOptionIdCompany]);
+
+  const [dailyDataForBuildingEnabled, setDailyDataForBuildingEnabled] = useState(false);
+  const [dailyDataForBuilding, setDailyDataForBuilding] = useState(null);
+
+  useQuery(
+    ["dailyDataForBuilding", selectedOptionIdBuilding],
+    () => getDailyViewForBuilding(selectedOptionIdBuilding),
+    {
+      enabled: dailyDataForBuildingEnabled,
+      onSuccess: (data) => {
+        setDailyDataForBuildingEnabled(false);
+        setDailyDataForBuilding(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setDailyDataForBuildingEnabled(true);
+  }, [selectedOptionIdBuilding]);
+
+  const [dailyDataForInverterEnabled, setDailyDataForInverterEnabled] = useState(false);
+  const [dailyDataForInverter, setDailyDataForInverter] = useState(null);
+
+  useQuery(
+    ["dailyDataForInverter", selectedOptionIdInverter],
+    () => getDailyViewForInverter(selectedOptionIdInverter),
+    {
+      enabled: dailyDataForInverterEnabled,
+      onSuccess: (data) => {
+        setDailyDataForInverterEnabled(false);
+        setDailyDataForInverter(data);
+      }
+    }
+  );
+
+  useEffect(() => {
+    setDailyDataForInverterEnabled(true);
+  }, [selectedOptionIdInverter]);
+
+  //main data for daily view
+  const [mainDailyViewData, setMainDailyViewData] = useState(null);
+
+  useEffect(() => {
+    if (selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainDailyViewData(dailyDataForProject);
+    } else if (selectedOptionId && selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainDailyViewData(dailyDataForCompany);
+    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainDailyViewData(dailyDataForBuilding);
+    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && selectedOptionIdInverter) {
+      setMainDailyViewData(dailyDataForInverter);
+    } else if (!selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainDailyViewData(dailyDataForDefault);
+    }
+  }, [dailyDataForProject, dailyDataForCompany, dailyDataForBuilding, dailyDataForInverter, selectedOptionId, selectedOptionIdCompany, selectedOptionIdBuilding, selectedOptionIdInverter, dailyDataForDefault]);
+
   return (
     <>
       <div className="flex flex-col w-full h-full space-y-1.5">
@@ -1040,7 +1160,7 @@ export default function Index() {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-1.5">
-          <DailyView />
+          <DailyView dailyViewData={mainDailyViewData} />
           <LivePowerFlow />
         </div>
         <div className="grid grid-cols-6 gap-1.5">

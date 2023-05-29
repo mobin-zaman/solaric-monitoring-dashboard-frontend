@@ -501,3 +501,42 @@ export const getImpactDataForInverter = async (id) => {
   return response.data;
 }
 
+// Api calls for get daily View for project
+export const getDailyViewForProject = async (id) => {
+  const response = await todoApi.get(`/dashboard/project/power-line-view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get daily View for company
+export const getDailyViewForCompany = async (id) => {
+  const response = await todoApi.get(`/dashboard/company/power-line-view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get daily View for building
+export const getDailyViewForBuilding = async (id) => {
+  const response = await todoApi.get(`/dashboard/building/power-line-view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api calls for get daily View for inverter
+export const getDailyViewForInverter = async (id) => {
+  const response = await todoApi.get(`/dashboard/inverter/power-line-view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}

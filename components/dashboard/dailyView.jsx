@@ -20,8 +20,114 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useEffect, useState } from "react";
 
-export default function DailyView() {
+export default function DailyView({ dailyViewData }) {
+  const [
+    dailyViewDataForProjectPowerLineChartDataYearly,
+    setDailyViewDataForProjectPowerLineChartDataYearly,
+  ] = useState([]);
+  const [
+    dailyViewDataForProjectPowerLineChartDataMonthly,
+    setDailyViewDataForProjectPowerLineChartDataMonthly,
+  ] = useState([]);
+  const [
+    dailyViewDataForProjectPowerLineChartDataYearCount,
+    setDailyViewDataForProjectPowerLineChartDataYearCount,
+  ] = useState([]);
+  const [
+    dailyViewDataForProjectPowerLineChartDataMonthCount,
+    setDailyViewDataForProjectPowerLineChartDataMonthCount,
+  ] = useState([]);
+  const [
+    dailyViewDataForProjectPowerLineChartDataYearSelected,
+    setDailyViewDataForProjectPowerLineChartDataYearSelected,
+  ] = useState("Year");
+  const [
+    dailyViewDataForProjectPowerLineChartDataMonthSelected,
+    setDailyViewDataForProjectPowerLineChartDataMonthSelected,
+  ] = useState("Month");
+
+  useEffect(() => {
+    setDailyViewDataForProjectPowerLineChartDataYearSelected("Year");
+    setDailyViewDataForProjectPowerLineChartDataMonthSelected("Month");
+    if (dailyViewData) {
+      setDailyViewDataForProjectPowerLineChartDataYearSelected(
+        Object.keys(dailyViewData?.yearly || {}).slice(-1)[0]
+      );
+    }
+  }, [dailyViewData]);
+
+  useEffect(() => {
+    if (dailyViewData) {
+      setDailyViewDataForProjectPowerLineChartDataYearSelected(
+        Object.keys(dailyViewData?.yearly || {}).slice(-1)[0]
+      );
+      setDailyViewDataForProjectPowerLineChartDataYearCount(
+        Object.keys(dailyViewData?.yearly || {})
+      );
+      setDailyViewDataForProjectPowerLineChartDataYearly(
+        dailyViewData?.yearly[
+          dailyViewDataForProjectPowerLineChartDataYearSelected
+        ]?.map((item) => {
+          return {
+            name: item?.day,
+            generation: item?.generation,
+          };
+        })
+      );
+    }
+  }, [dailyViewDataForProjectPowerLineChartDataYearSelected, dailyViewData]);
+
+  useEffect(() => {
+    if (dailyViewData && dailyViewDataForProjectPowerLineChartDataYearSelected && dailyViewDataForProjectPowerLineChartDataMonthSelected) {
+      setDailyViewDataForProjectPowerLineChartDataMonthCount(
+        Object.keys(dailyViewData?.monthly || {})
+      );
+      setDailyViewDataForProjectPowerLineChartDataMonthly(
+        dailyViewData?.monthly[
+          dailyViewDataForProjectPowerLineChartDataMonthSelected
+        ]?.map((item) => {
+          return {
+            name: item?.day,
+            generation: item?.generation,
+          };
+        })
+      );
+    }
+  }, [dailyViewDataForProjectPowerLineChartDataYearSelected, dailyViewData, dailyViewDataForProjectPowerLineChartDataMonthSelected]);
+
+  const digitToMonth = (digit) => {
+    switch (digit) {
+      case "1":
+        return "Jan";
+      case "2":
+        return "Feb";
+      case "3":
+        return "Mar";
+      case "4":
+        return "Apr";
+      case "5":
+        return "May";
+      case "6":
+        return "Jun";
+      case "7":
+        return "Jul";
+      case "8":
+        return "Aug";
+      case "9":
+        return "Sep";
+      case "10":
+        return "Oct";
+      case "11":
+        return "Nov";
+      case "12":
+        return "Dec";
+      default:
+        return "Jan";
+    }
+  };
+
   const data = [
     {
       name: "Page A",
@@ -66,6 +172,7 @@ export default function DailyView() {
       amt: 2100,
     },
   ];
+  console.log(dailyViewData?.monthly, dailyViewDataForProjectPowerLineChartDataMonthSelected, "hhh");
 
   return (
     <>
@@ -75,16 +182,47 @@ export default function DailyView() {
             Daily View
           </span>
           {/* <FontAwesomeIcon icon={faRotate} /> */}
-          <div className="flex rounded-md bg-gray-200">
-            <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-l-md select-none border-r">
-              Year
-            </button>
-            <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] select-none border-r">
-              Month
-            </button>
-            <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-r-md select-none">
-              Day
-            </button>
+          <div className="flex space-x-4">
+            <select
+              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              value={dailyViewDataForProjectPowerLineChartDataYearSelected}
+              onChange={(e) =>
+                setDailyViewDataForProjectPowerLineChartDataMonthSelected(
+                  e.target.value
+                )
+              }
+            >
+              <option disabled>Year</option>
+              {dailyViewDataForProjectPowerLineChartDataYearCount?.map(
+                (item, Index) => {
+                  return <option key={Index}>{item}</option>;
+                }
+              )}
+            </select>
+            <select
+              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              value={dailyViewDataForProjectPowerLineChartDataMonthSelected}
+              onChange={(e) =>
+                setDailyViewDataForProjectPowerLineChartDataMonthSelected(
+                  e.target.value
+                )
+              }
+            >
+              <option disabled>Month</option>
+              {dailyViewDataForProjectPowerLineChartDataMonthCount?.map(
+                (item, Index) => {
+                  if (
+                    dailyViewDataForProjectPowerLineChartDataYearSelected === item?.split("-")[0]
+                  ) {
+                    return (
+                      <option key={Index} value={item}>
+                        {digitToMonth(item?.split("-")[1])}
+                      </option>
+                    );
+                  }
+                }
+              )}
+            </select>
           </div>
         </div>
         <div className="flex w-full h-full items-center justify-between">
@@ -99,12 +237,6 @@ export default function DailyView() {
                 </span>
                 <span className="text-sm font-semibold text-white">2023</span>
               </div>
-              <div className="flex flex-col items-center justify-center bg-[#25476A] rounded-md p-3">
-                <span className="text-sm font-semibold text-white">
-                  Sun - Hrs
-                </span>
-                <span className="text-sm font-semibold text-white">1.29</span>
-              </div>
             </div>
           </div>
           <div
@@ -115,7 +247,7 @@ export default function DailyView() {
               <AreaChart
                 width={730}
                 height={250}
-                data={data}
+                data={dailyViewDataForProjectPowerLineChartDataMonthly ? dailyViewDataForProjectPowerLineChartDataMonthly : dailyViewDataForProjectPowerLineChartDataYearly}
                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
               >
                 <defs>
@@ -134,18 +266,18 @@ export default function DailyView() {
                 <Tooltip />
                 <Area
                   type="monotone"
-                  dataKey="uv"
+                  dataKey="generation"
                   stroke="#8884d8"
                   fillOpacity={1}
                   fill="url(#colorUv)"
                 />
-                <Area
+                {/* <Area
                   type="monotone"
                   dataKey="pv"
                   stroke="#82ca9d"
                   fillOpacity={1}
                   fill="url(#colorPv)"
-                />
+                /> */}
               </AreaChart>
             </ResponsiveContainer>
           </div>
