@@ -12,9 +12,34 @@ export default function LogIn() {
 
   const router = useRouter();
 
-  if (typeof window !== "undefined" && localStorage.getItem("Token") !== null) {
-    router.push("/dashboard");
-  }
+  const refreshAccessToken = async (tokenExpirationTime) => {
+    try {
+      const refreshedToken = await auth.currentUser.getIdToken(true);
+      localStorage.setItem("Token", refreshedToken);
+  
+      const tokenExpiration = new Date().getTime() + tokenExpirationTime;
+      localStorage.setItem("TokenExpiration", tokenExpiration.toString());
+    } catch (error) {
+      // Handle token refresh error
+    }
+  };
+
+  const checkTokenAndRedirect = async () => {
+    const tokenExpirationTime = 1 * 60 * 1000; // 55 minutes
+
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("Token") !== null &&
+      new Date().getTime() < parseInt(localStorage.getItem("TokenExpiration"))
+    ) {
+      router.push("/dashboard");
+    } else {
+      await refreshAccessToken(tokenExpirationTime);
+    }
+  };
+  
+  checkTokenAndRedirect();
+    
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,17 +81,6 @@ export default function LogIn() {
     }
   };
   
-  const refreshAccessToken = async (tokenExpirationTime) => {
-    try {
-      const refreshedToken = await auth.currentUser.getIdToken(true);
-      localStorage.setItem("Token", refreshedToken);
-  
-      const tokenExpiration = new Date().getTime() + tokenExpirationTime;
-      localStorage.setItem("TokenExpiration", tokenExpiration.toString());
-    } catch (error) {
-      // Handle token refresh error
-    }
-  };
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
