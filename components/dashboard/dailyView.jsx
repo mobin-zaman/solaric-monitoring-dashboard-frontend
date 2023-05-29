@@ -231,11 +231,11 @@ export default function DailyView({ dailyViewData }) {
             style={{ width: "30%", height: "80%" }}
           >
             <div className="space-y-8">
-              <div className="flex flex-col items-center justify-center bg-[#25476A] rounded-md p-3">
+              <div className="flex flex-col items-center justify-center bg-[#25476A] rounded-md p-3 select-none">
                 <span className="text-sm font-semibold text-white">
                   Generation, KWh
                 </span>
-                <span className="text-sm font-semibold text-white">2023</span>
+                <span className="text-sm font-semibold text-white">{dailyViewDataForProjectPowerLineChartDataMonthly ? dailyViewDataForProjectPowerLineChartDataMonthly?.reduce((a, b) => a + b?.generation, 0).toFixed(1) : dailyViewDataForProjectPowerLineChartDataYearly?.reduce((a, b) => a + b?.generation, 0).toFixed(1)}</span>
               </div>
             </div>
           </div>
