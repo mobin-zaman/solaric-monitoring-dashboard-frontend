@@ -58,24 +58,36 @@ export default function Project({ buildingId }) {
   const [inverterId, setInverterId] = useState(null);
 
   const handleCopy = (data) => {
-    console.log(data.projectId);
     let valueToCopy = "";
+    let isProjectIdCopy = false;
+    let isSolarmanPlantIdCopy = false;
+  
     if (data.companyId) {
-      valueToCopy = data?.companyId;
-      setProjectIdCopy(true);
-      setSolarmanPlantIdCopy(false);
+      valueToCopy = data.companyId;
+      isProjectIdCopy = true;
     } else if (data.code) {
-      valueToCopy = data?.code;
-      setProjectIdCopy(false);
-      setSolarmanPlantIdCopy(true);
+      valueToCopy = data.code;
+      isSolarmanPlantIdCopy = true;
     }
-
-    navigator.clipboard.writeText(valueToCopy);
-
-    setTimeout(() => {
-      setProjectIdCopy(false);
-      setSolarmanPlantIdCopy(false);
-    }, 2000);
+  
+    try {
+      navigator.clipboard.writeText(valueToCopy);
+  
+      if (isProjectIdCopy) {
+        setProjectIdCopy(true);
+        setSolarmanPlantIdCopy(false);
+      } else if (isSolarmanPlantIdCopy) {
+        setProjectIdCopy(false);
+        setSolarmanPlantIdCopy(true);
+      }
+  
+      setTimeout(() => {
+        setProjectIdCopy(false);
+        setSolarmanPlantIdCopy(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Error copying text:', error);
+    }
   };
 
   const handleInverterClick = (inverterId) => {
