@@ -61,32 +61,32 @@ export default function LogIn() {
             </div>
           </div>
           <div className="flex items-center justify-start py-4">
-            <span className="text-[#373737] font-medium text-2xl">Sign In</span>
+            <span className="text-[#25476A] font-semibold text-2xl">Sign In</span>
           </div>
           <div className="flex items-center justify-start text-[#373737] font-medium text-sm py-3 space-x-1">
-            <span className="text-[#373737] font-medium text-sm">
+            <span className="text-[#25476A] font-medium text-sm">
               New user?
             </span>
-            <button className="text-[#F7100C] font-medium text-sm">
+            <button disabled className="text-[#F7100C] font-medium text-sm">
               Create an account
             </button>
           </div>
-          <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
-            <div className="font-medium text-lg">Email address</div>
+          <div className=" text-[#25476A] font-medium text-sm py-2 space-x-1">
+            <div className="font-semibold text-base">Email address</div>
             <div className="flex items-center border-b-2 border-[#168636]"><FontAwesomeIcon icon={faEnvelope} />
             <input
-              className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+              className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#4e5b68] bg-transparent ring-0 focus:ring-0 focus:outline-none"
               type="text"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             /></div>
           </div>
-          <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
-            <div className="font-medium text-lg">Password</div>
+          <div className=" text-[#25476A] font-medium text-sm py-2 space-x-1">
+            <div className="font-semibold text-base">Password</div>
             <div className="flex items-center border-b-2 border-[#168636]"><FontAwesomeIcon icon={faLock} />
             <input
-              className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+              className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#4e5b68] bg-transparent ring-0 focus:ring-0 focus:outline-none"
               type={showPassword ? 'text' : 'password'}
               placeholder="Enter your password"
               value={password}
@@ -110,7 +110,7 @@ export default function LogIn() {
                 Remember me
               </span>
             </div> */}
-            <button className="text-[#373737] font-medium text-sm">
+            <button disabled className="text-[#25476A] font-semibold text-sm">
               Forgot password?
             </button>
           </div>
@@ -121,7 +121,7 @@ export default function LogIn() {
             </div> }
         </div>
         <div className="flex items-center justify-end">
-            <button className="w-32 h-11 text-xl text-white font-semibold bg-[#39B54A] rounded-md" onClick={handleSignUp}>
+            <button className="px-5 py-2 text-white font-semibold bg-[#25476A] rounded-md" onClick={handleSignUp}>
             Sign In
             </button>
           </div>
