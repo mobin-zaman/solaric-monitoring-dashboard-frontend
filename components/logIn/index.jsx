@@ -1,22 +1,36 @@
 import Image from "next/image";
 import logo from "@/public/logo.png";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faLock, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEnvelope,
+  faLock,
+  faEyeSlash,
+  faEye,
+} from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { authentication } from "@/config/firebase";
 import { useRouter } from "next/router";
 
-
 export default function LogIn() {
-
   const router = useRouter();
+
+  if (typeof window !== "undefined" && localStorage.getItem("Token") !== null) {
+    router.push("/dashboard");
+  }
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailPassNotMatch, setEmailPassNotMatch] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const auth = getAuth();
 
   const refreshAccessToken = async (tokenExpirationTime) => {
     try {
       const refreshedToken = await auth.currentUser.getIdToken(true);
       localStorage.setItem("Token", refreshedToken);
-  
+
       const tokenExpiration = new Date().getTime() + tokenExpirationTime;
       localStorage.setItem("TokenExpiration", tokenExpiration.toString());
     } catch (error) {
@@ -25,28 +39,21 @@ export default function LogIn() {
   };
 
   const checkTokenAndRedirect = async () => {
-    const tokenExpirationTime = 1 * 60 * 1000; // 55 minutes
-
     if (
       typeof window !== "undefined" &&
-      localStorage.getItem("Token") !== null &&
-      new Date().getTime() < parseInt(localStorage.getItem("TokenExpiration"))
+      localStorage.getItem("Token") !== null
     ) {
-      router.push("/dashboard");
-    } else {
-      await refreshAccessToken(tokenExpirationTime);
+      const currentTime = new Date().getTime();
+      const tokenExpiration = parseInt(localStorage.getItem("TokenExpiration"));
+
+      if (currentTime < tokenExpiration) {
+        router.push("/dashboard");
+      } else {
+        await refreshAccessToken(tokenExpirationTime);
+        router.push("/dashboard");
+      }
     }
   };
-  
-  checkTokenAndRedirect();
-    
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailPassNotMatch, setEmailPassNotMatch] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const auth = getAuth();
 
   const handleSignUp = async () => {
     try {
@@ -56,23 +63,12 @@ export default function LogIn() {
         password
       );
       localStorage.setItem("Token", response.user.accessToken);
-  
-      const tokenExpirationTime = 1 * 60 * 1000; // 55 minutes
-      const tokenRefreshInterval = setInterval(async () => {
-        const currentTime = new Date().getTime();
-        const tokenExpiration = parseInt(localStorage.getItem("TokenExpiration"));
-        console.log(tokenExpiration, currentTime);
-        if (tokenExpiration && currentTime >= tokenExpiration) {
-          clearInterval(tokenRefreshInterval);
-          await refreshAccessToken(tokenExpirationTime);
-          console.log("Token refreshed");
-        }
-      }, tokenExpirationTime);
-  
+
+      const tokenExpirationTime = 55 * 60 * 1000; // 55 minutes
       const tokenExpiration = new Date().getTime() + tokenExpirationTime;
       localStorage.setItem("TokenExpiration", tokenExpiration.toString());
-  
-      router.push("/dashboard");
+
+      checkTokenAndRedirect();
       setEmailPassNotMatch(false);
     } catch (error) {
       setEmailPassNotMatch(true);
@@ -80,7 +76,25 @@ export default function LogIn() {
       setPassword("");
     }
   };
+
+  const tokenExpirationTime = 55 * 60 * 1000; // 55 minutes
+
+  // Function to refresh the token after a specified delay
+  const refreshTokenAfterDelay = () => {
+    setTimeout(async () => {
+      await refreshAccessToken(tokenExpirationTime);
+      console.log("Token refreshed");
   
+      // Call the function again after the delay
+      refreshTokenAfterDelay();
+    }, tokenExpirationTime);
+  };
+  
+  // Call the function to start refreshing the token after a delay
+  refreshTokenAfterDelay();
+
+  // Call checkTokenAndRedirect when the page is loaded
+  checkTokenAndRedirect();
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -96,7 +110,9 @@ export default function LogIn() {
             </div>
           </div>
           <div className="flex items-center justify-start py-4">
-            <span className="text-[#25476A] font-semibold text-2xl">Sign In</span>
+            <span className="text-[#25476A] font-semibold text-2xl">
+              Sign In
+            </span>
           </div>
           <div className="flex items-center justify-start text-[#373737] font-medium text-sm py-3 space-x-1">
             <span className="text-[#25476A] font-medium text-sm">
@@ -108,34 +124,37 @@ export default function LogIn() {
           </div>
           <div className=" text-[#25476A] font-medium text-sm py-2 space-x-1">
             <div className="font-semibold text-base">Email address</div>
-            <div className="flex items-center border-b-2 border-[#168636]"><FontAwesomeIcon icon={faEnvelope} />
-            <input
-              className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#4e5b68] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-              type="text"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            /></div>
+            <div className="flex items-center border-b-2 border-[#168636]">
+              <FontAwesomeIcon icon={faEnvelope} />
+              <input
+                className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#4e5b68] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                type="text"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
           </div>
           <div className=" text-[#25476A] font-medium text-sm py-2 space-x-1">
             <div className="font-semibold text-base">Password</div>
-            <div className="flex items-center border-b-2 border-[#168636]"><FontAwesomeIcon icon={faLock} />
-            <input
-              className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#4e5b68] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-                    <button
-          className="bg-transparent focus:outline-none"
-          onClick={handleShowPassword}
-        >
-          <FontAwesomeIcon
-            icon={showPassword ? faEyeSlash : faEye}
-            className="text-[#373737] hover:text-[#168636] ml-2"
-          />
-        </button>
+            <div className="flex items-center border-b-2 border-[#168636]">
+              <FontAwesomeIcon icon={faLock} />
+              <input
+                className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#4e5b68] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                className="bg-transparent focus:outline-none"
+                onClick={handleShowPassword}
+              >
+                <FontAwesomeIcon
+                  icon={showPassword ? faEyeSlash : faEye}
+                  className="text-[#373737] hover:text-[#168636] ml-2"
+                />
+              </button>
             </div>
           </div>
           <div className="flex items-center justify-end text-[#373737] font-medium text-sm py-3 space-x-1">
@@ -149,17 +168,22 @@ export default function LogIn() {
               Forgot password?
             </button>
           </div>
-          {emailPassNotMatch &&           <div className="flex items-center justify-center py-3 space-x-1">
-            <span className="text-[#ff0e0e] font-medium text-sm">
-              Email & Password not match.
-            </span>
-            </div> }
+          {emailPassNotMatch && (
+            <div className="flex items-center justify-center py-3 space-x-1">
+              <span className="text-[#ff0e0e] font-medium text-sm">
+                Email & Password not match.
+              </span>
+            </div>
+          )}
         </div>
         <div className="flex items-center justify-end">
-            <button className="px-5 py-2 text-white font-semibold bg-[#25476A] rounded-md" onClick={handleSignUp}>
+          <button
+            className="px-5 py-2 text-white font-semibold bg-[#25476A] rounded-md"
+            onClick={handleSignUp}
+          >
             Sign In
-            </button>
-          </div>
+          </button>
+        </div>
       </div>
     </div>
   );
