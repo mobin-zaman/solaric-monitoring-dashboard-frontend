@@ -47,14 +47,14 @@ export default function AddUserModal({
     <>
       <div className="flex items-center bg-opacity-10 backdrop-filter backdrop-blur-sm bg-gray-300 fixed inset-0 z-50">
         <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] sm:w-[24rem] space-y-5 shadow-md border border-gray-200">
-          <div className="flex justify-between">
-            <div className="flex items-center space-x-3 select-none">
+          <div className="flex items-start justify-between">
+            <div className="flex flex-col items-start select-none">
             <span className="text-[#25476A] font-semibold text-2xl">
               Inverter
             </span>
             <div className="text-[#25476A] text-sm font-medium bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
-                  <span>Id:</span>
-                  <span>{editInverterData?.id}</span>
+                  <span>Device Serial Number:</span>
+                  <span>{editInverterData?.deviceSn}</span>
                 </div>
                 </div>
             <button
@@ -113,10 +113,10 @@ export default function AddUserModal({
           </div>
           <div className="flex justify-end items-center">
             <button
-              className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-2"
+              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-2"
               onClick={handleAddUser}
             >
-              <span className="">Edit</span>
+              <span>Edit</span>
               <FontAwesomeIcon icon={faPenToSquare} />
             </button>
           </div>

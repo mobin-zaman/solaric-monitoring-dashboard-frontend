@@ -2,8 +2,10 @@ import { useRouter } from "next/router";
 import SideBar from "@/components/common/sideBar";
 import Header from "@/components/common/header";
 import Company from "@/components/company/company";
+import useFirebaseToken from "@/hooks/useFirebaseToken";
 
 export default function UserDetail() {
+  useFirebaseToken();
   const router = useRouter();
   const { companyId } = router.query;
 

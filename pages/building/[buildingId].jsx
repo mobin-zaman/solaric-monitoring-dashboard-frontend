@@ -2,8 +2,10 @@ import { useRouter } from "next/router";
 import SideBar from "@/components/common/sideBar";
 import Header from "@/components/common/header";
 import Building from "@/components/building/building";
+import useFirebaseToken from "@/hooks/useFirebaseToken";
 
 export default function UserDetail() {
+  useFirebaseToken();
   const router = useRouter();
   const { buildingId } = router.query;
 

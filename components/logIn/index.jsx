@@ -15,45 +15,10 @@ import { useRouter } from "next/router";
 export default function LogIn() {
   const router = useRouter();
 
-  if (typeof window !== "undefined" && localStorage.getItem("Token") !== null) {
-    router.push("/dashboard");
-  }
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailPassNotMatch, setEmailPassNotMatch] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  const auth = getAuth();
-
-  const refreshAccessToken = async (tokenExpirationTime) => {
-    try {
-      const refreshedToken = await auth.currentUser.getIdToken(true);
-      localStorage.setItem("Token", refreshedToken);
-
-      const tokenExpiration = new Date().getTime() + tokenExpirationTime;
-      localStorage.setItem("TokenExpiration", tokenExpiration.toString());
-    } catch (error) {
-      // Handle token refresh error
-    }
-  };
-
-  const checkTokenAndRedirect = async () => {
-    if (
-      typeof window !== "undefined" &&
-      localStorage.getItem("Token") !== null
-    ) {
-      const currentTime = new Date().getTime();
-      const tokenExpiration = parseInt(localStorage.getItem("TokenExpiration"));
-
-      if (currentTime < tokenExpiration) {
-        router.push("/dashboard");
-      } else {
-        await refreshAccessToken(tokenExpirationTime);
-        router.push("/dashboard");
-      }
-    }
-  };
 
   const handleSignUp = async () => {
     try {
@@ -63,12 +28,9 @@ export default function LogIn() {
         password
       );
       localStorage.setItem("Token", response.user.accessToken);
-
-      const tokenExpirationTime = 55 * 60 * 1000; // 55 minutes
-      const tokenExpiration = new Date().getTime() + tokenExpirationTime;
-      localStorage.setItem("TokenExpiration", tokenExpiration.toString());
-
-      checkTokenAndRedirect();
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
+      router.push("/dashboard");
       setEmailPassNotMatch(false);
     } catch (error) {
       setEmailPassNotMatch(true);
@@ -76,25 +38,6 @@ export default function LogIn() {
       setPassword("");
     }
   };
-
-  const tokenExpirationTime = 55 * 60 * 1000; // 55 minutes
-
-  // Function to refresh the token after a specified delay
-  const refreshTokenAfterDelay = () => {
-    setTimeout(async () => {
-      await refreshAccessToken(tokenExpirationTime);
-      console.log("Token refreshed");
-  
-      // Call the function again after the delay
-      refreshTokenAfterDelay();
-    }, tokenExpirationTime);
-  };
-  
-  // Call the function to start refreshing the token after a delay
-  refreshTokenAfterDelay();
-
-  // Call checkTokenAndRedirect when the page is loaded
-  checkTokenAndRedirect();
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);

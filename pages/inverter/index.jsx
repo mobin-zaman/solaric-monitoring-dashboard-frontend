@@ -6,8 +6,10 @@ import { getCurrentUser } from "@/lib/Helper";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Custom404 from "../404";
+import useFirebaseToken from "@/hooks/useFirebaseToken";
 
 export default function Projects() {
+  useFirebaseToken();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState();
   const { data } = useQuery("currentUser", getCurrentUser);

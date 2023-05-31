@@ -23,6 +23,8 @@ import placeholderImage from "@/public/placeholderImage.jpg";
 import Id from "@/public/icons/Id.png";
 import Placeholder from "@/public/Placeholder.png";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Project({ projectId }) {
   const router = useRouter();
@@ -37,7 +39,7 @@ export default function Project({ projectId }) {
   const [disableCompanyModalId, setDisableCompanyModalId] = useState(null);
   const [userDisabled, setUserDisabled] = useState(false);
   const [companyDisabled, setCompanyDisabled] = useState(false);
-  
+
   const { data, isLoading, error, refetch } = useQuery(
     ["project", projectId],
     () => getProject(projectId),
@@ -70,7 +72,7 @@ export default function Project({ projectId }) {
     let valueToCopy = "";
     let isProjectIdCopy = false;
     let isSolarmanPlantIdCopy = false;
-  
+
     if (data.projectId) {
       valueToCopy = data.projectId;
       isProjectIdCopy = true;
@@ -78,7 +80,7 @@ export default function Project({ projectId }) {
       valueToCopy = data.solarmanPlantId;
       isSolarmanPlantIdCopy = true;
     }
-  
+
     try {
       navigator.clipboard.writeText(valueToCopy);
       if (isProjectIdCopy) {
@@ -88,13 +90,13 @@ export default function Project({ projectId }) {
         setProjectIdCopy(false);
         setSolarmanPlantIdCopy(true);
       }
-  
+
       setTimeout(() => {
         setProjectIdCopy(false);
         setSolarmanPlantIdCopy(false);
       }, 2000);
     } catch (error) {
-      console.error('Error copying text:', error);
+      console.error("Error copying text:", error);
     }
   };
 
@@ -139,6 +141,21 @@ export default function Project({ projectId }) {
     router.push(`/inverter/${inverterId}`);
   };
 
+  const notifyForUserAdd = () => {
+    console.log("notifyForUserAdd");
+    toast.success("User Added Successfully", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+    });
+  };
+
+  // Call notifyForProjectAdd when newUserCreated is true
+  useEffect(() => {
+    if (userAdded) {
+      console.log("userAdded");
+      notifyForUserAdd();
+    }
+  }, [userAdded]);
 
   return (
     <>
@@ -303,9 +320,10 @@ export default function Project({ projectId }) {
                     <FontAwesomeIcon icon={faArrowDown} />
                   </div>
                   <div className="lg:col-span-4 xl:col-span-3 hidden lg:block">
-                  <div className="flex justify-center font-semibold tracking-wide">
-                    Email
-                  </div></div>
+                    <div className="flex justify-center font-semibold tracking-wide">
+                      Email
+                    </div>
+                  </div>
                   <div className="flex justify-center font-semibold tracking-wide col-span-2 lg:col-span-1">
                     Role
                   </div>
@@ -322,7 +340,7 @@ export default function Project({ projectId }) {
                     key={Math.random()}
                   >
                     <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                    <div className="flex items-center font-medium space-x-2 px-5 col-span-6 md:col-span-5 lg:col-span-4">
+                      <div className="flex items-center font-medium space-x-2 px-5 col-span-6 md:col-span-5 lg:col-span-4">
                         <Image
                           src={placeholderImage}
                           alt="logo"
@@ -360,8 +378,8 @@ export default function Project({ projectId }) {
                           {user?.user?.email || "N/A"}
                         </span> */}
                         <div className="flex justify-center select-all">
-                        {user?.user?.email || "N/A"}
-                    </div>
+                          {user?.user?.email || "N/A"}
+                        </div>
                       </div>
                       <div className="flex justify-center items-center col-span-2 lg:col-span-1">
                         {user?.user?.role === "ADMIN" ? (
@@ -385,11 +403,14 @@ export default function Project({ projectId }) {
                           {user?.user?.address || "N/A"}
                         </span>
                       </div> */}
-                    <div className="flex justify-center col-span-2 md:col-span-3 lg:col-span-2 xl:col-span-3">                        <button
+                      <div className="flex justify-center col-span-2 md:col-span-3 lg:col-span-2 xl:col-span-3">
+                        {" "}
+                        <button
                           className="flex items-center space-x-1 text-sm"
                           onClick={() => handleDisableUser(user.userId)}
                         >
-                          <FontAwesomeIcon icon={faTrashCan} /> <span className="hidden xl:block">Delete</span>
+                          <FontAwesomeIcon icon={faTrashCan} />{" "}
+                          <span className="hidden xl:block">Delete</span>
                         </button>
                       </div>
                     </div>
@@ -397,13 +418,13 @@ export default function Project({ projectId }) {
                 ))}
               </div>
               {disableUserModalOpen && (
-                      <DisableUserModal
-                        projectId={projectId}
-                        userId={disableUserModalId}
-                        userDisabled={setUserDisabled}
-                        disableUserModalOpen={setDisableUserModalOpen}
-                      />
-                    )}
+                <DisableUserModal
+                  projectId={projectId}
+                  userId={disableUserModalId}
+                  userDisabled={setUserDisabled}
+                  disableUserModalOpen={setDisableUserModalOpen}
+                />
+              )}
             </div>
             <div className="p-3 space-y-2 bg-white rounded-md">
               <div className="flex justify-between items-center">
@@ -453,7 +474,7 @@ export default function Project({ projectId }) {
                 </div>
               </div>
               <div className="space-y-1.5 h-64 overflow-y-auto">
-                {searchResult1?.length >= 0  
+                {searchResult1?.length >= 0
                   ? searchResult1?.map((company) => (
                       <div
                         className="bg-gray-200 rounded-md p-2"
@@ -553,13 +574,13 @@ export default function Project({ projectId }) {
                     ))}
               </div>
               {disableCompanyModalOpen && (
-                          <DisableCompanyModal
-                            projectId={projectId}
-                            companyId={disableCompanyModalId}
-                            companyDisabled={setCompanyDisabled}
-                            disableCompanyModalOpen={setDisableCompanyModalOpen}
-                          />
-                        )}
+                <DisableCompanyModal
+                  projectId={projectId}
+                  companyId={disableCompanyModalId}
+                  companyDisabled={setCompanyDisabled}
+                  disableCompanyModalOpen={setDisableCompanyModalOpen}
+                />
+              )}
             </div>
             <div className="p-3 space-y-2 bg-white rounded-md">
               <div className="flex justify-between items-center">
@@ -608,88 +629,88 @@ export default function Project({ projectId }) {
               </div>
               <div className="space-y-1.5 h-64 overflow-y-auto">
                 {
-                // searchResult1?.length >= 0
-                //   ? searchResult1?.map((inverter) => (
-                //       <div
-                //         className="bg-gray-200 rounded-md p-2"
-                //         key={Math.random()}
-                //       >
-                //         <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                //           <div
-                //             className="grid grid-cols-11 col-span-11"
-                //             onClick={() => {
-                //               handleInverterClick(inverter.id);
-                //             }}
-                //           >
-                //             <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
-                //               <Image
-                //                 src={Placeholder}
-                //                 alt="logo"
-                //                 className="w-10 h-10 rounded-full"
-                //               />
-                //               <div>
-                //                 <div className="select-none text-gray-700 font-semibold">
-                //                   {inverter.deviceSn}
-                //                 </div>
-                //                 <div className="select-none flex items-center text-gray-700 text-xs space-x-1">
-                //                   <span>ID:</span>
-                //                   <span>{inverter.id}</span>
-                //                 </div>
-                //               </div>
-                //             </div>
-                //             <div className="flex items-center col-span-2">
-                //               <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                //                 {inverter.deviceId}
-                //               </span>
-                //             </div>
-                //           </div>
-                //           <div className="flex justify-center">
-                //             <button
-                //               className="text-sm text-gray-700"
-                //               onClick={() => handleDelete(inverter.id)}
-                //             >
-                //               <FontAwesomeIcon icon={faTrashCan} /> Delete
-                //             </button>
-                //           </div>
-                //         </div>
-                //       </div>
-                //     ))
-                //   : 
+                  // searchResult1?.length >= 0
+                  //   ? searchResult1?.map((inverter) => (
+                  //       <div
+                  //         className="bg-gray-200 rounded-md p-2"
+                  //         key={Math.random()}
+                  //       >
+                  //         <div className="grid grid-cols-12 items-center py-[0.001rem]">
+                  //           <div
+                  //             className="grid grid-cols-11 col-span-11"
+                  //             onClick={() => {
+                  //               handleInverterClick(inverter.id);
+                  //             }}
+                  //           >
+                  //             <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                  //               <Image
+                  //                 src={Placeholder}
+                  //                 alt="logo"
+                  //                 className="w-10 h-10 rounded-full"
+                  //               />
+                  //               <div>
+                  //                 <div className="select-none text-gray-700 font-semibold">
+                  //                   {inverter.deviceSn}
+                  //                 </div>
+                  //                 <div className="select-none flex items-center text-gray-700 text-xs space-x-1">
+                  //                   <span>ID:</span>
+                  //                   <span>{inverter.id}</span>
+                  //                 </div>
+                  //               </div>
+                  //             </div>
+                  //             <div className="flex items-center col-span-2">
+                  //               <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                  //                 {inverter.deviceId}
+                  //               </span>
+                  //             </div>
+                  //           </div>
+                  //           <div className="flex justify-center">
+                  //             <button
+                  //               className="text-sm text-gray-700"
+                  //               onClick={() => handleDelete(inverter.id)}
+                  //             >
+                  //               <FontAwesomeIcon icon={faTrashCan} /> Delete
+                  //             </button>
+                  //           </div>
+                  //         </div>
+                  //       </div>
+                  //     ))
+                  //   :
                   data?.inverters?.map((inverter) => (
-                      <div
-                        className="bg-gray-200 rounded-md p-2"
-                        key={Math.random()}
-                      >
-                        <div className="grid grid-cols-12 items-center py-[0.001rem]">
-                          <div
-                            className="grid grid-cols-12 col-span-12 border-r-2 hover:cursor-pointer"
-                            onClick={() => {
-                              handleInverterClick(inverter.id);
-                            }}
-                          >
-                            <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
-                              <Image
-                                src={Placeholder}
-                                alt="logo"
-                                className="w-10 h-10 rounded-full"
-                              />
-                              <div>
-                                <div className="select-none text-gray-700 font-semibold">
-                                  {inverter.deviceSn}
-                                </div>
-                                <div className="select-none flex items-center text-gray-700 text-xs space-x-1">
-                                  <span>ID:</span>
-                                  <span>{inverter.id}</span>
-                                </div>
+                    <div
+                      className="bg-gray-200 rounded-md p-2"
+                      key={Math.random()}
+                    >
+                      <div className="grid grid-cols-12 items-center py-[0.001rem]">
+                        <div
+                          className="grid grid-cols-12 col-span-12 border-r-2 hover:cursor-pointer"
+                          onClick={() => {
+                            handleInverterClick(inverter.id);
+                          }}
+                        >
+                          <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                            <Image
+                              src={Placeholder}
+                              alt="logo"
+                              className="w-10 h-10 rounded-full"
+                            />
+                            <div>
+                              <div className="select-none text-gray-700 font-semibold">
+                                {inverter.deviceSn}
+                              </div>
+                              <div className="select-none flex items-center text-gray-700 text-xs space-x-1">
+                                <span>ID:</span>
+                                <span>{inverter.id}</span>
                               </div>
                             </div>
-                            <div className="flex items-center col-span-3">
-                              <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                                {inverter.deviceId}
-                              </span>
-                            </div>
                           </div>
-                          {/* <div className="flex justify-center">
+                          <div className="flex items-center col-span-3">
+                            <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                              {inverter.deviceId}
+                            </span>
+                          </div>
+                        </div>
+                        {/* <div className="flex justify-center">
                             <button
                               className="text-sm text-gray-700"
                               onClick={() => handleDelete(inverter.id)}
@@ -697,9 +718,10 @@ export default function Project({ projectId }) {
                               <FontAwesomeIcon icon={faTrashCan} /> Delete
                             </button>
                           </div> */}
-                        </div>
                       </div>
-                    ))}
+                    </div>
+                  ))
+                }
               </div>
             </div>
           </div>

@@ -1,39 +1,22 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faTrashCan,
   faPenToSquare,
-  faArrowDown,
-  faPlus,
-  faMagnifyingGlass,
-  faEye,
   faCopy,
-  faIdCard,
   faClipboard,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { useQuery, useMutation } from "react-query";
-import { getInverters, getInverter, searchCompany } from "@/lib/Helper";
-import Image from "next/image";
-import TimestampConverter from "@/lib/TimestampConverter";
-import AddUserModal from "./editInverterModal";
+import { useQuery } from "react-query";
+import { getInverter, searchCompany } from "@/lib/Helper";
 import EditInverterModal from "./editInverterModal";
-import Id from "@/public/icons/Id.png";
-import Placeholder from "@/public/Placeholder.png";
 import { useRouter } from "next/router";
 import FormatDateTime from "@/lib/FormatDateTime";
 
 export default function Project({ inverterId }) {
-  console.log(inverterId);
-  const router = useRouter();
   const [editInverterModalOpen, setEditInverterModalOpen] = useState(false);
-  const [addCompanyModalOpen, setAddCompanyModalOpen] = useState(false);
-  const [disableUserModalOpen, setDisableUserModalOpen] = useState(false);
-  const [disableCompanyModalOpen, setDisableCompanyModalOpen] = useState(false);
-  const [searchResult1, setSearchResult1] = useState(null);
   const [inverterEdited, setInverterEdited] = useState(false);
 
-  const { data, isLoading, isFetching, refetch } = useQuery(
-    ["project", inverterId],
+  const { data, isLoading, refetch } = useQuery(
+    ["inverter", inverterId],
     () => getInverter(inverterId),
     {
       enabled: inverterId ? true : false,
@@ -83,35 +66,6 @@ export default function Project({ inverterId }) {
     }
   };
 
-  const handleCompanyClick = (companyId) => {
-    router.push(`/company/${companyId}`);
-  };
-
-  // const searchData = useQuery(() => searchCompany(), {
-  //   enabled: searchOn,
-  // });
-
-  const handleSearch = (e) => {
-    const searchPromise = searchCompany({ search: e.target.value, projectId });
-
-    if (e.target.value.length < 0) {
-      setSearchResult1(null);
-    } else {
-      if (searchPromise instanceof Promise) {
-        searchPromise
-          .then((data) => {
-            setSearchResult1(data);
-            console.log(searchResult1, "searchResult1");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    }
-  };
-
-  console.log(data, "data");
-
   return (
     <>
       <div className="space-y-1.5 relative">
@@ -126,9 +80,6 @@ export default function Project({ inverterId }) {
                 Inverter Overview
               </h1>
               <div className="flex space-x-3">
-                {/* <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
-                <span>{data?.name}</span>
-              </div> */}
                 <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
                   <span>Id:</span>
                   <span>{inverterId}</span>
@@ -143,7 +94,7 @@ export default function Project({ inverterId }) {
               </div>
             </div>
             <button
-              className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-2"
+              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
               onClick={() => setEditInverterModalOpen(true)}
             >
               <span className="">Edit</span>
@@ -157,25 +108,16 @@ export default function Project({ inverterId }) {
                 inverterEdited={setInverterEdited}
               />
             )}
-            {/* {newUserCreated && (
-              <div className="toast toast-end">
-                <div className="alert alert-success">
-                  <div>
-                    <span>User Created successfully.</span>
-                  </div>
-                </div>
-              </div>
-            )} */}
           </div>
         </div>
         <div className="bg-white rounded-md shadow-md p-6">
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <p className="text-gray-700 text-sm font-medium">
+              <p className="text-gray-700 text-sm font-medium select-none">
                 Device Serial Number:
               </p>
               <div className="flex items-center space-x-2">
-                <span className="text-[#25476A] font-semibold">
+                <span className="text-[#25476A] font-semibold select-none">
                   {data?.deviceSn}
                 </span>
                 <button className="text-[#25476A] hover:text-blue-500">
@@ -188,27 +130,27 @@ export default function Project({ inverterId }) {
               </div>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">Device Id:</p>
+              <p className="text-gray-700 text-sm font-medium select-none">Device Id:</p>
               <p className="text-gray-700">{data?.deviceId || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">Code:</p>
+              <p className="text-gray-700 text-sm font-medium select-none">Code:</p>
               <p className="text-gray-700">{data?.code || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">Capacity:</p>
+              <p className="text-gray-700 text-sm font-medium select-none">Capacity:</p>
               <p className="text-gray-700">{data?.capacity || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">Project:</p>
+              <p className="text-gray-700 text-sm font-medium select-none">Project:</p>
               <p className="text-gray-700">{data?.project?.name || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">Building:</p>
+              <p className="text-gray-700 text-sm font-medium select-none">Building:</p>
               <p className="text-gray-700">{data?.building?.name || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">
+              <p className="text-gray-700 text-sm font-medium select-none">
                 Created Date & Time:
               </p>
               <p className="text-gray-700">
@@ -216,7 +158,7 @@ export default function Project({ inverterId }) {
               </p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">
+              <p className="text-gray-700 text-sm font-medium select-none">
                 Updated Date & Time:
               </p>
               <p className="text-gray-700">
@@ -224,7 +166,7 @@ export default function Project({ inverterId }) {
               </p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium">Note:</p>
+              <p className="text-gray-700 text-sm font-medium select-none">Note:</p>
               <textarea
                 className="bg-gray-200 px-2 flex w-full h-6 rounded-md text-gray-700"
                 value={data?.note || ""}

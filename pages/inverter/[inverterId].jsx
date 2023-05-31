@@ -6,8 +6,10 @@ import { useQuery } from "react-query";
 import { getCurrentUser } from "@/lib/Helper";
 import { useEffect, useState } from "react";
 import Custom404 from "../404";
+import useFirebaseToken from "@/hooks/useFirebaseToken";
 
 export default function UserDetail() {
+  useFirebaseToken();
   const router = useRouter();
   const { inverterId } = router.query;
 

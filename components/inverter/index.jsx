@@ -1,42 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrashCan,
-  faPenToSquare,
-  faArrowDown,
-  faPlus,
-  faMagnifyingGlass,
-  faEye,
-  faCopy,
-  faIdCard,
-} from "@fortawesome/free-solid-svg-icons";
-import { useQuery, useMutation } from "react-query";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useQuery } from "react-query";
 import { getInverters, searchInverter } from "@/lib/Helper";
-import CreateProjectModal from "./createProjectModal";
 import { useState } from "react";
-import Image from "next/image";
-import placeholderImage from "@/public/placeholderImage.jpg";
-import DeleteProjectModal from "./deleteProjectModal";
-import UpdateProjectModal from "./updateProjectModal";
-import Id from "@/public/icons/Id.png";
-import Location from "@/public/icons/Location.png";
-import TimestampConverter from "@/lib/TimestampConverter";
 import { useRouter } from "next/router";
 
 export default function Users() {
   const router = useRouter();
-  const [addInverterModalOpen, setAddInverterModalOpen] = useState(false);
-  const [deleteUserModalOpen, setDeleteUserModalOpen] = useState(false);
-  const [editUserModalOpen, setEditUserModalOpen] = useState(false);
-  const [newUserCreated, setNewUserCreated] = useState(false);
-  const [userDeleted, setUserDeleted] = useState(false);
-  const [userEdited, setUserEdited] = useState(false);
-  const [deleteUser, setDeleteUser] = useState({});
-  const [editUser, setEditUser] = useState({});
-  const [search, setSearch] = useState("");
-  console.log(search, "search");
   const [searchOn, setSearchOn] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
-  const [searchResult1, setSearchResult1] = useState([]);
   const [searchResultEmpty, setSearchResultEmpty] = useState(false);
 
   const { data, isLoading, isError } = useQuery(
@@ -47,45 +19,16 @@ export default function Users() {
     }
   );
 
-  //when new user is created, refetch the data
-  useQuery("users", () => getUsers(), {
-    enabled: newUserCreated, //enable query
-    onSuccess: () => setNewUserCreated(false),
-  });
-
-  //when user is deleted, refetch the data
-  useQuery("users", () => getUsers(), {
-    enabled: userDeleted, //enable query
-    onSuccess: () => setUserDeleted(false),
-  });
-
-  //when user is edited, refetch the data
-  useQuery("users", () => getUsers(), {
-    enabled: userEdited, //enable query
-    onSuccess: () => setUserEdited(false),
-  });
-
-  const handleDeleteUser = (user) => {
-    setDeleteUserModalOpen(true);
-    setDeleteUser(user);
-  };
-
-  const handleEditUser = (inverterId) => {
+  const handleClickInverter = (inverterId) => {
     router.push(`/inverter/${inverterId}`);
   };
-
-  const searchData = useQuery(() => searchInverter(search), {
-    enabled: searchOn,
-  });
-
-  // console.log(searchResult, "searchResult");
 
   const handleSearch = (e) => {
     setSearchOn(true);
     const searchPromise = searchInverter(e.target.value);
 
     if (e.target.value.length < 1) {
-      setSearchResult1(null);
+      setSearchResult(null);
       setSearchOn(false);
       setSearchResultEmpty(false);
     } else {
@@ -96,7 +39,7 @@ export default function Users() {
               setSearchResultEmpty(true);
             } else {
               setSearchResultEmpty(false);
-              setSearchResult1(data);
+              setSearchResult(data);
             }
           })
           .catch((error) => {
@@ -106,18 +49,12 @@ export default function Users() {
     }
   };
 
-  const handleSolarmanPlantIdCopy = (id) => {
-    navigator.clipboard.writeText(id);
-  };
-
   return (
     <>
       <div className="space-y-1.5 relative select-none">
         <div className="space-y-1.5 sticky -top-1.5 z-50 bg-gray-200 pt-0.5">
           <div
-            className={`flex items-center justify-between bg-[#25476A] rounded-md p-3.5 ${
-              isLoading ? "animate-pulse" : "animate-pulse"
-            }`}
+            className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5"
           >
             <div className="flex items-center space-x-3 select-none">
               <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
@@ -167,13 +104,13 @@ export default function Users() {
         {!isLoading && !isError && (
           <div className="space-y-1.5">
             {!searchResultEmpty &&
-              searchResult1?.length > 0 &&
+              searchResult?.length > 0 &&
               searchOn &&
-              searchResult1?.map((inverter) => (
+              searchResult?.map((inverter) => (
                 <div
                   key={Math.random()}
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-3.5 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
-                  onClick={() => handleEditUser(inverter?.id)}
+                  onClick={() => handleClickInverter(inverter?.id)}
                 >
                   <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
                     <div className="select-none font-semibold">
@@ -228,7 +165,7 @@ export default function Users() {
                 <div
                   key={Math.random()}
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-3.5 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
-                  onClick={() => handleEditUser(inverter?.id)}
+                  onClick={() => handleClickInverter(inverter?.id)}
                 >
                   <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
                     <div className="select-none font-semibold">
@@ -268,39 +205,7 @@ export default function Users() {
               ))}
           </div>
         )}
-        {editUserModalOpen && (
-          <UpdateProjectModal
-            editUserModalOpen={setEditUserModalOpen}
-            editUserData={editUser}
-            userEdited={setUserEdited}
-          />
-        )}
       </div>
-      {userEdited && (
-        <div className="toast toast-end">
-          <div className="alert alert-success">
-            <div>
-              <span>User edited successfully.</span>
-            </div>
-          </div>
-        </div>
-      )}
-      {deleteUserModalOpen && (
-        <DeleteProjectModal
-          deleteUserModalOpen={setDeleteUserModalOpen}
-          deleteUserData={deleteUser}
-          userDeleted={setUserDeleted}
-        />
-      )}
-      {userDeleted && (
-        <div className="toast toast-end">
-          <div className="alert alert-success">
-            <div>
-              <span>User deleted successfully.</span>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
