@@ -6,30 +6,30 @@ import { updateUser } from "@/lib/Helper";
 import Image from "next/image";
 import placeholderImage from "@/public/placeholderImage.jpg";
 
-export default function AddUserModal({
-  editUserModalOpen,
-  editUserData,
-  userEdited,
+export default function UpdateProjectModal({
+  updateProjectModalOpen,
+  editProjectData,
+  projectUpdated,
 }) {
-  const [name, setName] = useState(editUserData?.name || "");
-  const [email, setEmail] = useState(editUserData?.email || "");
-  const [role, setRole] = useState(editUserData?.role || "");
+  const [name, setName] = useState(editProjectData?.name || "");
+  const [email, setEmail] = useState(editProjectData?.email || "");
+  const [role, setRole] = useState(editProjectData?.role || "");
   const [statusValue, setStatusValue] = useState(
-    editUserData?.status === "ACTIVE" ? true : false
+    editProjectData?.status === "ACTIVE" ? true : false
   );
   console.log(statusValue);
-  const [address, setAddress] = useState(editUserData?.address || "");
+  const [address, setAddress] = useState(editProjectData?.address || "");
   const [errorMessage, setErrorMessage] = useState("");
   const [userTab, setUserTab] = useState(true);
   const [companyTab, setCompanyTab] = useState(false);
   const [editTab, setEditTab] = useState(false);
-  const [users, setUsers] = useState(editUserData?.users || []);
+  const [users, setUsers] = useState(editProjectData?.users || []);
   console.log(users);
 
   const mutation = useMutation(updateUser, {
     onSuccess: () => {
-      userEdited(true);
-      editUserModalOpen(false);
+      projectUpdated(true);
+      updateProjectModalOpen(false);
     },
     onError: (error) => {
       setErrorMessage(error.response.data.message);
@@ -38,7 +38,7 @@ export default function AddUserModal({
 
   const handleEditUser = (e) => {
     e.preventDefault();
-    userEdited(false);
+    projectUpdated(false);
     setErrorMessage("");
     setErrorMessage("");
     if (!name || !email || !role || !address) {
@@ -50,7 +50,7 @@ export default function AddUserModal({
     //   return;
     // }
     mutation.mutate({
-      id: parseInt(editUserData.id),
+      id: parseInt(editProjectData.id),
       name,
       email,
       role,
@@ -96,7 +96,7 @@ export default function AddUserModal({
             </span>
             <button
               className="opacity-80"
-              onClick={() => editUserModalOpen(false)}
+              onClick={() => updateProjectModalOpen(false)}
             >
               <FontAwesomeIcon icon={faXmark} />
             </button>

@@ -71,7 +71,7 @@ export default function Users() {
               <input
                 type="text"
                 className="w-48 md:w-56 h-8 lg:w-72 placeholder:text-xs md:placeholder:text-sm rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm focus:outline-none focus:ring-0"
-                placeholder="Search by id and serial number"
+                placeholder="Search by serial number"
                 onChange={handleSearch}
               />
               <div className="absolute top-1.5 right-2.5">

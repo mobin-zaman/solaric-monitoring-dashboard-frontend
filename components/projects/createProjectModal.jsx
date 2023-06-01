@@ -9,10 +9,10 @@ export default function AddUserModal({
   createProjectModalOpen,
   projectCreated,
 }) {
+  const queryClient = useQueryClient();
   const [name, setName] = useState("");
   const [solarmanPlantId, setSolarmanPlantId] = useState();
   const [errorMessage, setErrorMessage] = useState("");
-  const queryClient = useQueryClient();
 
   const mutation = useMutation(postProject, {
     onSuccess: () => {
@@ -52,7 +52,7 @@ export default function AddUserModal({
         <div className="grid grid-cols-1 bg-gray-50 rounded-md items-center relative mx-auto w-[20rem] sm:w-[24rem] space-y-5 shadow-md border border-gray-300">
           <div className="flex items-center justify-between bg-gray-200 rounded-t-md px-6 py-3">
             <span className="text-[#25476A] font-semibold text-lg">
-              Project
+              Project Add
             </span>
             <button
               className="opacity-80"
@@ -60,7 +60,7 @@ export default function AddUserModal({
             >
               <FontAwesomeIcon
                 icon={faXmark}
-                className="text-yellow-800 animate-ping"
+                className="text-yellow-800"
               />
             </button>
           </div>
@@ -98,7 +98,9 @@ export default function AddUserModal({
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <div className="text-red-700 text-sm h-8 flex justify-center items-center">{errorMessage}</div>
+              <div className="text-red-700 text-sm h-8 flex justify-center items-center">
+                {errorMessage}
+              </div>
               <button
                 className="flex items-center justify-center px-5 h-8 text-md font-semibold text-white bg-teal-500 hover:bg-teal-400 rounded-md"
                 onClick={handleCreateProject}

@@ -15,29 +15,33 @@ import { useQuery, useMutation } from "react-query";
 import { getProjects, getProject, searchCompany } from "@/lib/Helper";
 import Image from "next/image";
 import TimestampConverter from "@/lib/TimestampConverter";
-import AddUserModal from "./addUserModal";
-import AddCompanyModal from "./addCompanyModal";
-import DisableUserModal from "./disableUserModal";
-import DisableCompanyModal from "./disableCompanyModal";
+import CreateUserInProjectModal from "./createUserInProjectModal";
+import AddCompanyModal from "../addCompanyModal";
+import DeleteUserFromProjectModal from "./deleteUserFromProjectModal";
+import DisableCompanyModal from "../disableCompanyModal";
+import UpdateProjectModal from "./updateProjectModal";
 import placeholderImage from "@/public/placeholderImage.jpg";
 import Id from "@/public/icons/Id.png";
 import Placeholder from "@/public/Placeholder.png";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import FormatDateTime from "@/lib/FormatDateTime";
 
 export default function Project({ projectId }) {
   const router = useRouter();
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
   const [addCompanyModalOpen, setAddCompanyModalOpen] = useState(false);
-  const [disableUserModalOpen, setDisableUserModalOpen] = useState(false);
+  const [deletedUserModalOpen, setDeletedUserModalOpen] = useState(false);
   const [disableCompanyModalOpen, setDisableCompanyModalOpen] = useState(false);
+  const [updateProjectModalOpen, setUpdateProjectModalOpen] = useState(false);
+  const [projectUpdated, setProjectUpdated] = useState(false);
   const [searchResult1, setSearchResult1] = useState(null);
   const [userAdded, setUserAdded] = useState(false);
   const [companyAdded, setCompanyAdded] = useState(false);
   const [disableUserModalId, setDisableUserModalId] = useState(null);
   const [disableCompanyModalId, setDisableCompanyModalId] = useState(null);
-  const [userDisabled, setUserDisabled] = useState(false);
+  const [userDeletedFromProject, setUserDeletedFromProject] = useState(false);
   const [companyDisabled, setCompanyDisabled] = useState(false);
 
   const { data, isLoading, error, refetch } = useQuery(
@@ -47,7 +51,7 @@ export default function Project({ projectId }) {
       enabled: projectId ? true : false,
     }
   );
-
+  console.log(data);
   //when user is added, refetch the data
   useEffect(() => {
     if (userAdded) {
@@ -56,14 +60,14 @@ export default function Project({ projectId }) {
     } else if (companyAdded) {
       refetch();
       setCompanyAdded(false);
-    } else if (userDisabled) {
+    } else if (userDeletedFromProject) {
       refetch();
-      setUserDisabled(false);
+      setUserDeletedFromProject(false);
     } else if (companyDisabled) {
       refetch();
       setCompanyDisabled(false);
     }
-  }, [refetch, userAdded, companyAdded, userDisabled, companyDisabled]);
+  }, [refetch, userAdded, companyAdded, userDeletedFromProject, companyDisabled]);
 
   const [projectIdCopy, setProjectIdCopy] = useState(false);
   const [solarmanPlantIdCopy, setSolarmanPlantIdCopy] = useState(false);
@@ -128,7 +132,7 @@ export default function Project({ projectId }) {
   };
 
   const handleDisableUser = (id) => {
-    setDisableUserModalOpen(true);
+    setDeletedUserModalOpen(true);
     setDisableUserModalId(id);
   };
 
@@ -159,165 +163,207 @@ export default function Project({ projectId }) {
 
   return (
     <>
-      <div className="space-y-2.5 relative p-1.5">
-        <div className="bg-[#25476A] rounded-md p-3.5 sticky -top-1.5 z-50">
-          <div className="flex items-center justify-between space-x-3 select-none">
-            <h1 className="text-xl font-semibold text-white tracking-wide">
-              Project Overview
-            </h1>
-            <div className="flex space-x-2">
-              <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
-                <span>{data?.name}</span>
-              </div>
-              <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
-                <span>Id:</span>
-                <span>{projectId}</span>
-                <button onClick={() => handleCopy({ projectId: data?.id })}>
-                  {projectIdCopy ? (
-                    <FontAwesomeIcon icon={faCopy} />
-                  ) : (
-                    <FontAwesomeIcon icon={faClipboard} />
-                  )}
-                </button>
+      <div className="space-y-1.5 relative">
+        <div className="sticky -top-0 z-50 bg-gray-200 rounded-b-md select-none">
+          <div className="bg-gray-200 pb-1.5"></div>
+          <div className="space-y-1.5">
+          <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
+            <div className="flex items-center space-x-3 select-none">
+              <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
+                Project Overview
+              </h1>
+              <div className="flex space-x-3">
+                <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md">
+                  <span>{data?.name}</span>
+                </div>
+                <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
+                  <span>Id:</span>
+                  <span>{projectId}</span>
+                  <button onClick={() => handleCopy({ projectId: data?.id })}>
+                    {projectIdCopy ? (
+                      <FontAwesomeIcon icon={faCopy} />
+                    ) : (
+                      <FontAwesomeIcon icon={faClipboard} />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="space-y-1 select-none bg-white rounded-md">
-          <div className="font-medium border-r-2 p-1.5">
-            <div className="flex space-x-3">
-              <Image
-                src={data?.meta?.stationImage || "/Placeholder.png"}
-                width={2000}
-                height={2000}
-                alt="logo"
-                className="w-40 h-40 rounded-full object-cover"
+            {/* <button
+              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
+              onClick={() => setUpdateProjectModalOpen(true)}
+            >
+              <span className="">Edit</span>
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </button>
+
+            {updateProjectModalOpen && (
+              <UpdateProjectModal
+                editProjectData={data}
+                updateProjectModalOpen={updateProjectModalOpen}
+                projectUpdated={setProjectUpdated}
               />
-              <div className="grid grid-cols-2 gap-20 w-full">
-                <div className="flex flex-col justify-center">
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Solarman Plant Id:
-                    </span>
-                    <div className="space-x-1">
-                      <span className="text-gray-700">
-                        {data?.solarmanPlantId}
-                      </span>
-                      <button
-                        className="text-[#25476A]"
-                        onClick={() =>
-                          handleCopy({
-                            solarmanPlantId: data?.solarmanPlantId,
-                          })
-                        }
-                      >
-                        {solarmanPlantIdCopy ? (
-                          <FontAwesomeIcon icon={faCopy} />
-                        ) : (
-                          <FontAwesomeIcon icon={faClipboard} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">Type:</span>
-                    <span className="text-gray-700">
-                      {data?.meta?.type
-                        .replace(/_/g, " ") // Replace all '_' with ' '
-                        .split(" ")
-                        .map(
-                          (word) =>
-                            word.charAt(0).toUpperCase() +
-                            word.slice(1).toLowerCase()
-                        )
-                        .join(" ")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Installed Capacity (Wp):
-                    </span>
-                    <span className="text-gray-700">
-                      {data?.meta?.installedCapacity || "N/A"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Owner Name:
-                    </span>
-                    <span className="text-gray-700">
-                      {data?.meta?.ownerName || "N/A"}
-                    </span>
-                  </div>
+            )} */}
+          </div>
+          <div className="bg-white rounded-md shadow-md flex">
+          <Image
+            src={data?.meta?.stationImage || "/Placeholder.png"}
+            width={2000}
+            height={2000}
+            alt="logo"
+            className="w-64 h-68 rounded-l-md object-cover"
+          />
+          <div className="flex space-x-3 p-6 w-full">
+            <div className="grid grid-cols-3 gap-4 w-full">
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Solarman Plant Id:
+                </p>
+                <div className="flex items-center space-x-2">
+                  <span className="text-[#25476A] font-semibold select-none">
+                    {data?.solarmanPlantId}
+                  </span>
+                  <button
+                    className="text-[#25476A]"
+                    onClick={() =>
+                      handleCopy({
+                        solarmanPlantId: data?.solarmanPlantId,
+                      })
+                    }
+                  >
+                    {solarmanPlantIdCopy ? (
+                      <FontAwesomeIcon icon={faCopy} />
+                    ) : (
+                      <FontAwesomeIcon icon={faClipboard} />
+                    )}
+                  </button>
                 </div>
-                <div className="flex flex-col justify-center px-2">
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Contact:
-                    </span>
-                    <span className="text-gray-700">
-                      {data?.meta?.Contact || "N/A"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Address:
-                    </span>
-                    <span className="text-gray-700">
-                      {data?.meta?.locationAddress || "N/A"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Total Users:
-                    </span>
-                    <span className="text-gray-700">
-                      {data?.users?.length || 0}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm border-b p-1.5">
-                    <span className="text-[#25476A] font-semibold">
-                      Total Companies:
-                    </span>
-                    <span className="text-gray-700">
-                      {data?.companies?.length || 0}
-                    </span>
-                  </div>
-                </div>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Type:
+                </p>
+                <p className="text-gray-700">
+                  {" "}
+                  {data?.meta?.type
+                    .replace(/_/g, " ") // Replace all '_' with ' '
+                    .split(" ")
+                    .map(
+                      (word) =>
+                        word.charAt(0).toUpperCase() +
+                        word.slice(1).toLowerCase()
+                    )
+                    .join(" ")}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Installed Capacity (Wp):
+                </p>
+                <p className="text-gray-700">
+                  {data?.meta?.installedCapacity.toFixed(1) || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Owner Name:
+                </p>
+                <p className="text-gray-700">
+                  {data?.meta?.ownerName || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Contact:
+                </p>
+                <p className="text-gray-700">{data?.meta?.Contact || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Address:
+                </p>
+                <p className="text-gray-700">
+                  {data?.meta?.locationAddress || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Total Users:
+                </p>
+                <p className="text-gray-700"> {data?.users?.length || 0}</p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Total Companies:
+                </p>
+                <p className="text-gray-700">{data?.companies?.length || 0}</p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Total Inverter:
+                </p>
+                <p className="text-gray-700">{data?.inverters?.length || 0}</p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Created Date & Time:
+                </p>
+                <p className="text-gray-700">
+                  <FormatDateTime dateString={data?.createdAt} />
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Updated Date & Time:
+                </p>
+                <p className="text-gray-700">
+                  <FormatDateTime dateString={data?.updatedAt} />
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-medium select-none">
+                  Description:
+                </p>
+                <textarea
+                  className="bg-gray-200 px-2 flex w-full h-6 rounded-md text-gray-700"
+                  value={data?.description || ""}
+                  disabled
+                />
               </div>
             </div>
           </div>
         </div>
-        <div className="space-y-1 select-none rounded-md">
-          <div className="grid grid-cols-1 gap-2.5">
-            <div className="p-3 space-y-3 bg-white rounded-md">
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold tracking-wide text-[#25476A]">
-                  Users
-                </span>
-                <button
-                  className="px-3 py-1.5 text-white font-semibold bg-[#39B54A] rounded-md select-none"
-                  onClick={() => setAddUserModalOpen(true)}
-                >
-                  Add User <FontAwesomeIcon icon={faPlus} />
-                </button>
-                {addUserModalOpen && (
-                  <AddUserModal
-                    projectId={projectId}
-                    projectName={data?.name}
-                    userAdded={setUserAdded}
-                    addUserModalOpen={setAddUserModalOpen}
-                  />
-                )}
-              </div>
-              <div className="space-y-1 select-none bg-gray-200 rounded-md p-1.5 border-y-2 text-[#25476A]">
+        </div>
+        </div>
+        <div className="grid grid-cols-1">
+            <div className="flex justify-between items-center bg-[#2e5984] rounded-t-md p-3">
+              <span className="text-lg font-semibold tracking-wide text-white">
+                Users
+              </span>
+              <button
+                className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-teal-500 hover:bg-teal-400 rounded-md space-x-1"
+                onClick={() => setAddUserModalOpen(true)}
+              >
+                <span>Add</span>
+                <FontAwesomeIcon icon={faPlus} />
+              </button>
+              {addUserModalOpen && (
+                <CreateUserInProjectModal
+                  projectId={projectId}
+                  projectName={data?.name}
+                  userAdded={setUserAdded}
+                  addUserModalOpen={setAddUserModalOpen}
+                />
+              )}
+            </div>
+            <div className="p-3 space-y-1.5 bg-white rounded-b-md">
+            <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
                 <div className="grid grid-cols-12 items-center h-9">
                   <div className="flex justify-center font-semibold tracking-wide col-span-6 md:col-span-5 lg:col-span-4">
                     Name
                   </div>
                   <div className="flex items-center justify-center font-semibold tracking-wide space-x-1.5 col-span-2 lg:col-span-1">
                     <span>Status</span>
-                    <FontAwesomeIcon icon={faArrowDown} />
                   </div>
                   <div className="lg:col-span-4 xl:col-span-3 hidden lg:block">
                     <div className="flex justify-center font-semibold tracking-wide">
@@ -333,7 +379,7 @@ export default function Project({ projectId }) {
                   <div className="md:col-span-3 lg:col-span-2 xl:col-span-3"></div>
                 </div>
               </div>
-              <div className="space-y-1 h-64 overflow-y-auto">
+              <div className="space-y-1.5 h-64 overflow-y-auto">
                 {data?.users?.map((user) => (
                   <div
                     className="bg-gray-200 rounded-md p-2"
@@ -407,7 +453,7 @@ export default function Project({ projectId }) {
                         {" "}
                         <button
                           className="flex items-center space-x-1 text-sm"
-                          onClick={() => handleDisableUser(user.userId)}
+                          onClick={() => handleDisableUser(user)}
                         >
                           <FontAwesomeIcon icon={faTrashCan} />{" "}
                           <span className="hidden xl:block">Delete</span>
@@ -417,52 +463,55 @@ export default function Project({ projectId }) {
                   </div>
                 ))}
               </div>
-              {disableUserModalOpen && (
-                <DisableUserModal
+              {deletedUserModalOpen && (
+                <DeleteUserFromProjectModal
+                  project={data}
+                  user={disableUserModalId}
+                  userDeletedFromProject={setUserDeletedFromProject}
+                  deletedUserModalOpen={setDeletedUserModalOpen}
+                />
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1">
+            <div className="flex justify-between items-center bg-[#2e5984] rounded-t-md p-3">
+              <span className="text-lg font-semibold tracking-wide text-white">
+                Companies
+              </span>
+              <div className="space-x-5 flex items-center">
+                <div className="relative">
+                  <input
+                    type="text"
+                    className="w-72 h-8 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
+                    placeholder="Search by name"
+                    onChange={handleSearch}
+                  />
+                  <div className="absolute top-1.5 right-2.5">
+                    <FontAwesomeIcon
+                      icon={faMagnifyingGlass}
+                      className="text-gray-400"
+                    />
+                  </div>
+                </div>
+                <button
+                  className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-teal-500 hover:bg-teal-400 rounded-md space-x-1"
+                  onClick={() => setAddCompanyModalOpen(true)}
+                >
+                  <span>Add</span>
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </div>
+              {addCompanyModalOpen && (
+                <AddCompanyModal
                   projectId={projectId}
-                  userId={disableUserModalId}
-                  userDisabled={setUserDisabled}
-                  disableUserModalOpen={setDisableUserModalOpen}
+                  projectName={data?.name}
+                  companyAdded={setCompanyAdded}
+                  addCompanyModalOpen={setAddCompanyModalOpen}
                 />
               )}
             </div>
             <div className="p-3 space-y-2 bg-white rounded-md">
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold tracking-wide text-[#25476A]">
-                  Companies
-                </span>
-                <div className="space-x-5 flex items-center">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      className="w-72 h-8 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
-                      placeholder="Search by name"
-                      onChange={handleSearch}
-                    />
-                    <div className="absolute top-1.5 right-2.5">
-                      <FontAwesomeIcon
-                        icon={faMagnifyingGlass}
-                        className="text-gray-400"
-                      />
-                    </div>
-                  </div>
-                  <button
-                    className="px-3 py-1.5 text-white font-semibold bg-[#39B54A] rounded-md select-none"
-                    onClick={() => setAddCompanyModalOpen(true)}
-                  >
-                    Add Company <FontAwesomeIcon icon={faPlus} />
-                  </button>
-                </div>
-                {addCompanyModalOpen && (
-                  <AddCompanyModal
-                    projectId={projectId}
-                    projectName={data?.name}
-                    companyAdded={setCompanyAdded}
-                    addCompanyModalOpen={setAddCompanyModalOpen}
-                  />
-                )}
-              </div>
-              <div className="space-y-1 select-none bg-white p-1.5 border-y-2 text-[#25476A]">
+            <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
                 <div className="grid grid-cols-12 items-center h-9">
                   <div className="flex justify-center font-semibold tracking-wide col-span-9">
                     Name
@@ -582,41 +631,15 @@ export default function Project({ projectId }) {
                 />
               )}
             </div>
+          </div>
+          <div className="grid grid-cols-1">
+            <div className="flex justify-between items-center bg-[#2e5984] rounded-t-md p-3">
+              <span className="text-lg font-semibold tracking-wide text-white">
+                Inverters
+              </span>
+            </div>
             <div className="p-3 space-y-2 bg-white rounded-md">
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold tracking-wide text-[#25476A]">
-                  Inverters
-                </span>
-                {/* <div className="space-x-5 flex items-center">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      className="w-72 h-8 rounded-md border border-gray-300 pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#39B54A] focus:border-[#39B54A]"
-                      placeholder="Search by device serial number"
-                      onChange={handleSearch}
-                    />
-                    <div className="absolute top-1.5 right-2.5">
-                      <FontAwesomeIcon
-                        icon={faMagnifyingGlass}
-                        className="text-gray-400"
-                      />
-                    </div>
-                  </div>
-                  <button
-                    className="px-3 py-1.5 text-white font-semibold bg-[#39B54A] rounded-md select-none"
-                    onClick={() => setAddCompanyModalOpen(true)}
-                  >
-                    Add Inverter <FontAwesomeIcon icon={faPlus} />
-                  </button>
-                </div>
-                {addCompanyModalOpen && (
-                  <AddCompanyModal
-                    buildingId={buildingId}
-                    addCompanyModalOpen={setAddCompanyModalOpen}
-                  />
-                )} */}
-              </div>
-              <div className="space-y-1 select-none bg-gray-200 rounded-md p-1.5 border-y-2 text-[#25476A]">
+            <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
                 <div className="grid grid-cols-12 items-center h-9">
                   <div className="flex justify-center font-semibold tracking-wide col-span-9">
                     Device Serial Number
@@ -725,7 +748,6 @@ export default function Project({ projectId }) {
               </div>
             </div>
           </div>
-        </div>
       </div>
     </>
   );

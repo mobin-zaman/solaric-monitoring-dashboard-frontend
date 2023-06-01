@@ -67,8 +67,8 @@ export default function Users() {
     }
   };
 
+  // notifyForProjectAdd function to show toast notification when project is added
   const notifyForProjectAdd = () => {
-    console.log("notifyForProjectAdd");
     toast.success("Project Added Successfully", {
       position: toast.POSITION.TOP_RIGHT,
       autoClose: 3000,
@@ -78,15 +78,31 @@ export default function Users() {
   // Call notifyForProjectAdd when projectCreated is true
   useEffect(() => {
     if (projectCreated) {
-      console.log("projectCreated");
       notifyForProjectAdd();
+      setProjectCreated(false);
     }
   }, [projectCreated]);
+
+  // notifyForProjectDelete function to show toast notification when project is deleted
+  const notifyForProjectDelete = () => {
+    toast.error("Project Deleted Successfully", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+    });
+  };
+
+  // Call notifyForProjectDelete when projectDeleted is true
+  useEffect(() => {
+    if (projectDeleted) {
+      notifyForProjectDelete();
+      setProjectDeleted(false);
+    }
+  }, [projectDeleted]);
 
   return (
     <>
       <div className="space-y-1.5 relative select-none">
-        <div className=" sticky -top-0 z-50 bg-gray-200">
+        <div className="sticky -top-0 z-50 bg-gray-200 rounded-b-md">
           <div className="bg-gray-200 pb-1.5"></div>
           <div className="space-y-1.5">
             <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
@@ -129,7 +145,7 @@ export default function Users() {
               )}
             </div>
             {!isLoading && !isError && !searchResultEmpty && (
-              <div className="text-white bg-[#25476A] font-medium rounded-md p-1.5">
+              <div className="text-white bg-[#2e5984] font-medium rounded-md p-1.5">
                 <div className="grid grid-cols-12 items-center h-9 text-sm md:text-base">
                   <div className="flex justify-center col-span-7 sm:col-span-5 lg:col-span-4 xl:col-span-3">
                     Name
