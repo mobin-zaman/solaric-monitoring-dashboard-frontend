@@ -164,7 +164,7 @@ export default function Users() {
               data?.map((inverter) => (
                 <div
                   key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-3.5 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
                   onClick={() => handleClickInverter(inverter?.id)}
                 >
                   <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">

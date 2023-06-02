@@ -1,47 +1,41 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { deleteUserFromProject } from "@/lib/Helper";
+import { deleteCompanyFromProject } from "@/lib/Helper";
 import { useMutation, useQueryClient } from "react-query";
 
-export default function DeleteProjectModal({
-  deleteUserFromProjectModalOpen,
-  projectData,
-  userData,
-  userDeletedFromProject,
-}) {
+export default function DeleteCompanyFromProjectModal({ deleteCompanyFromProjectModalOpen , projectData, companyData, companyDeletedFromProject }) {
   const queryClient = useQueryClient();
-
-  const mutation = useMutation(deleteUserFromProject, {
+  const mutation = useMutation(deleteCompanyFromProject, {
     onSuccess: () => {
-      userDeletedFromProject(true);
-      deleteUserFromProjectModalOpen(false);
+      companyDeletedFromProject(true);
+      deleteCompanyFromProjectModalOpen(false);
       queryClient.invalidateQueries("project");
     },
   });
 
-  const handleDeleteUser = (userId) => {
-    mutation.mutate({
-      projectId: parseInt(projectData?.id),
-      userId: parseInt(userId),
-    });
+  const handleDeleteUser = (companyId) => {
+    mutation.mutate(
+      {
+        projectId: parseInt(projectData?.id),
+        companyId: parseInt(companyId),
+      }
+    );
   };
 
   return (
     <>
       <div className="flex items-center bg-opacity-10 backdrop-filter backdrop-blur-sm bg-gray-300 fixed inset-0 z-50">
-        <div className="grid grid-cols-1 bg-gray-50 rounded-md items-center relative mx-auto w-[20rem] sm:w-[24rem] space-y-5 shadow-md border border-gray-300">
-          <div className="flex items-center justify-between bg-gray-200 rounded-t-md px-6 py-3">
-            <span className="text-[#25476A] font-semibold text-lg">
-              User Delete From Project
+      <div className="grid grid-cols-1 bg-gray-50 rounded-md items-center relative mx-auto w-[24rem] sm:w-[28rem] space-y-5 shadow-md border border-gray-300">
+      <div className="flex items-center justify-between bg-gray-200 rounded-t-md px-6 py-3">
+      <span className="text-[#25476A] font-semibold text-lg">
+              Company Delete From Project
             </span>
             <button
               className="opacity-80"
-              onClick={() => deleteUserFromProjectModalOpen(false)}
+              onClick={() => deleteCompanyFromProjectModalOpen(false)}
             >
-              <FontAwesomeIcon
-                icon={faXmark}
-                className="text-yellow-800"
-              />
+              <FontAwesomeIcon icon={faXmark}                 className="text-yellow-800"
+ />
             </button>
           </div>
           <div className="px-6 pb-6 space-y-3">
@@ -52,10 +46,10 @@ export default function DeleteProjectModal({
             <div className="flex flex-col space-y-5">
               <div className="flex justify-center items-center flex-col">
                 <div className="font-medium text-lg text-[#25476A]">
-                  Are you sure to delete the User -
+                  Are you sure to delete Company -
                 </div>
-                <div className="font-semibold text-lg text-[#25476A]">
-                  {userData?.user?.name?.toUpperCase()} ?
+                <div className="font-semibold text-sm text-[#25476A]">
+                  {companyData?.name?.toUpperCase()} ?
                 </div>
               </div>
             </div>
@@ -65,7 +59,7 @@ export default function DeleteProjectModal({
               </div>
               <button
                 className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
-                onClick={() => handleDeleteUser(userData?.userId)}
+                onClick={() => handleDeleteUser(companyData?.id)}
               >
                 <span>Delete</span>
               </button>

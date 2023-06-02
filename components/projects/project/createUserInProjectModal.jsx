@@ -5,17 +5,17 @@ import {
   faIdBadge,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { addUserToProject, searchUserAsUserRole } from "@/lib/Helper";
 import Image from "next/image";
 import placeholderImage from "@/public/placeholderImage.jpg";
 
 export default function CreateUserInProjectModal({
-  addUserModalOpen,
-  projectId,
-  projectName,
-  userAdded,
+  createUserInProjectModalOpen,
+  projectData,
+  userCreatedInProject,
 }) {
+  const queryClient = useQueryClient();
   const [userId, setUserId] = useState("");
   const [userNameOrEmail, setUserNameOrEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -25,8 +25,9 @@ export default function CreateUserInProjectModal({
 
   const mutation = useMutation(addUserToProject, {
     onSuccess: () => {
-      userAdded(true);
-      addUserModalOpen(false);
+      userCreatedInProject(true);
+      createUserInProjectModalOpen(false);
+      queryClient.invalidateQueries("project");
     },
     onError: (error) => {
       setErrorMessage(
@@ -47,7 +48,7 @@ export default function CreateUserInProjectModal({
     }
 
     mutation.mutate({
-      projectId: parseInt(projectId),
+      projectId: parseInt(projectData?.id),
       userId: parseInt(userId),
     });
   };
@@ -85,19 +86,19 @@ export default function CreateUserInProjectModal({
         <div className="grid grid-cols-1 bg-gray-50 rounded-md items-center relative mx-auto w-[20rem] sm:w-[24rem] space-y-5 shadow-md border border-gray-300">
           <div className="flex items-center justify-between bg-gray-200 rounded-t-md px-6 py-3">
             <span className="text-[#25476A] font-semibold text-lg select-none">
-              Add User In Project
+              User Add In Project
             </span>
             <button
               className="opacity-80"
-              onClick={() => addUserModalOpen(false)}
+              onClick={() => createUserInProjectModalOpen(false)}
             >
               <FontAwesomeIcon icon={faXmark} className="text-yellow-800" />
             </button>
           </div>
           <div className="px-6 pb-6 space-y-10">
             <div className="text-[#25476A] text-sm font-semibold bg-gray-200 px-2 h-8 flex items-center justify-center rounded-md space-x-1 shadow-md">
-              <span>Project Name:</span>
-              <span>{projectName}</span>
+              <span>Project:</span>
+              <span>{projectData?.name}</span>
             </div>
             <div className="flex flex-col space-y-1">
               <div className="text-[#373737] font-medium text-sm space-x-1">
@@ -123,7 +124,7 @@ export default function CreateUserInProjectModal({
                       value={user.id}
                       className={`flex items-center justify-start cursor-pointer rounded-md ${
                         user.id === userId
-                          ? "bg-[#168636] text-white"
+                          ? "bg-[#25476A] text-white"
                           : "bg-gray-200 text-[#25476A]"
                       }`}
                       onClick={() => setUserId(user.id)}

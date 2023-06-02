@@ -6,7 +6,7 @@ import {
   faUserGroup,
   faEnvelope,
   faGear,
-  faDiagramProject,
+  faCalculator,
   faCubesStacked,
   faMicrochip,
 } from "@fortawesome/free-solid-svg-icons";
@@ -80,6 +80,21 @@ export default function SideBar() {
                     : ""
                 }`}
                 title="Inverter"
+              />
+            </Link>
+          )}
+                              {data?.role === "ADMIN" && (
+            <Link href="/meter">
+              <FontAwesomeIcon
+                icon={faCalculator}
+                className={`w-5 h-5 ${
+                  link === "/meter"
+                    ? "text-[#38EB1A]"
+                    : link === "/meter/[meterId]"
+                    ? "text-[#38EB1A]"
+                    : ""
+                }`}
+                title="Meter"
               />
             </Link>
           )}

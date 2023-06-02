@@ -540,3 +540,44 @@ export const getDailyViewForInverter = async (id) => {
   });
   return response.data;
 }
+
+// Api call for get all meter data
+export const getMeters = async () => {
+  const response = await todoApi.get(`/meter`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api call for delete meter
+export const deleteMeter = async (meterId) => {
+  const response = await todoApi.delete(`/meter/${meterId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api call for search meter
+export const searchMeter = async (data) => {
+  const response = await todoApi.get(`/meter?search=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api call for get meter
+export const getMeter = async (meterId) => {
+  const response = await todoApi.get(`/meter/${meterId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+

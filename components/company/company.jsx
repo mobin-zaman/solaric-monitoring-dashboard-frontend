@@ -34,7 +34,7 @@ export default function Project({ companyId }) {
   const [buildingDeleted, setBuildingDeleted] = useState(false);
 
   const { data, isLoading, error, refetch } = useQuery(
-    ["project", companyId],
+    ["company", companyId],
     () => getCompany(companyId),
     {
       enabled: companyId ? true : false,
