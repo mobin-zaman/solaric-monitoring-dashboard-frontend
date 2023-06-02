@@ -129,40 +129,40 @@ export default function Project({ companyId }) {
 
   return (
     <>
-            <div className="text-sm breadcrumbs text-[#25476A]">
-          <ul>
-            <li>
+      <div className="text-sm breadcrumbs text-[#25476A]">
+        <ul>
+          <li>
             <Link href="/dashboard">
-            <FontAwesomeIcon
-              icon={faHouse}
-              className={`w-4 h-4`}
-              title="Dashboard"
-            />
-                <span className="ml-2">Dashboard</span>
-              </Link>
-            </li>
-            <li>
+              <FontAwesomeIcon
+                icon={faHouse}
+                className={`w-4 h-4`}
+                title="Dashboard"
+              />
+              <span className="ml-2">Dashboard</span>
+            </Link>
+          </li>
+          <li>
             <Link href="/project">
-            <FontAwesomeIcon
-              icon={faCubesStacked}
-              className={`w-4 h-4`}
-              title="Dashboard"
-            />
-                <span className="ml-2">Projects</span>
-              </Link>
-            </li>
-            <li>
+              <FontAwesomeIcon
+                icon={faCubesStacked}
+                className={`w-4 h-4`}
+                title="Dashboard"
+              />
+              <span className="ml-2">Projects</span>
+            </Link>
+          </li>
+          <li>
             <Link href={`/project/${data?.project?.id}`}>
-                <span className="">{data?.project?.name}</span>
+              <span className="">{data?.project?.name}</span>
             </Link>
-            </li>
-            <li>
+          </li>
+          <li>
             <Link href={`/company/${data?.id}`}>
-                <span className="">{data?.name}</span>
+              <span className="">{data?.name}</span>
             </Link>
-            </li>
-          </ul>
-        </div>
+          </li>
+        </ul>
+      </div>
       <div className="space-y-2.5">
         <div className="bg-[#25476A] rounded-md p-3.5">
           <div className="flex items-center justify-between space-x-3 select-none">

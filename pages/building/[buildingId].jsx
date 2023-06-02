@@ -15,7 +15,7 @@ export default function UserDetail() {
         <SideBar />
         <div className="w-full h-full">
           <Header />
-          <div className="p-1.5 overflow-y-auto" style={{ height: "calc(100vh - 4rem)" }}>
+          <div className="px-1.5 overflow-y-auto" style={{ height: "calc(100vh - 4rem)" }}>
             <Building buildingId={buildingId} />
           </div>
         </div>

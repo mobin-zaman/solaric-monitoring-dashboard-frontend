@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "react-query";
-import { getProjects, getBuilding, searchInverterForBuilding } from "@/lib/Helper";
+import { getProject, getProjects, getBuilding, searchInverterForBuilding } from "@/lib/Helper";
 import Image from "next/image";
 import TimestampConverter from "@/lib/TimestampConverter";
 import AddCompanyModal from "./addBuildingModal";
@@ -22,6 +22,16 @@ import Id from "@/public/icons/Id.png";
 import Placeholder from "@/public/Placeholder.png";
 import { useRouter } from "next/router";
 import FormatDateTime from "@/lib/FormatDateTime";
+import Link from "next/link";
+import {
+  faHouse,
+  faUserGroup,
+  faEnvelope,
+  faGear,
+  faCalculator,
+  faCubesStacked,
+  faMicrochip,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Project({ buildingId }) {
   const router = useRouter();
@@ -34,10 +44,21 @@ export default function Project({ buildingId }) {
   const [inverterDeleted, setInverterDeleted] = useState(false);
 
   const { data, isLoading, isError, refetch } = useQuery(
-    ["project", buildingId],
+    ["building", buildingId],
     () => getBuilding(buildingId),
     {
       enabled: buildingId ? true : false,
+      onSuccess: (data) => {
+        console.log(data);
+      },
+    }
+  );
+
+  const project = useQuery(
+    ["project", data?.company?.projectId],
+    () => getProject(data?.company?.projectId),
+    {
+      enabled: data?.company?.projectId ? true : false,
     }
   );
 
@@ -124,6 +145,45 @@ export default function Project({ buildingId }) {
 
   return (
     <>
+                <div className="text-sm breadcrumbs text-[#25476A]">
+          <ul>
+            <li>
+            <Link href="/dashboard">
+            <FontAwesomeIcon
+              icon={faHouse}
+              className={`w-4 h-4`}
+              title="Dashboard"
+            />
+                <span className="ml-2">Dashboard</span>
+              </Link>
+            </li>
+            <li>
+            <Link href="/project">
+            <FontAwesomeIcon
+              icon={faCubesStacked}
+              className={`w-4 h-4`}
+              title="Dashboard"
+            />
+                <span className="ml-2">Projects</span>
+              </Link>
+            </li>
+            <li>
+            <Link href={`/project/${project?.data?.id}`}>
+                <span className="">{project?.data?.name}</span>
+            </Link>
+            </li>
+            <li>
+            <Link href={`/company/${data?.company?.id}`}>
+                <span className="">{data?.company?.name}</span>
+            </Link>
+            </li>
+            <li>
+            <Link href={`/building/${data?.id}`}>
+                <span className="">{data?.name}</span>
+            </Link>
+            </li>
+          </ul>
+        </div>
       <div className="space-y-2.5">
         <div className="bg-[#25476A] rounded-md p-3.5">
           <div className="flex items-center justify-between space-x-3 select-none">
