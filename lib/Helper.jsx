@@ -581,3 +581,19 @@ export const getMeter = async (meterId) => {
   return response.data;
 }
 
+// Api call for update meter
+export const updateMeter = async (data) => {
+  const meterId = data?.meterId;
+  const meterData = {
+    importMeterCode: data?.importMeterCode,
+    exportMeterCode: data?.exportMeterCode,
+    importMeterSerialNumber: data?.importMeterSerialNumber,
+    exportMeterSerialNumber: data?.exportMeterSerialNumber,
+  }
+  const response = await todoApi.put(`/meter/${meterId}`, meterData, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}

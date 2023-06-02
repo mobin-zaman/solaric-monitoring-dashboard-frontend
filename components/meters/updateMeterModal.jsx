@@ -1,24 +1,27 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useMutation } from "react-query";
-import { updateInverter } from "@/lib/Helper";
+import { useMutation, useQueryClient } from "react-query";
+import { updateMeter } from "@/lib/Helper";
 
 export default function UpdateMeterModal({
   updateMeterModalOpen,
   meterUpdated,
   meterData,
 }) {
+  console
+  const queryClient = useQueryClient();
   const [errorMessage, setErrorMessage] = useState("");
-  const [importMeterCode, setImportMeterCode] = useState("");
-  const [exportMeterCode, setExportMeterCode] = useState("");
-  const [importMeterSerialNumber, setImportMeterSerialNumber] = useState("");
-  const [exportMeterSerialNumber, setExportMeterSerialNumber] = useState("");
+  const [importMeterCode, setImportMeterCode] = useState(meterData?.importMeterCode);
+  const [exportMeterCode, setExportMeterCode] = useState(meterData?.exportMeterCode);
+  const [importMeterSerialNumber, setImportMeterSerialNumber] = useState(meterData?.importMeterSerialNumber);
+  const [exportMeterSerialNumber, setExportMeterSerialNumber] = useState(meterData?.exportMeterSerialNumber);
 
-  const mutation = useMutation(updateInverter, {
+  const mutation = useMutation(updateMeter, {
     onSuccess: () => {
-      meterData(true);
-      editInverterModalOpen(false);
+      meterUpdated(true);
+      updateMeterModalOpen(false);
+      queryClient.invalidateQueries("meter");
     },
     onError: (error) => {
       setErrorMessage(error.response.data.message);
@@ -68,7 +71,7 @@ export default function UpdateMeterModal({
                     className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
                     type="text"
                     placeholder="Enter import meter code"
-                    value={meterData?.importMeterCode}
+                    value={importMeterCode}
                     onChange={(e) => setImportMeterCode(e.target.value)}
                   />
                 </div>
@@ -83,7 +86,7 @@ export default function UpdateMeterModal({
                     className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
                     type="text"
                     placeholder="Enter export meter code"
-                    value={meterData?.exportMeterCode}
+                    value={exportMeterCode}
                     onChange={(e) => setExportMeterCode(e.target.value)}
                   />
                 </div>
@@ -98,7 +101,7 @@ export default function UpdateMeterModal({
                     className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
                     type="text"
                     placeholder="Enter import meter serial number"
-                    value={meterData?.importMeterSerialNumber}
+                    value={importMeterSerialNumber}
                     onChange={(e) => setImportMeterSerialNumber(e.target.value)}
                   />
                 </div>
@@ -113,7 +116,7 @@ export default function UpdateMeterModal({
                     className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
                     type="text"
                     placeholder="Enter export meter serial number"
-                    value={meterData?.exportMeterSerialNumber}
+                    value={exportMeterSerialNumber}
                     onChange={(e) => setExportMeterSerialNumber(e.target.value)}
                   />
                 </div>
@@ -124,7 +127,7 @@ export default function UpdateMeterModal({
                 {errorMessage}
               </div>
               <button
-                className="flex items-center justify-center px-5 h-8 text-md font-semibold text-white bg-[#795548] hover:bg-teal-400 rounded-md"
+                className="flex items-center justify-center px-5 h-8 text-md font-semibold text-white bg-[#795548] hover:bg-[#6D4C41] rounded-md"
                 onClick={handleAddUser}
                 >
                 <span>Edit</span>

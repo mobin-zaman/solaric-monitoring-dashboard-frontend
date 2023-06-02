@@ -22,6 +22,16 @@ import Id from "@/public/icons/Id.png";
 import Placeholder from "@/public/Placeholder.png";
 import { useRouter } from "next/router";
 import FormatDateTime from "@/lib/FormatDateTime";
+import Link from "next/link";
+import {
+  faHouse,
+  faUserGroup,
+  faEnvelope,
+  faGear,
+  faCalculator,
+  faCubesStacked,
+  faMicrochip,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Project({ companyId }) {
   const router = useRouter();
@@ -52,7 +62,6 @@ export default function Project({ companyId }) {
     }
   }, [buildingAdded, refetch, buildingDeleted]);
 
-
   const [projectIdCopy, setProjectIdCopy] = useState(false);
   const [solarmanPlantIdCopy, setSolarmanPlantIdCopy] = useState(false);
   const [buildingId, setBuildingId] = useState(null);
@@ -61,7 +70,7 @@ export default function Project({ companyId }) {
     let valueToCopy = "";
     let isProjectIdCopy = false;
     let isSolarmanPlantIdCopy = false;
-  
+
     if (data.companyId) {
       valueToCopy = data.companyId;
       isProjectIdCopy = true;
@@ -69,10 +78,10 @@ export default function Project({ companyId }) {
       valueToCopy = data.code;
       isSolarmanPlantIdCopy = true;
     }
-  
+
     try {
       navigator.clipboard.writeText(valueToCopy);
-  
+
       if (isProjectIdCopy) {
         setProjectIdCopy(true);
         setSolarmanPlantIdCopy(false);
@@ -80,13 +89,13 @@ export default function Project({ companyId }) {
         setProjectIdCopy(false);
         setSolarmanPlantIdCopy(true);
       }
-  
+
       setTimeout(() => {
         setProjectIdCopy(false);
         setSolarmanPlantIdCopy(false);
       }, 2000);
     } catch (error) {
-      console.error('Error copying text:', error);
+      console.error("Error copying text:", error);
     }
   };
   const handleBuildingClick = (buildingId) => {
@@ -120,6 +129,40 @@ export default function Project({ companyId }) {
 
   return (
     <>
+            <div className="text-sm breadcrumbs text-[#25476A]">
+          <ul>
+            <li>
+            <Link href="/dashboard">
+            <FontAwesomeIcon
+              icon={faHouse}
+              className={`w-4 h-4`}
+              title="Dashboard"
+            />
+                <span className="ml-2">Dashboard</span>
+              </Link>
+            </li>
+            <li>
+            <Link href="/project">
+            <FontAwesomeIcon
+              icon={faCubesStacked}
+              className={`w-4 h-4`}
+              title="Dashboard"
+            />
+                <span className="ml-2">Projects</span>
+              </Link>
+            </li>
+            <li>
+            <Link href={`/project/${data?.project?.id}`}>
+                <span className="">{data?.project?.name}</span>
+            </Link>
+            </li>
+            <li>
+            <Link href={`/company/${data?.id}`}>
+                <span className="">{data?.name}</span>
+            </Link>
+            </li>
+          </ul>
+        </div>
       <div className="space-y-2.5">
         <div className="bg-[#25476A] rounded-md p-3.5">
           <div className="flex items-center justify-between space-x-3 select-none">

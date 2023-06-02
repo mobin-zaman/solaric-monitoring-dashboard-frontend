@@ -10,11 +10,10 @@ import { getMeter, searchCompany } from "@/lib/Helper";
 import UpdateMeterModal from "./updateMeterModal";
 import { useRouter } from "next/router";
 import FormatDateTime from "@/lib/FormatDateTime";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Project({ meterId }) {
-  const [editInverterModalOpen, setEditInverterModalOpen] = useState(false);
-  const [inverterEdited, setInverterEdited] = useState(false);
-  const [meterData, setMeterData] = useState(null);
   const [meterUpdated, setMeterUpdated] = useState(false);
   const [updateMeterModalOpen, setUpdateMeterModalOpen] = useState(false);
 
@@ -23,54 +22,51 @@ export default function Project({ meterId }) {
     () => getMeter(meterId),
     {
       enabled: meterId ? true : false,
-      onSuccess: (data) => {
-        setMeterData(data);
-      },
     }
   );
 
-  useEffect(() => {
-    if (inverterEdited) {
-      refetch();
-      setInverterEdited(false);
-    }
-  }, [inverterEdited, refetch]);
 
   const [projectIdCopy, setProjectIdCopy] = useState(false);
-  const [solarmanPlantIdCopy, setSolarmanPlantIdCopy] = useState(false);
 
   const handleCopy = (data) => {
     let valueToCopy = "";
     let isProjectIdCopy = false;
-    let isSolarmanPlantIdCopy = false;
 
     if (data.projectId) {
       valueToCopy = data.projectId;
       isProjectIdCopy = true;
-    } else if (data.solarmanPlantId) {
-      valueToCopy = data.solarmanPlantId;
-      isSolarmanPlantIdCopy = true;
     }
 
     try {
       navigator.clipboard.writeText(valueToCopy);
-
       if (isProjectIdCopy) {
         setProjectIdCopy(true);
         setSolarmanPlantIdCopy(false);
-      } else if (isSolarmanPlantIdCopy) {
-        setProjectIdCopy(false);
-        setSolarmanPlantIdCopy(true);
       }
-
       setTimeout(() => {
         setProjectIdCopy(false);
-        setSolarmanPlantIdCopy(false);
       }, 2000);
     } catch (error) {
       console.error("Error copying text:", error);
     }
   };
+
+  // notifyForUpdateMeter is used to notify the user that the meter has been updated
+  const notifyForUpdateMeter = () => {
+    toast.info("Meter updated successfully!", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+    });
+  };
+
+    // Call notifyForUpdateMeter function when meterUpdated is true
+  useEffect(() => {
+    if (meterUpdated) {
+      notifyForUpdateMeter();
+      setMeterUpdated(false);
+    }
+  }, [meterUpdated]);
+
 
   return (
     <>
@@ -109,7 +105,7 @@ export default function Project({ meterId }) {
 
             {updateMeterModalOpen && (
               <UpdateMeterModal
-                meterData={meterData}
+                meterData={data}
                 updateMeterModalOpen={setUpdateMeterModalOpen}
                 meterUpdated={setMeterUpdated}
               />
