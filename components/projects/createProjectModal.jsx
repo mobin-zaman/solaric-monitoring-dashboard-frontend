@@ -25,9 +25,14 @@ export default function AddUserModal({
         error.response.data.message ===
         "Solarman plant not found, please provide proper plant ID"
       ) {
-        setErrorMessage("Please provide proper Plant ID");
-      } else {
-        setErrorMessage("Something went wrong");
+        setErrorMessage("Please provide proper Plant ID.");
+      } else if (
+        error.response.data.message === "\nInvalid `this.prisma.project.create()` invocation in\n/root/monitoring_portal/solaric-monitoring-dashboard-backend/dist/project/project.service.js:39:59\n\n  36 console.log('Found matching project:', matchedSolarmanPlant);\n  37 const deviceList = await this.solarman.getAllDevices(matchedSolarmanPlant.id);\n  38 console.log({ deviceList });\n→ 39 const project = await this.prisma.project.create(\nUnique constraint failed on the fields: (`solarmanPlantId`)"
+      ) {
+        setErrorMessage("Project already exists.");
+      }
+      else {
+        setErrorMessage("Something went wrong.");
       }
     },
   });

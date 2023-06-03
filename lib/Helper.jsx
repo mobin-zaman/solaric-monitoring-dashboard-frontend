@@ -597,3 +597,42 @@ export const updateMeter = async (data) => {
   });
   return response.data;
 }
+
+// Api call for get meters for building
+export const getMetersForBuilding = async (buildingId) => {
+  const response = await todoApi.get(`/meter/building/${buildingId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api call for search meter for building
+export const searchMeterForBuilding = async (data) => {
+  const buildingId = data?.buildingId;
+  const searchValue = data.search;
+  const response = await todoApi.get(`/meter/building/${buildingId}?search=${searchValue}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+// Api call for post meter for building
+export const postMeterForBuilding = async (data) => {
+  const buildingId = data?.buildingId;
+  const meterData = {
+    importMeterCode: data?.importMeterCode,
+    exportMeterCode: data?.exportMeterCode,
+    importMeterSerialNumber: data?.importMeterSerialNumber,
+    exportMeterSerialNumber: data?.exportMeterSerialNumber,
+  }
+  const response = await todoApi.post(`/building/meter/${buildingId}`, meterData, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}

@@ -36,7 +36,7 @@ export default function Projects() {
           <div className="w-full h-full">
             <Header />
             <div
-              className="px-1.5 overflow-y-auto"
+              className="px-1.5 pb-1.5 overflow-y-auto"
               style={{ height: "calc(100vh - 4rem)" }}
             >
               <AllProjects />
