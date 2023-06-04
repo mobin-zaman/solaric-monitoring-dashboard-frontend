@@ -22,6 +22,7 @@ export default function CreateMeterModal({
       meterCreatedInBuilding(true);
       createMeterInBuildingModalOpen(false);
       queryClient.invalidateQueries("metersForBuilding");
+      queryClient.invalidateQueries("meters");
     },
     onError: (error) => {
       setErrorMessage(error.response.data.message);

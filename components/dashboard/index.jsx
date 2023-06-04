@@ -29,6 +29,7 @@ import {
   getDailyViewForCompany,
   getDailyViewForBuilding,
   getDailyViewForInverter,
+  getCollectTimeForInverterHourlyData
 } from "@/lib/Helper";
 
 export default function Index() {
@@ -419,7 +420,7 @@ export default function Index() {
       onSuccess: (data) => {
         setHistoricalDataForDefaultEnabled(false);
         setHistoricalDataForDefault(data);
-      }
+      },
     }
   );
 
@@ -858,18 +859,44 @@ export default function Index() {
     }
   }, [dailyDataForProject, dailyDataForCompany, dailyDataForBuilding, dailyDataForInverter, selectedOptionId, selectedOptionIdCompany, selectedOptionIdBuilding, selectedOptionIdInverter, dailyDataForDefault]);
 
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (dailyDataForDefault && historicalDataForDefaultSunHrsBarChartData) {
+      setTimeout(() => { 
+      setLoading(true);
+      }, 2000);
+    }
+  }, [dailyDataForDefault, historicalDataForDefaultSunHrsBarChartData]);
+
+
+  const [collectTimeForInverterHourlyData, setCollectTimeForInverterHourlyData] = useState(null);
+
+    useQuery(
+      ["collectTimeForInverterHourlyData", selectedOptionIdInverter],
+      () => getCollectTimeForInverterHourlyData(selectedOptionIdInverter),
+      {
+      enabled: selectedOptionIdInverter ? true : false,
+      onSuccess: (data) => {
+        setCollectTimeForInverterHourlyData(data);
+        console.log("collectTimeForInverterHourlyData", data);
+      },
+      onError: (error) => {
+        console.log("error", error);
+      }
+    });
+
+
   return (
     <>
       <div className="flex flex-col w-full h-full space-y-1.5">
         <div
-          className={`flex items-center justify-start space-x-5 bg-[#25476A] rounded-md p-3.5 select-none`}
+          className={`flex items-center justify-between space-x-5 bg-[#25476A] rounded-md p-3.5 select-none`}
         >
           <div className="flex items-center space-x-3 select-none">
             <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
               Dashboard
             </h1>
-          </div>
-          <div className="space-x-2 md:space-x-5 flex items-center select-none">
+            <div className="space-x-2 md:space-x-5 flex items-center select-none">
             <div className="relative select-none" ref={dropdownRef}>
               <input
                 type="text"
@@ -1158,9 +1185,11 @@ export default function Index() {
               <option value="USER">User</option>
             </select> */}
           </div>
+          </div>
         </div>
+        {loading ? <>
         <div className="grid grid-cols-2 gap-1.5">
-          <DailyView dailyViewData={mainDailyViewData} />
+          <DailyView dailyViewData={mainDailyViewData} collectTimeForInverterHourlyData={collectTimeForInverterHourlyData} selectedOptionIdInverter={selectedOptionIdInverter} />
           <LivePowerFlow />
         </div>
         <div className="grid grid-cols-6 gap-1.5">
@@ -1170,7 +1199,7 @@ export default function Index() {
           <div className="col-span-2">
             <Impact impactData={mainImpactTableData} />
           </div>
-        </div>
+        </div></> : <div className="flex items-center justify-center text-black pt-10">Loading...</div>}
       </div>
     </>
   );

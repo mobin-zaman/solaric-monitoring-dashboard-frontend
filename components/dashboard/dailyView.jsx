@@ -21,8 +21,14 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useEffect, useState } from "react";
+import { useQuery, useMutation } from "react-query";
+import { getInverterHourData } from "@/lib/Helper";
 
-export default function DailyView({ dailyViewData }) {
+export default function DailyView({
+  dailyViewData,
+  collectTimeForInverterHourlyData,
+  selectedOptionIdInverter,
+}) {
   const [
     dailyViewDataForProjectPowerLineChartDataYearly,
     setDailyViewDataForProjectPowerLineChartDataYearly,
@@ -32,12 +38,20 @@ export default function DailyView({ dailyViewData }) {
     setDailyViewDataForProjectPowerLineChartDataMonthly,
   ] = useState([]);
   const [
+    dailyViewDataForProjectPowerLineChartDataDay,
+    setDailyViewDataForProjectPowerLineChartDataDay,
+  ] = useState(undefined);
+  const [
     dailyViewDataForProjectPowerLineChartDataYearCount,
     setDailyViewDataForProjectPowerLineChartDataYearCount,
   ] = useState([]);
   const [
     dailyViewDataForProjectPowerLineChartDataMonthCount,
     setDailyViewDataForProjectPowerLineChartDataMonthCount,
+  ] = useState([]);
+  const [
+    dailyViewDataForProjectPowerLineChartDataDayCount,
+    setDailyViewDataForProjectPowerLineChartDataDayCount,
   ] = useState([]);
   const [
     dailyViewDataForProjectPowerLineChartDataYearSelected,
@@ -47,6 +61,10 @@ export default function DailyView({ dailyViewData }) {
     dailyViewDataForProjectPowerLineChartDataMonthSelected,
     setDailyViewDataForProjectPowerLineChartDataMonthSelected,
   ] = useState("Month");
+  const [
+    dailyViewDataForProjectPowerLineChartDataDaySelected,
+    setDailyViewDataForProjectPowerLineChartDataDaySelected,
+  ] = useState("Day");
 
   useEffect(() => {
     setDailyViewDataForProjectPowerLineChartDataYearSelected("Year");
@@ -80,7 +98,11 @@ export default function DailyView({ dailyViewData }) {
   }, [dailyViewDataForProjectPowerLineChartDataYearSelected, dailyViewData]);
 
   useEffect(() => {
-    if (dailyViewData && dailyViewDataForProjectPowerLineChartDataYearSelected && dailyViewDataForProjectPowerLineChartDataMonthSelected) {
+    if (
+      dailyViewData &&
+      dailyViewDataForProjectPowerLineChartDataYearSelected &&
+      dailyViewDataForProjectPowerLineChartDataMonthSelected
+    ) {
       setDailyViewDataForProjectPowerLineChartDataMonthCount(
         Object.keys(dailyViewData?.monthly || {})
       );
@@ -95,7 +117,40 @@ export default function DailyView({ dailyViewData }) {
         })
       );
     }
-  }, [dailyViewDataForProjectPowerLineChartDataYearSelected, dailyViewData, dailyViewDataForProjectPowerLineChartDataMonthSelected]);
+  }, [
+    dailyViewDataForProjectPowerLineChartDataYearSelected,
+    dailyViewData,
+    dailyViewDataForProjectPowerLineChartDataMonthSelected,
+  ]);
+
+  // useEffect(() => {
+  //   if (
+  //     dailyViewData &&
+  //     dailyViewDataForProjectPowerLineChartDataYearSelected &&
+  //     dailyViewDataForProjectPowerLineChartDataMonthSelected &&
+  //     dailyViewDataForProjectPowerLineChartDataDaySelected
+  //   ) {
+  //     setDailyViewDataForProjectPowerLineChartDataDayCount(
+  //       Object.keys(dailyViewData?.daily || {})
+  //     );
+  //     setDailyViewDataForProjectPowerLineChartDataDay(
+  //       dailyViewData?.daily[
+  //         dailyViewDataForProjectPowerLineChartDataDaySelected
+  //       ]?.map((item) => {
+  //         return {
+  //           name: item?.hour,
+  //           generation: item?.generation,
+  //         };
+  //       })
+  //     );
+  //   }
+  // }, [
+  //   dailyViewDataForProjectPowerLineChartDataYearSelected,
+  //   dailyViewData,
+  //   dailyViewDataForProjectPowerLineChartDataMonthSelected,
+  //   dailyViewDataForProjectPowerLineChartDataDaySelected,
+  // ]);
+
 
   const digitToMonth = (digit) => {
     switch (digit) {
@@ -127,6 +182,75 @@ export default function DailyView({ dailyViewData }) {
         return "Jan";
     }
   };
+  const [inverterHourData, setInverterHourData] = useState([]);
+  useQuery(
+    ["getInverterHourData", dailyViewDataForProjectPowerLineChartDataDaySelected],
+    async () => {
+      const result = await getInverterHourData({selectedOptionIdInverter, dailyViewDataForProjectPowerLineChartDataDaySelected});
+      return result;
+    },
+    {
+      onSuccess: (data) => {
+        setInverterHourData(data);
+      },
+    }
+  );
+  
+  console.log("inverterHourData", inverterHourData);
+
+    useEffect(() => {
+    if (
+      inverterHourData &&
+      dailyViewDataForProjectPowerLineChartDataYearSelected !== "Year" &&
+      dailyViewDataForProjectPowerLineChartDataMonthSelected !== "Month" &&
+      dailyViewDataForProjectPowerLineChartDataDaySelected !== "Day"
+    ) {
+      // setDailyViewDataForProjectPowerLineChartDataDayCount(
+      //   Object.keys(dailyViewData?.daily || {})
+      // );
+      setDailyViewDataForProjectPowerLineChartDataDay(
+        inverterHourData?.map((item) => {
+          return {
+            value: item?.value,
+            collectTime: item?.collectTime,
+          };
+        })
+      );
+    }
+  }, [
+    dailyViewDataForProjectPowerLineChartDataYearSelected,
+    inverterHourData,
+    dailyViewDataForProjectPowerLineChartDataMonthSelected,
+    dailyViewDataForProjectPowerLineChartDataDaySelected,
+  ]);
+
+  console.log("dailyViewDataForProjectPowerLineChartDataDay", dailyViewDataForProjectPowerLineChartDataDay);
+
+  const [dailyViewDataForProjectPowerLineChartDataStore, setDailyViewDataForProjectPowerLineChartDataStore] = useState([]);
+
+  useEffect(() => {
+    if (
+      dailyViewDataForProjectPowerLineChartDataYearly && !dailyViewDataForProjectPowerLineChartDataMonthly && !dailyViewDataForProjectPowerLineChartDataDay
+    ) {
+      setDailyViewDataForProjectPowerLineChartDataStore(dailyViewDataForProjectPowerLineChartDataYearly);
+    } 
+    else if (
+      dailyViewDataForProjectPowerLineChartDataYearly && dailyViewDataForProjectPowerLineChartDataMonthly && !dailyViewDataForProjectPowerLineChartDataDay
+    ) {
+      setDailyViewDataForProjectPowerLineChartDataStore(dailyViewDataForProjectPowerLineChartDataMonthly);
+    } else if (
+      dailyViewDataForProjectPowerLineChartDataYearly && dailyViewDataForProjectPowerLineChartDataMonthly && dailyViewDataForProjectPowerLineChartDataDay
+    ) {
+      setDailyViewDataForProjectPowerLineChartDataStore(dailyViewDataForProjectPowerLineChartDataDay);
+    }
+  }, [dailyViewDataForProjectPowerLineChartDataDay, dailyViewDataForProjectPowerLineChartDataMonthly, dailyViewDataForProjectPowerLineChartDataYearly]);
+  
+  console.log("dailyViewDataForProjectPowerLineChartDataStore", dailyViewDataForProjectPowerLineChartDataStore);
+  
+  
+  
+
+    
 
   const data = [
     {
@@ -172,7 +296,11 @@ export default function DailyView({ dailyViewData }) {
       amt: 2100,
     },
   ];
-  console.log(dailyViewData?.monthly, dailyViewDataForProjectPowerLineChartDataMonthSelected, "hhh");
+  console.log(
+    dailyViewData?.monthly,
+    dailyViewDataForProjectPowerLineChartDataMonthSelected,
+    "hhh"
+  );
 
   return (
     <>
@@ -212,7 +340,8 @@ export default function DailyView({ dailyViewData }) {
               {dailyViewDataForProjectPowerLineChartDataMonthCount?.map(
                 (item, Index) => {
                   if (
-                    dailyViewDataForProjectPowerLineChartDataYearSelected === item?.split("-")[0]
+                    dailyViewDataForProjectPowerLineChartDataYearSelected ===
+                    item?.split("-")[0]
                   ) {
                     return (
                       <option key={Index} value={item}>
@@ -223,6 +352,44 @@ export default function DailyView({ dailyViewData }) {
                 }
               )}
             </select>
+            {collectTimeForInverterHourlyData?.length > 0 && (
+              <select
+                disabled={
+                  dailyViewDataForProjectPowerLineChartDataMonthSelected ===
+                  "Month"
+                    ? true
+                    : false
+                }
+                className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                value={dailyViewDataForProjectPowerLineChartDataDaySelected}
+                onChange={(e) =>
+                  setDailyViewDataForProjectPowerLineChartDataDaySelected(
+                    e.target.value
+                  )
+                }
+              >
+                <option disabled>Day</option>
+                {collectTimeForInverterHourlyData?.map((item, Index) => {
+                  if (
+                    dailyViewDataForProjectPowerLineChartDataYearSelected ===
+                      item?.split("-")[0] &&
+                    parseInt(item?.split("-")[1], 10) ===
+                      parseInt(
+                        dailyViewDataForProjectPowerLineChartDataMonthSelected.split(
+                          "-"
+                        )[1],
+                        10
+                      )
+                  ) {
+                    return (
+                      <option key={Index} value={item}>
+                        {item?.split("-")[2]}
+                      </option>
+                    );
+                  }
+                })}
+              </select>
+            )}
           </div>
         </div>
         <div className="flex w-full h-72 items-center justify-center">
@@ -239,14 +406,14 @@ export default function DailyView({ dailyViewData }) {
               </div>
             </div>
           </div> */}
-          <div
-            style={{ width: "90%", height: "90%" }}
-          >
+          <div style={{ width: "90%", height: "90%" }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 width={730}
                 height={250}
-                data={dailyViewDataForProjectPowerLineChartDataMonthly ? dailyViewDataForProjectPowerLineChartDataMonthly : dailyViewDataForProjectPowerLineChartDataYearly}
+                data={
+                  dailyViewDataForProjectPowerLineChartDataStore
+                }
                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
               >
                 <defs>
@@ -265,7 +432,7 @@ export default function DailyView({ dailyViewData }) {
                 <Tooltip />
                 <Area
                   type="monotone"
-                  dataKey="generation"
+                  dataKey={dailyViewDataForProjectPowerLineChartDataDay ? "value" : "generation"}
                   stroke="#8884d8"
                   fillOpacity={1}
                   fill="url(#colorUv)"
@@ -281,15 +448,23 @@ export default function DailyView({ dailyViewData }) {
             </ResponsiveContainer>
           </div>
         </div>
-                <div className="flex items-center justify-center">
-              <div className="flex items-center justify-center bg-[#8884d8] rounded-md px-3 py-2 select-none space-x-1">
-                <span className="text-sm font-semibold text-white">
-                  Generation, kWh
-                </span>
-                <span className="text-sm font-semibold text-white">-</span>
-                <span className="text-sm font-semibold text-white">{dailyViewDataForProjectPowerLineChartDataMonthly ? dailyViewDataForProjectPowerLineChartDataMonthly?.reduce((a, b) => a + b?.generation, 0).toFixed(1) : dailyViewDataForProjectPowerLineChartDataYearly?.reduce((a, b) => a + b?.generation, 0).toFixed(1)}</span>
-              </div>
-                </div>
+        <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center bg-[#8884d8] rounded-md px-3 py-2 select-none space-x-1">
+            <span className="text-sm font-semibold text-white">
+              Generation, kWh
+            </span>
+            <span className="text-sm font-semibold text-white">-</span>
+            <span className="text-sm font-semibold text-white">
+              {dailyViewDataForProjectPowerLineChartDataMonthly
+                ? dailyViewDataForProjectPowerLineChartDataMonthly
+                    ?.reduce((a, b) => a + b?.generation, 0)
+                    .toFixed(1)
+                : dailyViewDataForProjectPowerLineChartDataYearly
+                    ?.reduce((a, b) => a + b?.generation, 0)
+                    .toFixed(1)}
+            </span>
+          </div>
+        </div>
       </div>
     </>
   );

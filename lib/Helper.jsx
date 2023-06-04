@@ -140,16 +140,18 @@ export const deleteProject = async (id) => {
 
 // Api calls for user add to project
 export const addUserToProject = async (data) => {
-
   const projectId = data.projectId;
   const userId = data.userId;
-  const response = await todoApi.post(`/project/${projectId}/assign-user/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.post(
+    `/project/${projectId}/assign-user/${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for company add to project
 export const addCompanyToProject = async (data) => {
@@ -159,13 +161,17 @@ export const addCompanyToProject = async (data) => {
     name: data.companyName,
     code: data.companyCode,
   };
-  const response = await todoApi.post(`/project/${projectId}/companies`, companyData, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.post(
+    `/project/${projectId}/companies`,
+    companyData,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for delete user from project
 export const deleteUserFromProject = async (data) => {
@@ -178,19 +184,22 @@ export const deleteUserFromProject = async (data) => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for delete company from project
 export const deleteCompanyFromProject = async (data) => {
   const projectId = data.projectId;
   const companyId = data.companyId;
-  const response = await todoApi.delete(`project/${projectId}/company/${companyId}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.delete(
+    `project/${projectId}/company/${companyId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for project search
 export const searchProject = async (data) => {
@@ -200,7 +209,7 @@ export const searchProject = async (data) => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for get company data
 export const getCompany = async (id) => {
@@ -210,7 +219,7 @@ export const getCompany = async (id) => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for building add to company
 export const addBuildingToCompany = async (data) => {
@@ -219,13 +228,17 @@ export const addBuildingToCompany = async (data) => {
     name: data.buildingName,
     code: data.buildingCode,
   };
-  const response = await todoApi.post(`/company/${companyId}/building`, buildingData, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.post(
+    `/company/${companyId}/building`,
+    buildingData,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for delete building from company
 export const deleteBuildingFromCompany = async (data) => {
@@ -236,19 +249,22 @@ export const deleteBuildingFromCompany = async (data) => {
     },
   });
   return response.data;
-}
+};
 
 //Api calls for company search
 export const searchCompany = async (data) => {
   const searchValue = data.search;
   const projectId = data.projectId;
-  const response = await todoApi.get(`/company/${projectId}?search=${searchValue}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/company/${projectId}?search=${searchValue}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get building data
 export const getBuilding = async (id) => {
@@ -258,19 +274,22 @@ export const getBuilding = async (id) => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for inverter add to building
 export const addInverterToBuilding = async (data) => {
   const buildingId = data.buildingId;
   const inverterId = data.inverterId;
-  const response = await todoApi.post(`/building/${buildingId}/inverter/${inverterId}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.post(
+    `/building/${buildingId}/inverter/${inverterId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for delete inverter from building
 export const deleteInverterFromBuilding = async (data) => {
@@ -281,19 +300,22 @@ export const deleteInverterFromBuilding = async (data) => {
     },
   });
   return response.data;
-}
+};
 
 //Api calls for building search
 export const searchBuilding = async (data) => {
   const searchValue = data.search;
   const companyId = data.companyId;
-  const response = await todoApi.get(`/building/${companyId}?search=${searchValue}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/building/${companyId}?search=${searchValue}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get inverter data
 export const getInverter = async (id) => {
@@ -303,19 +325,22 @@ export const getInverter = async (id) => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for inverter search
 export const searchInverterForBuilding = async (data) => {
   const searchValue = data.search;
   const buildingId = data.buildingId;
-  const response = await todoApi.get(`/building/${buildingId}/inverter/search?search=${searchValue}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/building/${buildingId}/inverter/search?search=${searchValue}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 //Api calls for search user as user-role
 export const searchUserAsUserRole = async (data) => {
@@ -326,20 +351,22 @@ export const searchUserAsUserRole = async (data) => {
     },
   });
   return response.data;
-}
+};
 
 //Api calls for search inverter for assign in building
 export const searchInverterForAssignInBuilding = async (data) => {
   const searchValue = data.search;
   const buildingId = data.buildingId;
-  const response = await todoApi.get(`/building/inverter/${buildingId}/search?search=${searchValue}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/building/inverter/${buildingId}/search?search=${searchValue}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
-
+};
 
 //Inverter
 
@@ -351,7 +378,7 @@ export const getInverters = async () => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for inverter search
 export const searchInverter = async (data) => {
@@ -362,7 +389,7 @@ export const searchInverter = async (data) => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for update inverter data
 export const updateInverter = async (data) => {
@@ -370,7 +397,7 @@ export const updateInverter = async (data) => {
   const inverterData = {
     capacity: data.capacity,
     code: data.code,
-    note: data.note
+    note: data.note,
   };
   const response = await todoApi.put(`/inverter/${inverterId}`, inverterData, {
     headers: {
@@ -378,7 +405,7 @@ export const updateInverter = async (data) => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for get Historical Data For Project
 export const getHistoricalDataForProject = async (id) => {
@@ -388,18 +415,20 @@ export const getHistoricalDataForProject = async (id) => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for get Historical Data For Project sun hrs bar chart data
 export const getHistoricalDataForProjectSunHrsBarChartData = async (id) => {
-  const response = await todoApi.get(`/dashboard/project/bar-chart-view/sun-hrs/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/project/bar-chart-view/sun-hrs/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
-
+};
 
 // Api calls for get Historical Data For Company
 export const getHistoricalDataForCompany = async (id) => {
@@ -409,137 +438,176 @@ export const getHistoricalDataForCompany = async (id) => {
     },
   });
   return response.data;
-}
+};
 
 // Api calls for get Historical Data For Company sun hrs bar chart data
 export const getHistoricalDataForCompanySunHrsBarChartData = async (id) => {
-  const response = await todoApi.get(`/dashboard/company/bar-chart-view/sun-hrs/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/company/bar-chart-view/sun-hrs/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get Historical Data For Building
 export const getHistoricalDataForBuilding = async (id) => {
-  const response = await todoApi.get(`/dashboard/building/historic-view/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/building/historic-view/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get Historical Data For Building sun hrs bar chart data
 export const getHistoricalDataForBuildingSunHrsBarChartData = async (id) => {
-  const response = await todoApi.get(`/dashboard/building/bar-chart-view/sun-hrs/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/building/bar-chart-view/sun-hrs/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get Historical Data For Inverter
 export const getHistoricalDataForInverter = async (id) => {
-  const response = await todoApi.get(`/dashboard/inverter/historic-view/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/inverter/historic-view/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get Historical Data For Inverter sun hrs bar chart data
 export const getHistoricalDataForInverterSunHrsBarChartData = async (id) => {
-  const response = await todoApi.get(`/dashboard/inverter/bar-chart-view/sun-hrs/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/inverter/bar-chart-view/sun-hrs/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get impact data for project
 export const getImpactDataForProject = async (id) => {
-  const response = await todoApi.get(`/dashboard/project/environment-impact/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/project/environment-impact/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get impact data for company
 export const getImpactDataForCompany = async (id) => {
-  const response = await todoApi.get(`/dashboard/company/environment-impact/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/company/environment-impact/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get impact data for building
 export const getImpactDataForBuilding = async (id) => {
-  const response = await todoApi.get(`/dashboard/building/environment-impact/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/building/environment-impact/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get impact data for inverter
 export const getImpactDataForInverter = async (id) => {
-  const response = await todoApi.get(`/dashboard/inverter/environment-impact/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/inverter/environment-impact/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get daily View for project
 export const getDailyViewForProject = async (id) => {
-  const response = await todoApi.get(`/dashboard/project/power-line-view/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/project/power-line-view/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get daily View for company
 export const getDailyViewForCompany = async (id) => {
-  const response = await todoApi.get(`/dashboard/company/power-line-view/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/company/power-line-view/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get daily View for building
 export const getDailyViewForBuilding = async (id) => {
-  const response = await todoApi.get(`/dashboard/building/power-line-view/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/building/power-line-view/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api calls for get daily View for inverter
 export const getDailyViewForInverter = async (id) => {
-  const response = await todoApi.get(`/dashboard/inverter/power-line-view/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/dashboard/inverter/power-line-view/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api call for get all meter data
 export const getMeters = async () => {
@@ -549,7 +617,7 @@ export const getMeters = async () => {
     },
   });
   return response.data;
-}
+};
 
 // Api call for delete meter
 export const deleteMeter = async (meterId) => {
@@ -559,7 +627,7 @@ export const deleteMeter = async (meterId) => {
     },
   });
   return response.data;
-}
+};
 
 // Api call for search meter
 export const searchMeter = async (data) => {
@@ -569,7 +637,7 @@ export const searchMeter = async (data) => {
     },
   });
   return response.data;
-}
+};
 
 // Api call for get meter
 export const getMeter = async (meterId) => {
@@ -579,7 +647,7 @@ export const getMeter = async (meterId) => {
     },
   });
   return response.data;
-}
+};
 
 // Api call for update meter
 export const updateMeter = async (data) => {
@@ -589,14 +657,14 @@ export const updateMeter = async (data) => {
     exportMeterCode: data?.exportMeterCode,
     importMeterSerialNumber: data?.importMeterSerialNumber,
     exportMeterSerialNumber: data?.exportMeterSerialNumber,
-  }
+  };
   const response = await todoApi.put(`/meter/${meterId}`, meterData, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
     },
   });
   return response.data;
-}
+};
 
 // Api call for get meters for building
 export const getMetersForBuilding = async (buildingId) => {
@@ -606,19 +674,22 @@ export const getMetersForBuilding = async (buildingId) => {
     },
   });
   return response.data;
-}
+};
 
 // Api call for search meter for building
 export const searchMeterForBuilding = async (data) => {
   const buildingId = data?.buildingId;
   const searchValue = data.search;
-  const response = await todoApi.get(`/meter/building/${buildingId}?search=${searchValue}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.get(
+    `/meter/building/${buildingId}?search=${searchValue}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
 
 // Api call for post meter for building
 export const postMeterForBuilding = async (data) => {
@@ -628,11 +699,44 @@ export const postMeterForBuilding = async (data) => {
     exportMeterCode: data?.exportMeterCode,
     importMeterSerialNumber: data?.importMeterSerialNumber,
     exportMeterSerialNumber: data?.exportMeterSerialNumber,
-  }
-  const response = await todoApi.post(`/building/meter/${buildingId}`, meterData, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  };
+  const response = await todoApi.post(
+    `/building/meter/${buildingId}`,
+    meterData,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
   return response.data;
-}
+};
+
+// Api call for get collect time for inverter hourly data
+export const getCollectTimeForInverterHourlyData = async (inverterId) => {
+  const response = await todoApi.get(
+    `/dashboard/inverter/collect-times/${inverterId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+// Api call for get inverter hour data using collect time
+export const getInverterHourData = async (data) => {
+  const inverterId = data?.selectedOptionIdInverter;
+  const collectTime =
+    data?.dailyViewDataForProjectPowerLineChartDataDaySelected;
+  const response = await todoApi.get(
+    `/dashboard/inverter/frame-data/${inverterId}/${collectTime}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+};
