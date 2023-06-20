@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "react-query";
-import { getMeters, searchMeter } from "@/lib/Helper";
-import { useState, useEffect } from "react";
+import { getMeters, searchMeter, getBuilding } from "@/lib/Helper";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import DeleteMeterModal from "./deleteMeterModal";
 import { toast } from "react-toastify";
@@ -16,6 +16,7 @@ export default function Meters() {
   const [deleteMeterModalOpen, setDeleteMeterModalOpen] = useState(false);
   const [meterData, setMeterData] = useState(null);
   const [meterDeleted, setMeterDeleted] = useState(false);
+
 
   const { data, isLoading, isError } = useQuery("meters", () => getMeters(), {
     enabled: true, //enable query
@@ -123,7 +124,7 @@ export default function Meters() {
                   Export Serial Number
                 </div>
                 <div className="flex justify-center col-span-2">
-                  Building Id
+                  Building Name
                 </div>
               </div>
               <div className=""></div>

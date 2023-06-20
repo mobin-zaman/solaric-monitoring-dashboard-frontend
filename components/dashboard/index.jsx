@@ -50,7 +50,6 @@ export default function Index() {
 
   useEffect(() => {
     if (allProject) {
-      console.log(allProject[0]?.name, "all project");
       setSelectedOption(allProject[0]?.name);
       setSelectedOptionId(allProject[0]?.id);
       setFirstProjectForDefaultViewId(allProject[0]?.id);
@@ -147,8 +146,6 @@ export default function Index() {
   //   setProjectData(project.data);
   // }, [selectedOptionId, project]);
 
-  // console.log(project.data, "project data");
-
   const [isOpenCompany, setIsOpenCompany] = useState(false);
   const [selectedOptionCompany, setSelectedOptionCompany] = useState("Select Company");
   const [selectedOptionIdCompany, setSelectedOptionIdCompany] = useState(null);
@@ -242,8 +239,6 @@ export default function Index() {
   //   setCompanyData(company.data);
   // }, [selectedOptionIdCompany, company]);
 
-  // console.log(company.data, "company data");
-
   const [isOpenBuilding, setIsOpenBuilding] = useState(false);
   const [selectedOptionBuilding, setSelectedOptionBuilding] =
     useState("Select Building");
@@ -335,8 +330,6 @@ export default function Index() {
   //   }
   //   setBuildingData(building.data);
   // }, [selectedOptionIdBuilding, building]);
-
-  // console.log(building.data, "building data");
 
   const [isOpenInverter, setIsOpenInverter] = useState(false);
   const [selectedOptionInverter, setSelectedOptionInverter] =
@@ -617,7 +610,6 @@ export default function Index() {
       setMainHistoricalTableData(historicalDataForCompany);
       setMainHistoricalSunHrsBarChartData(historicalDataForCompanySunHrsBarChartData);
     } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && !selectedOptionIdInverter) {
-      console.log("historicalDataForBuilding", historicalDataForBuilding);
       setMainHistoricalTableData(historicalDataForBuilding);
       setMainHistoricalSunHrsBarChartData(historicalDataForBuildingSunHrsBarChartData);
     } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && selectedOptionIdInverter) {
@@ -642,7 +634,6 @@ export default function Index() {
       onSuccess: (data) => {
         setImpactDataForDefaultEnabled(false);
         setImpactDataForDefault(data);
-        console.log("impactDataForDefault", data);
       }
     }
   );
@@ -757,7 +748,6 @@ export default function Index() {
       onSuccess: (data) => {
         setDailyDataForDefaultEnabled(false);
         setDailyDataForDefault(data);
-        console.log("dailyDataForDefault", data); 
       }
     }
   );
@@ -878,7 +868,6 @@ export default function Index() {
       enabled: selectedOptionIdInverter ? true : false,
       onSuccess: (data) => {
         setCollectTimeForInverterHourlyData(data);
-        console.log("collectTimeForInverterHourlyData", data);
       },
       onError: (error) => {
         console.log("error", error);
@@ -1189,7 +1178,7 @@ export default function Index() {
         </div>
         {loading ? <>
         <div className="grid grid-cols-2 gap-1.5">
-          <DailyView dailyViewData={mainDailyViewData} collectTimeForInverterHourlyData={collectTimeForInverterHourlyData} selectedOptionIdInverter={selectedOptionIdInverter} />
+          <DailyView dailyViewData={mainDailyViewData} collectTimeForInverterHourlyData={collectTimeForInverterHourlyData} firstProjectForDefaultViewId={firstProjectForDefaultViewId} selectedOptionId={selectedOptionId} selectedOptionIdCompany={selectedOptionIdCompany} selectedOptionIdBuilding={selectedOptionIdBuilding} selectedOptionIdInverter={selectedOptionIdInverter} />
           <LivePowerFlow />
         </div>
         <div className="grid grid-cols-6 gap-1.5">

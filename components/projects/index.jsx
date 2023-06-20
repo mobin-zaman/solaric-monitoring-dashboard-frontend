@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
 import Router from "next/router";
 import CreateProjectModal from "./createProjectModal";
 import DeleteProjectModal from "./deleteProjectModal";
@@ -18,6 +20,7 @@ import {
 import Link from "next/link";
 
 export default function Users() {
+  const router = useRouter();
   const [createProjectModalOpen, setCreateProjectModalOpen] = useState(false);
   const [deleteProjectModalOpen, setDeleteProjectModalOpen] = useState(false);
   const [projectCreated, setProjectCreated] = useState(false);
@@ -41,7 +44,7 @@ export default function Users() {
   };
 
   const handleClickProject = (project) => {
-    Router.push(`/project/${project.id}`);
+    router.push(`/project/${project.id}`);
   };
 
   const handleSearch = (e) => {

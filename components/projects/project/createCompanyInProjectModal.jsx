@@ -9,6 +9,7 @@ export default function CreateCompanyInProjectModal({
   projectData,
   companyCreatedInProject,
 }) {
+
   const queryClient = useQueryClient();
   const [companyName, setCompanyName] = useState("");
   const [companyCode, setCompanyCode] = useState("");

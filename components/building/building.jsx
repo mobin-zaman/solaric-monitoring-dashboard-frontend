@@ -386,7 +386,7 @@ const [meterCreatedInBuilding, setMeterCreatedInBuilding] = useState(false);
             </div>
           </div>
           <div className="p-3 space-y-1.5 bg-white rounded-b-md">
-            <div className="text-[#25476A] bg-gray-200 font-semibold rounded-md p-1.5">
+            <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
                 <div className="flex justify-center col-span-4 xl:col-span-3">
                   Device Serial Number
@@ -529,7 +529,7 @@ const [meterCreatedInBuilding, setMeterCreatedInBuilding] = useState(false);
             </div>
           </div>
           <div className="p-3 space-y-1.5 bg-white rounded-b-md">
-            <div className="text-[#2e5984] bg-gray-200 font-semibold rounded-md p-1.5">
+            <div className="text-[#2e5984] bg-gray-200 font-medium rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9 text-sm md:text-base">
                 <div className="flex justify-center col-span-2">Id</div>
                 <div className="flex justify-center col-span-2">

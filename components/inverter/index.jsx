@@ -93,9 +93,9 @@ export default function Users() {
                 <div className="hidden xl:block col-span-1">
                   <div className="flex justify-center">Code</div>
                 </div>
-                <div className="flex justify-center col-span-2">Project Id</div>
+                <div className="flex justify-center col-span-2">Project</div>
                 <div className="flex justify-center col-span-2">
-                  Building Id
+                  Building
                 </div>
               </div>
             </div>
@@ -193,12 +193,12 @@ export default function Users() {
                   </div>
                   <div className="flex col-span-2">
                     <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                      {inverter?.projectId || "N/A"}
+                      {inverter?.project?.meta?.name || "N/A"}
                     </span>
                   </div>
                   <div className="flex col-span-2">
                     <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                      {inverter?.buildingId || "N/A"}
+                      {inverter?.building?.name || "N/A"}
                     </span>
                   </div>
                 </div>

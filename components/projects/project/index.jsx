@@ -14,7 +14,7 @@ import {
   faMicrochip,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { getProject, searchCompany } from "@/lib/Helper";
 import Image from "next/image";
 import CreateUserInProjectModal from "./createUserInProjectModal";
@@ -31,6 +31,8 @@ import Link from "next/link";
 
 export default function Project({ projectId }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  
   const [createUserInProjectModalOpen, setCreateUserInProjectModalOpen] =
     useState(false);
   const [createCompanyInProjectModalOpen, setCreateCompanyInProjectModalOpen] =
@@ -64,10 +66,16 @@ export default function Project({ projectId }) {
       enabled: projectId ? true : false,
       onSuccess: (data) => {
         setProjectData(data);
-        console.log(data);
       },
+      // refetchInterval: 1000,
     }
   );
+
+  useEffect(() => {
+    queryClient.invalidateQueries("project");
+  }, []);
+
+  
 
   // Handle copy button for project id and solarman plant id
   const handleCopyButton = (data) => {

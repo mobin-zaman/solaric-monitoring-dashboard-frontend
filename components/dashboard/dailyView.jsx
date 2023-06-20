@@ -23,24 +23,54 @@ import {
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "react-query";
 import { getInverterHourData } from "@/lib/Helper";
+import {
+  getProjects,
+  searchProject,
+  getProject,
+  searchCompany,
+  getCompany,
+  searchBuilding,
+  getBuilding, 
+  searchInverterForBuilding,
+  getHistoricalDataForProject,
+  getHistoricalDataForCompany,
+  getHistoricalDataForBuilding,
+  getHistoricalDataForInverter,
+  getHistoricalDataForProjectSunHrsBarChartData,
+  getHistoricalDataForCompanySunHrsBarChartData,
+  getHistoricalDataForBuildingSunHrsBarChartData,
+  getHistoricalDataForInverterSunHrsBarChartData,
+  getImpactDataForProject,
+  getImpactDataForCompany,
+  getImpactDataForBuilding,
+  getImpactDataForInverter,
+  getDailyViewForProject,
+  getDailyViewForCompany,
+  getDailyViewForBuilding,
+  getDailyViewForInverter,
+  getCollectTimeForInverterHourlyData
+} from "@/lib/Helper";
 
 export default function DailyView({
   dailyViewData,
   collectTimeForInverterHourlyData,
   selectedOptionIdInverter,
 }) {
+
   const [
     dailyViewDataForProjectPowerLineChartDataYearly,
     setDailyViewDataForProjectPowerLineChartDataYearly,
-  ] = useState([]);
+  ] = useState(undefined);
   const [
     dailyViewDataForProjectPowerLineChartDataMonthly,
     setDailyViewDataForProjectPowerLineChartDataMonthly,
-  ] = useState([]);
+  ] = useState(undefined);
   const [
     dailyViewDataForProjectPowerLineChartDataDay,
     setDailyViewDataForProjectPowerLineChartDataDay,
   ] = useState(undefined);
+
+  ///
   const [
     dailyViewDataForProjectPowerLineChartDataYearCount,
     setDailyViewDataForProjectPowerLineChartDataYearCount,
@@ -53,34 +83,49 @@ export default function DailyView({
     dailyViewDataForProjectPowerLineChartDataDayCount,
     setDailyViewDataForProjectPowerLineChartDataDayCount,
   ] = useState([]);
+  ////
   const [
     dailyViewDataForProjectPowerLineChartDataYearSelected,
     setDailyViewDataForProjectPowerLineChartDataYearSelected,
-  ] = useState("Year");
+  ] = useState();
   const [
     dailyViewDataForProjectPowerLineChartDataMonthSelected,
     setDailyViewDataForProjectPowerLineChartDataMonthSelected,
-  ] = useState("Month");
+  ] = useState();
   const [
     dailyViewDataForProjectPowerLineChartDataDaySelected,
     setDailyViewDataForProjectPowerLineChartDataDaySelected,
-  ] = useState("Day");
+  ] = useState();
+///
 
   useEffect(() => {
-    setDailyViewDataForProjectPowerLineChartDataYearSelected("Year");
+    setDailyViewDataForProjectPowerLineChartDataMonthSelected(undefined);
+    setDailyViewDataForProjectPowerLineChartDataDaySelected("Day");
+
+  }, [dailyViewDataForProjectPowerLineChartDataYearSelected]);
+
+  useEffect(() => {
+    setDailyViewDataForProjectPowerLineChartDataDaySelected("Day");
+    setDailyViewDataForProjectPowerLineChartDataDay(undefined);
+  }, [dailyViewDataForProjectPowerLineChartDataMonthSelected]);
+
+  useEffect(() => {
+    setDailyViewDataForProjectPowerLineChartDataMonthCount([]);
     setDailyViewDataForProjectPowerLineChartDataMonthSelected("Month");
-    if (dailyViewData) {
+  }, [dailyViewData]);
+
+  useEffect(() => {
+    if (!dailyViewDataForProjectPowerLineChartDataYearSelected) {
       setDailyViewDataForProjectPowerLineChartDataYearSelected(
         Object.keys(dailyViewData?.yearly || {}).slice(-1)[0]
       );
     }
-  }, [dailyViewData]);
-
+  }, [dailyViewDataForProjectPowerLineChartDataYearSelected, dailyViewData]);
+  
   useEffect(() => {
-    if (dailyViewData) {
-      setDailyViewDataForProjectPowerLineChartDataYearSelected(
-        Object.keys(dailyViewData?.yearly || {}).slice(-1)[0]
-      );
+    if (
+      dailyViewData
+    ) {
       setDailyViewDataForProjectPowerLineChartDataYearCount(
         Object.keys(dailyViewData?.yearly || {})
       );
@@ -95,13 +140,15 @@ export default function DailyView({
         })
       );
     }
-  }, [dailyViewDataForProjectPowerLineChartDataYearSelected, dailyViewData]);
+  }, [
+    dailyViewDataForProjectPowerLineChartDataYearSelected,
+    dailyViewData,
+  ]);
 
   useEffect(() => {
     if (
       dailyViewData &&
-      dailyViewDataForProjectPowerLineChartDataYearSelected &&
-      dailyViewDataForProjectPowerLineChartDataMonthSelected
+      dailyViewDataForProjectPowerLineChartDataYearSelected
     ) {
       setDailyViewDataForProjectPowerLineChartDataMonthCount(
         Object.keys(dailyViewData?.monthly || {})
@@ -122,35 +169,6 @@ export default function DailyView({
     dailyViewData,
     dailyViewDataForProjectPowerLineChartDataMonthSelected,
   ]);
-
-  // useEffect(() => {
-  //   if (
-  //     dailyViewData &&
-  //     dailyViewDataForProjectPowerLineChartDataYearSelected &&
-  //     dailyViewDataForProjectPowerLineChartDataMonthSelected &&
-  //     dailyViewDataForProjectPowerLineChartDataDaySelected
-  //   ) {
-  //     setDailyViewDataForProjectPowerLineChartDataDayCount(
-  //       Object.keys(dailyViewData?.daily || {})
-  //     );
-  //     setDailyViewDataForProjectPowerLineChartDataDay(
-  //       dailyViewData?.daily[
-  //         dailyViewDataForProjectPowerLineChartDataDaySelected
-  //       ]?.map((item) => {
-  //         return {
-  //           name: item?.hour,
-  //           generation: item?.generation,
-  //         };
-  //       })
-  //     );
-  //   }
-  // }, [
-  //   dailyViewDataForProjectPowerLineChartDataYearSelected,
-  //   dailyViewData,
-  //   dailyViewDataForProjectPowerLineChartDataMonthSelected,
-  //   dailyViewDataForProjectPowerLineChartDataDaySelected,
-  // ]);
-
 
   const digitToMonth = (digit) => {
     switch (digit) {
@@ -182,6 +200,7 @@ export default function DailyView({
         return "Jan";
     }
   };
+
   const [inverterHourData, setInverterHourData] = useState([]);
   useQuery(
     ["getInverterHourData", dailyViewDataForProjectPowerLineChartDataDaySelected],
@@ -196,18 +215,13 @@ export default function DailyView({
     }
   );
   
-  console.log("inverterHourData", inverterHourData);
-
     useEffect(() => {
     if (
       inverterHourData &&
-      dailyViewDataForProjectPowerLineChartDataYearSelected !== "Year" &&
+      dailyViewDataForProjectPowerLineChartDataYearSelected  &&
       dailyViewDataForProjectPowerLineChartDataMonthSelected !== "Month" &&
       dailyViewDataForProjectPowerLineChartDataDaySelected !== "Day"
     ) {
-      // setDailyViewDataForProjectPowerLineChartDataDayCount(
-      //   Object.keys(dailyViewData?.daily || {})
-      // );
       setDailyViewDataForProjectPowerLineChartDataDay(
         inverterHourData?.map((item) => {
           return {
@@ -224,7 +238,7 @@ export default function DailyView({
     dailyViewDataForProjectPowerLineChartDataDaySelected,
   ]);
 
-  console.log("dailyViewDataForProjectPowerLineChartDataDay", dailyViewDataForProjectPowerLineChartDataDay);
+  // console.log("dailyViewDataForProjectPowerLineChartDataDay", dailyViewDataForProjectPowerLineChartDataDay);
 
   const [dailyViewDataForProjectPowerLineChartDataStore, setDailyViewDataForProjectPowerLineChartDataStore] = useState([]);
 
@@ -233,19 +247,22 @@ export default function DailyView({
       dailyViewDataForProjectPowerLineChartDataYearly && !dailyViewDataForProjectPowerLineChartDataMonthly && !dailyViewDataForProjectPowerLineChartDataDay
     ) {
       setDailyViewDataForProjectPowerLineChartDataStore(dailyViewDataForProjectPowerLineChartDataYearly);
+      console.log("111111111111111111111111111");
     } 
     else if (
       dailyViewDataForProjectPowerLineChartDataYearly && dailyViewDataForProjectPowerLineChartDataMonthly && !dailyViewDataForProjectPowerLineChartDataDay
     ) {
       setDailyViewDataForProjectPowerLineChartDataStore(dailyViewDataForProjectPowerLineChartDataMonthly);
+      console.log("222222222222222222222222");
     } else if (
       dailyViewDataForProjectPowerLineChartDataYearly && dailyViewDataForProjectPowerLineChartDataMonthly && dailyViewDataForProjectPowerLineChartDataDay
     ) {
       setDailyViewDataForProjectPowerLineChartDataStore(dailyViewDataForProjectPowerLineChartDataDay);
+      console.log("333333333333333333333333333");
     }
-  }, [dailyViewDataForProjectPowerLineChartDataDay, dailyViewDataForProjectPowerLineChartDataMonthly, dailyViewDataForProjectPowerLineChartDataYearly]);
+  }, [dailyViewDataForProjectPowerLineChartDataDay, dailyViewDataForProjectPowerLineChartDataMonthly, dailyViewDataForProjectPowerLineChartDataYearly, dailyViewDataForProjectPowerLineChartDataDaySelected, dailyViewDataForProjectPowerLineChartDataMonthSelected]);
   
-  console.log("dailyViewDataForProjectPowerLineChartDataStore", dailyViewDataForProjectPowerLineChartDataStore);
+  console.log(dailyViewDataForProjectPowerLineChartDataDaySelected, dailyViewDataForProjectPowerLineChartDataDay);
   
   
   
@@ -296,12 +313,12 @@ export default function DailyView({
       amt: 2100,
     },
   ];
-  console.log(
-    dailyViewData?.monthly,
-    dailyViewDataForProjectPowerLineChartDataMonthSelected,
-    "hhh"
-  );
-
+  // console.log(
+  //   dailyViewData?.monthly,
+  //   dailyViewDataForProjectPowerLineChartDataMonthSelected,
+  //   "hhh"
+  // );
+  
   return (
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md">
@@ -315,7 +332,7 @@ export default function DailyView({
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={dailyViewDataForProjectPowerLineChartDataYearSelected}
               onChange={(e) =>
-                setDailyViewDataForProjectPowerLineChartDataMonthSelected(
+                setDailyViewDataForProjectPowerLineChartDataYearSelected(
                   e.target.value
                 )
               }
@@ -323,7 +340,7 @@ export default function DailyView({
               <option disabled>Year</option>
               {dailyViewDataForProjectPowerLineChartDataYearCount?.map(
                 (item, Index) => {
-                  return <option key={Index}>{item}</option>;
+                  return <option key={Index} value={item}>{item}</option>;
                 }
               )}
             </select>
@@ -336,7 +353,7 @@ export default function DailyView({
                 )
               }
             >
-              <option disabled>Month</option>
+              <option disabled selected>Month</option>
               {dailyViewDataForProjectPowerLineChartDataMonthCount?.map(
                 (item, Index) => {
                   if (
@@ -352,7 +369,7 @@ export default function DailyView({
                 }
               )}
             </select>
-            {collectTimeForInverterHourlyData?.length > 0 && (
+            {collectTimeForInverterHourlyData?.length > 0 && selectedOptionIdInverter && (
               <select
                 disabled={
                   dailyViewDataForProjectPowerLineChartDataMonthSelected ===
@@ -368,7 +385,7 @@ export default function DailyView({
                   )
                 }
               >
-                <option disabled>Day</option>
+                <option disabled selected>Day</option>
                 {collectTimeForInverterHourlyData?.map((item, Index) => {
                   if (
                     dailyViewDataForProjectPowerLineChartDataYearSelected ===
