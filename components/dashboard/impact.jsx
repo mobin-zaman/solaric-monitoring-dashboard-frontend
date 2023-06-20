@@ -1,73 +1,71 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faTrashCan,
-  faPenToSquare,
+  faTrashAlt,
+  faPen,
   faArrowDown,
   faPlus,
-  faMagnifyingGlass,
+  faSearch,
   faEye,
   faCopy,
   faIdCard,
   faClipboard,
-  faRotate,
+  faSyncAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
-export default function Impact({ impactData}) {
+export default function Impact({ impactData }) {
   console.log(impactData);
   return (
-    <>
-      <div className="w-full h-96 bg-white p-3 rounded-md space-y-5">
-        <div className="flex items-center justify-between">
-          <span className="text-xl font-semibold tracking-wide text-[#25476A]">
-            Impact
+    <div className="w-full bg-white p-3 rounded-md space-y-10 h-96">
+      <span className="text-xl font-semibold tracking-wide text-[#25476A]">
+        Impact
+      </span>
+      <div className="grid grid-cols-2 items-center justify-center gap-36">
+
+        <div className="flex flex-col items-end justify-center">
+          <div className="h-24 w-28 flex flex-col items-center justify-center">
+            <Image
+              src="/Impact/impact10.png"
+              alt="impact2"
+              width={150}
+              height={100}
+            />
+                      <span className="text-[#44576b] font-semibold mt-2">MT</span>
+          <span className="text-sm text-[#44576b] font-semibold">
+            {impactData?.co2Reduction?.toFixed(0)}
           </span>
+          </div>
+
         </div>
-        <div className="w-full h-[19.5rem] grid">
-          <div className="flex items-center justify-center space-x-16">
+        <div className="flex flex-col items-start justify-center">
+        <div className="h-24 w-28 flex flex-col items-center justify-center">
             <Image
-              src="/Impact/impact1.png"
-              alt="impact1"
-              width={80}
+              src="/Impact/impact9.png"
+              alt="impact3"
+              width={100}
               height={100}
             />
-            <div className="flex flex-col w-28 items-center justify-center bg-[#25476A] rounded-md p-3">
-              <span className="font-semibold text-white">
-                Trees
-              </span>
-              <span className="text-sm font-semibold text-white">{impactData?.treesSaved?.toFixed(0)}</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-center space-x-16 border-y-2">
-            <div className="flex flex-col w-28 items-center justify-center bg-[#25476A] rounded-md p-3">
-              <span className="font-semibold text-white">
-                MT
-              </span>
-              <span className="text-sm font-semibold text-white">{impactData?.co2Reduction?.toFixed(0)}</span>
-            </div>
-            <Image
-              src="/Impact/impact2.png"
-              alt="impact1"
-              width={80}
-              height={100}
-            />
-          </div>
-          <div className="flex items-center justify-center space-x-16">
-            <Image
-              src="/Impact/impact3.png"
-              alt="impact1"
-              width={80}
-              height={100}
-            />
-            <div className="flex flex-col w-28 items-center justify-center bg-[#25476A] rounded-md p-3">
-              <span className="font-semibold text-white">
-                MN$
-              </span>
-              <span className="text-sm font-semibold text-white">...</span>
-            </div>
+                      <span className="text-[#44576b] font-semibold mt-2">MN$</span>
+          <span className="text-sm text-[#44576b] font-semibold">...</span>
           </div>
         </div>
       </div>
-    </>
+      <div className="grid grid-cols items-center justify-center">
+        <div className="flex flex-col items-center justify-center">
+        <div className="h-24 w-28 flex flex-col items-center justify-center">
+            <Image
+              src="/Impact/impact11.png"
+              alt="impact1"
+              width={80}
+              height={100}
+            />
+                      <span className="text-[#44576b] font-semibold mt-2">Trees</span>
+          <span className="text-sm text-[#44576b] font-semibold">
+            {impactData?.treesSaved?.toFixed(0)}
+          </span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

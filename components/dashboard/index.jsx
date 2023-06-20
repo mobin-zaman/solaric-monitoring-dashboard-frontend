@@ -1181,8 +1181,8 @@ export default function Index() {
           <DailyView dailyViewData={mainDailyViewData} collectTimeForInverterHourlyData={collectTimeForInverterHourlyData} firstProjectForDefaultViewId={firstProjectForDefaultViewId} selectedOptionId={selectedOptionId} selectedOptionIdCompany={selectedOptionIdCompany} selectedOptionIdBuilding={selectedOptionIdBuilding} selectedOptionIdInverter={selectedOptionIdInverter} />
           <LivePowerFlow />
         </div>
-        <div className="grid grid-cols-6 gap-1.5">
-          <div className="col-span-4">
+        <div className="grid grid-cols-8 gap-1.5">
+          <div className="col-span-6">
             <Historical historicalDataForProject={mainHistoricalTableData} historicalDataForProjectSunHrsBarChartData={mainHistoricalSunHrsBarChartData} />
           </div>
           <div className="col-span-2">
