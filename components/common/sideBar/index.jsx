@@ -53,7 +53,7 @@ export default function SideBar() {
             </Link>
           )}
           {data?.role === "ADMIN" && (
-            <Link legacyBehavior href="/project">
+            <Link href="/project">
               {/* <Image src={Projects} alt="Projects" className="w-6" /> */}
               <FontAwesomeIcon
                 icon={faCubesStacked}
