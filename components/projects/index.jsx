@@ -187,7 +187,7 @@ export default function Users() {
                   </div>
                   <div className="hidden xl:block xl:col-span-2">
                     <div className="flex items-center justify-center">
-                      Contact
+                      Funding Type
                     </div>
                   </div>
                   <div className="hidden lg:block col-span-3">
@@ -249,8 +249,8 @@ export default function Users() {
                     </div>
                     <div className="hidden xl:block xl:col-span-2">
                       <div className="flex justify-center select-all text-sm">
-                        {project?.meta?.contactPhone
-                          ? project.meta.contactPhone
+                        {project?.fundingType
+                          ? project.fundingType
                           : "N/A"}
                       </div>
                     </div>
@@ -332,8 +332,8 @@ export default function Users() {
                     </div>
                     <div className="hidden xl:block xl:col-span-2">
                       <div className="flex justify-center select-all text-sm">
-                        {project?.meta?.contactPhone
-                          ? project.meta.contactPhone
+                        {project?.fundingType
+                          ? project.fundingType
                           : "N/A"}
                       </div>
                     </div>

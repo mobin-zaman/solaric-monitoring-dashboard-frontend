@@ -17,7 +17,7 @@ export default function Impact({ impactData }) {
   console.log(impactData);
   return (
     <div className="w-full bg-white p-3 rounded-md space-y-10 h-96">
-      <span className="text-xl font-semibold tracking-wide text-[#25476A]">
+      <span className="w-full text-xl font-semibold tracking-wide text-[#25476A]">
         Impact
       </span>
       <div className="grid grid-cols-2 items-center justify-center gap-36">
@@ -30,7 +30,7 @@ export default function Impact({ impactData }) {
               width={150}
               height={100}
             />
-                      <span className="text-[#44576b] font-semibold mt-2">MT</span>
+                      <span className="text-[#44576b] font-semibold mt-2 text-sm">MT</span>
           <span className="text-sm text-[#44576b] font-semibold">
             {impactData?.co2Reduction?.toFixed(0)}
           </span>
@@ -45,7 +45,7 @@ export default function Impact({ impactData }) {
               width={100}
               height={100}
             />
-                      <span className="text-[#44576b] font-semibold mt-2">MN$</span>
+                      <span className="text-[#44576b] font-semibold mt-2 text-sm">Money Saved</span>
           <span className="text-sm text-[#44576b] font-semibold">...</span>
           </div>
         </div>
@@ -59,7 +59,7 @@ export default function Impact({ impactData }) {
               width={80}
               height={100}
             />
-                      <span className="text-[#44576b] font-semibold mt-2">Trees</span>
+                      <span className="text-[#44576b] font-semibold mt-2 text-sm">Trees</span>
           <span className="text-sm text-[#44576b] font-semibold">
             {impactData?.treesSaved?.toFixed(0)}
           </span>

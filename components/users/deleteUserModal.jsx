@@ -2,14 +2,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { deleteUser } from "@/lib/Helper";
 import { useMutation } from "react-query";
+import { useState } from "react";
 
 export default function AddUserModal({ deleteUserModalOpen, deleteUserData, userDeleted }) {
+
+  const [errorMessage, setErrorMessage] = useState();
 
   const mutation = useMutation(deleteUser, {
     onSuccess: () => {
       userDeleted(true);
       deleteUserModalOpen(false);
     },
+    onError: (error) => {
+      setErrorMessage(error.response.data.message);
+    }
   });
 
   const handleDeleteUser = (id) => {
@@ -39,6 +45,9 @@ export default function AddUserModal({ deleteUserModalOpen, deleteUserData, user
             {deleteUserData?.name}?
             </div>
           </div>
+          {errorMessage && (
+              <div className="text-red-600 text-sm">{errorMessage}</div>
+            )}
           <div className="flex justify-center items-center">
             <button
               className="px-2.5 py-1.5 text-md text-white font-semibold bg-red-600 rounded-md"

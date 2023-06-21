@@ -740,3 +740,17 @@ export const getInverterHourData = async (data) => {
   );
   return response.data;
 };
+
+
+// Api call for get project collect time for daily view
+export const getProjectCollectTimeForDailyView = async (projectId) => {
+  const response = await todoApi.get(
+    `/dashboard/daily-view/project/collect-times/${projectId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+}

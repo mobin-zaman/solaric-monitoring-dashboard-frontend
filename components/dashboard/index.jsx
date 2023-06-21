@@ -4,6 +4,8 @@ import Historical from "./historical";
 import Impact from "./impact";
 import { useState, useRef, useEffect, use } from "react";
 import { useQuery, useMutation } from "react-query";
+import ReactLoading from 'react-loading';
+
 import {
   getProjects,
   searchProject,
@@ -875,6 +877,20 @@ export default function Index() {
     });
 
 
+
+    const { data: ProjectCollectTimeForDailyViewData } = useQuery(
+      ["ProjectCollectTimeForDailyView", selectedOptionId],
+      () => getProjectCollectTimeForDailyView(1),
+      {
+        enabled: true
+      }
+    );
+  
+
+
+
+
+
   return (
     <>
       <div className="flex flex-col w-full h-full space-y-1.5">
@@ -1188,7 +1204,7 @@ export default function Index() {
           <div className="col-span-2">
             <Impact impactData={mainImpactTableData} />
           </div>
-        </div></> : <div className="flex items-center justify-center text-black pt-10">Loading...</div>}
+        </div></> : <div className="flex items-center justify-center text-black pt-10"><ReactLoading type="spokes" color="#25476A" height={50} width={50} /></div>}
       </div>
     </>
   );
