@@ -138,6 +138,21 @@ export const deleteProject = async (id) => {
   return response.data;
 };
 
+// Api calls for update project
+export const updateProject = async (data) => {
+  const id = data.id;
+  const d = {
+    name: data.name,
+    fundingType: data.fundingType,
+  }
+  const response = await todoApi.put(`/project/${id}`, d, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+};
+
 // Api calls for user add to project
 export const addUserToProject = async (data) => {
   const projectId = data.projectId;
@@ -746,6 +761,22 @@ export const getInverterHourData = async (data) => {
 export const getProjectCollectTimeForDailyView = async (projectId) => {
   const response = await todoApi.get(
     `/dashboard/daily-view/project/collect-times/${projectId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+}
+
+// Api call for get project frame data for daily view
+export const getProjectFrameDataForDailyView = async (data) => {
+  console.log(data,"ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+  const projectId = data?.selectedOptionId;
+  const collectTime = data?.selectedYearMonthDay;
+  const response = await todoApi.get(
+    `/dashboard/daily-view/project/frame-data/${projectId}/${collectTime}`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Token")}`,

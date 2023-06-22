@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Router from "next/router";
-import CreateProjectModal from "./createProjectModal";
+import CreateProjectModal from "./project/updateProjectModal";
 import DeleteProjectModal from "./deleteProjectModal";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { getProjects, searchProject } from "@/lib/Helper";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +20,7 @@ import {
 import Link from "next/link";
 
 export default function Users() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [createProjectModalOpen, setCreateProjectModalOpen] = useState(false);
   const [deleteProjectModalOpen, setDeleteProjectModalOpen] = useState(false);
@@ -37,6 +38,10 @@ export default function Users() {
       enabled: true, //enable query
     }
   );
+
+  useEffect(() => {
+    queryClient.invalidateQueries("projects");
+  }, []);
 
   const handleDeleteProject = (project) => {
     setDeleteProjectModalOpen(true);

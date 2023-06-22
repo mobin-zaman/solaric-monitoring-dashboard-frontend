@@ -12,6 +12,7 @@ import {
   faCalculator,
   faCubesStacked,
   faMicrochip,
+  faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
@@ -21,6 +22,7 @@ import CreateUserInProjectModal from "./createUserInProjectModal";
 import CreateCompanyInProjectModal from "./createCompanyInProjectModal";
 import DeleteUserFromProjectModal from "./deleteUserFromProjectModal";
 import DeleteCompanyFromProjectModal from "./deleteCompanyFromProjectModal";
+import UpdateProjectModal from "./updateProjectModal";
 import placeholderImage from "@/public/placeholderImage.jpg";
 import Placeholder from "@/public/Placeholder.png";
 import { useRouter } from "next/router";
@@ -43,6 +45,8 @@ export default function Project({ projectId }) {
     deleteCompanyFromProjectModalOpen,
     setDeleteCompanyFromProjectModalOpen,
   ] = useState(false);
+  const [updateProjectModalOpen, setUpdateProjectModalOpen] = useState(false);
+  const [projectUpdated, setProjectUpdated] = useState(false);
 
   const [userCreatedInProject, setUserCreatedInProject] = useState(false);
   const [companyCreatedInProject, setCompanyCreatedInProject] = useState(false);
@@ -216,6 +220,23 @@ export default function Project({ projectId }) {
     }
   }, [companyDeletedFromProject]);
 
+  // Notify for project updated
+  const notifyForProjectUpdated = () => {
+    toast.success("Project Updated Successfully", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+    });
+  };
+
+  // Call notifyForProjectUpdated when projectUpdated is true
+  useEffect(() => {
+    if (projectUpdated) {
+      console.log("projectUpdated");
+      notifyForProjectUpdated();
+    }
+  }, [projectUpdated]);
+  
+
   return (
     <>
       <div className="space-y-1.5 relative">
@@ -261,54 +282,8 @@ export default function Project({ projectId }) {
                   </div>
                   <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
                     <span>Id:</span>
-                    <span>{projectId}</span>
+                    <span>{data?.solarmanPlantId}</span>
                     <button
-                      onClick={() => handleCopyButton({ projectId: data?.id })}
-                    >
-                      {projectIdCopy ? (
-                        <FontAwesomeIcon icon={faCopy} />
-                      ) : (
-                        <FontAwesomeIcon icon={faClipboard} />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {/* <button
-              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
-              onClick={() => setUpdateProjectModalOpen(true)}
-            >
-              <span className="">Edit</span>
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </button>
-
-            {updateProjectModalOpen && (
-              <UpdateProjectModal
-                editProjectData={data}
-                updateProjectModalOpen={updateProjectModalOpen}
-                projectUpdated={setProjectUpdated}
-              />
-            )} */}
-            </div>
-            <div className="bg-white rounded-md shadow-md flex">
-              <Image
-                src={data?.meta?.stationImage || "/Placeholder.png"}
-                width={2000}
-                height={2000}
-                alt="logo"
-                className="w-64 h-68 rounded-l-md object-cover"
-              />
-              <div className="flex space-x-3 p-6 w-full">
-                <div className="grid grid-cols-3 gap-4 w-full">
-                  <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
-                      Solarman Plant Id:
-                    </p>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-[#25476A] font-semibold select-none">
-                        {data?.solarmanPlantId}
-                      </span>
-                      <button
                         className="text-[#25476A]"
                         onClick={() =>
                           handleCopyButton({
@@ -322,6 +297,44 @@ export default function Project({ projectId }) {
                           <FontAwesomeIcon icon={faClipboard} />
                         )}
                       </button>
+                  </div>
+                </div>
+              </div>
+              <button
+              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
+              onClick={() => setUpdateProjectModalOpen(true)}
+            >
+              <span className="">Edit</span>
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </button>
+            
+            
+            {updateProjectModalOpen && (
+              <UpdateProjectModal
+                editProjectData={data}
+                updateProjectModalOpen={setUpdateProjectModalOpen}
+                projectUpdated={setProjectUpdated}
+              />
+            )}
+            </div>
+            <div className="bg-white rounded-md shadow-md flex">
+              <Image
+                src={data?.meta?.stationImage || "/Placeholder.png"}
+                width={2000}
+                height={2000}
+                alt="logo"
+                className="w-64 h-68 rounded-l-md object-cover"
+              />
+              <div className="flex space-x-3 p-6 w-full">
+                <div className="grid grid-cols-3 gap-4 w-full">
+                  <div>
+                    <p className="text-gray-700 text-sm font-medium select-none">
+                    Funding Type:
+                    </p>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-gray-700 font-medium select-none">
+                        {data?.fundingType}
+                      </span>
                     </div>
                   </div>
                   <div>

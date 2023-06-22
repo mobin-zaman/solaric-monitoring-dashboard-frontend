@@ -50,6 +50,7 @@ import {
   getDailyViewForInverter,
   getCollectTimeForInverterHourlyData,
   getProjectCollectTimeForDailyView,
+  getProjectFrameDataForDailyView,
 } from "@/lib/Helper";
 
 export default function DailyView({
@@ -61,60 +62,75 @@ export default function DailyView({
   selectedOptionId,
   firstProjectForDefaultViewId,
 }) {
-  console.log(
-    firstProjectForDefaultViewId,
-    selectedOptionId,
-    selectedOptionIdCompany,
-    selectedOptionIdBuilding,
-    selectedOptionIdInverter
-  );
-
-  const [CollectTimeForDailyView, setCollectTimeForDailyView] =
-    useState(undefined);
   const [selectedYear, setSelectedYear] = useState(undefined);
   const [selectedMonth, setSelectedMonth] = useState(undefined);
   const [selectedDay, setSelectedDay] = useState(undefined);
+
+  function removeDuplicatesFromArray(arr) {
+    return [...new Set(arr)];
+  }
+  
+  
   const [uniqueYears, setUniqueYears] = useState([]);
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [uniqueDays, setUniqueDays] = useState([]);
-  const [uniqueYearsWithoutDuplicates, setUniqueYearsWithoutDuplicates] =
-    useState([]);
-  const [uniqueMonthsWithoutDuplicates, setUniqueMonthsWithoutDuplicates] =
-    useState([]);
-  const [uniqueDaysWithoutDuplicates, setUniqueDaysWithoutDuplicates] =
-    useState([]);
+  const [uniqueYearsWithoutDuplicates, setUniqueYearsWithoutDuplicates] = useState([]);
+  const [uniqueMonthsWithoutDuplicates, setUniqueMonthsWithoutDuplicates] = useState([]);
+  const [uniqueDaysWithoutDuplicates, setUniqueDaysWithoutDuplicates] = useState([]);
+  
+  const { data: ProjectCollectTimeForDailyViewData, isLoading } = useQuery(
+    ["ProjectCollectTimeForDailyView", selectedOptionId],
+    () => getProjectCollectTimeForDailyView(selectedOptionId),
+    {
+      enabled: !!selectedOptionId,
+    }
+  );
+  
+  useEffect(() => {
+    if (!isLoading && ProjectCollectTimeForDailyViewData) {
+      const tempYears = [];
+      const tempMonths = [];
+      const tempDays = [];
+  
+      ProjectCollectTimeForDailyViewData.forEach((item) => {
+        const [year, month, day] = item.split("-");
+        tempYears.push(year);
+        tempMonths.push(month);
+        tempDays.push(day);
+      });
+  
+      setUniqueYears((prev) => [...prev, ...tempYears]);
+      setUniqueMonths((prev) => [...prev, ...tempMonths]);
+      setUniqueDays((prev) => [...prev, ...tempDays]);
+    }
+  }, [ProjectCollectTimeForDailyViewData, isLoading]);
+  
+  useEffect(() => {
+    setUniqueYearsWithoutDuplicates(removeDuplicatesFromArray(uniqueYears));
+    setUniqueMonthsWithoutDuplicates(removeDuplicatesFromArray(uniqueMonths));
+    setUniqueDaysWithoutDuplicates(removeDuplicatesFromArray(uniqueDays));
+  }, [uniqueYears, uniqueMonths, uniqueDays]);
+  
+  const[selectedYearMonthDay, setSelectedYearMonthDay] = useState(undefined);
 
+  useEffect(() => {
+    if(selectedYear && selectedMonth && selectedDay){
+      setSelectedYearMonthDay(`${selectedYear}-${selectedMonth}-${selectedDay}`);
+    }
+  }, [selectedYear, selectedMonth, selectedDay]);
 
-  // const { data: ProjectCollectTimeForDailyViewData, isLoading } = useQuery(
-  //   ["ProjectCollectTimeForDailyView", selectedOptionId],
-  //   () => getProjectCollectTimeForDailyView(selectedOptionId),
-  //   {
-  //     enabled: !!selectedOptionId,
-  //   }
-  // );
+  const { data: projectFrameDataForDailyViewData } = useQuery(
+    ["ProjectFrameDataForDailyView", selectedOptionId],
+    () => getProjectFrameDataForDailyView(selectedOptionId, selectedYearMonthDay),
+    {
+      enabled: !!selectedYearMonthDay,
+    }
+  );
 
-  // useEffect(() => {
-  //   if(!isLoading){
-  //   if (ProjectCollectTimeForDailyViewData) {
-  //     // setCollectTimeForDailyView(ProjectCollectTimeForDailyViewData);
-  //     ProjectCollectTimeForDailyViewData?.map((item) => {
-  //       // console.log(item, "item");
-  //       setUniqueYears((prev) => [...prev, item.split("-")[0]]);
-  //       setUniqueMonths((prev) => [...prev, item.split("-")[1]]);
-  //       setUniqueDays((prev) => [...prev, item.split("-")[2]]);
-  //     });
-  //   }
-  // }
-  //   setUniqueYearsWithoutDuplicates([...new Set(uniqueYears)]);
-  //   setUniqueMonthsWithoutDuplicates([...new Set(uniqueMonths)]);
-  //   setUniqueDaysWithoutDuplicates([...new Set(uniqueDays)]);
-  //   // console.log(uniqueYears, "uniqueYears");
-  // }, [ProjectCollectTimeForDailyViewData, uniqueYears, uniqueMonths, uniqueDays, isLoading]);
-
-  // console.log(CollectTimeForDailyView);
-
-
-
+  useEffect(() => {
+  console.log("projectFrameDataForDailyView", projectFrameDataForDailyViewData);
+  }, [projectFrameDataForDailyViewData]);
+      
 
 
 
@@ -233,23 +249,23 @@ export default function DailyView({
 
   const digitToMonth = (digit) => {
     switch (digit) {
-      case "1":
+      case "01":
         return "Jan";
-      case "2":
+      case "02":
         return "Feb";
-      case "3":
+      case "03":
         return "Mar";
-      case "4":
+      case "04":
         return "Apr";
-      case "5":
+      case "05":
         return "May";
-      case "6":
+      case "06":
         return "Jun";
-      case "7":
+      case "07":
         return "Jul";
-      case "8":
+      case "08":
         return "Aug";
-      case "9":
+      case "09":
         return "Sep";
       case "10":
         return "Oct";
@@ -412,14 +428,12 @@ export default function DailyView({
             Daily View
           </span>
           {/* <FontAwesomeIcon icon={faRotate} /> */}
-          {/* <div className="flex space-x-4">
+          <div className="flex space-x-4">
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={dailyViewDataForProjectPowerLineChartDataYearSelected}
+              // value={dailyViewDataForProjectPowerLineChartDataYearSelected}
               onChange={(e) =>
-                setDailyViewDataForProjectPowerLineChartDataYearSelected(
-                  e.target.value
-                )
+                setSelectedYear(e.target.value)
               }
             >
               <option disabled>Year</option>
@@ -430,35 +444,47 @@ export default function DailyView({
                       {item}
                     </option>
                   );
-                return null;
               })}
             </select>
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={dailyViewDataForProjectPowerLineChartDataMonthSelected}
+              // value={dailyViewDataForProjectPowerLineChartDataMonthSelected}
               onChange={(e) =>
-                setDailyViewDataForProjectPowerLineChartDataMonthSelected(
+                setSelectedMonth(
                   e.target.value
                 )
               }
             >
-              <option disabled selected>
+              <option disabled>
                 Month
               </option>
-              {dailyViewDataForProjectPowerLineChartDataMonthCount?.map(
-                (item, Index) => {
-                  if (
-                    dailyViewDataForProjectPowerLineChartDataYearSelected ===
-                    item?.split("-")[0]
-                  ) {
-                    return (
-                      <option key={Index} value={item}>
-                        {digitToMonth(item?.split("-")[1])}
-                      </option>
-                    );
-                  }
-                }
-              )}
+              {uniqueMonthsWithoutDuplicates?.map((item, Index) => {
+                  return (
+                    <option key={Index} value={item}>
+                      {digitToMonth(item)}
+                    </option>
+                  );
+              })}
+            </select>
+            <select
+              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              // value={dailyViewDataForProjectPowerLineChartDataMonthSelected}
+              onChange={(e) =>
+                setSelectedDay(
+                  e.target.value
+                )
+              }
+            >
+              <option disabled>
+                Day
+              </option>
+              {uniqueDaysWithoutDuplicates?.map((item, Index) => {
+                  return (
+                    <option key={Index} value={item}>
+                      {item}
+                    </option>
+                  );
+              })}
             </select>
             {collectTimeForInverterHourlyData?.length > 0 &&
               selectedOptionIdInverter && (
@@ -501,7 +527,7 @@ export default function DailyView({
                   })}
                 </select>
               )}
-          </div> */}
+          </div>
           <div className="flex space-x-4">
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"

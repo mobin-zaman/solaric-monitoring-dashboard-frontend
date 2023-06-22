@@ -11,7 +11,8 @@ export default function AddUserModal({
 }) {
   const queryClient = useQueryClient();
   const [name, setName] = useState("");
-  const [solarmanPlantId, setSolarmanPlantId] = useState();
+  const [solarmanPlantId, setSolarmanPlantId] = useState("");
+  const [fundingType, setFundingType] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const mutation = useMutation(postProject, {
@@ -40,7 +41,7 @@ export default function AddUserModal({
   const handleCreateProject = (e) => {
     projectCreated(false);
     setErrorMessage("");
-    if (!name || !solarmanPlantId) {
+    if (!name || !solarmanPlantId || !fundingType) {
       setErrorMessage("Please fill all the fields");
       return;
     }
@@ -48,6 +49,7 @@ export default function AddUserModal({
     mutation.mutate({
       name,
       solarmanPlantId: parseInt(solarmanPlantId),
+      fundingType,
     });
   };
 
@@ -101,6 +103,23 @@ export default function AddUserModal({
                   />
                 </div>
               </div>
+              <div className="text-[#373737] font-medium text-sm space-x-1">
+                <div className="font-medium text-lg text-[#25476A] space-x-0.5">
+                  <span>Funding Type</span>
+                  <span className="text-red-500">*</span>
+                  </div>
+                <div className="flex items-center border-b-2 border-[#25476A]">
+                  <select
+                    className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                    value={fundingType}
+                    onChange={(e) => setFundingType(e.target.value)}
+                  >
+                    <option value="">Select Funding Type</option>
+                    <option value="CAPEX">CAPEX</option>
+                    <option value="OPEX">OPEX</option>
+                  </select>
+                  </div>
+                  </div>
             </div>
             <div className="flex justify-between items-center">
               <div className="text-red-700 text-sm h-8 flex justify-center items-center">
