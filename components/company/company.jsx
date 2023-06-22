@@ -16,7 +16,8 @@ import { getProjects, getCompany, searchBuilding } from "@/lib/Helper";
 import Image from "next/image";
 import TimestampConverter from "@/lib/TimestampConverter";
 import AddCompanyModal from "./addBuildingModal";
-import DisableCompanyModal from "./disableCompanyModal";
+import DisableCompanyModal from "./disableBuildingModal";
+import UpdateCompanyModal from "./updateCompanyModal";
 import placeholderImage from "@/public/placeholderImage.jpg";
 import Id from "@/public/icons/Id.png";
 import Placeholder from "@/public/Placeholder.png";
@@ -32,6 +33,8 @@ import {
   faCubesStacked,
   faMicrochip,
 } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Project({ companyId }) {
   const router = useRouter();
@@ -42,6 +45,9 @@ export default function Project({ companyId }) {
   const [searchResult1, setSearchResult1] = useState(null);
   const [buildingAdded, setBuildingAdded] = useState(false);
   const [buildingDeleted, setBuildingDeleted] = useState(false);
+  const [updateCompanyModalOpen, setUpdateCompanyModalOpen] = useState(false);
+  const [companyUpdated, setCompanyUpdated] = useState(false);
+
 
   const { data, isLoading, error, refetch } = useQuery(
     ["company", companyId],
@@ -127,6 +133,22 @@ export default function Project({ companyId }) {
     }
   };
 
+  // Notify for company updated 
+  const notifyForCompanyUpdated = () => {
+    toast.success("Company updated successfully", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+    });
+  };
+
+  // Call notifyForCompanyUpdated when companyUpdated is true
+  useEffect(() => {
+    if (companyUpdated) {
+      notifyForCompanyUpdated();
+    }
+  }, [companyUpdated]);
+
+
   return (
     <>
       <div className="text-sm breadcrumbs text-[#25476A]">
@@ -166,10 +188,10 @@ export default function Project({ companyId }) {
       <div className="space-y-2.5">
         <div className="bg-[#25476A] rounded-md p-3.5">
           <div className="flex items-center justify-between space-x-3 select-none">
+            <div className="flex items-center space-x-2">
             <h1 className="text-xl font-semibold text-white tracking-wide">
               Company Overview
             </h1>
-            <div className="flex space-x-2">
               <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
                 <span>{data?.name}</span>
               </div>
@@ -184,14 +206,21 @@ export default function Project({ companyId }) {
                   )}
                 </button>
               </div>
-              {/* TODO */}
-              {/* <button
-                  className="px-3 py-1 text-white font-semibold bg-[#39B54A] rounded-md select-none"
-                  onClick={() => setAddCompanyModalOpen(true)}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} /> Edit 
-                </button> */}
-            </div>
+              </div>
+              <button
+              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
+              onClick={() => setUpdateCompanyModalOpen(true)}
+            >
+              <span className="">Edit</span>
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </button>
+            {updateCompanyModalOpen && (
+              <UpdateCompanyModal
+                editCompanyData={data}
+                updateCompanyModalOpen={setUpdateCompanyModalOpen}
+                companyUpdated={setCompanyUpdated}
+              />
+            )}
           </div>
         </div>
         <div className="space-y-1 select-none bg-white rounded-md">

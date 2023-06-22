@@ -188,6 +188,26 @@ export const addCompanyToProject = async (data) => {
   return response.data;
 };
 
+// Api calls for company update to project
+export const updateCompanyToProject = async (data) => {
+  console.log({ data });
+  const companyId = data.companyId;
+  const companyData = {
+    name: data.companyName,
+  };
+  const response = await todoApi.put(
+    `/company/${companyId}`,
+    companyData,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+
 // Api calls for delete user from project
 export const deleteUserFromProject = async (data) => {
   console.log({ data });
