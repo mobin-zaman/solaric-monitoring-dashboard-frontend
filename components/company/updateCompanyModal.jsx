@@ -12,7 +12,7 @@ export default function CreateCompanyInProjectModal({
 
   const queryClient = useQueryClient();
   const [companyName, setCompanyName] = useState(editCompanyData?.name);
-  // const [companyCode, setCompanyCode] = useState("");
+  const [companyCode, setCompanyCode] = useState(editCompanyData?.code);
   const [errorMessage, setErrorMessage] = useState("");
 
   const mutation = useMutation(updateCompanyToProject, {
@@ -30,7 +30,7 @@ export default function CreateCompanyInProjectModal({
     e.preventDefault();
     // userEdited(false);
     setErrorMessage("");
-    if (!companyName) {
+    if (!companyName || !companyCode) {
       setErrorMessage("Please fill all the fields");
       return;
     }
@@ -38,6 +38,7 @@ export default function CreateCompanyInProjectModal({
     mutation.mutate({
       companyId: parseInt(editCompanyData?.id),
       companyName,
+      companyCode,
     });
   };
 
@@ -77,7 +78,7 @@ export default function CreateCompanyInProjectModal({
                   />
                 </div>
               </div>
-              {/* <div className=" text-[#373737] font-medium text-sm space-x-1">
+              <div className=" text-[#373737] font-medium text-sm space-x-1">
                 <div className="font-medium text-lg text-[#25476A] space-x-0.5">
                   <span>Company Code</span>
                   <span className="text-red-500">*</span>
@@ -91,7 +92,7 @@ export default function CreateCompanyInProjectModal({
                     onChange={(e) => setCompanyCode(e.target.value)}
                   />
                 </div>
-              </div> */}
+              </div>
             </div>
             <div className="flex justify-between items-center">
               <div className="text-red-700 text-sm h-8 flex justify-center items-center">

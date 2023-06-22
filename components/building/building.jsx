@@ -40,6 +40,9 @@ import {
   faMicrochip,
 } from "@fortawesome/free-solid-svg-icons";
 import CreateMeterInBuildingModal from "./createMeterInBuildingModal";
+import UpdateBuildingModal from "./updateBuildingModal";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Project({ buildingId }) {
   const router = useRouter();
@@ -50,6 +53,8 @@ export default function Project({ buildingId }) {
   const [searchResult1, setSearchResult1] = useState(null);
   const [inverterAdded, setInverterAdded] = useState(false);
   const [inverterDeleted, setInverterDeleted] = useState(false);
+  const [updateBuildingModalOpen, setUpdateBuildingModalOpen] = useState(false);
+  const [buildingUpdated, setBuildingUpdated] = useState(false);
 
   const { data, isLoading, isError, refetch } = useQuery(
     ["building", buildingId],
@@ -131,11 +136,11 @@ export default function Project({ buildingId }) {
     router.push(`/inverter/${inverterId}`);
   };
 
-  const handleDelete = (id) => {
-    console.log(id);
-    setDisableCompanyModalOpen(true);
-    setInverterId(id);
-  };
+  // const handleDelete = (id) => {
+  //   console.log(id);
+  //   setDisableCompanyModalOpen(true);
+  //   setInverterId(id);
+  // };
 
   const handleSearch = (e) => {
     const searchPromise = searchInverterForBuilding({
@@ -166,8 +171,9 @@ export default function Project({ buildingId }) {
   const [meterSearchOn, setMeterSearchOn] = useState(false);
   const [meterSearchResult, setMeterSearchResult] = useState(null);
   const [meterSearchResultEmpty, setMeterSearchResultEmpty] = useState(false);
-  const [createMeterInBuildingModalOpen, setCreateMeterInBuildingModalOpen] = useState(false);
-const [meterCreatedInBuilding, setMeterCreatedInBuilding] = useState(false);
+  const [createMeterInBuildingModalOpen, setCreateMeterInBuildingModalOpen] =
+    useState(false);
+  const [meterCreatedInBuilding, setMeterCreatedInBuilding] = useState(false);
   const handleMeterSearch = (e) => {
     setMeterSearchOn(true);
     const searchPromise = searchMeterForBuilding({
@@ -197,6 +203,23 @@ const [meterCreatedInBuilding, setMeterCreatedInBuilding] = useState(false);
       }
     }
   };
+
+  // Notify for building updated
+  const notifyForBuildingUpdated = () => {
+    toast.success("Building updated successfully", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+    });
+  };
+
+  // Call notifyForBuildingUpdated when buildingUpdated is true
+  useEffect(() => {
+    if (buildingUpdated) {
+      notifyForBuildingUpdated();
+      setBuildingUpdated(false);
+    }
+  }, [buildingUpdated]);
+
   return (
     <>
       <div className="text-sm breadcrumbs text-[#25476A]">
@@ -241,10 +264,10 @@ const [meterCreatedInBuilding, setMeterCreatedInBuilding] = useState(false);
       <div className="space-y-2.5">
         <div className="bg-[#25476A] rounded-md p-3.5">
           <div className="flex items-center justify-between space-x-3 select-none">
-            <h1 className="text-xl font-semibold text-white tracking-wide">
-              Building Overview
-            </h1>
-            <div className="flex space-x-2">
+            <div className="flex items-center space-x-2">
+              <h1 className="text-xl font-semibold text-white tracking-wide">
+                Building Overview
+              </h1>
               <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
                 <span>{data?.name}</span>
               </div>
@@ -259,14 +282,21 @@ const [meterCreatedInBuilding, setMeterCreatedInBuilding] = useState(false);
                   )}
                 </button>
               </div>
-              {/* TODO */}
-              {/* <button
-                  className="px-3 py-1 text-white font-semibold bg-[#39B54A] rounded-md select-none"
-                  onClick={() => setAddCompanyModalOpen(true)}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} /> Edit 
-                </button> */}
             </div>
+            <button
+              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
+              onClick={() => setUpdateBuildingModalOpen(true)}
+            >
+              <span className="">Edit</span>
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </button>
+            {updateBuildingModalOpen && (
+              <UpdateBuildingModal
+                editBuildingData={data}
+                updateBuildingModalOpen={setUpdateBuildingModalOpen}
+                BuildingUpdated={setBuildingUpdated}
+              />
+            )}
           </div>
         </div>
         <div className="space-y-1 select-none bg-white rounded-md">

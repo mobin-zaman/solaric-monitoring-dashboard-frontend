@@ -13,10 +13,11 @@ import {
   faCubesStacked,
   faMicrochip,
   faPenToSquare,
+  faRotate,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
-import { getProject, searchCompany } from "@/lib/Helper";
+import { useQuery, useQueryClient, useMutation } from "react-query";
+import { getProject, searchCompany, updateInvertersInProject } from "@/lib/Helper";
 import Image from "next/image";
 import CreateUserInProjectModal from "./createUserInProjectModal";
 import CreateCompanyInProjectModal from "./createCompanyInProjectModal";
@@ -235,7 +236,28 @@ export default function Project({ projectId }) {
       notifyForProjectUpdated();
     }
   }, [projectUpdated]);
-  
+
+
+  const mutation = useMutation(updateInvertersInProject, {
+    onSuccess: (data) => {
+      if (data) {
+        console.log(data);
+        //refresh the page or project data
+        queryClient.invalidateQueries("project");
+        
+      }
+    },
+    onError: (error) => {
+      setErrorMessage(error.response.data.message);
+    },
+  });
+
+  const handleRefreshInverters = (e) => {
+
+    mutation.mutate({
+      projectId: parseInt(data?.id),
+    });
+  };
 
   return (
     <>
@@ -713,6 +735,13 @@ export default function Project({ projectId }) {
                 </span>
               </div>
             </div>
+            <button
+              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-black bg-[#c7ef44] hover:bg-[#b5d93e] rounded-md space-x-1"
+              onClick={() => handleRefreshInverters()}
+            >
+              <span className="">Refresh</span>
+              <FontAwesomeIcon icon={faRotate} />
+                          </button>
           </div>
           <div className="p-3 space-y-1.5 bg-white rounded-b-md">
             <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">

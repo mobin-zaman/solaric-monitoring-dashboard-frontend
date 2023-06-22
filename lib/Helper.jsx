@@ -194,6 +194,7 @@ export const updateCompanyToProject = async (data) => {
   const companyId = data.companyId;
   const companyData = {
     name: data.companyName,
+    code: data.companyCode,
   };
   const response = await todoApi.put(
     `/company/${companyId}`,
@@ -304,6 +305,21 @@ export const searchCompany = async (data) => {
 // Api calls for get building data
 export const getBuilding = async (id) => {
   const response = await todoApi.get(`/building/find-one/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+};
+
+// Api calls for building update
+export const updateBuilding = async (data) => {
+  const id = data.buildingId;
+  const d = {
+    name: data.buildingName,
+    code: data.buildingCode,
+  }
+  const response = await todoApi.put(`/building/${id}`, d, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
     },
@@ -797,6 +813,20 @@ export const getProjectFrameDataForDailyView = async (data) => {
   const collectTime = data?.selectedYearMonthDay;
   const response = await todoApi.get(
     `/dashboard/daily-view/project/frame-data/${projectId}/${collectTime}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+}
+
+// Api call for update inverters in project
+export const updateInvertersInProject = async (data) => {
+  const projectId = data?.projectId;
+  const response = await todoApi.put(
+    `/project/${projectId}/update-inverters`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Token")}`,

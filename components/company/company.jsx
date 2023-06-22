@@ -145,6 +145,7 @@ export default function Project({ companyId }) {
   useEffect(() => {
     if (companyUpdated) {
       notifyForCompanyUpdated();
+      setCompanyUpdated(false);
     }
   }, [companyUpdated]);
 
