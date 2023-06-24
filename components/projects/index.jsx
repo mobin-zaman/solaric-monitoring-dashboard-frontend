@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Router from "next/router";
-import CreateProjectModal from "./project/updateProjectModal";
+import CreateProjectModal from "./createProjectModal";
 import DeleteProjectModal from "./deleteProjectModal";
 import { useQuery, useQueryClient } from "react-query";
 import { getProjects, searchProject } from "@/lib/Helper";

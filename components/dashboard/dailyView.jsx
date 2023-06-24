@@ -65,19 +65,22 @@ export default function DailyView({
   const [selectedYear, setSelectedYear] = useState(undefined);
   const [selectedMonth, setSelectedMonth] = useState(undefined);
   const [selectedDay, setSelectedDay] = useState(undefined);
+  // console.log(selectedYear, selectedMonth, selectedDay);
 
   function removeDuplicatesFromArray(arr) {
     return [...new Set(arr)];
   }
-  
-  
+
   const [uniqueYears, setUniqueYears] = useState([]);
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [uniqueDays, setUniqueDays] = useState([]);
-  const [uniqueYearsWithoutDuplicates, setUniqueYearsWithoutDuplicates] = useState([]);
-  const [uniqueMonthsWithoutDuplicates, setUniqueMonthsWithoutDuplicates] = useState([]);
-  const [uniqueDaysWithoutDuplicates, setUniqueDaysWithoutDuplicates] = useState([]);
-  
+  const [uniqueYearsWithoutDuplicates, setUniqueYearsWithoutDuplicates] =
+    useState([]);
+  const [uniqueMonthsWithoutDuplicates, setUniqueMonthsWithoutDuplicates] =
+    useState([]);
+  const [uniqueDaysWithoutDuplicates, setUniqueDaysWithoutDuplicates] =
+    useState([]);
+
   const { data: ProjectCollectTimeForDailyViewData, isLoading } = useQuery(
     ["ProjectCollectTimeForDailyView", selectedOptionId],
     () => getProjectCollectTimeForDailyView(selectedOptionId),
@@ -85,60 +88,59 @@ export default function DailyView({
       enabled: !!selectedOptionId,
     }
   );
-  
+
   useEffect(() => {
     if (!isLoading && ProjectCollectTimeForDailyViewData) {
       const tempYears = [];
       const tempMonths = [];
       const tempDays = [];
-  
+
       ProjectCollectTimeForDailyViewData.forEach((item) => {
         const [year, month, day] = item.split("-");
         tempYears.push(year);
         tempMonths.push(month);
-        tempDays.push(day);
+        tempDays.push(month + "-" + day);
       });
-  
+
       setUniqueYears((prev) => [...prev, ...tempYears]);
       setUniqueMonths((prev) => [...prev, ...tempMonths]);
       setUniqueDays((prev) => [...prev, ...tempDays]);
     }
   }, [ProjectCollectTimeForDailyViewData, isLoading]);
-  
+
   useEffect(() => {
     setUniqueYearsWithoutDuplicates(removeDuplicatesFromArray(uniqueYears));
     setUniqueMonthsWithoutDuplicates(removeDuplicatesFromArray(uniqueMonths));
     setUniqueDaysWithoutDuplicates(removeDuplicatesFromArray(uniqueDays));
-  }, [uniqueYears, uniqueMonths, uniqueDays]);
-  
-  const[selectedYearMonthDay, setSelectedYearMonthDay] = useState(undefined);
+    setSelectedDay(uniqueDaysWithoutDuplicates[0]);
+  }, [uniqueYears, uniqueMonths, uniqueDays, uniqueDaysWithoutDuplicates]);
+
+  const [selectedYearMonthDay, setSelectedYearMonthDay] = useState(undefined);
 
   useEffect(() => {
-    if(selectedYear && selectedMonth && selectedDay){
-      setSelectedYearMonthDay(`${selectedYear}-${selectedMonth}-${selectedDay}`);
+    if (selectedYear && selectedMonth && selectedDay) {
+      setSelectedYearMonthDay(
+        `${selectedYear}-${selectedMonth}-${selectedDay}`
+      );
     }
+
   }, [selectedYear, selectedMonth, selectedDay]);
 
   const { data: projectFrameDataForDailyViewData } = useQuery(
     ["ProjectFrameDataForDailyView", selectedOptionId],
-    () => getProjectFrameDataForDailyView(selectedOptionId, selectedYearMonthDay),
+    () =>
+      getProjectFrameDataForDailyView(selectedOptionId, selectedYearMonthDay),
     {
       enabled: !!selectedYearMonthDay,
     }
   );
 
-  useEffect(() => {
-  console.log("projectFrameDataForDailyView", projectFrameDataForDailyViewData);
-  }, [projectFrameDataForDailyViewData]);
-      
-
-
-
-
-
-
-
-
+  // useEffect(() => {
+  //   console.log(
+  //     "projectFrameDataForDailyView",
+  //     projectFrameDataForDailyViewData
+  //   );
+  // }, [projectFrameDataForDailyViewData]);
 
   const [
     dailyViewDataForProjectPowerLineChartDataYearly,
@@ -337,7 +339,6 @@ export default function DailyView({
       setDailyViewDataForProjectPowerLineChartDataStore(
         dailyViewDataForProjectPowerLineChartDataYearly
       );
-      console.log("111111111111111111111111111");
     } else if (
       dailyViewDataForProjectPowerLineChartDataYearly &&
       dailyViewDataForProjectPowerLineChartDataMonthly &&
@@ -346,7 +347,6 @@ export default function DailyView({
       setDailyViewDataForProjectPowerLineChartDataStore(
         dailyViewDataForProjectPowerLineChartDataMonthly
       );
-      console.log("222222222222222222222222");
     } else if (
       dailyViewDataForProjectPowerLineChartDataYearly &&
       dailyViewDataForProjectPowerLineChartDataMonthly &&
@@ -355,7 +355,6 @@ export default function DailyView({
       setDailyViewDataForProjectPowerLineChartDataStore(
         dailyViewDataForProjectPowerLineChartDataDay
       );
-      console.log("333333333333333333333333333");
     }
   }, [
     dailyViewDataForProjectPowerLineChartDataDay,
@@ -365,10 +364,10 @@ export default function DailyView({
     dailyViewDataForProjectPowerLineChartDataMonthSelected,
   ]);
 
-  console.log(
-    dailyViewDataForProjectPowerLineChartDataDaySelected,
-    dailyViewDataForProjectPowerLineChartDataDay
-  );
+  // console.log(
+  //   dailyViewDataForProjectPowerLineChartDataDaySelected,
+  //   dailyViewDataForProjectPowerLineChartDataDay
+  // );
 
   const data = [
     {
@@ -432,58 +431,47 @@ export default function DailyView({
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               // value={dailyViewDataForProjectPowerLineChartDataYearSelected}
-              onChange={(e) =>
-                setSelectedYear(e.target.value)
-              }
+              onChange={(e) => setSelectedYear(e.target.value)}
             >
               <option disabled>Year</option>
 
               {uniqueYearsWithoutDuplicates?.map((item, Index) => {
-                  return (
-                    <option key={Index} value={item}>
-                      {item}
-                    </option>
-                  );
+                return (
+                  <option key={Index} value={item} selected={Index === 0}>
+                    {item}
+                  </option>
+                );
               })}
             </select>
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               // value={dailyViewDataForProjectPowerLineChartDataMonthSelected}
-              onChange={(e) =>
-                setSelectedMonth(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setSelectedMonth(e.target.value)}
             >
-              <option disabled>
-                Month
-              </option>
+              <option disabled>Month</option>
               {uniqueMonthsWithoutDuplicates?.map((item, Index) => {
-                  return (
-                    <option key={Index} value={item}>
-                      {digitToMonth(item)}
-                    </option>
-                  );
+                return (
+                  <option key={Index} value={item} selected={Index === 0}>
+                    {digitToMonth(item)}
+                  </option>
+                );
               })}
             </select>
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               // value={dailyViewDataForProjectPowerLineChartDataMonthSelected}
-              onChange={(e) =>
-                setSelectedDay(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setSelectedDay(e.target.value)}
             >
-              <option disabled>
-                Day
-              </option>
-              {uniqueDaysWithoutDuplicates?.map((item, Index) => {
+              <option disabled>Day</option>
+              {uniqueDaysWithoutDuplicates?.map((item, index) => {
+                if (item.split("-")[0] === uniqueDaysWithoutDuplicates?.[0].split("-")[0]) {
                   return (
-                    <option key={Index} value={item}>
-                      {item}
+                    <option key={index} value={item} selected={index === 0}>
+                      {item.split("-")[1]}
                     </option>
                   );
+                }
+                return null; // Add this line to handle the case when the condition is not met
               })}
             </select>
             {collectTimeForInverterHourlyData?.length > 0 &&

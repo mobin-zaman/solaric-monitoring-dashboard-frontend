@@ -114,7 +114,7 @@ export default function AddUserModal({
                     value={fundingType}
                     onChange={(e) => setFundingType(e.target.value)}
                   >
-                    <option value="">Select Funding Type</option>
+                    <option disabled>Select Funding Type</option>
                     <option value="CAPEX">CAPEX</option>
                     <option value="OPEX">OPEX</option>
                   </select>
