@@ -1199,7 +1199,7 @@ export default function Index() {
         </div>
         <div className="grid grid-cols-8 gap-1.5">
           <div className="col-span-6">
-            <Historical historicalDataForProject={mainHistoricalTableData} historicalDataForProjectSunHrsBarChartData={mainHistoricalSunHrsBarChartData} />
+            <Historical historicalDataForProject={mainHistoricalTableData} historicalDataForProjectSunHrsBarChartData={mainHistoricalSunHrsBarChartData} firstProjectForDefaultViewId={firstProjectForDefaultViewId} selectedOptionId={selectedOptionId} selectedOptionIdCompany={selectedOptionIdCompany} selectedOptionIdBuilding={selectedOptionIdBuilding} selectedOptionIdInverter={selectedOptionIdInverter} />
           </div>
           <div className="col-span-2">
             <Impact impactData={mainImpactTableData} />

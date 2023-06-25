@@ -835,3 +835,19 @@ export const updateInvertersInProject = async (data) => {
   );
   return response.data;
 }
+
+// Api call for historical peak power data
+export const getHistoricalPeakPowerData = async (collectionKey) => {
+  const key = Object.keys(collectionKey)[0];
+  const id = collectionKey[key];
+  console.log(key, id);
+  const response = await todoApi.get(
+    `/dashboard/historic-view/peak-power/${key}/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+}

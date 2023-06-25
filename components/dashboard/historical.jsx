@@ -23,6 +23,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { use, useEffect, useState } from "react";
+import HistoricalPeakPower from "./historicalPeakPower";
 
 const data = [
   {
@@ -72,6 +73,11 @@ const data = [
 export default function Historical({
   historicalDataForProject,
   historicalDataForProjectSunHrsBarChartData,
+  firstProjectForDefaultViewId,
+  selectedOptionId,
+  selectedOptionIdCompany,
+  selectedOptionIdBuilding,
+  selectedOptionIdInverter,
 }) {
   const [
     historicalDataForProjectSunHrsBarChartDataYearly,
@@ -196,6 +202,19 @@ export default function Historical({
     }
   };
 
+  const [peakPowerOpen, setPeakPowerOpen] = useState(false);
+  const [sunHoursOpen, setSunHoursOpen] = useState(true);
+
+  const handlePeakPowerOpen = () => {
+    setPeakPowerOpen(true);
+    setSunHoursOpen(false);
+  };
+
+  const handleSunHoursOpen = () => {
+    setPeakPowerOpen(false);
+    setSunHoursOpen(true);
+  };
+
   return (
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md space-y-2.5">
@@ -203,88 +222,32 @@ export default function Historical({
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
             Historical
           </span>
-          <div className="flex space-x-4">
-            <select
-              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={historicalDataForProjectSunHrsBarChartDataYearSelected}
-              onChange={(e) =>
-                setHistoricalDataForProjectSunHrsBarChartDataSelected(
-                  e.target.value
-                )
-              }
-            >
-              <option disabled>Year</option>
-              {historicalDataForProjectSunHrsBarChartDataYearCount?.map(
-                (item, Index) => {
-                  return <option key={Index}>{item}</option>;
-                }
-              )}
-            </select>
-            <select
-              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={historicalDataForProjectSunHrsBarChartDataMonthSelected}
-              onChange={(e) =>
-                setHistoricalDataForProjectSunHrsBarChartDataMonthSelected(
-                  e.target.value
-                )
-              }
-            >
-              <option disabled>Month</option>
-              {historicalDataForProjectSunHrsBarChartDataMonthCount?.map(
-                (item, Index) => {
-                  if (
-                    historicalDataForProjectSunHrsBarChartDataYearSelected ===
-                    item?.split("-")[0]
-                  ) {
-                    return (
-                      <option key={Index} value={item}>
-                        {digitToMonth(item?.split("-")[1])}
-                      </option>
-                    );
-                  }
-                }
-              )}
-            </select>
+          <div className="flex">
+          <div
+            className="flex justify-end items-center space-x-5"
+          >
+            <div className="flex rounded-md bg-gray-200">
+              <button
+                className={`flex items-center justify-center h-8 p-2 text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${ peakPowerOpen ? "bg-[#39B54A] text-white" : "bg-white text-[#39B54A]" }`}
+                onClick={() => handlePeakPowerOpen()}
+              >
+                Peak Power
+              </button>
+              <button
+                className={`flex items-center justify-center h-8 p-2 text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${ sunHoursOpen ? "bg-[#39B54A] text-white" : "bg-white text-[#39B54A]" }`}
+                onClick={() => handleSunHoursOpen()}
+              >
+                Sun Hours
+              </button>
+            </div>
           </div>
         </div>
-        {/* <div className="flex">
-          <div
-            className="flex justify-end items-center space-x-5"
-            style={{ width: "45%" }}
-          >
-            <FontAwesomeIcon icon={faRotate} />
-            <div className="flex rounded-md bg-gray-200">
-              <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-l-md select-none border-r">
-                Plant
-              </button>
-              <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-r-md select-none">
-                KEPZ
-              </button>
-            </div>
-          </div>
-          <div
-            className="flex justify-end items-center space-x-5"
-            style={{ width: "55%" }}
-          >
-            <FontAwesomeIcon icon={faRotate} />
-            <div className="flex rounded-md bg-gray-200">
-              <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-l-md select-none border-r">
-                Plant
-              </button>
-              <button className="flex items-center justify-center h-8 p-2 text-sm text-white font-semibold bg-[#39B54A] rounded-r-md select-none">
-                KEPZ
-              </button>
-            </div>
-          </div>
-        </div> */}
-        <div className="flex w-full h-72 justify-between">
-          <div
-            className="flex justify-center items-start"
-            style={{ width: "45%", height: "100%" }}
-          >
+        </div>
+        <div className="grid grid-cols-7">
+          <div className="flex justify-center items-start col-span-3">
             <table className="table-fixed w-full border rounded-md select-none text-[#25476A]">
               <tbody className="text-center">
-                <tr className="bg-gray-200 h-10 font-semibold">
+                <tr className="bg-gray-200 h-16 font-semibold">
                   <td></td>
                   <td>Prod</td>
                   <td>Export</td>
@@ -349,36 +312,94 @@ export default function Historical({
               </tbody>
             </table>
           </div>
-          <div
-            className="flex items-center justify-end"
-            style={{ width: "55%", height: "100%" }}
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                width={500}
-                height={300}
-                data={
-                  historicalDataForProjectSunHrsBarChartDataMonthly
-                    ? historicalDataForProjectSunHrsBarChartDataMonthly
-                    : historicalDataForProjectSunHrsBarChartDataYearly
-                }
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
+
+          {sunHoursOpen ? (
+            <div className="flex flex-col col-span-4 h-72 space-y-3">
+              <div className="flex space-x-3 justify-end">
+                <select
+                  className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                  value={historicalDataForProjectSunHrsBarChartDataYearSelected}
+                  onChange={(e) =>
+                    setHistoricalDataForProjectSunHrsBarChartDataSelected(
+                      e.target.value
+                    )
+                  }
+                >
+                  <option disabled>Year</option>
+                  {historicalDataForProjectSunHrsBarChartDataYearCount?.map(
+                    (item, Index) => {
+                      return <option key={Index}>{item}</option>;
+                    }
+                  )}
+                </select>
+                <select
+                  className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                  value={
+                    historicalDataForProjectSunHrsBarChartDataMonthSelected
+                  }
+                  onChange={(e) =>
+                    setHistoricalDataForProjectSunHrsBarChartDataMonthSelected(
+                      e.target.value
+                    )
+                  }
+                >
+                  <option disabled>Month</option>
+                  {historicalDataForProjectSunHrsBarChartDataMonthCount?.map(
+                    (item, Index) => {
+                      if (
+                        historicalDataForProjectSunHrsBarChartDataYearSelected ===
+                        item?.split("-")[0]
+                      ) {
+                        return (
+                          <option key={Index} value={item}>
+                            {digitToMonth(item?.split("-")[1])}
+                          </option>
+                        );
+                      }
+                    }
+                  )}
+                </select>
+              </div>
+
+              <div
+                className="flex items-center justify-center"
+                style={{ width: "100%", height: "100%" }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                {/* <Legend /> */}
-                {/* <Bar dataKey="pv" fill="#8884d8" /> */}
-                <Bar dataKey="sunHours" fill="#82ca9d" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    width={500}
+                    height={300}
+                    data={
+                      historicalDataForProjectSunHrsBarChartDataMonthly
+                        ? historicalDataForProjectSunHrsBarChartDataMonthly
+                        : historicalDataForProjectSunHrsBarChartDataYearly
+                    }
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    {/* <Legend /> */}
+                    <Bar dataKey="sunHours" fill="#82ca9d" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          ) : (
+            <HistoricalPeakPower
+              firstProjectForDefaultViewId={firstProjectForDefaultViewId}
+              selectedOptionId={selectedOptionId}
+              selectedOptionIdCompany={selectedOptionIdCompany}
+              selectedOptionIdBuilding={selectedOptionIdBuilding}
+              selectedOptionIdInverter={selectedOptionIdInverter}
+            />
+          )}
         </div>
       </div>
     </>

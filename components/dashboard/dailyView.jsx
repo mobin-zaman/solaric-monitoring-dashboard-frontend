@@ -65,7 +65,6 @@ export default function DailyView({
   const [selectedYear, setSelectedYear] = useState(undefined);
   const [selectedMonth, setSelectedMonth] = useState(undefined);
   const [selectedDay, setSelectedDay] = useState(undefined);
-  // console.log(selectedYear, selectedMonth, selectedDay);
 
   function removeDuplicatesFromArray(arr) {
     return [...new Set(arr)];
@@ -98,7 +97,7 @@ export default function DailyView({
       ProjectCollectTimeForDailyViewData.forEach((item) => {
         const [year, month, day] = item.split("-");
         tempYears.push(year);
-        tempMonths.push(month);
+        tempMonths.push(year + "-" + month);
         tempDays.push(month + "-" + day);
       });
 
@@ -112,8 +111,26 @@ export default function DailyView({
     setUniqueYearsWithoutDuplicates(removeDuplicatesFromArray(uniqueYears));
     setUniqueMonthsWithoutDuplicates(removeDuplicatesFromArray(uniqueMonths));
     setUniqueDaysWithoutDuplicates(removeDuplicatesFromArray(uniqueDays));
+  }, [uniqueYears, uniqueMonths, uniqueDays]);
+
+
+
+
+  useEffect(() => {
+    setSelectedYear(uniqueYearsWithoutDuplicates[0]);
+    setSelectedMonth(uniqueMonthsWithoutDuplicates[0]);
     setSelectedDay(uniqueDaysWithoutDuplicates[0]);
-  }, [uniqueYears, uniqueMonths, uniqueDays, uniqueDaysWithoutDuplicates]);
+  }, [ uniqueYearsWithoutDuplicates, uniqueMonthsWithoutDuplicates, uniqueDaysWithoutDuplicates]);
+
+
+
+
+
+
+
+
+
+
 
   const [selectedYearMonthDay, setSelectedYearMonthDay] = useState(undefined);
 
@@ -424,20 +441,20 @@ export default function DailyView({
       <div className="w-full h-96 bg-white p-3 rounded-md">
         <div className="flex items-center justify-between">
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
-            Daily View
+            Daily View{selectedYear}{selectedMonth}{selectedDay}
           </span>
           {/* <FontAwesomeIcon icon={faRotate} /> */}
           <div className="flex space-x-4">
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              // value={dailyViewDataForProjectPowerLineChartDataYearSelected}
+              value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
             >
               <option disabled>Year</option>
 
-              {uniqueYearsWithoutDuplicates?.map((item, Index) => {
+              {uniqueYearsWithoutDuplicates?.map((item, index) => {
                 return (
-                  <option key={Index} value={item} selected={Index === 0}>
+                  <option key={index} value={item} selected={index === 0}>
                     {item}
                   </option>
                 );
@@ -445,26 +462,29 @@ export default function DailyView({
             </select>
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              // value={dailyViewDataForProjectPowerLineChartDataMonthSelected}
+              value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
             >
               <option disabled>Month</option>
-              {uniqueMonthsWithoutDuplicates?.map((item, Index) => {
-                return (
-                  <option key={Index} value={item} selected={Index === 0}>
-                    {digitToMonth(item)}
-                  </option>
-                );
+              {uniqueMonthsWithoutDuplicates?.map((item, index) => {
+                if (item.split("-")[0] === selectedYear) {
+                  return (
+                    <option key={index} value={item} selected={index === 0}>
+                      {item}
+                    </option>
+                  );
+                }
+                return null; // Add this line to handle the case when the condition is not met
               })}
             </select>
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              // value={dailyViewDataForProjectPowerLineChartDataMonthSelected}
+              value={selectedDay}
               onChange={(e) => setSelectedDay(e.target.value)}
             >
               <option disabled>Day</option>
               {uniqueDaysWithoutDuplicates?.map((item, index) => {
-                if (item.split("-")[0] === uniqueDaysWithoutDuplicates?.[0].split("-")[0]) {
+                if (item.split("-")[0] === selectedMonth?.split("-")[1]) {
                   return (
                     <option key={index} value={item} selected={index === 0}>
                       {item.split("-")[1]}
