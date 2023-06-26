@@ -362,7 +362,7 @@ export default function Historical({
               </div>
 
               <div
-                className="flex items-center justify-center"
+                className="flex items-center justify-center text-xs font-medium"
                 style={{ width: "100%", height: "100%" }}
               >
                 <ResponsiveContainer width="100%" height="100%">

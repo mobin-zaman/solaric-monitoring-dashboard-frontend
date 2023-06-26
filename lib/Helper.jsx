@@ -793,10 +793,13 @@ export const getInverterHourData = async (data) => {
 };
 
 
-// Api call for get project collect time for daily view
-export const getProjectCollectTimeForDailyView = async (projectId) => {
+// Api call for get daily view collect time
+export const getDailyViewCollectTime = async (collectionKey) => {
+  const key = Object.keys(collectionKey)[0];
+  const id = collectionKey[key];
+
   const response = await todoApi.get(
-    `/dashboard/daily-view/project/collect-times/${projectId}`,
+    `/dashboard/daily-view/${key}/collect-times/${id}`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -806,13 +809,13 @@ export const getProjectCollectTimeForDailyView = async (projectId) => {
   return response.data;
 }
 
-// Api call for get project frame data for daily view
-export const getProjectFrameDataForDailyView = async (data) => {
-  console.log(data,"ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
-  const projectId = data?.selectedOptionId;
-  const collectTime = data?.selectedYearMonthDay;
+// Api call for get Daily View Data
+export const getDailyViewData = async (data) => {
+  const key = Object.keys(data.collectionKey)[0];
+  const id = data.collectionKey[key];
+  const dateKey = data.dateKey;
   const response = await todoApi.get(
-    `/dashboard/daily-view/project/frame-data/${projectId}/${collectTime}`,
+    `/dashboard/daily-view/${key}/frame-data/${id}/${dateKey}`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -840,7 +843,6 @@ export const updateInvertersInProject = async (data) => {
 export const getHistoricalPeakPowerData = async (collectionKey) => {
   const key = Object.keys(collectionKey)[0];
   const id = collectionKey[key];
-  console.log(key, id);
   const response = await todoApi.get(
     `/dashboard/historic-view/peak-power/${key}/${id}`,
     {

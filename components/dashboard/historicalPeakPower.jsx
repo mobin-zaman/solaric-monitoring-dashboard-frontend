@@ -72,7 +72,7 @@ export default function HistoricalPeakPower({
     isLoading,
     error,
   } = useQuery(
-    ["historicalPeakPower", collectionKey],
+    ["historicalPeakPowerData", collectionKey],
     () => getHistoricalPeakPowerData(collectionKey),
     {
       enabled: !!collectionKey,
@@ -230,8 +230,8 @@ export default function HistoricalPeakPower({
           </select>
         </div>
         <div
-          className="flex items-center justify-center"
-          style={{ width: "100%", height: "100%" }}
+          className="flex items-center justify-center text-xs font-medium"
+          style={{ width: "100%", height: "100%" }} 
         >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
