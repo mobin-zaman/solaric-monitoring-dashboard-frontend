@@ -89,18 +89,18 @@ export default function DailyView({
   useEffect(() => {
     if (!DailyViewCollectTimeIsLoading && DailyViewCollectTimeData) {
       const tempYears = [];
-      const tempMonths = [];
+      const tempMonthsDays = [];
       const tempDays = [];
 
       DailyViewCollectTimeData?.forEach((item) => {
         const [year, month, day] = item.split("-");
         tempYears.push(year);
-        tempMonths.push(month);
+        tempMonthsDays.push(month + "-" + day);
         tempDays.push(day);
       });
 
       setYearsFromData(tempYears);
-      setMonthsFromData(tempMonths);
+      setMonthsFromData(tempMonthsDays);
       setDaysFromData(tempDays);
     }
   }, [DailyViewCollectTimeData, DailyViewCollectTimeIsLoading]);
@@ -109,9 +109,13 @@ export default function DailyView({
     return [...new Set(arr)];
   }
 
+  function removeDuplicatesMonthsFromArray(arr) {
+    return [...new Set(arr?.map((item) => item.split("-")[0]))];
+  }
+
   useEffect(() => {
     setUniqueYears1(removeDuplicatesFromArray(yearsFromData));
-    setUniqueMonths1(removeDuplicatesFromArray(monthsFromData));
+    setUniqueMonths1(removeDuplicatesMonthsFromArray(monthsFromData));
     setUniqueDays1(removeDuplicatesFromArray(daysFromData));
   }, [yearsFromData, monthsFromData, daysFromData]);
 
@@ -169,7 +173,10 @@ export default function DailyView({
       setStoreDailyViewData(
         DailyViewData["data"]?.frameDataArray?.map((frameItem) => ({
           MW: frameItem.value,
-          collectTime: new Date(new Date(`2000-01-01T${frameItem.collectTime}`).getTime() + 5 * 60 * 60 * 1000).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
+          collectTime: new Date(
+            new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
+              5 * 60 * 60 * 1000
+          ).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
         }))
       );
       setGenerationData(DailyViewData["data"]?.generation.toFixed(1));
@@ -229,6 +236,16 @@ export default function DailyView({
     return null;
   };
 
+  useEffect(() => {
+    setSelectedDay1(
+      monthsFromData
+        .filter(item => item.split("-")[0] === selectedMonth1)
+        .map(item => item.split("-")[1])
+        .sort((a, b) => a.localeCompare(b))
+        .slice(0, 1)
+    );
+  }, [selectedMonth1, monthsFromData]);
+
   return (
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md">
@@ -273,13 +290,25 @@ export default function DailyView({
               onChange={(e) => setSelectedDay1(e.target.value)}
             >
               <option disabled>Day</option>
-              {uniqueDays1?.map((item, Index) => {
-                return (
-                  <option key={Index} value={item}>
-                    {item}
+              {monthsFromData
+                ?.map((item, Index) => {
+                  if (item.split("-")[0] === selectedMonth1) {
+                    return item; // Return the original item
+                  } else {
+                    return null; // Skip items that don't match the condition
+                  }
+                })
+                .filter((item) => item !== null) // Filter out null items
+                .sort((a, b) => {
+                  const aValue = a.split("-")[1];
+                  const bValue = b.split("-")[1];
+                  return aValue.localeCompare(bValue); // Sort based on the split value
+                })
+                .map((item, index) => (
+                  <option key={index} value={item.split("-")[1]}>
+                    {item.split("-")[1]}
                   </option>
-                );
-              })}
+                ))}
             </select>
           </div>
         </div>
