@@ -1,16 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrashCan,
-  faPenToSquare,
-  faArrowDown,
-  faPlus,
-  faMagnifyingGlass,
-  faEye,
-  faCopy,
-  faIdCard,
-  faClipboard,
-  faRotate,
-} from "@fortawesome/free-solid-svg-icons";
 import {
   AreaChart,
   Area,
@@ -20,69 +7,62 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { use, useEffect, useState } from "react";
-import { useQuery, useMutation } from "react-query";
-import { getInverterHourData, getDailyViewCollectTime, getDailyViewData } from "@/lib/Helper";
-import {
-  getProjects,
-  searchProject,
-  getProject,
-  searchCompany,
-  getCompany,
-  searchBuilding,
-  getBuilding,
-  searchInverterForBuilding,
-  getHistoricalDataForProject,
-  getHistoricalDataForCompany,
-  getHistoricalDataForBuilding,
-  getHistoricalDataForInverter,
-  getHistoricalDataForProjectSunHrsBarChartData,
-  getHistoricalDataForCompanySunHrsBarChartData,
-  getHistoricalDataForBuildingSunHrsBarChartData,
-  getHistoricalDataForInverterSunHrsBarChartData,
-  getImpactDataForProject,
-  getImpactDataForCompany,
-  getImpactDataForBuilding,
-  getImpactDataForInverter,
-  getDailyViewForProject,
-  getDailyViewForCompany,
-  getDailyViewForBuilding,
-  getDailyViewForInverter,
-  getCollectTimeForInverterHourlyData,
-  getProjectCollectTimeForDailyView,
-  getProjectFrameDataForDailyView,
-} from "@/lib/Helper";
+import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { getDailyViewCollectTime, getDailyViewData } from "@/lib/Helper";
 
 export default function DailyView({
-  dailyViewData,
-  collectTimeForInverterHourlyData,
   selectedOptionIdInverter,
   selectedOptionIdBuilding,
   selectedOptionIdCompany,
   selectedOptionId,
-  firstProjectForDefaultViewId,
 }) {
   const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
-    if ( selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter ) {
+    if (
+      selectedOptionId &&
+      !selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setCollectionKey({
         project: selectedOptionId,
       });
-    } else if ( selectedOptionId && selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter ) {
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setCollectionKey({
         company: selectedOptionIdCompany,
       });
-    } else if ( selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && !selectedOptionIdInverter ) {
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setCollectionKey({
         building: selectedOptionIdBuilding,
       });
-    } else if ( selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && selectedOptionIdInverter ) {
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
       setCollectionKey({
         inverter: selectedOptionIdInverter,
       });
     }
-  }, [ selectedOptionId, selectedOptionIdCompany, selectedOptionIdBuilding, selectedOptionIdInverter ]);
+  }, [
+    selectedOptionId,
+    selectedOptionIdCompany,
+    selectedOptionIdBuilding,
+    selectedOptionIdInverter,
+  ]);
 
   const {
     data: DailyViewCollectTimeData,
@@ -159,13 +139,11 @@ export default function DailyView({
 
   const [dateKey, setDateKey] = useState("");
 
-  
-useEffect(() => {
-  if (selectedYear1 && selectedMonth1 && selectedDay1) {
-    setDateKey(`${selectedYear1}-${selectedMonth1}-${selectedDay1}`);
-  }
-}, [selectedYear1, selectedMonth1, selectedDay1]);
-  
+  useEffect(() => {
+    if (selectedYear1 && selectedMonth1 && selectedDay1) {
+      setDateKey(`${selectedYear1}-${selectedMonth1}-${selectedDay1}`);
+    }
+  }, [selectedYear1, selectedMonth1, selectedDay1]);
 
   const {
     data: DailyViewData,
@@ -186,14 +164,13 @@ useEffect(() => {
   const [generationData, setGenerationData] = useState();
   const [sunHoursData, setSunHoursData] = useState();
 
-
   useEffect(() => {
     if (!DailyViewDataIsLoading && DailyViewData) {
       setStoreDailyViewData(
-          DailyViewData["data"]?.frameDataArray?.map((frameItem) => ({
-            MW: frameItem.value,
-            collectTime: new Date(`2000-01-01T${frameItem.collectTime}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
-          }))
+        DailyViewData["data"]?.frameDataArray?.map((frameItem) => ({
+          MW: frameItem.value,
+          collectTime: new Date(new Date(`2000-01-01T${frameItem.collectTime}`).getTime() + 5 * 60 * 60 * 1000).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
+        }))
       );
       setGenerationData(DailyViewData["data"]?.generation.toFixed(1));
       setSunHoursData(DailyViewData["data"]?.sunHrs.toFixed(1));
@@ -239,16 +216,16 @@ useEffect(() => {
     if (active && payload && payload.length) {
       // Extract the necessary data from the payload
       const { collectTime, MW } = payload[0].payload;
-  
+
       // Custom tooltip content
       return (
         <div className="custom-tooltip bg-white px-5 py-3 text-sm rounded-md border-2 border-gray-300 space-y-0.5">
           <p>{`Time: ${collectTime}`}</p>
-          <p>{`${MW.toFixed(1)} MW`}</p>
+          <p>{`${MW.toFixed(1)} kw`}</p>
         </div>
       );
     }
-  
+
     return null;
   };
 
@@ -269,12 +246,12 @@ useEffect(() => {
               <option disabled>Year</option>
 
               {uniqueYears1?.map((item, Index) => {
-              return (
-                <option key={Index} value={item}>
-                  {item}
-                </option>
-              );
-            })}
+                return (
+                  <option key={Index} value={item}>
+                    {item}
+                  </option>
+                );
+              })}
             </select>
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
@@ -283,12 +260,12 @@ useEffect(() => {
             >
               <option disabled>Month</option>
               {uniqueMonths1?.map((item, Index) => {
-              return (
-                <option key={Index} value={item}>
-                  {digitToMonth(item)}
-                </option>
-              );
-            })}
+                return (
+                  <option key={Index} value={item}>
+                    {digitToMonth(item)}
+                  </option>
+                );
+              })}
             </select>
             <select
               className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
@@ -297,17 +274,20 @@ useEffect(() => {
             >
               <option disabled>Day</option>
               {uniqueDays1?.map((item, Index) => {
-              return (
-                <option key={Index} value={item}>
-                  {item}
-                </option>
-              );
-            })}
+                return (
+                  <option key={Index} value={item}>
+                    {item}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </div>
         <div className="flex w-full h-72 items-center justify-center">
-          <div style={{ width: "90%", height: "90%" }} className="text-xs font-medium">
+          <div
+            style={{ width: "90%", height: "90%" }}
+            className="text-xs font-medium"
+          >
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 width={730}
@@ -326,13 +306,12 @@ useEffect(() => {
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="collectTime" />
-                <YAxis tickFormatter={(value) => `${value} MW`} />
+                <YAxis tickFormatter={(value) => `${value} kw`} />
                 <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip content={<CustomTooltip />} />
                 <Area
                   type="monotone"
-                  dataKey={"MW"
-                  }
+                  dataKey={"MW"}
                   stroke="#8884d8"
                   fillOpacity={1}
                   fill="url(#colorUv)"
@@ -356,9 +335,7 @@ useEffect(() => {
             <span className="text-sm font-semibold text-white">
               {generationData}
             </span>
-            <span className="text-sm font-semibold text-white">
-              kWh
-            </span>
+            <span className="text-sm font-semibold text-white">MW</span>
           </div>
           <div className="flex items-center justify-center bg-[#8884d8] rounded-md px-3 py-2 select-none space-x-1">
             <span className="text-sm font-semibold text-white">
@@ -367,9 +344,7 @@ useEffect(() => {
             <span className="text-sm font-semibold text-white">
               {sunHoursData}
             </span>
-            <span className="text-sm font-semibold text-white">
-              kWh
-            </span>
+            <span className="text-sm font-semibold text-white">kWh</span>
           </div>
         </div>
       </div>
