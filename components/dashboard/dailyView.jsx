@@ -373,7 +373,7 @@ export default function DailyView({
             <span className="text-sm font-semibold text-white">
               {sunHoursData}
             </span>
-            <span className="text-sm font-semibold text-white">kWh</span>
+            <span className="text-sm font-semibold text-white">H</span>
           </div>
         </div>
       </div>
