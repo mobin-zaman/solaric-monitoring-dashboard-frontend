@@ -125,21 +125,55 @@ export default function DailyView({
 
   useEffect(() => {
     if (uniqueYears1.length > 0) {
-      setSelectedYear1(uniqueYears1[0]);
+      if (localStorage.getItem("date")) {
+        const date = localStorage.getItem("date").split("-");
+        setSelectedYear1(date[0]);
+      } else {
+        const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
+        setSelectedYear1(sortedYears[0]);
+      }
     }
   }, [uniqueYears1]);
 
   useEffect(() => {
     if (uniqueMonths1.length > 0) {
-      setSelectedMonth1(uniqueMonths1[0]);
+      if (localStorage.getItem("date")) {
+        const date = localStorage.getItem("date").split("-");
+        setSelectedMonth1(date[1]);
+      } else {
+        const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
+        setSelectedMonth1(sortedMonths[0]);
+      }
     }
   }, [uniqueMonths1]);
 
   useEffect(() => {
     if (uniqueDays1.length > 0) {
-      setSelectedDay1(uniqueDays1[0]);
+      if (localStorage.getItem("date")) {
+        const date = localStorage.getItem("date").split("-");
+        setSelectedDay1(date[2]);
+      } else {
+        const sortedDays = uniqueDays1.sort(); // Sort the uniqueDays1 array
+        setSelectedDay1(sortedDays[0]);
+      }
     }
   }, [uniqueDays1]);
+
+  // useEffect(() => {
+  //   // if (uniqueDays1.length > 0) {
+  //   //   const sortedDays = uniqueDays1.sort(); // Sort the uniqueDays1 array
+  //   //   setSelectedDay1(sortedDays[0]);
+  //   // }
+  //   const sortedDays1 = monthsFromData
+  //     ?.map((item, Index) => {
+  //       if (item.split("-")[0] === selectedMonth1) {
+  //         return item.split("-")[1];
+  //       }
+  //     })
+  //     .sort();
+  //     console.log("sortedDays1111111111111111111111", sortedDays1);
+  //     setSelectedDay1(sortedDays1[0]);
+  // }, [uniqueDays1, monthsFromData, selectedMonth1]);
 
   const [dateKey, setDateKey] = useState("");
 
@@ -175,18 +209,40 @@ export default function DailyView({
           MW: frameItem.value,
           collectTime: new Date(
             new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
-              5 * 60 * 60 * 1000
+              5 * 60 * 60 * 1000 +
+              50 * 60 * 1000
           ).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
         }))
       );
-      setGenerationData(DailyViewData["data"]?.generation.toFixed(1));
-      setSunHoursData(DailyViewData["data"]?.sunHrs.toFixed(1));
+      setGenerationData(DailyViewData["data"]?.generation?.toFixed(1));
+      setSunHoursData(DailyViewData["data"]?.sunHrs?.toFixed(1));
     }
   }, [DailyViewData, DailyViewDataIsLoading]);
 
   useEffect(() => {
     console.log("storeDailyViewData", storeDailyViewData);
   }, [storeDailyViewData]);
+
+  useEffect(() => {
+    localStorage.setItem("date", dateKey);
+  }, [dateKey]);
+
+  useEffect(() => {
+      // const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
+      // setSelectedYear1(sortedYears[0]);
+      // const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
+      // setSelectedMonth1(sortedMonths[0]);
+    // const sortedDays = monthsFromData
+    //   ?.map((item, Index) => {
+    //     if (item.split("-")[0] === sortedMonths[0]) {
+    //       return item.split("-")[1];
+    //     }
+    //   })
+    //   .sort();
+    //   setSelectedDay1(sortedDays[0]);
+    
+  }, [selectedOptionId, uniqueYears1, uniqueMonths1, monthsFromData]);
+
 
   const digitToMonth = (digit) => {
     switch (digit) {
@@ -228,7 +284,7 @@ export default function DailyView({
       return (
         <div className="custom-tooltip bg-white px-5 py-3 text-sm rounded-md border-2 border-gray-300 space-y-0.5">
           <p>{`Time: ${collectTime}`}</p>
-          <p>{`${MW.toFixed(1)} kw`}</p>
+          <p>{`${MW?.toFixed(1)} kw`}</p>
         </div>
       );
     }
@@ -239,8 +295,8 @@ export default function DailyView({
   useEffect(() => {
     setSelectedDay1(
       monthsFromData
-        .filter(item => item.split("-")[0] === selectedMonth1)
-        .map(item => item.split("-")[1])
+        .filter((item) => item.split("-")[0] === selectedMonth1)
+        .map((item) => item.split("-")[1])
         .sort((a, b) => a.localeCompare(b))
         .slice(0, 1)
     );
@@ -276,9 +332,9 @@ export default function DailyView({
               onChange={(e) => setSelectedMonth1(e.target.value)}
             >
               <option disabled>Month</option>
-              {uniqueMonths1?.map((item, Index) => {
+              {uniqueMonths1?.sort().map((item, index) => {
                 return (
-                  <option key={Index} value={item}>
+                  <option key={index} value={item}>
                     {digitToMonth(item)}
                   </option>
                 );

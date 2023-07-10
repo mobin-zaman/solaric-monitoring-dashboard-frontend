@@ -257,17 +257,17 @@ export default function Historical({
                 <tr className="h-12">
                   <td>Today</td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.production?.totalGenerationToday.toFixed(
+                    {historicalDataForProject?.historicalTableData?.production?.totalGenerationToday?.toFixed(
                       1
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.export?.today.toFixed(
+                    {historicalDataForProject?.historicalTableData?.export?.today?.toFixed(
                       1
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.import?.today.toFixed(
+                    {historicalDataForProject?.historicalTableData?.import?.today?.toFixed(
                       1
                     ) || 0}
                   </td>
@@ -280,17 +280,17 @@ export default function Historical({
                 <tr className="h-12">
                   <td>This Month</td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisMonth.toFixed(
+                    {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisMonth?.toFixed(
                       1
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.export?.thisMonth.toFixed(
+                    {historicalDataForProject?.historicalTableData?.export?.thisMonth?.toFixed(
                       1
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.import?.thisMonth.toFixed(
+                    {historicalDataForProject?.historicalTableData?.import?.thisMonth?.toFixed(
                       1
                     ) || 0}
                   </td>
@@ -303,17 +303,17 @@ export default function Historical({
                 <tr className="h-12">
                   <td>This Year</td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisYear.toFixed(
+                    {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisYear?.toFixed(
                       1
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.export?.thisYear.toFixed(
+                    {historicalDataForProject?.historicalTableData?.export?.thisYear?.toFixed(
                       1
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.import?.thisYear.toFixed(
+                    {historicalDataForProject?.historicalTableData?.import?.thisYear?.toFixed(
                       1
                     ) || 0}
                   </td>
@@ -326,17 +326,17 @@ export default function Historical({
                 <tr className="h-12">
                   <td>All Time</td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.production?.totalGenerationAllTime.toFixed(
+                    {historicalDataForProject?.historicalTableData?.production?.totalGenerationAllTime?.toFixed(
                       1
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.export?.allTime.toFixed(
+                    {historicalDataForProject?.historicalTableData?.export?.allTime?.toFixed(
                       1
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.import?.allTime.toFixed(
+                    {historicalDataForProject?.historicalTableData?.import?.allTime?.toFixed(
                       1
                     ) || 0}
                   </td>
