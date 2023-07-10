@@ -245,12 +245,13 @@ export default function Historical({
         </div>
         <div className="grid grid-cols-7">
           <div className="flex justify-center items-start col-span-3">
-            <table className="table-fixed w-full border rounded-md select-none text-[#25476A]">
+            <table className="table-fixed w-full border rounded-md select-none text-[#25476A] text-sm">
               <tbody className="text-center">
                 <tr className="bg-gray-200 h-16 font-semibold">
                   <td></td>
                   <td>Prod</td>
                   <td>Export</td>
+                  <td>Import</td>
                   <td>Sun-Hrs</td>
                 </tr>
                 <tr className="h-12">
@@ -260,7 +261,16 @@ export default function Historical({
                       1
                     ) || 0}
                   </td>
-                  <td>...</td>
+                  <td>
+                    {historicalDataForProject?.historicalTableData?.export?.today.toFixed(
+                      1
+                    ) || 0}
+                  </td>
+                  <td>
+                    {historicalDataForProject?.historicalTableData?.import?.today.toFixed(
+                      1
+                    ) || 0}
+                  </td>
                   <td>
                     {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisMonth?.toFixed(
                       1
@@ -274,7 +284,16 @@ export default function Historical({
                       1
                     ) || 0}
                   </td>
-                  <td>...</td>
+                  <td>
+                    {historicalDataForProject?.historicalTableData?.export?.thisMonth.toFixed(
+                      1
+                    ) || 0}
+                  </td>
+                  <td>
+                    {historicalDataForProject?.historicalTableData?.import?.thisMonth.toFixed(
+                      1
+                    ) || 0}
+                  </td>
                   <td>
                     {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisYear?.toFixed(
                       1
@@ -288,7 +307,16 @@ export default function Historical({
                       1
                     ) || 0}
                   </td>
-                  <td>...</td>
+                  <td>
+                    {historicalDataForProject?.historicalTableData?.export?.thisYear.toFixed(
+                      1
+                    ) || 0}
+                  </td>
+                  <td>
+                    {historicalDataForProject?.historicalTableData?.import?.thisYear.toFixed(
+                      1
+                    ) || 0}
+                  </td>
                   <td>
                     {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursTillToday?.toFixed(
                       1
@@ -302,7 +330,16 @@ export default function Historical({
                       1
                     ) || 0}
                   </td>
-                  <td>...</td>
+                  <td>
+                    {historicalDataForProject?.historicalTableData?.export?.allTime.toFixed(
+                      1
+                    ) || 0}
+                  </td>
+                  <td>
+                    {historicalDataForProject?.historicalTableData?.import?.allTime.toFixed(
+                      1
+                    ) || 0}
+                  </td>
                   <td>
                     {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursToday?.toFixed(
                       1
