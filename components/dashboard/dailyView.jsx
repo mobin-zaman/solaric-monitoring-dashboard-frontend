@@ -420,7 +420,7 @@ export default function DailyView({
             <span className="text-sm font-semibold text-white">
               {generationData}
             </span>
-            <span className="text-sm font-semibold text-white">MW</span>
+            <span className="text-sm font-semibold text-white">MWh</span>
           </div>
           <div className="flex items-center justify-center bg-[#8884d8] rounded-md px-3 py-2 select-none space-x-1">
             <span className="text-sm font-semibold text-white">
