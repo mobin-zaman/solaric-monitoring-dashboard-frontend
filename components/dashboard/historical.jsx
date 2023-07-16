@@ -223,28 +223,67 @@ export default function Historical({
             Historical
           </span>
           <div className="flex">
-          <div
-            className="flex justify-end items-center space-x-5"
-          >
-            <div className="flex rounded-md bg-gray-200">
-              <button
-                className={`flex items-center justify-center h-8 p-2 text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${ peakPowerOpen ? "bg-[#39B54A] text-white" : "bg-white text-[#39B54A]" }`}
-                onClick={() => handlePeakPowerOpen()}
-              >
-                Peak Power
-              </button>
-              <button
-                className={`flex items-center justify-center h-8 p-2 text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${ sunHoursOpen ? "bg-[#39B54A] text-white" : "bg-white text-[#39B54A]" }`}
-                onClick={() => handleSunHoursOpen()}
-              >
-                Sun Hours
-              </button>
+            <div className="flex justify-end items-center space-x-5">
+              <div className="flex rounded-md bg-gray-200">
+                <button
+                  className={`flex items-center justify-center h-7 p-2 text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${
+                    peakPowerOpen
+                      ? "bg-[#39B54A] text-white"
+                      : "bg-white text-[#39B54A]"
+                  }`}
+                  onClick={() => handlePeakPowerOpen()}
+                >
+                  Peak Power
+                </button>
+                <button
+                  className={`flex items-center justify-center h-7 p-2 text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${
+                    sunHoursOpen
+                      ? "bg-[#39B54A] text-white"
+                      : "bg-white text-[#39B54A]"
+                  }`}
+                  onClick={() => handleSunHoursOpen()}
+                >
+                  Sun Hours
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        </div>
-        <div className="grid grid-cols-7">
-          <div className="flex justify-center items-start col-span-3">
+        <div className="grid grid-cols-8">
+          <div className="flex flex-col justify-center items-end col-span-3 space-y-3">
+            <div className="flex space-x-4">
+              <button
+                className={`flex items-center justify-center h-7 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${
+                  peakPowerOpen
+                    ? "bg-[#39B54A] text-white"
+                    : "bg-white text-[#39B54A]"
+                }`}
+                // onClick={() => handlePeakPowerOpen()}
+              >
+                Default
+              </button>
+              <select
+                className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                value={"Year"}
+                onChange={(e) => setSelectedYear1(e.target.value)}
+              >
+                <option disabled>Year</option>
+              </select>
+              <select
+                className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                value={"Month"}
+                onChange={(e) => setSelectedMonth1(e.target.value)}
+              >
+                <option disabled>Month</option>
+              </select>
+              <select
+                className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                value={"Day"}
+                onChange={(e) => setSelectedDay1(e.target.value)}
+              >
+                <option disabled>Day</option>
+              </select>
+            </div>
             <table className="table-fixed w-full border rounded-md select-none text-[#25476A] text-sm">
               <tbody className="text-center">
                 <tr className="bg-gray-200 h-16 font-semibold">
@@ -351,10 +390,10 @@ export default function Historical({
           </div>
 
           {sunHoursOpen ? (
-            <div className="flex flex-col col-span-4 h-72 space-y-3">
+            <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
               <div className="flex space-x-3 justify-end">
                 <select
-                  className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                  className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
                   value={historicalDataForProjectSunHrsBarChartDataYearSelected}
                   onChange={(e) =>
                     setHistoricalDataForProjectSunHrsBarChartDataSelected(
@@ -370,7 +409,7 @@ export default function Historical({
                   )}
                 </select>
                 <select
-                  className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                  className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
                   value={
                     historicalDataForProjectSunHrsBarChartDataMonthSelected
                   }
@@ -399,7 +438,7 @@ export default function Historical({
               </div>
 
               <div
-                className="flex items-center justify-center text-xs font-medium"
+                className="flex items-center justify-center text-xs font-semibold"
                 style={{ width: "100%", height: "100%" }}
               >
                 <ResponsiveContainer width="100%" height="100%">

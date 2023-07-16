@@ -130,7 +130,8 @@ export default function DailyView({
         setSelectedYear1(date[0]);
       } else {
         const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
-        setSelectedYear1(sortedYears[0]);
+        const lastIdx = sortedYears.length - 1;
+        setSelectedYear1(sortedYears[lastIdx]);
       }
     }
   }, [uniqueYears1]);
@@ -142,38 +143,28 @@ export default function DailyView({
         setSelectedMonth1(date[1]);
       } else {
         const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
-        setSelectedMonth1(sortedMonths[0]);
+        const lastIdx = sortedMonths.length - 1;
+        setSelectedMonth1(sortedMonths[lastIdx]);
       }
     }
   }, [uniqueMonths1]);
 
   useEffect(() => {
-    if (uniqueDays1.length > 0) {
+    if (monthsFromData.length > 0) {
       if (localStorage.getItem("date")) {
         const date = localStorage.getItem("date").split("-");
         setSelectedDay1(date[2]);
       } else {
-        const sortedDays = uniqueDays1.sort(); // Sort the uniqueDays1 array
-        setSelectedDay1(sortedDays[0]);
+        const sortedDays =       monthsFromData
+        .filter((item) => item.split("-")[0] === selectedMonth1)
+        .map((item) => item.split("-")[1])
+        .sort((a, b) => a.localeCompare(b));
+
+        const lastIdx = sortedDays.length - 1;
+        setSelectedDay1(sortedDays[lastIdx]);
       }
     }
-  }, [uniqueDays1]);
-
-  // useEffect(() => {
-  //   // if (uniqueDays1.length > 0) {
-  //   //   const sortedDays = uniqueDays1.sort(); // Sort the uniqueDays1 array
-  //   //   setSelectedDay1(sortedDays[0]);
-  //   // }
-  //   const sortedDays1 = monthsFromData
-  //     ?.map((item, Index) => {
-  //       if (item.split("-")[0] === selectedMonth1) {
-  //         return item.split("-")[1];
-  //       }
-  //     })
-  //     .sort();
-  //     console.log("sortedDays1111111111111111111111", sortedDays1);
-  //     setSelectedDay1(sortedDays1[0]);
-  // }, [uniqueDays1, monthsFromData, selectedMonth1]);
+  }, [selectedMonth1, monthsFromData]);
 
   const [dateKey, setDateKey] = useState("");
 
@@ -209,13 +200,13 @@ export default function DailyView({
           MW: frameItem.value,
           collectTime: new Date(
             new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
-              5 * 60 * 60 * 1000 +
-              50 * 60 * 1000
+              6 * 60 * 60 * 1000 
+              // + 50 * 60 * 1000
           ).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
         }))
       );
-      setGenerationData(DailyViewData["data"]?.generation?.toFixed(1));
-      setSunHoursData(DailyViewData["data"]?.sunHrs?.toFixed(1));
+      setGenerationData(DailyViewData["data"]?.generation?.toFixed(2));
+      setSunHoursData(DailyViewData["data"]?.sunHrs?.toFixed(2));
     }
   }, [DailyViewData, DailyViewDataIsLoading]);
 
@@ -292,27 +283,17 @@ export default function DailyView({
     return null;
   };
 
-  useEffect(() => {
-    setSelectedDay1(
-      monthsFromData
-        .filter((item) => item.split("-")[0] === selectedMonth1)
-        .map((item) => item.split("-")[1])
-        .sort((a, b) => a.localeCompare(b))
-        .slice(0, 1)
-    );
-  }, [selectedMonth1, monthsFromData]);
-
   return (
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md">
         <div className="flex items-center justify-between">
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
-            Daily View
+            Daily View{selectedYear1}{selectedMonth1}{selectedDay1}
           </span>
           {/* <FontAwesomeIcon icon={faRotate} /> */}
           <div className="flex space-x-4">
             <select
-              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedYear1}
               onChange={(e) => setSelectedYear1(e.target.value)}
             >
@@ -327,7 +308,7 @@ export default function DailyView({
               })}
             </select>
             <select
-              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedMonth1}
               onChange={(e) => setSelectedMonth1(e.target.value)}
             >
@@ -341,7 +322,7 @@ export default function DailyView({
               })}
             </select>
             <select
-              className="flex items-center justify-center px-2.5 py-1 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedDay1}
               onChange={(e) => setSelectedDay1(e.target.value)}
             >
@@ -368,10 +349,21 @@ export default function DailyView({
             </select>
           </div>
         </div>
-        <div className="flex w-full h-72 items-center justify-center">
+        <div className="w-full h-full p-3 rounded-md relative text-xs font-semibold text-gray-600">
+      {/* Add the div element to display Generation and Sun Hours */}
+      <div className="flex flex-col justify-between mb-2 absolute top-8 left-20 bg-white p-2 rounded-md space-y-0.5">
+      <div className="flex items-center space-x-2">
+          <span className="">Generation:</span>
+          <span className="">{generationData} MWh</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <span className="">Sun Hours:</span>
+          <span className="">{sunHoursData} H</span>
+        </div>
+      </div>
           <div
-            style={{ width: "90%", height: "90%" }}
-            className="text-xs font-medium"
+            style={{ width: "100%", height: "100%" }}
+            className="text-xs font-semibold"
           >
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
@@ -412,7 +404,7 @@ export default function DailyView({
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="flex items-center justify-center space-x-3">
+        {/* <div className="flex items-center justify-center space-x-3">
           <div className="flex items-center justify-center bg-[#8884d8] rounded-md px-3 py-2 select-none space-x-1">
             <span className="text-sm font-semibold text-white">
               Generation :
@@ -431,7 +423,7 @@ export default function DailyView({
             </span>
             <span className="text-sm font-semibold text-white">H</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
