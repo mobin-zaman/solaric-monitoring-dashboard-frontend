@@ -1192,7 +1192,7 @@ export default function Index() {
           </div>
           </div>
         </div>
-        {loading ? <>
+        {/* {loading ? <> */}
         <div className="grid grid-cols-2 gap-1.5">
           <DailyView dailyViewData={mainDailyViewData} collectTimeForInverterHourlyData={collectTimeForInverterHourlyData} firstProjectForDefaultViewId={firstProjectForDefaultViewId} selectedOptionId={selectedOptionId} selectedOptionIdCompany={selectedOptionIdCompany} selectedOptionIdBuilding={selectedOptionIdBuilding} selectedOptionIdInverter={selectedOptionIdInverter} />
           <LivePowerFlow />
@@ -1204,7 +1204,8 @@ export default function Index() {
           <div className="col-span-2">
             <Impact impactData={mainImpactTableData} />
           </div>
-        </div></> : <div className="flex items-center justify-center text-black pt-10"><ReactLoading type="spokes" color="#25476A" height={50} width={50} /></div>}
+        </div>
+        {/* </> : <div className="flex items-center justify-center text-black pt-10"><ReactLoading type="spokes" color="#25476A" height={50} width={50} /></div>} */}
       </div>
     </>
   );

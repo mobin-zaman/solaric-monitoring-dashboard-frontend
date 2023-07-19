@@ -288,7 +288,7 @@ export default function DailyView({
       <div className="w-full h-96 bg-white p-3 rounded-md">
         <div className="flex items-center justify-between">
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
-            Daily View{selectedYear1}{selectedMonth1}{selectedDay1}
+            Daily View
           </span>
           {/* <FontAwesomeIcon icon={faRotate} /> */}
           <div className="flex space-x-4">

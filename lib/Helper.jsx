@@ -144,7 +144,7 @@ export const updateProject = async (data) => {
   const d = {
     name: data.name,
     fundingType: data.fundingType,
-  }
+  };
   const response = await todoApi.put(`/project/${id}`, d, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -159,6 +159,7 @@ export const addUserToProject = async (data) => {
   const userId = data.userId;
   const response = await todoApi.post(
     `/project/${projectId}/assign-user/${userId}`,
+    {},
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -196,18 +197,13 @@ export const updateCompanyToProject = async (data) => {
     name: data.companyName,
     code: data.companyCode,
   };
-  const response = await todoApi.put(
-    `/company/${companyId}`,
-    companyData,
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("Token")}`,
-      },
-    }
-  );
+  const response = await todoApi.put(`/company/${companyId}`, companyData, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
   return response.data;
 };
-
 
 // Api calls for delete user from project
 export const deleteUserFromProject = async (data) => {
@@ -318,7 +314,7 @@ export const updateBuilding = async (data) => {
   const d = {
     name: data.buildingName,
     code: data.buildingCode,
-  }
+  };
   const response = await todoApi.put(`/building/${id}`, d, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -792,7 +788,6 @@ export const getInverterHourData = async (data) => {
   return response.data;
 };
 
-
 // Api call for get daily view collect time
 export const getDailyViewCollectTime = async (collectionKey) => {
   const key = Object.keys(collectionKey)[0];
@@ -807,7 +802,7 @@ export const getDailyViewCollectTime = async (collectionKey) => {
     }
   );
   return response.data;
-}
+};
 
 // Api call for get Daily View Data
 export const getDailyViewData = async (data) => {
@@ -823,28 +818,26 @@ export const getDailyViewData = async (data) => {
     }
   );
   return response.data;
-}
+};
 
 // Api call for update inverters in project
 export const updateInvertersInProject = async (data) => {
   const projectId = data?.projectId;
-  const response = await todoApi.put(
-    `/project/${projectId}/update-inverters`,
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("Token")}`,
-      },
-    }
-  );
+  const response = await todoApi.put(`/project/${projectId}/update-inverters`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
   return response.data;
-}
+};
 
 // Api call for historical peak power data
-export const getHistoricalPeakPowerData = async (collectionKey) => {
-  const key = Object.keys(collectionKey)[0];
-  const id = collectionKey[key];
+export const getHistoricalPeakPowerData = async (data) => {
+  const key = Object.keys(data.collectionKey)[0];
+  const id = data.collectionKey[key];
+  const dateKey = data.dateKey;
   const response = await todoApi.get(
-    `/dashboard/historic-view/peak-power/${key}/${id}`,
+    `/dashboard/historic-view/peak-power/${key}/${id}/${dateKey}`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -852,4 +845,4 @@ export const getHistoricalPeakPowerData = async (collectionKey) => {
     }
   );
   return response.data;
-}
+};

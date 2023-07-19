@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { data } from "autoprefixer";
 import { useQuery, useMutation } from "react-query";
-import { getHistoricalPeakPowerData } from "@/lib/Helper";
+import { getDailyViewCollectTime, getHistoricalPeakPowerData } from "@/lib/Helper";
 
 export default function HistoricalPeakPower({
   selectedOptionId,
@@ -68,12 +68,12 @@ export default function HistoricalPeakPower({
   ]);
 
   const {
-    data: historicalPeakPowerData,
-    isLoading,
-    error,
+    data: DailyViewCollectTimeData,
+    isLoading: DailyViewCollectTimeIsLoading,
+    error: DailyViewCollectTimeError,
   } = useQuery(
-    ["historicalPeakPowerData", collectionKey],
-    () => getHistoricalPeakPowerData(collectionKey),
+    ["DailyViewCollectTime", collectionKey],
+    () => getDailyViewCollectTime(collectionKey),
     {
       enabled: !!collectionKey,
       onSuccess: (data) => {
@@ -84,33 +84,73 @@ export default function HistoricalPeakPower({
 
   const [yearsFromData, setYearsFromData] = useState([]);
   const [monthsFromData, setMonthsFromData] = useState([]);
+  const [daysFromData, setDaysFromData] = useState([]);
   const [uniqueYears, setUniqueYears] = useState([]);
   const [uniqueMonths, setUniqueMonths] = useState([]);
+  const [uniqueDays, setUniqueDays] = useState([]);
 
   useEffect(() => {
-    if (!isLoading && historicalPeakPowerData) {
+    if (!DailyViewCollectTimeIsLoading && DailyViewCollectTimeData) {
       const tempYears = [];
-      const tempMonths = [];
+      const tempMonthsDays = [];
+      const tempDays = [];
 
-      Object.keys(historicalPeakPowerData)?.map((item) => {
-        const [year, month] = item.split("-");
+      DailyViewCollectTimeData?.forEach((item) => {
+        const [year, month, day] = item.split("-");
         tempYears.push(year);
-        tempMonths.push(month);
+        tempMonthsDays.push(month + "-" + day);
+        tempDays.push(day);
       });
 
       setYearsFromData(tempYears);
-      setMonthsFromData(tempMonths);
+      setMonthsFromData(tempMonthsDays);
+      setDaysFromData(tempDays);
     }
-  }, [isLoading, historicalPeakPowerData]);
+  }, [DailyViewCollectTimeData, DailyViewCollectTimeIsLoading]);
 
   function removeDuplicatesFromArray(arr) {
     return [...new Set(arr)];
   }
 
+  function removeDuplicatesMonthsFromArray(arr) {
+    return [...new Set(arr?.map((item) => item.split("-")[0]))];
+  }
+
   useEffect(() => {
     setUniqueYears(removeDuplicatesFromArray(yearsFromData));
-    setUniqueMonths(removeDuplicatesFromArray(monthsFromData));
-  }, [yearsFromData, monthsFromData]);
+    setUniqueMonths(removeDuplicatesMonthsFromArray(monthsFromData));
+    setUniqueDays(removeDuplicatesFromArray(daysFromData));
+  }, [yearsFromData, monthsFromData, daysFromData]);
+
+  // const [yearsFromData, setYearsFromData] = useState([]);
+  // const [monthsFromData, setMonthsFromData] = useState([]);
+  // const [uniqueYears, setUniqueYears] = useState([]);
+  // const [uniqueMonths, setUniqueMonths] = useState([]);
+
+  // useEffect(() => {
+  //   if (!isLoading && historicalPeakPowerData) {
+  //     const tempYears = [];
+  //     const tempMonths = [];
+
+  //     Object.keys(historicalPeakPowerData)?.map((item) => {
+  //       const [year, month] = item.split("-");
+  //       tempYears.push(year);
+  //       tempMonths.push(month);
+  //     });
+
+  //     setYearsFromData(tempYears);
+  //     setMonthsFromData(tempMonths);
+  //   }
+  // }, [isLoading, historicalPeakPowerData]);
+
+  // function removeDuplicatesFromArray(arr) {
+  //   return [...new Set(arr)];
+  // }
+
+  // useEffect(() => {
+  //   setUniqueYears(removeDuplicatesFromArray(yearsFromData));
+  //   setUniqueMonths(removeDuplicatesFromArray(monthsFromData));
+  // }, [yearsFromData, monthsFromData]);
 
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -119,22 +159,53 @@ export default function HistoricalPeakPower({
 
   useEffect(() => {
     if (uniqueYears.length > 0) {
-      setSelectedYear(uniqueYears[0]);
-      setStoreYearlyData(
-        Object.keys(historicalPeakPowerData)?.map((item, index) => {
-          const [year, month] = item.split("-");
-          if (year === selectedYear) {
-            const peakPower = historicalPeakPowerData[item]?.peakPower;
-            const peakPowerType = index % 2 === 0 ? "PeakPowerA" : "PeakPowerB";
-            return {
-              name: digitToMonth(month),
-              peakPower: peakPower,
-            };
-          }
-        })
-      );
+      if (localStorage.getItem("date")) {
+        const date = localStorage.getItem("date").split("-");
+        setSelectedYear(date[0]);
+      } else {
+        const sortedYears = uniqueYears.sort(); // Sort the uniqueYears1 array
+        const lastIdx = sortedYears.length - 1;
+        setSelectedYear(sortedYears[lastIdx]);
+      }
     }
-  }, [uniqueYears, historicalPeakPowerData, selectedYear]);
+  }, [uniqueYears]);
+
+  const [dateKey, setDateKey] = useState("");
+
+  useEffect(() => {
+    if (selectedYear && selectedMonth == "Month") {
+      setDateKey(selectedYear);
+    } else if (selectedYear && selectedMonth != "Month") {
+      setDateKey(selectedYear + "-" + selectedMonth);
+    }
+  }, [selectedYear, selectedMonth]);
+
+  const {
+    data: historicalPeakPowerData,
+    isLoading : historicalPeakPowerDataIsLoading,
+    error : historicalPeakPowerDataError
+  } = useQuery(
+    ["historicalPeakPowerData", collectionKey, dateKey],
+    () => getHistoricalPeakPowerData({ collectionKey, dateKey }),
+    {
+      enabled: !!collectionKey && !!dateKey,
+      onSuccess: (data) => {
+        console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", data);
+      },
+    }
+  );
+
+  const [storeHistoricalPeakPowerData, setStoreHistoricalPeakPowerData] = useState([]);
+
+  useEffect(() => {
+    if (!historicalPeakPowerDataIsLoading && historicalPeakPowerData) {
+      setStoreHistoricalPeakPowerData(historicalPeakPowerData?.map((item) => ({
+        name: item.date.split("-").slice(-1)[0],
+        peakPower: item.peakPower,
+      })));
+    }
+  }, [historicalPeakPowerData, historicalPeakPowerDataIsLoading]);
+
 
   useEffect(() => {
     if (historicalPeakPowerData) {
