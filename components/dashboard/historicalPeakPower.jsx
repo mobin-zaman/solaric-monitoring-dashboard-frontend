@@ -12,7 +12,10 @@ import {
 import { useEffect, useState } from "react";
 import { data } from "autoprefixer";
 import { useQuery, useMutation } from "react-query";
-import { getDailyViewCollectTime, getHistoricalPeakPowerData } from "@/lib/Helper";
+import {
+  getDailyViewCollectTime,
+  getHistoricalPeakPowerData,
+} from "@/lib/Helper";
 
 export default function HistoricalPeakPower({
   selectedOptionId,
@@ -159,16 +162,30 @@ export default function HistoricalPeakPower({
 
   useEffect(() => {
     if (uniqueYears.length > 0) {
-      if (localStorage.getItem("date")) {
-        const date = localStorage.getItem("date").split("-");
-        setSelectedYear(date[0]);
-      } else {
-        const sortedYears = uniqueYears.sort(); // Sort the uniqueYears1 array
-        const lastIdx = sortedYears.length - 1;
-        setSelectedYear(sortedYears[lastIdx]);
-      }
+      // if (localStorage.getItem("historicalPeakPowerDate")) {
+      //   const date = localStorage.getItem("historicalPeakPowerDate").split("-");
+      //   setSelectedYear(date[0]);
+      // } else {
+      //   const sortedYears = uniqueYears.sort(); // Sort the uniqueYears1 array
+      //   const lastIdx = sortedYears.length - 1;
+      //   setSelectedYear(sortedYears[lastIdx]);
+      // }
+      const sortedYears = uniqueYears.sort(); // Sort the uniqueYears1 array
+      const lastIdx = sortedYears.length - 1;
+      setSelectedYear(sortedYears[lastIdx]);
     }
   }, [uniqueYears]);
+
+  // useEffect(() => {
+  //   if (selectedMonth != "Month" && localStorage.getItem("historicalPeakPowerDate")) {
+  //     const date = localStorage.getItem("historicalPeakPowerDate").split("-");
+  //     setSelectedMonth(date[1]);
+  //   }
+  // }, [selectedMonth]);
+
+  useEffect(() => {
+    setSelectedMonth("Month");
+  }, [selectedYear]);
 
   const [dateKey, setDateKey] = useState("");
 
@@ -182,55 +199,57 @@ export default function HistoricalPeakPower({
 
   const {
     data: historicalPeakPowerData,
-    isLoading : historicalPeakPowerDataIsLoading,
-    error : historicalPeakPowerDataError
+    isLoading: historicalPeakPowerDataIsLoading,
+    error: historicalPeakPowerDataError,
   } = useQuery(
     ["historicalPeakPowerData", collectionKey, dateKey],
     () => getHistoricalPeakPowerData({ collectionKey, dateKey }),
     {
       enabled: !!collectionKey && !!dateKey,
       onSuccess: (data) => {
-        console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", data);
+        console.log("historicalPeakPowerDataaaaaaaaaaaaaaaaaaaaaaa", data);
       },
     }
   );
 
-  const [storeHistoricalPeakPowerData, setStoreHistoricalPeakPowerData] = useState([]);
+  const [storeHistoricalPeakPowerData, setStoreHistoricalPeakPowerData] =
+    useState([]);
 
   useEffect(() => {
     if (!historicalPeakPowerDataIsLoading && historicalPeakPowerData) {
-      setStoreHistoricalPeakPowerData(historicalPeakPowerData?.map((item) => ({
-        name: item.date.split("-").slice(-1)[0],
-        peakPower: item.peakPower,
-      })));
+      setStoreHistoricalPeakPowerData(
+        historicalPeakPowerData?.map((item) => ({
+          name: item.collectTime.split("-").slice(-1)[0],
+          peakPower: item.peakPower,
+        }))
+      );
     }
   }, [historicalPeakPowerData, historicalPeakPowerDataIsLoading]);
 
-
   useEffect(() => {
-    if (historicalPeakPowerData) {
-      const monthlyData = Object.keys(historicalPeakPowerData)
-        .map((item) => {
-          const [year, month] = item.split("-");
-          if (year === selectedYear && month === selectedMonth) {
-            return historicalPeakPowerData[item]?.dayWisePeakPower?.map(
-              (dayItem) => ({
-                name: dayItem.day.split("-")[2],
-                peakPower: dayItem.peakPower,
-              })
-            );
-          }
-          return null; // Return null for months that don't match the selected month
-        })
-        .filter(Boolean); // Filter out null values
+    localStorage.setItem("historicalPeakPowerDate", dateKey);
+  }, [dateKey]);
 
-      setStoreMonthlyData(monthlyData.flat());
-    }
-  }, [historicalPeakPowerData, selectedYear, selectedMonth]);
+  // useEffect(() => {
+  //   if (historicalPeakPowerData) {
+  //     const monthlyData = Object.keys(historicalPeakPowerData)
+  //       .map((item) => {
+  //         const [year, month] = item.split("-");
+  //         if (year === selectedYear && month === selectedMonth) {
+  //           return historicalPeakPowerData[item]?.dayWisePeakPower?.map(
+  //             (dayItem) => ({
+  //               name: dayItem.day.split("-")[2],
+  //               peakPower: dayItem.peakPower,
+  //             })
+  //           );
+  //         }
+  //         return null; // Return null for months that don't match the selected month
+  //       })
+  //       .filter(Boolean); // Filter out null values
 
-  useEffect(() => {
-    setSelectedMonth("Month");
-  }, [selectedYear]);
+  //     setStoreMonthlyData(monthlyData.flat());
+  //   }
+  // }, [historicalPeakPowerData, selectedYear, selectedMonth]);
 
   const digitToMonth = (digit) => {
     switch (digit) {
@@ -265,7 +284,7 @@ export default function HistoricalPeakPower({
 
   return (
     <>
-      <div className="flex flex-col col-span-4 h-72 space-y-3">
+      <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
         <div className="flex space-x-3 justify-end">
           <select
             className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
@@ -275,7 +294,7 @@ export default function HistoricalPeakPower({
             }}
           >
             <option disabled>Year</option>
-            {uniqueYears?.map((item, Index) => {
+            {uniqueYears?.sort().map((item, Index) => {
               return (
                 <option key={Index} value={item}>
                   {item}
@@ -291,26 +310,25 @@ export default function HistoricalPeakPower({
             }}
           >
             <option>Month</option>
-            {uniqueMonths?.map((item, Index) => {
+            {uniqueMonths?.sort().map((item, index) => {
               return (
-                <option key={Index} value={item}>
+                <option key={index} value={item}>
                   {digitToMonth(item)}
                 </option>
               );
             })}
           </select>
         </div>
+
         <div
-          className="flex items-center justify-center text-xs font-medium"
-          style={{ width: "100%", height: "100%" }} 
+          className="flex items-center justify-center text-xs font-semibold"
+          style={{ width: "100%", height: "100%" }}
         >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               width={500}
               height={300}
-              data={
-                selectedMonth != "Month" ? storeMonthlyData : storeYearlyData
-              }
+              data={storeHistoricalPeakPowerData}
               margin={{
                 top: 5,
                 right: 30,
