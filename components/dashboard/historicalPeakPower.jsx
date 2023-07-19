@@ -16,6 +16,7 @@ import {
   getDailyViewCollectTime,
   getHistoricalPeakPowerData,
 } from "@/lib/Helper";
+import ReactLoading from 'react-loading';
 
 export default function HistoricalPeakPower({
   selectedOptionId,
@@ -282,6 +283,15 @@ export default function HistoricalPeakPower({
     }
   };
 
+  const [ fakeLoader, setFakeLoader ] = useState(false);
+
+  useEffect(() => {
+      setTimeout(() => { 
+        setFakeLoader(true);
+      }, 50000);
+
+  }, []);
+
   return (
     <>
       <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
@@ -319,11 +329,11 @@ export default function HistoricalPeakPower({
             })}
           </select>
         </div>
-
         <div
           className="flex items-center justify-center text-xs font-semibold"
           style={{ width: "100%", height: "100%" }}
         >
+          {fakeLoader ? (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               width={500}
@@ -343,7 +353,11 @@ export default function HistoricalPeakPower({
               {/* <Legend /> */}
               <Bar dataKey="peakPower" fill="#82ca9d" />
             </BarChart>
-          </ResponsiveContainer>
+          </ResponsiveContainer> ) : (
+            <div width="100%" height="100%" className="flex items-center justify-center border w-full h-full">
+            <ReactLoading type="spokes" color="#25476A" height={50} width={50} />
+          </div>
+          )}
         </div>
       </div>
     </>

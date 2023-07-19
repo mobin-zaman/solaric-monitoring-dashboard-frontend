@@ -249,7 +249,7 @@ export default function Historical({
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-8">
+        <div className="grid grid-cols-8 gap-5">
           <div className="flex flex-col justify-center items-end col-span-3 space-y-3">
             <div className="flex space-x-4">
               <button
@@ -311,7 +311,7 @@ export default function Historical({
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisMonth?.toFixed(
+                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursToday?.toFixed(
                       1
                     ) || 0}
                   </td>
@@ -334,7 +334,7 @@ export default function Historical({
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisYear?.toFixed(
+                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisMonth?.toFixed(
                       1
                     ) || 0}
                   </td>
@@ -357,7 +357,7 @@ export default function Historical({
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursTillToday?.toFixed(
+                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisYear?.toFixed(
                       1
                     ) || 0}
                   </td>
@@ -380,7 +380,7 @@ export default function Historical({
                     ) || 0}
                   </td>
                   <td>
-                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursToday?.toFixed(
+                    {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursTillToday?.toFixed(
                       1
                     ) || 0}
                   </td>
