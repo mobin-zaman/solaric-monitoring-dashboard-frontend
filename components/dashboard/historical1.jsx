@@ -218,127 +218,147 @@ export default function Historical({
   return (
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md space-y-2.5">
-        <div className="flex items-center justify-between">
-          <span className="text-xl font-semibold tracking-wide text-[#25476A]">
-            Historical
-          </span>
-          <div className="flex">
-            <div className="flex justify-end items-center space-x-5">
-              <div className="flex rounded-md bg-gray-200">
-                <button
-                  className={`flex items-center justify-center h-7 p-2 text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${
-                    peakPowerOpen
-                      ? "bg-[#39B54A] text-white"
-                      : "bg-white text-[#39B54A]"
-                  }`}
-                  onClick={() => handlePeakPowerOpen()}
-                >
-                  Peak Power
-                </button>
-                <button
-                  className={`flex items-center justify-center h-7 p-2 text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${
-                    sunHoursOpen
-                      ? "bg-[#39B54A] text-white"
-                      : "bg-white text-[#39B54A]"
-                  }`}
-                  onClick={() => handleSunHoursOpen()}
-                >
-                  Sun Hours
-                </button>
-              </div>
-            </div>
-          </div>
+        <div className="text-xl font-semibold tracking-wide text-[#25476A]">
+          Historical
         </div>
-
-
-          {sunHoursOpen ? (
-            <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
-              <div className="flex space-x-3 justify-end">
-                <select
-                  className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-                  value={historicalDataForProjectSunHrsBarChartDataYearSelected}
-                  onChange={(e) =>
-                    setHistoricalDataForProjectSunHrsBarChartDataSelected(
-                      e.target.value
-                    )
-                  }
-                >
-                  <option disabled>Year</option>
-                  {historicalDataForProjectSunHrsBarChartDataYearCount?.map(
-                    (item, Index) => {
-                      return <option key={Index}>{item}</option>;
-                    }
-                  )}
-                </select>
-                <select
-                  className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-                  value={
-                    historicalDataForProjectSunHrsBarChartDataMonthSelected
-                  }
-                  onChange={(e) =>
-                    setHistoricalDataForProjectSunHrsBarChartDataMonthSelected(
-                      e.target.value
-                    )
-                  }
-                >
-                  <option disabled>Month</option>
-                  {historicalDataForProjectSunHrsBarChartDataMonthCount?.map(
-                    (item, Index) => {
-                      if (
-                        historicalDataForProjectSunHrsBarChartDataYearSelected ===
-                        item?.split("-")[0]
-                      ) {
-                        return (
-                          <option key={Index} value={item}>
-                            {digitToMonth(item?.split("-")[1])}
-                          </option>
-                        );
-                      }
-                    }
-                  )}
-                </select>
-              </div>
-
-              <div
-                className="flex items-center justify-center text-xs font-semibold"
-                style={{ width: "100%", height: "100%" }}
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    width={500}
-                    height={300}
-                    data={
-                      historicalDataForProjectSunHrsBarChartDataMonthly
-                        ? historicalDataForProjectSunHrsBarChartDataMonthly
-                        : historicalDataForProjectSunHrsBarChartDataYearly
-                    }
-                    margin={{
-                      top: 5,
-                      right: 30,
-                      left: 20,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    {/* <Legend /> */}
-                    <Bar dataKey="sunHours" fill="#82ca9d" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          ) : (
-            <HistoricalPeakPower
-              firstProjectForDefaultViewId={firstProjectForDefaultViewId}
-              selectedOptionId={selectedOptionId}
-              selectedOptionIdCompany={selectedOptionIdCompany}
-              selectedOptionIdBuilding={selectedOptionIdBuilding}
-              selectedOptionIdInverter={selectedOptionIdInverter}
-            />
-          )}
-       
+        <div className="flex flex-col justify-center items-end col-span-3 space-y-3">
+          <div className="flex space-x-4">
+            <button
+              className={`flex items-center justify-center h-7 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${
+                peakPowerOpen
+                  ? "bg-[#39B54A] text-white"
+                  : "bg-white text-[#39B54A]"
+              }`}
+              // onClick={() => handlePeakPowerOpen()}
+            >
+              Default
+            </button>
+            <select
+              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              value={"Year"}
+              onChange={(e) => setSelectedYear1(e.target.value)}
+            >
+              <option disabled>Year</option>
+            </select>
+            <select
+              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              value={"Month"}
+              onChange={(e) => setSelectedMonth1(e.target.value)}
+            >
+              <option disabled>Month</option>
+            </select>
+            <select
+              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              value={"Day"}
+              onChange={(e) => setSelectedDay1(e.target.value)}
+            >
+              <option disabled>Day</option>
+            </select>
+          </div>
+          <table className="table-fixed w-full border rounded-md select-none text-[#25476A] text-sm">
+            <tbody className="text-center">
+              <tr className="bg-gray-200 h-16 font-semibold">
+                <td></td>
+                <td>Prod</td>
+                <td>Export</td>
+                <td>Import</td>
+                <td>Sun-Hrs</td>
+              </tr>
+              <tr className="h-12">
+                <td>Today</td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.production?.totalGenerationToday?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.export?.today?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.import?.today?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursToday?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+              </tr>
+              <tr className="h-12">
+                <td>This Month</td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisMonth?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.export?.thisMonth?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.import?.thisMonth?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisMonth?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+              </tr>
+              <tr className="h-12">
+                <td>This Year</td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisYear?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.export?.thisYear?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.import?.thisYear?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisYear?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+              </tr>
+              <tr className="h-12">
+                <td>All Time</td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.production?.totalGenerationAllTime?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.export?.allTime?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.import?.allTime?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+                <td>
+                  {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursTillToday?.toFixed(
+                    1
+                  ) || 0}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

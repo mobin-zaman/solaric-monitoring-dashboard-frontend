@@ -1,10 +1,11 @@
 import DailyView from "./dailyView";
 import LivePowerFlow from "./livePowerFlow";
 import Historical from "./historical";
+import Historical1 from "./historical1";
 import Impact from "./impact";
 import { useState, useRef, useEffect, use } from "react";
 import { useQuery, useMutation } from "react-query";
-import ReactLoading from 'react-loading';
+import ReactLoading from "react-loading";
 
 import {
   getProjects,
@@ -13,7 +14,7 @@ import {
   searchCompany,
   getCompany,
   searchBuilding,
-  getBuilding, 
+  getBuilding,
   searchInverterForBuilding,
   getHistoricalDataForProject,
   getHistoricalDataForCompany,
@@ -31,11 +32,10 @@ import {
   getDailyViewForCompany,
   getDailyViewForBuilding,
   getDailyViewForInverter,
-  getCollectTimeForInverterHourlyData
+  getCollectTimeForInverterHourlyData,
 } from "@/lib/Helper";
 
 export default function Index() {
-
   //default view
   const {
     data: allProject,
@@ -149,7 +149,8 @@ export default function Index() {
   // }, [selectedOptionId, project]);
 
   const [isOpenCompany, setIsOpenCompany] = useState(false);
-  const [selectedOptionCompany, setSelectedOptionCompany] = useState("Select Company");
+  const [selectedOptionCompany, setSelectedOptionCompany] =
+    useState("Select Company");
   const [selectedOptionIdCompany, setSelectedOptionIdCompany] = useState(null);
   const [inputValueCompany, setInputValueCompany] = useState("");
   const [searchOnCompany, setSearchOnCompany] = useState(false);
@@ -404,8 +405,10 @@ export default function Index() {
   }, []);
 
   //default
-  const [historicalDataForDefaultEnabled, setHistoricalDataForDefaultEnabled] = useState(false);
-  const [historicalDataForDefault, setHistoricalDataForDefault] = useState(null);
+  const [historicalDataForDefaultEnabled, setHistoricalDataForDefaultEnabled] =
+    useState(false);
+  const [historicalDataForDefault, setHistoricalDataForDefault] =
+    useState(null);
 
   useQuery(
     ["historicalDataForDefault", firstProjectForDefaultViewId],
@@ -423,18 +426,30 @@ export default function Index() {
     setHistoricalDataForDefaultEnabled(true);
   }, [firstProjectForDefaultViewId]);
 
-  const [historicalDataForDefaultSunHrsBarChartDataEnabled, setHistoricalDataForDefaultSunHrsBarChartDataEnabled] = useState(false);
-  const [historicalDataForDefaultSunHrsBarChartData, setHistoricalDataForDefaultSunHrsBarChartData] = useState(null);
+  const [
+    historicalDataForDefaultSunHrsBarChartDataEnabled,
+    setHistoricalDataForDefaultSunHrsBarChartDataEnabled,
+  ] = useState(false);
+  const [
+    historicalDataForDefaultSunHrsBarChartData,
+    setHistoricalDataForDefaultSunHrsBarChartData,
+  ] = useState(null);
 
   useQuery(
-    ["historicalDataForDefaultSunHrsBarChartData", firstProjectForDefaultViewId],
-    () => getHistoricalDataForProjectSunHrsBarChartData(firstProjectForDefaultViewId),
+    [
+      "historicalDataForDefaultSunHrsBarChartData",
+      firstProjectForDefaultViewId,
+    ],
+    () =>
+      getHistoricalDataForProjectSunHrsBarChartData(
+        firstProjectForDefaultViewId
+      ),
     {
       enabled: historicalDataForDefaultSunHrsBarChartDataEnabled,
       onSuccess: (data) => {
         setHistoricalDataForDefaultSunHrsBarChartDataEnabled(false);
         setHistoricalDataForDefaultSunHrsBarChartData(data);
-      }
+      },
     }
   );
 
@@ -443,9 +458,10 @@ export default function Index() {
   }, [firstProjectForDefaultViewId]);
 
   //project
-  const [historicalDataForProjectEnabled, setHistoricalDataForProjectEnabled] = useState(false);
-  const [historicalDataForProject, setHistoricalDataForProject] = useState(null);
-
+  const [historicalDataForProjectEnabled, setHistoricalDataForProjectEnabled] =
+    useState(false);
+  const [historicalDataForProject, setHistoricalDataForProject] =
+    useState(null);
 
   useQuery(
     ["historicalDataForProject", selectedOptionId],
@@ -455,17 +471,22 @@ export default function Index() {
       onSuccess: (data) => {
         setHistoricalDataForProjectEnabled(false);
         setHistoricalDataForProject(data);
-      }
+      },
     }
   );
-
 
   useEffect(() => {
     setHistoricalDataForProjectEnabled(true);
   }, [selectedOptionId]);
 
-  const [historicalDataForProjectSunHrsBarChartDataEnabled, setHistoricalDataForProjectSunHrsBarChartDataEnabled] = useState(false);
-  const [historicalDataForProjectSunHrsBarChartData, setHistoricalDataForProjectSunHrsBarChartData] = useState(null);
+  const [
+    historicalDataForProjectSunHrsBarChartDataEnabled,
+    setHistoricalDataForProjectSunHrsBarChartDataEnabled,
+  ] = useState(false);
+  const [
+    historicalDataForProjectSunHrsBarChartData,
+    setHistoricalDataForProjectSunHrsBarChartData,
+  ] = useState(null);
 
   useQuery(
     ["historicalDataForProjectSunHrsBarChartData", selectedOptionId],
@@ -475,7 +496,7 @@ export default function Index() {
       onSuccess: (data) => {
         setHistoricalDataForProjectSunHrsBarChartDataEnabled(false);
         setHistoricalDataForProjectSunHrsBarChartData(data);
-      }
+      },
     }
   );
 
@@ -484,8 +505,10 @@ export default function Index() {
   }, [selectedOptionId]);
 
   //company
-  const [historicalDataForCompanyEnabled, setHistoricalDataForCompanyEnabled] = useState(false);
-  const [historicalDataForCompany, setHistoricalDataForCompany] = useState(null);
+  const [historicalDataForCompanyEnabled, setHistoricalDataForCompanyEnabled] =
+    useState(false);
+  const [historicalDataForCompany, setHistoricalDataForCompany] =
+    useState(null);
 
   useQuery(
     ["historicalDataForCompany", selectedOptionIdCompany],
@@ -495,7 +518,7 @@ export default function Index() {
       onSuccess: (data) => {
         setHistoricalDataForCompanyEnabled(false);
         setHistoricalDataForCompany(data);
-      }
+      },
     }
   );
 
@@ -503,18 +526,25 @@ export default function Index() {
     setHistoricalDataForCompanyEnabled(true);
   }, [selectedOptionIdCompany]);
 
-  const [historicalDataForCompanySunHrsBarChartDataEnabled, setHistoricalDataForCompanySunHrsBarChartDataEnabled] = useState(false);
-  const [historicalDataForCompanySunHrsBarChartData, setHistoricalDataForCompanySunHrsBarChartData] = useState(null);
+  const [
+    historicalDataForCompanySunHrsBarChartDataEnabled,
+    setHistoricalDataForCompanySunHrsBarChartDataEnabled,
+  ] = useState(false);
+  const [
+    historicalDataForCompanySunHrsBarChartData,
+    setHistoricalDataForCompanySunHrsBarChartData,
+  ] = useState(null);
 
   useQuery(
     ["historicalDataForCompanySunHrsBarChartData", selectedOptionIdCompany],
-    () => getHistoricalDataForCompanySunHrsBarChartData(selectedOptionIdCompany),
+    () =>
+      getHistoricalDataForCompanySunHrsBarChartData(selectedOptionIdCompany),
     {
       enabled: historicalDataForCompanySunHrsBarChartDataEnabled,
       onSuccess: (data) => {
         setHistoricalDataForCompanySunHrsBarChartDataEnabled(false);
         setHistoricalDataForCompanySunHrsBarChartData(data);
-      }
+      },
     }
   );
 
@@ -523,8 +553,12 @@ export default function Index() {
   }, [selectedOptionIdCompany]);
 
   //building
-  const [historicalDataForBuildingEnabled, setHistoricalDataForBuildingEnabled] = useState(false);
-  const [historicalDataForBuilding, setHistoricalDataForBuilding] = useState(null);
+  const [
+    historicalDataForBuildingEnabled,
+    setHistoricalDataForBuildingEnabled,
+  ] = useState(false);
+  const [historicalDataForBuilding, setHistoricalDataForBuilding] =
+    useState(null);
 
   useQuery(
     ["historicalDataForBuilding", selectedOptionIdBuilding],
@@ -534,7 +568,7 @@ export default function Index() {
       onSuccess: (data) => {
         setHistoricalDataForBuildingEnabled(false);
         setHistoricalDataForBuilding(data);
-      }
+      },
     }
   );
 
@@ -542,18 +576,25 @@ export default function Index() {
     setHistoricalDataForBuildingEnabled(true);
   }, [selectedOptionIdBuilding]);
 
-  const [historicalDataForBuildingSunHrsBarChartDataEnabled, setHistoricalDataForBuildingSunHrsBarChartDataEnabled] = useState(false);
-  const [historicalDataForBuildingSunHrsBarChartData, setHistoricalDataForBuildingSunHrsBarChartData] = useState(null);
+  const [
+    historicalDataForBuildingSunHrsBarChartDataEnabled,
+    setHistoricalDataForBuildingSunHrsBarChartDataEnabled,
+  ] = useState(false);
+  const [
+    historicalDataForBuildingSunHrsBarChartData,
+    setHistoricalDataForBuildingSunHrsBarChartData,
+  ] = useState(null);
 
   useQuery(
     ["historicalDataForBuildingSunHrsBarChartData", selectedOptionIdBuilding],
-    () => getHistoricalDataForBuildingSunHrsBarChartData(selectedOptionIdBuilding),
+    () =>
+      getHistoricalDataForBuildingSunHrsBarChartData(selectedOptionIdBuilding),
     {
       enabled: historicalDataForBuildingSunHrsBarChartDataEnabled,
       onSuccess: (data) => {
         setHistoricalDataForBuildingSunHrsBarChartDataEnabled(false);
         setHistoricalDataForBuildingSunHrsBarChartData(data);
-      }
+      },
     }
   );
 
@@ -562,8 +603,12 @@ export default function Index() {
   }, [selectedOptionIdBuilding]);
 
   //inverter
-  const [historicalDataForInverterEnabled, setHistoricalDataForInverterEnabled] = useState(false);
-  const [historicalDataForInverter, setHistoricalDataForInverter] = useState(null);
+  const [
+    historicalDataForInverterEnabled,
+    setHistoricalDataForInverterEnabled,
+  ] = useState(false);
+  const [historicalDataForInverter, setHistoricalDataForInverter] =
+    useState(null);
 
   useQuery(
     ["historicalDataForInverter", selectedOptionIdInverter],
@@ -573,7 +618,7 @@ export default function Index() {
       onSuccess: (data) => {
         setHistoricalDataForInverterEnabled(false);
         setHistoricalDataForInverter(data);
-      }
+      },
     }
   );
 
@@ -581,18 +626,25 @@ export default function Index() {
     setHistoricalDataForInverterEnabled(true);
   }, [selectedOptionIdInverter]);
 
-  const [historicalDataForInverterSunHrsBarChartDataEnabled, setHistoricalDataForInverterSunHrsBarChartDataEnabled] = useState(false);
-  const [historicalDataForInverterSunHrsBarChartData, setHistoricalDataForInverterSunHrsBarChartData] = useState(null);
+  const [
+    historicalDataForInverterSunHrsBarChartDataEnabled,
+    setHistoricalDataForInverterSunHrsBarChartDataEnabled,
+  ] = useState(false);
+  const [
+    historicalDataForInverterSunHrsBarChartData,
+    setHistoricalDataForInverterSunHrsBarChartData,
+  ] = useState(null);
 
   useQuery(
     ["historicalDataForInverterSunHrsBarChartData", selectedOptionIdInverter],
-    () => getHistoricalDataForInverterSunHrsBarChartData(selectedOptionIdInverter),
+    () =>
+      getHistoricalDataForInverterSunHrsBarChartData(selectedOptionIdInverter),
     {
       enabled: historicalDataForInverterSunHrsBarChartDataEnabled,
       onSuccess: (data) => {
         setHistoricalDataForInverterSunHrsBarChartDataEnabled(false);
         setHistoricalDataForInverterSunHrsBarChartData(data);
-      }
+      },
     }
   );
 
@@ -602,30 +654,83 @@ export default function Index() {
 
   //main data
   const [mainHistoricalTableData, setMainHistoricalTableData] = useState(null);
-  const [mainHistoricalSunHrsBarChartData, setMainHistoricalSunHrsBarChartData] = useState(null);
+  const [
+    mainHistoricalSunHrsBarChartData,
+    setMainHistoricalSunHrsBarChartData,
+  ] = useState(null);
 
   useEffect(() => {
-    if (selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+    if (
+      selectedOptionId &&
+      !selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainHistoricalTableData(historicalDataForProject);
-      setMainHistoricalSunHrsBarChartData(historicalDataForProjectSunHrsBarChartData);
-    } else if (selectedOptionId && selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainHistoricalSunHrsBarChartData(
+        historicalDataForProjectSunHrsBarChartData
+      );
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainHistoricalTableData(historicalDataForCompany);
-      setMainHistoricalSunHrsBarChartData(historicalDataForCompanySunHrsBarChartData);
-    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainHistoricalSunHrsBarChartData(
+        historicalDataForCompanySunHrsBarChartData
+      );
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainHistoricalTableData(historicalDataForBuilding);
-      setMainHistoricalSunHrsBarChartData(historicalDataForBuildingSunHrsBarChartData);
-    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && selectedOptionIdInverter) {
+      setMainHistoricalSunHrsBarChartData(
+        historicalDataForBuildingSunHrsBarChartData
+      );
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
       setMainHistoricalTableData(historicalDataForInverter);
-      setMainHistoricalSunHrsBarChartData(historicalDataForInverterSunHrsBarChartData);
-    } else if (!selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+      setMainHistoricalSunHrsBarChartData(
+        historicalDataForInverterSunHrsBarChartData
+      );
+    } else if (
+      !selectedOptionId &&
+      !selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainHistoricalTableData(historicalDataForDefault);
-      setMainHistoricalSunHrsBarChartData(historicalDataForDefaultSunHrsBarChartData);
+      setMainHistoricalSunHrsBarChartData(
+        historicalDataForDefaultSunHrsBarChartData
+      );
     }
-  }, [historicalDataForProject, historicalDataForProjectSunHrsBarChartData, historicalDataForCompany, historicalDataForCompanySunHrsBarChartData, selectedOptionId, selectedOptionIdCompany, historicalDataForBuilding, historicalDataForBuildingSunHrsBarChartData, selectedOptionIdBuilding, historicalDataForInverter, historicalDataForInverterSunHrsBarChartData, selectedOptionIdInverter, historicalDataForDefault, historicalDataForDefaultSunHrsBarChartData]);
-
+  }, [
+    historicalDataForProject,
+    historicalDataForProjectSunHrsBarChartData,
+    historicalDataForCompany,
+    historicalDataForCompanySunHrsBarChartData,
+    selectedOptionId,
+    selectedOptionIdCompany,
+    historicalDataForBuilding,
+    historicalDataForBuildingSunHrsBarChartData,
+    selectedOptionIdBuilding,
+    historicalDataForInverter,
+    historicalDataForInverterSunHrsBarChartData,
+    selectedOptionIdInverter,
+    historicalDataForDefault,
+    historicalDataForDefaultSunHrsBarChartData,
+  ]);
 
   //impact data
-  const [impactDataForDefaultEnabled, setImpactDataForDefaultEnabled] = useState(false);
+  const [impactDataForDefaultEnabled, setImpactDataForDefaultEnabled] =
+    useState(false);
   const [impactDataForDefault, setImpactDataForDefault] = useState(null);
 
   useQuery(
@@ -636,7 +741,7 @@ export default function Index() {
       onSuccess: (data) => {
         setImpactDataForDefaultEnabled(false);
         setImpactDataForDefault(data);
-      }
+      },
     }
   );
 
@@ -644,7 +749,8 @@ export default function Index() {
     setImpactDataForDefaultEnabled(true);
   }, [firstProjectForDefaultViewId]);
 
-  const [impactDataForProjectEnabled, setImpactDataForProjectEnabled] = useState(false);
+  const [impactDataForProjectEnabled, setImpactDataForProjectEnabled] =
+    useState(false);
   const [impactDataForProject, setImpactDataForProject] = useState(null);
 
   useQuery(
@@ -655,7 +761,7 @@ export default function Index() {
       onSuccess: (data) => {
         setImpactDataForProjectEnabled(false);
         setImpactDataForProject(data);
-      }
+      },
     }
   );
 
@@ -663,7 +769,8 @@ export default function Index() {
     setImpactDataForProjectEnabled(true);
   }, [selectedOptionId]);
 
-  const [impactDataForCompanyEnabled, setImpactDataForCompanyEnabled] = useState(false);
+  const [impactDataForCompanyEnabled, setImpactDataForCompanyEnabled] =
+    useState(false);
   const [impactDataForCompany, setImpactDataForCompany] = useState(null);
 
   useQuery(
@@ -674,7 +781,7 @@ export default function Index() {
       onSuccess: (data) => {
         setImpactDataForCompanyEnabled(false);
         setImpactDataForCompany(data);
-      }
+      },
     }
   );
 
@@ -682,7 +789,8 @@ export default function Index() {
     setImpactDataForCompanyEnabled(true);
   }, [selectedOptionIdCompany]);
 
-  const [impactDataForBuildingEnabled, setImpactDataForBuildingEnabled] = useState(false);
+  const [impactDataForBuildingEnabled, setImpactDataForBuildingEnabled] =
+    useState(false);
   const [impactDataForBuilding, setImpactDataForBuilding] = useState(null);
 
   useQuery(
@@ -693,7 +801,7 @@ export default function Index() {
       onSuccess: (data) => {
         setImpactDataForBuildingEnabled(false);
         setImpactDataForBuilding(data);
-      }
+      },
     }
   );
 
@@ -701,7 +809,8 @@ export default function Index() {
     setImpactDataForBuildingEnabled(true);
   }, [selectedOptionIdBuilding]);
 
-  const [impactDataForInverterEnabled, setImpactDataForInverterEnabled] = useState(false);
+  const [impactDataForInverterEnabled, setImpactDataForInverterEnabled] =
+    useState(false);
   const [impactDataForInverter, setImpactDataForInverter] = useState(null);
 
   useQuery(
@@ -712,7 +821,7 @@ export default function Index() {
       onSuccess: (data) => {
         setImpactDataForInverterEnabled(false);
         setImpactDataForInverter(data);
-      }
+      },
     }
   );
 
@@ -724,22 +833,57 @@ export default function Index() {
   const [mainImpactTableData, setMainImpactTableData] = useState(null);
 
   useEffect(() => {
-    if (selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+    if (
+      selectedOptionId &&
+      !selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainImpactTableData(impactDataForProject);
-    } else if (selectedOptionId && selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainImpactTableData(impactDataForCompany);
-    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && !selectedOptionIdInverter) {
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainImpactTableData(impactDataForBuilding);
-    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && selectedOptionIdInverter) {
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
       setMainImpactTableData(impactDataForInverter);
-    } else if (!selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+    } else if (
+      !selectedOptionId &&
+      !selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainImpactTableData(impactDataForDefault);
     }
-  }, [impactDataForProject, impactDataForCompany, impactDataForBuilding, impactDataForInverter, selectedOptionId, selectedOptionIdCompany, selectedOptionIdBuilding, selectedOptionIdInverter, impactDataForDefault]);
-  
-  
+  }, [
+    impactDataForProject,
+    impactDataForCompany,
+    impactDataForBuilding,
+    impactDataForInverter,
+    selectedOptionId,
+    selectedOptionIdCompany,
+    selectedOptionIdBuilding,
+    selectedOptionIdInverter,
+    impactDataForDefault,
+  ]);
+
   ///daily view
-  const [dailyDataForDefaultEnabled, setDailyDataForDefaultEnabled] = useState(false);
+  const [dailyDataForDefaultEnabled, setDailyDataForDefaultEnabled] =
+    useState(false);
   const [dailyDataForDefault, setDailyDataForDefault] = useState(null);
 
   useQuery(
@@ -750,7 +894,7 @@ export default function Index() {
       onSuccess: (data) => {
         setDailyDataForDefaultEnabled(false);
         setDailyDataForDefault(data);
-      }
+      },
     }
   );
 
@@ -758,7 +902,8 @@ export default function Index() {
     setDailyDataForDefaultEnabled(true);
   }, [firstProjectForDefaultViewId]);
 
-  const [dailyDataForProjectEnabled, setDailyDataForProjectEnabled] = useState(false);
+  const [dailyDataForProjectEnabled, setDailyDataForProjectEnabled] =
+    useState(false);
   const [dailyDataForProject, setDailyDataForProject] = useState(null);
 
   useQuery(
@@ -769,7 +914,7 @@ export default function Index() {
       onSuccess: (data) => {
         setDailyDataForProjectEnabled(false);
         setDailyDataForProject(data);
-      }
+      },
     }
   );
 
@@ -777,7 +922,8 @@ export default function Index() {
     setDailyDataForProjectEnabled(true);
   }, [selectedOptionId]);
 
-  const [dailyDataForCompanyEnabled, setDailyDataForCompanyEnabled] = useState(false);
+  const [dailyDataForCompanyEnabled, setDailyDataForCompanyEnabled] =
+    useState(false);
   const [dailyDataForCompany, setDailyDataForCompany] = useState(null);
 
   useQuery(
@@ -788,7 +934,7 @@ export default function Index() {
       onSuccess: (data) => {
         setDailyDataForCompanyEnabled(false);
         setDailyDataForCompany(data);
-      }
+      },
     }
   );
 
@@ -796,7 +942,8 @@ export default function Index() {
     setDailyDataForCompanyEnabled(true);
   }, [selectedOptionIdCompany]);
 
-  const [dailyDataForBuildingEnabled, setDailyDataForBuildingEnabled] = useState(false);
+  const [dailyDataForBuildingEnabled, setDailyDataForBuildingEnabled] =
+    useState(false);
   const [dailyDataForBuilding, setDailyDataForBuilding] = useState(null);
 
   useQuery(
@@ -807,7 +954,7 @@ export default function Index() {
       onSuccess: (data) => {
         setDailyDataForBuildingEnabled(false);
         setDailyDataForBuilding(data);
-      }
+      },
     }
   );
 
@@ -815,7 +962,8 @@ export default function Index() {
     setDailyDataForBuildingEnabled(true);
   }, [selectedOptionIdBuilding]);
 
-  const [dailyDataForInverterEnabled, setDailyDataForInverterEnabled] = useState(false);
+  const [dailyDataForInverterEnabled, setDailyDataForInverterEnabled] =
+    useState(false);
   const [dailyDataForInverter, setDailyDataForInverter] = useState(null);
 
   useQuery(
@@ -826,7 +974,7 @@ export default function Index() {
       onSuccess: (data) => {
         setDailyDataForInverterEnabled(false);
         setDailyDataForInverter(data);
-      }
+      },
     }
   );
 
@@ -838,58 +986,89 @@ export default function Index() {
   const [mainDailyViewData, setMainDailyViewData] = useState(null);
 
   useEffect(() => {
-    if (selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+    if (
+      selectedOptionId &&
+      !selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainDailyViewData(dailyDataForProject);
-    } else if (selectedOptionId && selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainDailyViewData(dailyDataForCompany);
-    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && !selectedOptionIdInverter) {
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainDailyViewData(dailyDataForBuilding);
-    } else if (selectedOptionId && selectedOptionIdCompany && selectedOptionIdBuilding && selectedOptionIdInverter) {
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
       setMainDailyViewData(dailyDataForInverter);
-    } else if (!selectedOptionId && !selectedOptionIdCompany && !selectedOptionIdBuilding && !selectedOptionIdInverter) {
+    } else if (
+      !selectedOptionId &&
+      !selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
       setMainDailyViewData(dailyDataForDefault);
     }
-  }, [dailyDataForProject, dailyDataForCompany, dailyDataForBuilding, dailyDataForInverter, selectedOptionId, selectedOptionIdCompany, selectedOptionIdBuilding, selectedOptionIdInverter, dailyDataForDefault]);
+  }, [
+    dailyDataForProject,
+    dailyDataForCompany,
+    dailyDataForBuilding,
+    dailyDataForInverter,
+    selectedOptionId,
+    selectedOptionIdCompany,
+    selectedOptionIdBuilding,
+    selectedOptionIdInverter,
+    dailyDataForDefault,
+  ]);
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (dailyDataForDefault && historicalDataForDefaultSunHrsBarChartData) {
-      setTimeout(() => { 
-      setLoading(true);
+      setTimeout(() => {
+        setLoading(true);
       }, 2000);
     }
   }, [dailyDataForDefault, historicalDataForDefaultSunHrsBarChartData]);
 
+  const [
+    collectTimeForInverterHourlyData,
+    setCollectTimeForInverterHourlyData,
+  ] = useState(null);
 
-  const [collectTimeForInverterHourlyData, setCollectTimeForInverterHourlyData] = useState(null);
-
-    useQuery(
-      ["collectTimeForInverterHourlyData", selectedOptionIdInverter],
-      () => getCollectTimeForInverterHourlyData(selectedOptionIdInverter),
-      {
+  useQuery(
+    ["collectTimeForInverterHourlyData", selectedOptionIdInverter],
+    () => getCollectTimeForInverterHourlyData(selectedOptionIdInverter),
+    {
       enabled: selectedOptionIdInverter ? true : false,
       onSuccess: (data) => {
         setCollectTimeForInverterHourlyData(data);
       },
       onError: (error) => {
         console.log("error", error);
-      }
-    });
+      },
+    }
+  );
 
-
-
-    const { data: ProjectCollectTimeForDailyViewData } = useQuery(
-      ["ProjectCollectTimeForDailyView", selectedOptionId],
-      () => getProjectCollectTimeForDailyView(1),
-      {
-        enabled: true
-      }
-    );
-  
-
-
-
-
+  const { data: ProjectCollectTimeForDailyViewData } = useQuery(
+    ["ProjectCollectTimeForDailyView", selectedOptionId],
+    () => getProjectCollectTimeForDailyView(1),
+    {
+      enabled: true,
+    }
+  );
 
   return (
     <>
@@ -902,261 +1081,261 @@ export default function Index() {
               Dashboard
             </h1>
             <div className="space-x-2 md:space-x-5 flex items-center select-none">
-            <div className="relative select-none" ref={dropdownRef}>
-              <input
-                type="text"
-                className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
-                value={selectedOption}
-                readOnly
-                onClick={toggleDropdown}
-              />
-              <svg
-                className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
+              <div className="relative select-none" ref={dropdownRef}>
+                <input
+                  type="text"
+                  className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
+                  value={selectedOption}
+                  readOnly
+                  onClick={toggleDropdown}
                 />
-              </svg>
-              {isOpen && (
-                <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
-                  <li className="px-2 p-1">
-                    <input
-                      type="text"
-                      // value={inputValue}
-                      onChange={handleProjectSearch}
-                      className="border border-gray-300 w-full p-1 text-sm rounded-md"
-                      placeholder="Search..."
+                <svg
+                  className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+                {isOpen && (
+                  <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
+                    <li className="px-2 p-1">
+                      <input
+                        type="text"
+                        // value={inputValue}
+                        onChange={handleProjectSearch}
+                        className="border border-gray-300 w-full p-1 text-sm rounded-md"
+                        placeholder="Search..."
+                      />
+                    </li>
+                    {!searchResultEmpty &&
+                      searchResult1?.length > 0 &&
+                      searchOn &&
+                      searchResult1.map((option) => (
+                        <li
+                          key={option.id}
+                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                          onClick={() => selectOption(option?.id, option?.name)}
+                        >
+                          {option?.name}
+                        </li>
+                      ))}
+                    {!searchResultEmpty &&
+                      !searchOn &&
+                      allProject?.map((option) => (
+                        <li
+                          key={option.id}
+                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                          onClick={() => selectOption(option?.id, option?.name)}
+                        >
+                          {option?.name}
+                        </li>
+                      ))}
+                  </ul>
+                )}
+              </div>
+              {selectedOptionId !== null && (
+                <div className="relative select-none" ref={dropdownRefCompany}>
+                  <input
+                    type="text"
+                    className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
+                    value={selectedOptionCompany}
+                    readOnly
+                    onClick={toggleDropdownCompany}
+                  />
+                  <svg
+                    className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
                     />
-                  </li>
-                  {!searchResultEmpty &&
-                    searchResult1?.length > 0 &&
-                    searchOn &&
-                    searchResult1.map((option) => (
-                      <li
-                        key={option.id}
-                        className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                        onClick={() => selectOption(option?.id, option?.name)}
-                      >
-                        {option?.name}
+                  </svg>
+                  {isOpenCompany && (
+                    <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
+                      <li className="px-2 p-1">
+                        <input
+                          type="text"
+                          // value={inputValue}
+                          onChange={handleCompanySearch}
+                          className="border border-gray-300 w-full p-1 text-sm rounded-md"
+                          placeholder="Search..."
+                        />
                       </li>
-                    ))}
-                  {!searchResultEmpty &&
-                    !searchOn &&
-                    allProject?.map((option) => (
-                      <li
-                        key={option.id}
-                        className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                        onClick={() => selectOption(option?.id, option?.name)}
-                      >
-                        {option?.name}
-                      </li>
-                    ))}
-                </ul>
+                      {!searchResultEmptyCompany &&
+                        searchResult1Company?.length > 0 &&
+                        searchOnCompany &&
+                        searchResult1Company.map((option) => (
+                          <li
+                            key={option.id}
+                            className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                            onClick={() =>
+                              selectOptionCompany(option?.id, option?.name)
+                            }
+                          >
+                            {option?.name}
+                          </li>
+                        ))}
+                      {!searchResultEmptyCompany &&
+                        !searchOnCompany &&
+                        project?.data?.companies?.map((option) => (
+                          <li
+                            key={option.id}
+                            className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                            onClick={() =>
+                              selectOptionCompany(option?.id, option?.name)
+                            }
+                          >
+                            {option?.name}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
+                </div>
               )}
-            </div>
-            {selectedOptionId !== null && (
-              <div className="relative select-none" ref={dropdownRefCompany}>
-                <input
-                  type="text"
-                  className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
-                  value={selectedOptionCompany}
-                  readOnly
-                  onClick={toggleDropdownCompany}
-                />
-                <svg
-                  className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
+              {selectedOptionIdCompany !== null && (
+                <div className="relative select-none" ref={dropdownRefBuilding}>
+                  <input
+                    type="text"
+                    className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
+                    value={selectedOptionBuilding}
+                    readOnly
+                    onClick={toggleDropdownBuilding}
                   />
-                </svg>
-                {isOpenCompany && (
-                  <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
-                    <li className="px-2 p-1">
-                      <input
-                        type="text"
-                        // value={inputValue}
-                        onChange={handleCompanySearch}
-                        className="border border-gray-300 w-full p-1 text-sm rounded-md"
-                        placeholder="Search..."
-                      />
-                    </li>
-                    {!searchResultEmptyCompany &&
-                      searchResult1Company?.length > 0 &&
-                      searchOnCompany &&
-                      searchResult1Company.map((option) => (
-                        <li
-                          key={option.id}
-                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() =>
-                            selectOptionCompany(option?.id, option?.name)
-                          }
-                        >
-                          {option?.name}
-                        </li>
-                      ))}
-                    {!searchResultEmptyCompany &&
-                      !searchOnCompany &&
-                      project?.data?.companies?.map((option) => (
-                        <li
-                          key={option.id}
-                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() =>
-                            selectOptionCompany(option?.id, option?.name)
-                          }
-                        >
-                          {option?.name}
-                        </li>
-                      ))}
-                  </ul>
-                )}
-              </div>
-            )}
-            {selectedOptionIdCompany !== null && (
-              <div className="relative select-none" ref={dropdownRefBuilding}>
-                <input
-                  type="text"
-                  className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
-                  value={selectedOptionBuilding}
-                  readOnly
-                  onClick={toggleDropdownBuilding}
-                />
-                <svg
-                  className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
+                  <svg
+                    className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                  {isOpenBuilding && (
+                    <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
+                      <li className="px-2 p-1">
+                        <input
+                          type="text"
+                          // value={inputValue}
+                          onChange={handleBuildingSearch}
+                          className="border border-gray-300 w-full p-1 text-sm rounded-md"
+                          placeholder="Search..."
+                        />
+                      </li>
+                      {!searchResultEmptyBuilding &&
+                        searchResult1Building?.length > 0 &&
+                        searchOnBuilding &&
+                        searchResult1Building.map((option) => (
+                          <li
+                            key={option.id}
+                            className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                            onClick={() =>
+                              selectOptionBuilding(option?.id, option?.name)
+                            }
+                          >
+                            {option?.name}
+                          </li>
+                        ))}
+                      {!searchResultEmptyBuilding &&
+                        !searchOnBuilding &&
+                        company?.data?.buildings?.map((option) => (
+                          <li
+                            key={option.id}
+                            className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                            onClick={() =>
+                              selectOptionBuilding(option?.id, option?.name)
+                            }
+                          >
+                            {option?.name}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+              {selectedOptionIdBuilding !== null && (
+                <div className="relative select-none" ref={dropdownRefInverter}>
+                  <input
+                    type="text"
+                    className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
+                    value={selectedOptionInverter}
+                    readOnly
+                    onClick={toggleDropdownInverter}
                   />
-                </svg>
-                {isOpenBuilding && (
-                  <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
-                    <li className="px-2 p-1">
-                      <input
-                        type="text"
-                        // value={inputValue}
-                        onChange={handleBuildingSearch}
-                        className="border border-gray-300 w-full p-1 text-sm rounded-md"
-                        placeholder="Search..."
-                      />
-                    </li>
-                    {!searchResultEmptyBuilding &&
-                      searchResult1Building?.length > 0 &&
-                      searchOnBuilding &&
-                      searchResult1Building.map((option) => (
-                        <li
-                          key={option.id}
-                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() =>
-                            selectOptionBuilding(option?.id, option?.name)
-                          }
-                        >
-                          {option?.name}
-                        </li>
-                      ))}
-                    {!searchResultEmptyBuilding &&
-                      !searchOnBuilding &&
-                      company?.data?.buildings?.map((option) => (
-                        <li
-                          key={option.id}
-                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() =>
-                            selectOptionBuilding(option?.id, option?.name)
-                          }
-                        >
-                          {option?.name}
-                        </li>
-                      ))}
-                  </ul>
-                )}
-              </div>
-            )}
-            {selectedOptionIdBuilding !== null && (
-              <div className="relative select-none" ref={dropdownRefInverter}>
-                <input
-                  type="text"
-                  className="w-36 p-1 px-2 pr-7 text-sm border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none cursor-pointer select-none"
-                  value={selectedOptionInverter}
-                  readOnly
-                  onClick={toggleDropdownInverter}
-                />
-                <svg
-                  className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-                {isOpenInverter && (
-                  <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
-                    <li className="px-2 p-1">
-                      <input
-                        type="text"
-                        // value={inputValue}
-                        onChange={handleInverterSearch}
-                        className="border border-gray-300 w-full p-1 text-sm rounded-md"
-                        placeholder="Search..."
-                      />
-                    </li>
-                    {!searchResultEmptyInverter &&
-                      searchResult1Inverter?.length > 0 &&
-                      searchOnInverter &&
-                      searchResult1Inverter.map((option) => (
-                        <li
-                          key={option.id}
-                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() =>
-                            selectOptionInverter(option?.id, option?.deviceSn)
-                          }
-                        >
-                          {option?.deviceSn}
-                        </li>
-                      ))}
-                    {!searchResultEmptyInverter &&
-                      !searchOnInverter &&
-                      building?.data?.inverters?.map((option) => (
-                        <li
-                          key={option.id}
-                          className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() =>
-                            selectOptionInverter(option?.id, option?.deviceSn)
-                          }
-                        >
-                          {option?.deviceSn}
-                        </li>
-                      ))}
-                  </ul>
-                )}
-              </div>
-            )}
-            {/* <select
+                  <svg
+                    className="absolute right-2 top-2 pointer-events-none h-4 w-4 text-gray-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                  {isOpenInverter && (
+                    <ul className="absolute mt-0.5 py-0.5 w-full bg-gray-100 border border-gray-300 rounded-md z-50">
+                      <li className="px-2 p-1">
+                        <input
+                          type="text"
+                          // value={inputValue}
+                          onChange={handleInverterSearch}
+                          className="border border-gray-300 w-full p-1 text-sm rounded-md"
+                          placeholder="Search..."
+                        />
+                      </li>
+                      {!searchResultEmptyInverter &&
+                        searchResult1Inverter?.length > 0 &&
+                        searchOnInverter &&
+                        searchResult1Inverter.map((option) => (
+                          <li
+                            key={option.id}
+                            className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                            onClick={() =>
+                              selectOptionInverter(option?.id, option?.deviceSn)
+                            }
+                          >
+                            {option?.deviceSn}
+                          </li>
+                        ))}
+                      {!searchResultEmptyInverter &&
+                        !searchOnInverter &&
+                        building?.data?.inverters?.map((option) => (
+                          <li
+                            key={option.id}
+                            className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
+                            onClick={() =>
+                              selectOptionInverter(option?.id, option?.deviceSn)
+                            }
+                          >
+                            {option?.deviceSn}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+              {/* <select
               className="w-36 p-1 border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none"
               onChange={(e) => setRole(e.target.value)}
             >
@@ -1189,20 +1368,57 @@ export default function Index() {
               <option value="ENGINEER">Engineer</option>
               <option value="USER">User</option>
             </select> */}
-          </div>
+            </div>
           </div>
         </div>
         {/* {loading ? <> */}
-        <div className="grid grid-cols-2 gap-1.5">
-          <DailyView dailyViewData={mainDailyViewData} collectTimeForInverterHourlyData={collectTimeForInverterHourlyData} firstProjectForDefaultViewId={firstProjectForDefaultViewId} selectedOptionId={selectedOptionId} selectedOptionIdCompany={selectedOptionIdCompany} selectedOptionIdBuilding={selectedOptionIdBuilding} selectedOptionIdInverter={selectedOptionIdInverter} />
-          <LivePowerFlow />
-        </div>
-        <div className="grid grid-cols-8 gap-1.5">
-          <div className="col-span-6">
-            <Historical historicalDataForProject={mainHistoricalTableData} historicalDataForProjectSunHrsBarChartData={mainHistoricalSunHrsBarChartData} firstProjectForDefaultViewId={firstProjectForDefaultViewId} selectedOptionId={selectedOptionId} selectedOptionIdCompany={selectedOptionIdCompany} selectedOptionIdBuilding={selectedOptionIdBuilding} selectedOptionIdInverter={selectedOptionIdInverter} />
+        <div className="grid grid-cols-12 gap-1.5">
+          <div className="col-span-3">
+            <Historical1
+              historicalDataForProject={mainHistoricalTableData}
+              historicalDataForProjectSunHrsBarChartData={
+                mainHistoricalSunHrsBarChartData
+              }
+              firstProjectForDefaultViewId={firstProjectForDefaultViewId}
+              selectedOptionId={selectedOptionId}
+              selectedOptionIdCompany={selectedOptionIdCompany}
+              selectedOptionIdBuilding={selectedOptionIdBuilding}
+              selectedOptionIdInverter={selectedOptionIdInverter}
+            />
           </div>
-          <div className="col-span-2">
+          <div className="col-span-6">
+            <DailyView
+              dailyViewData={mainDailyViewData}
+              collectTimeForInverterHourlyData={
+                collectTimeForInverterHourlyData
+              }
+              firstProjectForDefaultViewId={firstProjectForDefaultViewId}
+              selectedOptionId={selectedOptionId}
+              selectedOptionIdCompany={selectedOptionIdCompany}
+              selectedOptionIdBuilding={selectedOptionIdBuilding}
+              selectedOptionIdInverter={selectedOptionIdInverter}
+            />
+          </div>
+          <div className="col-span-3">
             <Impact impactData={mainImpactTableData} />
+          </div>
+        </div>
+        <div className="grid grid-cols-12 gap-1.5">
+          <div className="col-span-6">
+            <LivePowerFlow />
+          </div>
+          <div className="col-span-6">
+            <Historical
+              historicalDataForProject={mainHistoricalTableData}
+              historicalDataForProjectSunHrsBarChartData={
+                mainHistoricalSunHrsBarChartData
+              }
+              firstProjectForDefaultViewId={firstProjectForDefaultViewId}
+              selectedOptionId={selectedOptionId}
+              selectedOptionIdCompany={selectedOptionIdCompany}
+              selectedOptionIdBuilding={selectedOptionIdBuilding}
+              selectedOptionIdInverter={selectedOptionIdInverter}
+            />
           </div>
         </div>
         {/* </> : <div className="flex items-center justify-center text-black pt-10"><ReactLoading type="spokes" color="#25476A" height={50} width={50} /></div>} */}
