@@ -1,195 +1,258 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrashCan,
-  faPenToSquare,
-  faArrowDown,
-  faPlus,
-  faMagnifyingGlass,
-  faEye,
-  faCopy,
-  faIdCard,
-  faClipboard,
-  faRotate,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  BarChart,
-  Bar,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import HistoricalPeakPower from "./historicalPeakPower";
-
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+import { getDailyViewCollectTime, getHistoricalData, getHistoricalDataWithDateKey } from "../../lib/Helper";
+import { useQuery } from "react-query";
 
 export default function Historical({
   historicalDataForProject,
   historicalDataForProjectSunHrsBarChartData,
-  firstProjectForDefaultViewId,
-  selectedOptionId,
-  selectedOptionIdCompany,
-  selectedOptionIdBuilding,
   selectedOptionIdInverter,
+  selectedOptionIdBuilding,
+  selectedOptionIdCompany,
+  selectedOptionId,
 }) {
-  const [
-    historicalDataForProjectSunHrsBarChartDataYearly,
-    setHistoricalDataForProjectSunHrsBarChartDataYearly,
-  ] = useState([]);
-  const [
-    historicalDataForProjectSunHrsBarChartDataMonthly,
-    setHistoricalDataForProjectSunHrsBarChartDataMonthly,
-  ] = useState([]);
-  const [
-    historicalDataForProjectSunHrsBarChartDataYearCount,
-    setHistoricalDataForProjectSunHrsBarChartDataYearCount,
-  ] = useState([]);
-  const [
-    historicalDataForProjectSunHrsBarChartDataMonthCount,
-    setHistoricalDataForProjectSunHrsBarChartDataMonthCount,
-  ] = useState([]);
-  const [
-    historicalDataForProjectSunHrsBarChartDataYearSelected,
-    setHistoricalDataForProjectSunHrsBarChartDataSelected,
-  ] = useState("Year");
-  const [
-    historicalDataForProjectSunHrsBarChartDataMonthSelected,
-    setHistoricalDataForProjectSunHrsBarChartDataMonthSelected,
-  ] = useState("Month");
 
-  useEffect(() => {
-    setHistoricalDataForProjectSunHrsBarChartDataSelected("Year");
-    setHistoricalDataForProjectSunHrsBarChartDataMonthSelected("Month");
-    if (historicalDataForProjectSunHrsBarChartData) {
-      setHistoricalDataForProjectSunHrsBarChartDataSelected(
-        Object.keys(
-          historicalDataForProjectSunHrsBarChartData?.yearly || {}
-        ).slice(-1)[0]
-      );
-    }
-  }, [historicalDataForProjectSunHrsBarChartData]);
-
-  useEffect(() => {
-    if (historicalDataForProjectSunHrsBarChartData) {
-      setHistoricalDataForProjectSunHrsBarChartDataSelected(
-        Object.keys(
-          historicalDataForProjectSunHrsBarChartData?.yearly || {}
-        ).slice(-1)[0]
-      );
-      setHistoricalDataForProjectSunHrsBarChartDataYearCount(
-        Object.keys(historicalDataForProjectSunHrsBarChartData?.yearly || {})
-      );
-      // setHistoricalDataForProjectSunHrsBarChartDataMonthCount(Object.keys(historicalDataForProjectSunHrsBarChartData?.monthly || {}));
-      setHistoricalDataForProjectSunHrsBarChartDataYearly(
-        historicalDataForProjectSunHrsBarChartData?.yearly?.["2023"]?.map(
-          (item) => {
-            return {
-              name: item?.month,
-              sunHours: item?.sunHours,
-            };
-          }
-        )
-      );
-    }
-  }, [
-    historicalDataForProjectSunHrsBarChartData,
-    historicalDataForProjectSunHrsBarChartDataMonthSelected,
-  ]);
+  const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
     if (
-      historicalDataForProjectSunHrsBarChartData &&
-      historicalDataForProjectSunHrsBarChartDataYearSelected &&
-      historicalDataForProjectSunHrsBarChartDataMonthSelected
+      selectedOptionId &&
+      !selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
     ) {
-      setHistoricalDataForProjectSunHrsBarChartDataMonthCount(
-        Object.keys(historicalDataForProjectSunHrsBarChartData?.monthly || {})
-      );
-      setHistoricalDataForProjectSunHrsBarChartDataMonthly(
-        historicalDataForProjectSunHrsBarChartData?.monthly?.[
-          historicalDataForProjectSunHrsBarChartDataMonthSelected
-        ]?.map((item) => {
-          return {
-            name: item?.day,
-            sunHours: item?.sunHours,
-          };
-        })
-      );
+      setCollectionKey({
+        project: selectedOptionId,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        company: selectedOptionIdCompany,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        building: selectedOptionIdBuilding,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        inverter: selectedOptionIdInverter,
+      });
     }
   }, [
-    historicalDataForProjectSunHrsBarChartDataYearSelected,
-    historicalDataForProjectSunHrsBarChartDataMonthSelected,
-    historicalDataForProjectSunHrsBarChartData,
+    selectedOptionId,
+    selectedOptionIdCompany,
+    selectedOptionIdBuilding,
+    selectedOptionIdInverter,
   ]);
 
-  console.log(historicalDataForProjectSunHrsBarChartDataMonthSelected);
+  const [ defaultData, setDefaultData ] = useState(true);
+
+  const {
+    data: HistoricalData,
+    isLoading: HistoricalDataIsLoading,
+    error: HistoricalDataError,
+  } = useQuery(
+    ["HistoricalData", collectionKey],
+    () => getHistoricalData(collectionKey),
+    {
+      enabled: !!collectionKey && defaultData,
+      onSuccess: (data) => {
+        console.log("data", data);
+      },
+    }
+  );
+
+  const {
+    data: DailyViewCollectTimeData,
+    isLoading: DailyViewCollectTimeIsLoading,
+    error: DailyViewCollectTimeError,
+  } = useQuery(
+    ["DailyViewCollectTime", collectionKey],
+    () => getDailyViewCollectTime(collectionKey),
+    {
+      enabled: !!collectionKey,
+      onSuccess: (data) => {
+        console.log("data", data);
+      },
+    }
+  );
+
+  const [yearsFromData, setYearsFromData] = useState([]);
+  const [monthsFromData, setMonthsFromData] = useState([]);
+  const [daysFromData, setDaysFromData] = useState([]);
+  const [uniqueYears1, setUniqueYears1] = useState([]);
+  const [uniqueMonths1, setUniqueMonths1] = useState([]);
+  const [uniqueDays1, setUniqueDays1] = useState([]);
+
+  useEffect(() => {
+    if (!DailyViewCollectTimeIsLoading && DailyViewCollectTimeData) {
+      const tempYears = [];
+      const tempMonthsDays = [];
+      const tempDays = [];
+
+      DailyViewCollectTimeData?.forEach((item) => {
+        const [year, month, day] = item.split("-");
+        tempYears.push(year);
+        tempMonthsDays.push(month + "-" + day);
+        tempDays.push(day);
+      });
+
+      setYearsFromData(tempYears);
+      setMonthsFromData(tempMonthsDays);
+      setDaysFromData(tempDays);
+    }
+  }, [DailyViewCollectTimeData, DailyViewCollectTimeIsLoading]);
+
+  function removeDuplicatesFromArray(arr) {
+    return [...new Set(arr)];
+  }
+
+  function removeDuplicatesMonthsFromArray(arr) {
+    return [...new Set(arr?.map((item) => item.split("-")[0]))];
+  }
+
+  useEffect(() => {
+    setUniqueYears1(removeDuplicatesFromArray(yearsFromData));
+    setUniqueMonths1(removeDuplicatesMonthsFromArray(monthsFromData));
+    setUniqueDays1(removeDuplicatesFromArray(daysFromData));
+  }, [yearsFromData, monthsFromData, daysFromData]);
+
+  const [selectedYear1, setSelectedYear1] = useState("");
+  const [selectedMonth1, setSelectedMonth1] = useState("");
+  const [selectedDay1, setSelectedDay1] = useState("");
+
+  // useEffect(() => {
+  //   if (uniqueYears1.length > 0) {
+  //     if (localStorage.getItem("date")) {
+  //       const date = localStorage.getItem("date").split("-");
+  //       setSelectedYear1(date[0]);
+  //     } else {
+  //       const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
+  //       const lastIdx = sortedYears.length - 1;
+  //       setSelectedYear1(sortedYears[lastIdx]);
+  //     }
+  //   }
+  // }, [uniqueYears1]);
+
+  // useEffect(() => {
+  //   if (uniqueMonths1.length > 0) {
+  //     if (localStorage.getItem("date")) {
+  //       const date = localStorage.getItem("date").split("-");
+  //       setSelectedMonth1(date[1]);
+  //     } else {
+  //       const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
+  //       const lastIdx = sortedMonths.length - 1;
+  //       setSelectedMonth1(sortedMonths[lastIdx]);
+  //     }
+  //   }
+  // }, [uniqueMonths1]);
+
+  // useEffect(() => {
+  //   if (monthsFromData.length > 0) {
+  //     if (localStorage.getItem("date")) {
+  //       const date = localStorage.getItem("date").split("-");
+  //       setSelectedDay1(date[2]);
+  //     } else {
+  //       const sortedDays =       monthsFromData
+  //       .filter((item) => item.split("-")[0] === selectedMonth1)
+  //       .map((item) => item.split("-")[1])
+  //       .sort((a, b) => a.localeCompare(b));
+
+  //       const lastIdx = sortedDays.length - 1;
+  //       setSelectedDay1(sortedDays[lastIdx]);
+  //     }
+  //   }
+  // }, [selectedMonth1, monthsFromData]);
+
+  const [dateKey, setDateKey] = useState("");
+
+  useEffect(() => {
+    if (selectedYear1 && selectedMonth1 && selectedDay1) {
+      setDateKey(`${selectedYear1}-${selectedMonth1}-${selectedDay1}`);
+    }
+  }, [selectedYear1, selectedMonth1, selectedDay1]);
+
+  const {
+    data: HistoricalDataWithDateKey,
+    isLoading: HistoricalDataWithDateKeyIsLoading,
+    error: HistoricalDataWithDateKeyError,
+  } = useQuery(
+    ["HistoricalDataWithDateKey", collectionKey, dateKey],
+    () => getHistoricalDataWithDateKey({ collectionKey, dateKey }),
+    {
+      enabled: !!collectionKey && !!dateKey,
+      onSuccess: (data) => {
+        console.log("HistoricalDataWithDateKey", data);
+      },
+    }
+  );
+
+  const [ historicalDataStore, setHistoricalDataStore] = useState();
+
+  useEffect(() => {
+    if (!HistoricalDataWithDateKeyIsLoading && HistoricalDataWithDateKey) {
+      setHistoricalDataStore(HistoricalDataWithDateKey);
+    } else {
+      setHistoricalDataStore(HistoricalData);
+    }
+  }, [HistoricalDataWithDateKey, HistoricalDataWithDateKeyIsLoading, HistoricalData]);
+
+  const handleSelectedYear1 = (value) => {
+    setDefaultData(false);
+    setSelectedYear1(value);
+  };
+
+  const handleDefaultData = () => {
+    setDefaultData(true);
+    setSelectedYear1("");
+    setSelectedMonth1("");
+    setSelectedDay1("");
+    setDateKey("");
+    setHistoricalDataStore(HistoricalData);
+  };
+
+  useEffect(() => {
+    setSelectedMonth1("");
+    setSelectedDay1("");
+  }, [selectedYear1]);
+
+  useEffect(() => {
+    setSelectedDay1("");
+  }, [selectedMonth1]);
 
   const digitToMonth = (digit) => {
     switch (digit) {
-      case "1":
+      case "01":
         return "Jan";
-      case "2":
+      case "02":
         return "Feb";
-      case "3":
+      case "03":
         return "Mar";
-      case "4":
+      case "04":
         return "Apr";
-      case "5":
+      case "05":
         return "May";
-      case "6":
+      case "06":
         return "Jun";
-      case "7":
+      case "07":
         return "Jul";
-      case "8":
+      case "08":
         return "Aug";
-      case "9":
+      case "09":
         return "Sep";
       case "10":
         return "Oct";
@@ -202,19 +265,6 @@ export default function Historical({
     }
   };
 
-  const [peakPowerOpen, setPeakPowerOpen] = useState(false);
-  const [sunHoursOpen, setSunHoursOpen] = useState(true);
-
-  const handlePeakPowerOpen = () => {
-    setPeakPowerOpen(true);
-    setSunHoursOpen(false);
-  };
-
-  const handleSunHoursOpen = () => {
-    setPeakPowerOpen(false);
-    setSunHoursOpen(true);
-  };
-
   return (
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md space-y-2.5">
@@ -225,34 +275,69 @@ export default function Historical({
           <div className="flex space-x-4">
             <button
               className={`flex items-center justify-center h-7 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${
-                peakPowerOpen
+                defaultData
                   ? "bg-[#39B54A] text-white"
                   : "bg-white text-[#39B54A]"
               }`}
-              // onClick={() => handlePeakPowerOpen()}
+              onClick={() => handleDefaultData()}
             >
               Default
             </button>
             <select
               className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={"Year"}
-              onChange={(e) => setSelectedYear1(e.target.value)}
+              value={selectedYear1 ? selectedYear1 : "Year"}
+              onChange={(e) => handleSelectedYear1(e.target.value)}
             >
               <option disabled>Year</option>
+              {uniqueYears1?.map((item, Index) => {
+                return (
+                  <option key={Index} value={item}>
+                    {item}
+                  </option>
+                );
+              })}
             </select>
             <select
               className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={"Month"}
+              value={selectedMonth1 ? selectedMonth1 : "Month"}
               onChange={(e) => setSelectedMonth1(e.target.value)}
+              disabled={!selectedYear1}
             >
               <option disabled>Month</option>
+              {uniqueMonths1?.sort().map((item, index) => {
+                return (
+                  <option key={index} value={item}>
+                    {digitToMonth(item)}
+                  </option>
+                );
+              })}
             </select>
             <select
               className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={"Day"}
+              value={selectedDay1 ? selectedDay1 : "Day"}
               onChange={(e) => setSelectedDay1(e.target.value)}
+              disabled={!selectedMonth1}
             >
               <option disabled>Day</option>
+              {monthsFromData
+                ?.map((item, Index) => {
+                  if (item.split("-")[0] === selectedMonth1) {
+                    return item; // Return the original item
+                  } else {
+                    return null; // Skip items that don't match the condition
+                  }
+                })
+                .filter((item) => item !== null) // Filter out null items
+                .sort((a, b) => {
+                  const aValue = a.split("-")[1];
+                  const bValue = b.split("-")[1];
+                  return aValue.localeCompare(bValue); // Sort based on the split value
+                })
+                .map((item, index) => (
+                  <option key={index} value={item.split("-")[1]}>
+                    {item.split("-")[1]}
+                  </option>
+                ))}
             </select>
           </div>
           <table className="table-fixed w-full border rounded-md select-none text-[#25476A] text-sm">
@@ -267,22 +352,22 @@ export default function Historical({
               <tr className="h-12">
                 <td>Today</td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.production?.totalGenerationToday?.toFixed(
+                  {historicalDataStore?.historicalTableData?.production?.totalGenerationToday?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.export?.today?.toFixed(
+                  {historicalDataStore?.historicalTableData?.export?.today?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.import?.today?.toFixed(
+                  {historicalDataStore?.historicalTableData?.import?.today?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursToday?.toFixed(
+                  {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursToday?.toFixed(
                     1
                   ) || 0}
                 </td>
@@ -290,22 +375,22 @@ export default function Historical({
               <tr className="h-12">
                 <td>This Month</td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisMonth?.toFixed(
+                  {historicalDataStore?.historicalTableData?.production?.totalGenerationThisMonth?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.export?.thisMonth?.toFixed(
+                  {historicalDataStore?.historicalTableData?.export?.thisMonth?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.import?.thisMonth?.toFixed(
+                  {historicalDataStore?.historicalTableData?.import?.thisMonth?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisMonth?.toFixed(
+                  {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursThisMonth?.toFixed(
                     1
                   ) || 0}
                 </td>
@@ -313,22 +398,22 @@ export default function Historical({
               <tr className="h-12">
                 <td>This Year</td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.production?.totalGenerationThisYear?.toFixed(
+                  {historicalDataStore?.historicalTableData?.production?.totalGenerationThisYear?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.export?.thisYear?.toFixed(
+                  {historicalDataStore?.historicalTableData?.export?.thisYear?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.import?.thisYear?.toFixed(
+                  {historicalDataStore?.historicalTableData?.import?.thisYear?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursThisYear?.toFixed(
+                  {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursThisYear?.toFixed(
                     1
                   ) || 0}
                 </td>
@@ -336,22 +421,22 @@ export default function Historical({
               <tr className="h-12">
                 <td>All Time</td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.production?.totalGenerationAllTime?.toFixed(
+                  {historicalDataStore?.historicalTableData?.production?.totalGenerationAllTime?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.export?.allTime?.toFixed(
+                  {historicalDataStore?.historicalTableData?.export?.allTime?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.import?.allTime?.toFixed(
+                  {historicalDataStore?.historicalTableData?.import?.allTime?.toFixed(
                     1
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataForProject?.historicalTableData?.sunHrs?.sunHoursTillToday?.toFixed(
+                  {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursTillToday?.toFixed(
                     1
                   ) || 0}
                 </td>

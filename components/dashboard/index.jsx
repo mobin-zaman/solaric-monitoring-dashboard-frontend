@@ -1400,7 +1400,10 @@ export default function Index() {
             />
           </div>
           <div className="col-span-3">
-            <Impact impactData={mainImpactTableData} />
+            <Impact               selectedOptionId={selectedOptionId}
+              selectedOptionIdCompany={selectedOptionIdCompany}
+              selectedOptionIdBuilding={selectedOptionIdBuilding}
+              selectedOptionIdInverter={selectedOptionIdInverter} />
           </div>
         </div>
         <div className="grid grid-cols-12 gap-1.5">

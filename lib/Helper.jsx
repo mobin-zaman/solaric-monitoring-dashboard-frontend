@@ -454,16 +454,6 @@ export const updateInverter = async (data) => {
   return response.data;
 };
 
-// Api calls for get Historical Data For Project
-export const getHistoricalDataForProject = async (id) => {
-  const response = await todoApi.get(`/dashboard/project/historic-view/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
-  return response.data;
-};
-
 // Api calls for get Historical Data For Project sun hrs bar chart data
 export const getHistoricalDataForProjectSunHrsBarChartData = async (id) => {
   const response = await todoApi.get(
@@ -846,3 +836,69 @@ export const getHistoricalPeakPowerData = async (data) => {
   );
   return response.data;
 };
+
+// Api calls for get Historical Data
+export const getHistoricalData = async (collectionKey) => {
+  const key = Object.keys(collectionKey)[0];
+  const id = collectionKey[key];
+
+  const response = await todoApi.get(
+    `/dashboard/${key}/historic-view/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+// Api call for historical data with date key
+export const getHistoricalDataWithDateKey = async (data) => {
+  const key = Object.keys(data.collectionKey)[0];
+  const id = data.collectionKey[key];
+  const dateKey = data.dateKey;
+  const response = await todoApi.get(
+    `/dashboard/${key}/historic-view/${id}/${dateKey}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+// Api calls for get Impact Data
+export const getImpactData = async (collectionKey) => {
+  const key = Object.keys(collectionKey)[0];
+  const id = collectionKey[key];
+
+  const response = await todoApi.get(
+    `/dashboard/${key}/environment-impact/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+}
+
+// Api call for impact data with date key
+export const getImpactDataWithDateKey = async (data) => {
+  const key = Object.keys(data.collectionKey)[0];
+  const id = data.collectionKey[key];
+  const dateKey = data.dateKey;
+  const response = await todoApi.get(
+    `/dashboard/${key}/environment-impact/${id}/${dateKey}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+}
+
+
