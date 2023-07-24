@@ -12,8 +12,50 @@ import {
   faRotate,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
+import { useState, useEffect, useRef } from "react";
 
 export default function LivePowerFlow() {
+
+  const [value0, setValue0] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setValue0((prevValue) => (prevValue + 10) % 110); // Increment the value from 0 to 100 and then reset to 0
+    }, 1000); // Change the animation duration here (in milliseconds)
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    // When the animation completes, reset the width to 0
+    if (value0 === 100) {
+      const timeout = setTimeout(() => {
+        setValue0(0);
+      }, 300);
+      return () => clearTimeout(timeout);
+    }
+  }, [value0]);
+
+  const [value1, setValue1] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setValue1((prevValue) => (prevValue - 10 + 110) % 110); // Decrement the value from 100 to 0 and then reset to 100
+    }, 500); // Change the animation duration here (in milliseconds)
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    // When the animation completes, reset the value to 100
+    if (value1 === 0) {
+      const timeout = setTimeout(() => {
+        setValue1(100);
+      }, 300);
+      return () => clearTimeout(timeout);
+    }
+  }, [value1]);
+
   return (
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md space-y-5">
@@ -32,27 +74,27 @@ export default function LivePowerFlow() {
               height={100}
             />
           </div>
-          <div className="flex flex-col items-center justify-center col-span-2 space-y-5">
-          <div className="flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:animate-flowX2 lg:animate-flowX1 xl:animate-flowX">
+          <div className="flex flex-col items-center justify-center col-span-2 space-y-7">
+          <div className="flex flex-col items-center justify-center ">
             <span>1</span>
-              <div className="relative"><div
-                  className="w-0 h-0 
-  border-t-[8px] border-t-transparent
-  border-r-[14px] border-r-red-500
-  border-b-[8px] border-b-transparent rotate-180 absolute -top-1 -right-3.5"
-                ></div>
-                <div className="h-2 w-12 lg:w-14 xl:w-16 2xl:w-24 bg-red-500"></div>
-              </div>
+      <div className="w-48 h-2.5 bg-red-600 rounded-md overflow-hidden relative">
+        <div
+          className={`h-full bg-gray-300 transition-all duration-300 ${
+            value0 === 0 ? 'reset-width' : ''
+          }`}
+          style={{ width: `${value1}%` }}
+        ></div>
+      </div>
             </div>
-            <div className="flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:animate-flowReverseX2 lg:animate-flowReverseX1 xl:animate-flowReverseX">
-              <div className="relative"> <div
-                  className="w-0 h-0 
-  border-t-[8px] border-t-transparent
-  border-r-[14px] border-r-green-500
-  border-b-[8px] border-b-transparent rotate-0 absolute -top-1 -left-3.5"
-                ></div>
-                <div className="h-2 w-12 lg:w-14 xl:w-16 2xl:w-24 bg-green-500"></div>
-              </div>
+            <div className="flex flex-col items-center justify-center">
+            <div className="w-48 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+        <div
+          className={`h-full bg-green-600 transition-all duration-300 ${
+            value0 === 100 ? 'reset-width' : ''
+          }`}
+          style={{ width: `${value0}%` }}
+        ></div>
+      </div>
               <span>5</span>
             </div>
           </div>
@@ -65,16 +107,15 @@ export default function LivePowerFlow() {
             />
           </div>
           <div className="flex items-center justify-center col-span-2">
-          <div className="flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:animate-flowReverseX2 lg:animate-flowReverseX1 xl:animate-flowReverseX">
-              <div className="relative">
-              <div
-                  className="w-0 h-0 
-  border-t-[8px] border-t-transparent
-  border-r-[14px] border-r-green-500
-  border-b-[8px] border-b-transparent rotate-0 absolute -top-1 -left-3.5"
-                ></div>
-                <div className="h-2 w-12 lg:w-14 xl:w-16 2xl:w-24 bg-green-500"></div>
-              </div>
+          <div className="flex flex-col items-center justify-center">
+          <div className="w-48 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+        <div
+          className={`h-full bg-gray-300 transition-all duration-300 ${
+            value0 === 0 ? 'reset-width' : ''
+          }`}
+          style={{ width: `${value1}%` }}
+        ></div>
+      </div>
               <span>8</span>
             </div>
           </div>
@@ -88,29 +129,27 @@ export default function LivePowerFlow() {
           </div>
         </div>
         <div className="grid grid-cols-7 items-center justify-center">
-          <div className="col-span-7 flex items-center justify-center space-x-5">
-            <div className="flex space-x-2 transition-transform duration-500 ease-in-out animate-flowY">
+          <div className="col-span-7 flex items-center justify-center space-x-7">
+            <div className="flex space-x-2 items-center">
             <span>8</span>
-              <div className="relative">
-                <div
-                  className="w-0 h-0 
-  border-t-[8px] border-t-transparent
-  border-r-[14px] border-r-red-500
-  border-b-[8px] border-b-transparent rotate-90 absolute -top-3.5 -left-[0.158rem]"
-                ></div>
-                <div className="h-10 w-2 bg-red-500"></div>
-              </div>
+            <div className="h-24 w-2.5 bg-red-600 rounded-md overflow-hidden relative">
+        <div
+          className={`h-full bg-gray-300 transition-all duration-300 ${
+            value0 === 0 ? 'reset-width' : ''
+          }`}
+          style={{ height: `${value1}%` }}
+        ></div>
+      </div>
             </div>
-            <div className="flex space-x-2 transition-transform duration-500 ease-in-out animate-flowReverseY">
-              <div className="relative">
-                <div
-                  className="w-0 h-0 
-  border-t-[8px] border-t-transparent
-  border-r-[14px] border-r-green-500
-  border-b-[8px] border-b-transparent -rotate-90 absolute -bottom-3.5 -left-[0.16rem]"
-                ></div>
-                <div className="h-10 w-2 bg-green-500"></div>
-              </div>
+            <div className="flex space-x-2 items-center">
+            <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+        <div
+          className={`h-full bg-green-600 transition-all duration-300 ${
+            value0 === 0 ? 'reset-width' : ''
+          }`}
+          style={{ height: `${value0}%` }}
+        ></div>
+      </div>
               <span>3</span>
             </div>
           </div>

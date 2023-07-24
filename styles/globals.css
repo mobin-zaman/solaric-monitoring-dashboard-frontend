@@ -17,3 +17,12 @@
   border-radius: 4px;
   white-space: nowrap;
 }
+
+@keyframes animateProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
