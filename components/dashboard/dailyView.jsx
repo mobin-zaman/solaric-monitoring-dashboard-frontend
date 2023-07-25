@@ -293,7 +293,7 @@ export default function DailyView({
           {/* <FontAwesomeIcon icon={faRotate} /> */}
           <div className="flex space-x-4">
             <select
-              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedYear1}
               onChange={(e) => setSelectedYear1(e.target.value)}
             >
@@ -308,7 +308,7 @@ export default function DailyView({
               })}
             </select>
             <select
-              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedMonth1}
               onChange={(e) => setSelectedMonth1(e.target.value)}
             >
@@ -322,7 +322,7 @@ export default function DailyView({
               })}
             </select>
             <select
-              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedDay1}
               onChange={(e) => setSelectedDay1(e.target.value)}
             >

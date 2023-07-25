@@ -1408,7 +1408,10 @@ export default function Index() {
         </div>
         <div className="grid grid-cols-12 gap-1.5">
           <div className="col-span-6">
-            <LivePowerFlow />
+            <LivePowerFlow selectedOptionId={selectedOptionId}
+              selectedOptionIdCompany={selectedOptionIdCompany}
+              selectedOptionIdBuilding={selectedOptionIdBuilding}
+              selectedOptionIdInverter={selectedOptionIdInverter} />
           </div>
           <div className="col-span-6">
             <Historical

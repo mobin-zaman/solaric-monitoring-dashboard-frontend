@@ -297,7 +297,7 @@ export default function HistoricalPeakPower({
       <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
         <div className="flex space-x-3 justify-end">
           <select
-            className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+            className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
             value={selectedYear}
             onChange={(e) => {
               setSelectedYear(e.target.value);
@@ -313,7 +313,7 @@ export default function HistoricalPeakPower({
             })}
           </select>
           <select
-            className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+            className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
             value={selectedMonth}
             onChange={(e) => {
               setSelectedMonth(e.target.value);

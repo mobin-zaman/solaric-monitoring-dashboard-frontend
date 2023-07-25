@@ -274,7 +274,7 @@ export default function Historical({
         <div className="flex flex-col justify-center items-end col-span-3 space-y-3">
           <div className="flex space-x-4">
             <button
-              className={`flex items-center justify-center h-7 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${
+              className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${
                 defaultData
                   ? "bg-[#39B54A] text-white"
                   : "bg-white text-[#39B54A]"
@@ -284,7 +284,7 @@ export default function Historical({
               Default
             </button>
             <select
-              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedYear1 ? selectedYear1 : "Year"}
               onChange={(e) => handleSelectedYear1(e.target.value)}
             >
@@ -298,7 +298,7 @@ export default function Historical({
               })}
             </select>
             <select
-              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedMonth1 ? selectedMonth1 : "Month"}
               onChange={(e) => setSelectedMonth1(e.target.value)}
               disabled={!selectedYear1}
@@ -313,7 +313,7 @@ export default function Historical({
               })}
             </select>
             <select
-              className="flex items-center justify-center px-2.5 h-7 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedDay1 ? selectedDay1 : "Day"}
               onChange={(e) => setSelectedDay1(e.target.value)}
               disabled={!selectedMonth1}
