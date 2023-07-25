@@ -348,6 +348,14 @@ export default function LivePowerFlow({
               </div>
             </div>
           )}
+          {selectedOptionId &&
+          selectedOptionIdCompany &&
+          selectedOptionIdBuilding &&
+          selectedOptionIdInverter && (
+            <div className="w-full h-[19.5rem] grid">
+
+            </div>
+          )}
       </div>
     </>
   );
