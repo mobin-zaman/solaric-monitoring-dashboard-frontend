@@ -351,7 +351,7 @@ export default function HistoricalPeakPower({
               <YAxis />
               <Tooltip />
               {/* <Legend /> */}
-              <Bar dataKey="peakPower" fill="#82ca9d" />
+              <Bar dataKey="peakPower" fill="#82ca9d" barSize={30} />
             </BarChart>
           </ResponsiveContainer> ) : (
             <div width="100%" height="100%" className="flex items-center justify-center border w-full h-full">

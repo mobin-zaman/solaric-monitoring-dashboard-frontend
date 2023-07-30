@@ -353,22 +353,22 @@ export default function Historical({
                 <td>Today</td>
                 <td>
                   {historicalDataStore?.historicalTableData?.production?.totalGenerationToday?.toFixed(
-                    1
+                    2
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.export?.today?.toFixed(
-                    1
+                   0
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.import?.today?.toFixed(
-                    1
+                    0
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursToday?.toFixed(
-                    1
+                    2
                   ) || 0}
                 </td>
               </tr>
@@ -376,22 +376,22 @@ export default function Historical({
                 <td>This Month</td>
                 <td>
                   {historicalDataStore?.historicalTableData?.production?.totalGenerationThisMonth?.toFixed(
-                    1
+                    2
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.export?.thisMonth?.toFixed(
-                    1
+                    0
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.import?.thisMonth?.toFixed(
-                    1
+                   0
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursThisMonth?.toFixed(
-                    1
+                    2
                   ) || 0}
                 </td>
               </tr>
@@ -399,22 +399,22 @@ export default function Historical({
                 <td>This Year</td>
                 <td>
                   {historicalDataStore?.historicalTableData?.production?.totalGenerationThisYear?.toFixed(
-                    1
+                    2
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.export?.thisYear?.toFixed(
-                    1
+                    0
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.import?.thisYear?.toFixed(
-                    1
+                    0
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursThisYear?.toFixed(
-                    1
+                    2
                   ) || 0}
                 </td>
               </tr>
@@ -422,22 +422,22 @@ export default function Historical({
                 <td>All Time</td>
                 <td>
                   {historicalDataStore?.historicalTableData?.production?.totalGenerationAllTime?.toFixed(
-                    1
+                    2
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.export?.allTime?.toFixed(
-                    1
+                    0
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.import?.allTime?.toFixed(
-                    1
+                    0
                   ) || 0}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursTillToday?.toFixed(
-                    1
+                    2
                   ) || 0}
                 </td>
               </tr>
