@@ -220,7 +220,7 @@ export default function Historical({
       <div className="w-full h-96 bg-white p-3 rounded-md space-y-2.5">
         <div className="flex items-center justify-between">
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
-            Historical
+            Historical Peak Power / Sun-Hrs
           </span>
           <div className="flex">
             <div className="flex justify-end items-center space-x-5">

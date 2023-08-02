@@ -275,11 +275,10 @@ export default function DailyView({
       return (
         <div className="custom-tooltip bg-white px-5 py-3 text-sm rounded-md border-2 border-gray-300 space-y-0.5">
           <p>{`Time: ${collectTime}`}</p>
-          <p>{`${MW?.toFixed(1)} kw`}</p>
+          <p>{`${Math.round(MW).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} KW`}</p>
         </div>
       );
     }
-
     return null;
   };
 
@@ -288,7 +287,7 @@ export default function DailyView({
       <div className="w-full h-96 bg-white p-3 rounded-md">
         <div className="flex items-center justify-between">
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
-            Daily View
+            Daily Generation
           </span>
           {/* <FontAwesomeIcon icon={faRotate} /> */}
           <div className="flex space-x-4">
@@ -354,11 +353,11 @@ export default function DailyView({
       <div className="flex flex-col justify-between mb-2 absolute top-8 left-20 bg-white p-2 rounded-md space-y-0.5">
       <div className="flex items-center space-x-2">
           <span className="">Generation:</span>
-          <span className="">{generationData} MWh</span>
+          <span className="">{Math.round(generationData).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} MWH</span>
         </div>
         <div className="flex items-center space-x-2">
           <span className="">Sun Hours:</span>
-          <span className="">{sunHoursData} H</span>
+          <span className="">{sunHoursData} Hrs.</span>
         </div>
       </div>
           <div

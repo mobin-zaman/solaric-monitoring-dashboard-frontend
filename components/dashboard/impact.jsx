@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getDailyViewCollectTime, getImpactData, getImpactDataWithDateKey } from "../../lib/Helper";
+import {
+  getDailyViewCollectTime,
+  getImpactData,
+  getImpactDataWithDateKey,
+} from "../../lib/Helper";
 import { useQuery } from "react-query";
 import Image from "next/image";
 
@@ -9,7 +13,6 @@ export default function Impact({
   selectedOptionIdCompany,
   selectedOptionId,
 }) {
-
   const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
@@ -57,7 +60,7 @@ export default function Impact({
     selectedOptionIdInverter,
   ]);
 
-  const [ defaultData, setDefaultData ] = useState(true);
+  const [defaultData, setDefaultData] = useState(true);
 
   const {
     data: ImpactData,
@@ -203,7 +206,7 @@ export default function Impact({
     }
   );
 
-  const [ impactDataStore, setImpactDataStore] = useState();
+  const [impactDataStore, setImpactDataStore] = useState();
 
   useEffect(() => {
     if (!ImpactDataWithDateKeyIsLoading && ImpactDataWithDateKey) {
@@ -273,16 +276,14 @@ export default function Impact({
         Impact
       </span>
       <div className="flex space-x-4 items-end justify-end h-6">
-      <button
-              className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${
-                defaultData
-                  ? "bg-[#39B54A] text-white"
-                  : "bg-white text-[#39B54A]"
-              }`}
-              onClick={() => handleDefaultData()}
-            >
-              Default
-            </button>
+        <button
+          className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${
+            defaultData ? "bg-[#39B54A] text-white" : "bg-white text-[#39B54A]"
+          }`}
+          onClick={() => handleDefaultData()}
+        >
+          Default
+        </button>
         <select
           className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
           value={selectedYear1 ? selectedYear1 : "Year"}
@@ -290,12 +291,12 @@ export default function Impact({
         >
           <option disabled>Year</option>
           {uniqueYears1?.map((item, Index) => {
-                return (
-                  <option key={Index} value={item}>
-                    {item}
-                  </option>
-                );
-              })}
+            return (
+              <option key={Index} value={item}>
+                {item}
+              </option>
+            );
+          })}
         </select>
         <select
           className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
@@ -305,12 +306,12 @@ export default function Impact({
         >
           <option disabled>Month</option>
           {uniqueMonths1?.sort().map((item, index) => {
-                return (
-                  <option key={index} value={item}>
-                    {digitToMonth(item)}
-                  </option>
-                );
-              })}
+            return (
+              <option key={index} value={item}>
+                {digitToMonth(item)}
+              </option>
+            );
+          })}
         </select>
         <select
           className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
@@ -320,73 +321,94 @@ export default function Impact({
         >
           <option disabled>Day</option>
           {monthsFromData
-                ?.map((item, Index) => {
-                  if (item.split("-")[0] === selectedMonth1) {
-                    return item; // Return the original item
-                  } else {
-                    return null; // Skip items that don't match the condition
-                  }
-                })
-                .filter((item) => item !== null) // Filter out null items
-                .sort((a, b) => {
-                  const aValue = a.split("-")[1];
-                  const bValue = b.split("-")[1];
-                  return aValue.localeCompare(bValue); // Sort based on the split value
-                })
-                .map((item, index) => (
-                  <option key={index} value={item.split("-")[1]}>
-                    {item.split("-")[1]}
-                  </option>
-                ))}
+            ?.map((item, Index) => {
+              if (item.split("-")[0] === selectedMonth1) {
+                return item; // Return the original item
+              } else {
+                return null; // Skip items that don't match the condition
+              }
+            })
+            .filter((item) => item !== null) // Filter out null items
+            .sort((a, b) => {
+              const aValue = a.split("-")[1];
+              const bValue = b.split("-")[1];
+              return aValue.localeCompare(bValue); // Sort based on the split value
+            })
+            .map((item, index) => (
+              <option key={index} value={item.split("-")[1]}>
+                {item.split("-")[1]}
+              </option>
+            ))}
         </select>
       </div>
       <div className="grid grid-cols-1 h-72">
         <div className="items-center grid grid-cols-3 text-center">
-        <div className="flex items-center justify-center">
-          <div className="h-12 w-12 xl:h-14 xl:w-14 2xl:h-[4rem] 2xl:w-[4rem] flex items-center justify-center">
-            <Image
-              src="/Impact/impact1111.png"
-              alt="impact2"
-              width={150}
-              height={100}
-            />
-          </div></div>
+          <div className="flex items-center justify-center">
+            <div className="h-12 w-12 xl:h-14 xl:w-14 2xl:h-[4rem] 2xl:w-[4rem] flex items-center justify-center">
+              <Image
+                src="/Impact/impact1111.png"
+                alt="impact2"
+                width={150}
+                height={100}
+              />
+            </div>
+          </div>
           <span className="text-[0.7rem] 2xl:text-sm text-[#44576b] font-semibold">
-            {impactDataStore?.treesPlanted?.toFixed(2) || 0}
+            {Math.round(impactDataStore?.treesPlanted)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") === "NaN"
+              ? 0
+              : Math.round(impactDataStore?.treesPlanted)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </span>
           <span className="text-[#44576b] font-semibold text-[0.7rem] 2xl:text-sm">
             Trees
           </span>
         </div>
         <div className="items-center grid grid-cols-3 text-center">
-        <div className="flex items-center justify-center">
-        <div className="h-12 w-12 xl:h-14 xl:w-14 2xl:h-[4rem] 2xl:w-[4rem] flex items-center justify-center">
-            <Image
-              src="/Impact/impact2222.png"
-              alt="impact3"
-              width={80}
-              height={100}
-            />
-          </div></div>
+          <div className="flex items-center justify-center">
+            <div className="h-12 w-12 xl:h-14 xl:w-14 2xl:h-[4rem] 2xl:w-[4rem] flex items-center justify-center">
+              <Image
+                src="/Impact/impact2222.png"
+                alt="impact3"
+                width={80}
+                height={100}
+              />
+            </div>
+          </div>
           <span className="text-[0.7rem] 2xl:text-sm text-[#44576b] font-semibold">
-          {impactDataStore?.co2EmissionReduction?.toFixed(2) || 0}
+            {Math.round(impactDataStore?.co2EmissionReduction)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") === "NaN"
+              ? 0
+              : Math.round(impactDataStore?.co2EmissionReduction)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </span>
           <span className="text-[#44576b] font-semibold text-[0.7rem] 2xl:text-sm">
             MT
           </span>
         </div>
         <div className="items-center grid grid-cols-3 text-center">
-        <div className="flex items-center justify-center">
-        <div className="h-12 w-12 xl:h-14 xl:w-14 2xl:h-[4rem] 2xl:w-[4rem] flex items-center justify-center">
-            <Image
-              src="/Impact/impact3333.png"
-              alt="impact1"
-              width={80}
-              height={100}
-            />
-          </div></div>
+          <div className="flex items-center justify-center">
+            <div className="h-12 w-12 xl:h-14 xl:w-14 2xl:h-[4rem] 2xl:w-[4rem] flex items-center justify-center">
+              <Image
+                src="/Impact/impact3333.png"
+                alt="impact1"
+                width={80}
+                height={100}
+              />
+            </div>
+          </div>
           <span className="text-[0.7rem] 2xl:text-sm text-[#44576b] font-semibold">
-            {impactDataStore?.treesSaved?.toFixed(2) || 0}
+            {Math.round(impactDataStore?.treesSaved)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") === "NaN"
+              ? 0
+              : Math.round(impactDataStore?.treesSaved)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </span>
           <span className="text-[#44576b] font-semibold text-[0.7rem] 2xl:text-sm">
             USD
