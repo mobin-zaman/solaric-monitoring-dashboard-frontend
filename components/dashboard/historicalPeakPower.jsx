@@ -288,7 +288,7 @@ export default function HistoricalPeakPower({
   useEffect(() => {
       setTimeout(() => { 
         setFakeLoader(true);
-      }, 50000);
+      }, 500);
 
   }, []);
 
