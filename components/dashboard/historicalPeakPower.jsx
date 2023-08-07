@@ -219,10 +219,49 @@ export default function HistoricalPeakPower({
   useEffect(() => {
     if (!historicalPeakPowerDataIsLoading && historicalPeakPowerData) {
       setStoreHistoricalPeakPowerData(
-        historicalPeakPowerData?.map((item) => ({
-          name: item.collectTime.split("-").slice(-1)[0],
-          peakPower: item.peakPower,
-        }))
+        historicalPeakPowerData?.map((item) => {
+
+
+          // If collectTime has 3 parts, it's not a monthly data point
+          if (item.collectTime.split("-").length === 3) {
+            return {
+              name: parseInt(item.collectTime.split("-")[2]),
+              peakPower: item.peakPower,
+            };
+          }
+
+          // Create an object with the name (converted month) and peakPower
+          return {
+            name: digitToMonth(item.collectTime.split("-")[1]),
+            peakPower: item.peakPower,
+          };
+        })
+          .sort((a, b) => {
+            const monthA = a.name;
+            const monthB = b.name;
+
+            // Define the order of the months
+            const monthOrder = {
+              Jan: 1,
+              Feb: 2,
+              Mar: 3,
+              Apr: 4,
+              May: 5,
+              Jun: 6,
+              Jul: 7,
+              Aug: 8,
+              Sep: 9,
+              Oct: 10,
+              Nov: 11,
+              Dec: 12,
+            };
+
+            if (!isNaN(monthA) && !isNaN(monthB)) {
+              return monthA - monthB;
+            } else {
+              return monthOrder[monthA] - monthOrder[monthB];
+            }
+          })
       );
     }
   }, [historicalPeakPowerData, historicalPeakPowerDataIsLoading]);
@@ -283,12 +322,12 @@ export default function HistoricalPeakPower({
     }
   };
 
-  const [ fakeLoader, setFakeLoader ] = useState(false);
+  const [fakeLoader, setFakeLoader] = useState(false);
 
   useEffect(() => {
-      setTimeout(() => { 
-        setFakeLoader(true);
-      }, 500);
+    setTimeout(() => {
+      setFakeLoader(true);
+    }, 500);
 
   }, []);
 
@@ -334,29 +373,29 @@ export default function HistoricalPeakPower({
           style={{ width: "100%", height: "100%" }}
         >
           {fakeLoader ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              width={500}
-              height={300}
-              data={storeHistoricalPeakPowerData}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              {/* <Legend /> */}
-              <Bar dataKey="peakPower" fill="#82ca9d" barSize={30} />
-            </BarChart>
-          </ResponsiveContainer> ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                width={500}
+                height={300}
+                data={storeHistoricalPeakPowerData}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                {/* <Legend /> */}
+                <Bar dataKey="peakPower" fill="#82ca9d" barSize={30} />
+              </BarChart>
+            </ResponsiveContainer>) : (
             <div width="100%" height="100%" className="flex items-center justify-center border w-full h-full">
-            <ReactLoading type="spokes" color="#25476A" height={50} width={50} />
-          </div>
+              <ReactLoading type="spokes" color="#25476A" height={50} width={50} />
+            </div>
           )}
         </div>
       </div>

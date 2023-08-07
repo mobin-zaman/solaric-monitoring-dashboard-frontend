@@ -41,7 +41,7 @@ export default function AddUserModal({
       id: editProjectData?.id,
       name,
       fundingType,
-      tarrif,
+      tarrif: parseFloat(tarrif),
       dollarRate: parseFloat(dollarRate),
     });
   };
