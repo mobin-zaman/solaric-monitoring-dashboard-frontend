@@ -14,13 +14,15 @@ export default function AddUserModal({
   const queryClient = useQueryClient();
   const [name, setName] = useState(editProjectData?.name);
   const [fundingType, setFundingType] = useState(editProjectData?.fundingType);
+  const [tarrif, setTarrif] = useState(editProjectData?.tarrif);
+  const [dollarRate, setDollarRate] = useState(editProjectData?.dollarRate);
   const [errorMessage, setErrorMessage] = useState("");
 
   const mutation = useMutation(updateProject, {
     onSuccess: () => {
       projectUpdated(true);
       updateProjectModalOpen(false);
-      queryClient.invalidateQueries("project","projects");
+      queryClient.invalidateQueries("project", "projects");
     },
     onError: (error) => {
       console.log(error);
@@ -30,7 +32,7 @@ export default function AddUserModal({
   const handleCreateProject = (e) => {
     projectUpdated(false);
     setErrorMessage("");
-    if (!name || !fundingType) {
+    if (!name || !fundingType || !tarrif || !dollarRate) {
       setErrorMessage("Please fill all the fields");
       return;
     }
@@ -39,6 +41,8 @@ export default function AddUserModal({
       id: editProjectData?.id,
       name,
       fundingType,
+      tarrif,
+      dollarRate: parseFloat(dollarRate),
     });
   };
 
@@ -89,6 +93,36 @@ export default function AddUserModal({
                     <option value="CAPEX">CAPEX</option>
                     <option value="OPEX">OPEX</option>
                   </select>
+                </div>
+              </div>
+              <div className="text-[#373737] font-medium text-sm space-x-1">
+                <div className="font-medium text-lg text-[#25476A] space-x-0.5">
+                  <span>Tarrif</span>
+                  <span className="text-red-500">*</span>
+                </div>
+                <div className="flex items-center border-b-2 border-[#25476A]">
+                  <input
+                    className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                    type="number"
+                    placeholder="Enter tarrif"
+                    value={tarrif}
+                    onChange={(e) => setTarrif(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="text-[#373737] font-medium text-sm space-x-1">
+                <div className="font-medium text-lg text-[#25476A] space-x-0.5">
+                  <span>Dollar Rate</span>
+                  <span className="text-red-500">*</span>
+                </div>
+                <div className="flex items-center border-b-2 border-[#25476A]">
+                  <input
+                    className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                    type="number"
+                    placeholder="Enter dollar rate"
+                    value={dollarRate}
+                    onChange={(e) => setDollarRate(e.target.value)}
+                  />
                 </div>
               </div>
             </div>

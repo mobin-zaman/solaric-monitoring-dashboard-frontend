@@ -360,6 +360,30 @@ export default function Project({ projectId }) {
                 <div className="grid grid-cols-3 gap-4 w-full">
                   <div>
                     <p className="text-gray-700 text-sm font-medium select-none">
+                      Owner Name:
+                    </p>
+                    <p className="text-gray-700">
+                      {data?.meta?.ownerName || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-700 text-sm font-medium select-none">
+                      Contact:
+                    </p>
+                    <p className="text-gray-700">
+                      {data?.meta?.Contact || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-700 text-sm font-medium select-none">
+                      Address:
+                    </p>
+                    <p className="text-gray-700">
+                      {data?.meta?.locationAddress || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-700 text-sm font-medium select-none">
                       Funding Type:
                     </p>
                     <div className="flex items-center space-x-2">
@@ -395,26 +419,18 @@ export default function Project({ projectId }) {
                   </div>
                   <div>
                     <p className="text-gray-700 text-sm font-medium select-none">
-                      Owner Name:
+                      Tarrif:
                     </p>
                     <p className="text-gray-700">
-                      {data?.meta?.ownerName || "N/A"}
+                      {data?.tarrif.toFixed(0) || "N/A"}
                     </p>
                   </div>
                   <div>
                     <p className="text-gray-700 text-sm font-medium select-none">
-                      Contact:
+                      Dollar Rate:
                     </p>
                     <p className="text-gray-700">
-                      {data?.meta?.Contact || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
-                      Address:
-                    </p>
-                    <p className="text-gray-700">
-                      {data?.meta?.locationAddress || "N/A"}
+                      {data?.dollarRate.toFixed(2) || "N/A"}
                     </p>
                   </div>
                   <div>
