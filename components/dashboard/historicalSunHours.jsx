@@ -14,9 +14,9 @@ import { data } from "autoprefixer";
 import { useQuery, useMutation } from "react-query";
 import {
   getDailyViewCollectTime,
-  getHistoricalPeakPowerData,
+  getHistoricalSunHours,
 } from "@/lib/Helper";
-import ReactLoading from "react-loading";
+import ReactLoading from 'react-loading';
 
 export default function HistoricalPeakPower({
   handlePeakPowerOpen,
@@ -208,7 +208,7 @@ export default function HistoricalPeakPower({
     error: historicalPeakPowerDataError,
   } = useQuery(
     ["historicalPeakPowerData", collectionKey, dateKey],
-    () => getHistoricalPeakPowerData({ collectionKey, dateKey }),
+    () => getHistoricalSunHours({ collectionKey, dateKey }),
     {
       enabled: !!collectionKey && !!dateKey,
       onSuccess: (data) => {
@@ -223,22 +223,23 @@ export default function HistoricalPeakPower({
   useEffect(() => {
     if (!historicalPeakPowerDataIsLoading && historicalPeakPowerData) {
       setStoreHistoricalPeakPowerData(
-        historicalPeakPowerData
-          ?.map((item) => {
-            // If collectTime has 3 parts, it's not a monthly data point
-            if (item.collectTime.split("-").length === 3) {
-              return {
-                name: parseInt(item.collectTime.split("-")[2]),
-                peakPower: item.peakPower,
-              };
-            }
+        historicalPeakPowerData?.map((item) => {
 
-            // Create an object with the name (converted month) and peakPower
+
+          // If collectTime has 3 parts, it's not a monthly data point
+          if (item.collectTime.split("-").length === 3) {
             return {
-              name: digitToMonth(item.collectTime.split("-")[1]),
-              peakPower: item.peakPower,
+              name: parseInt(item.collectTime.split("-")[2]),
+              sunHours: item.sunHours,
             };
-          })
+          }
+
+          // Create an object with the name (converted month) and peakPower
+          return {
+            name: digitToMonth(item.collectTime.split("-")[1]),
+            sunHours: item.sunHours,
+          };
+        })
           .sort((a, b) => {
             const monthA = a.name;
             const monthB = b.name;
@@ -331,12 +332,13 @@ export default function HistoricalPeakPower({
     setTimeout(() => {
       setFakeLoader(true);
     }, 500);
+
   }, []);
 
   return (
     <>
       <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
-        <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between">
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
             Historical Peak Power / Sun-Hrs
           </span>
@@ -397,7 +399,6 @@ export default function HistoricalPeakPower({
             </select>
           </div>
         </div>
-
         <div
           className="flex items-center justify-center text-xs font-semibold"
           style={{ width: "100%", height: "100%" }}
@@ -420,21 +421,11 @@ export default function HistoricalPeakPower({
                 <YAxis />
                 <Tooltip />
                 {/* <Legend /> */}
-                <Bar dataKey="peakPower" fill="#82ca9d" barSize={30} />
+                <Bar dataKey="sunHours" fill="#82ca9d" barSize={30} />
               </BarChart>
-            </ResponsiveContainer>
-          ) : (
-            <div
-              width="100%"
-              height="100%"
-              className="flex items-center justify-center border w-full h-full"
-            >
-              <ReactLoading
-                type="spokes"
-                color="#25476A"
-                height={50}
-                width={50}
-              />
+            </ResponsiveContainer>) : (
+            <div width="100%" height="100%" className="flex items-center justify-center border w-full h-full">
+              <ReactLoading type="spokes" color="#25476A" height={50} width={50} />
             </div>
           )}
         </div>

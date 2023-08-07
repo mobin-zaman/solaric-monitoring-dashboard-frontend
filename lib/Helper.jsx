@@ -841,6 +841,22 @@ export const getHistoricalPeakPowerData = async (data) => {
   return response.data;
 };
 
+// Api call for historical peak power data
+export const getHistoricalSunHours = async (data) => {
+  const key = Object.keys(data.collectionKey)[0];
+  const id = data.collectionKey[key];
+  const dateKey = data.dateKey;
+  const response = await todoApi.get(
+    `/dashboard/${key}/bar-chart-view/sun-hrs/${id}/${dateKey}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 // Api calls for get Historical Data
 export const getHistoricalData = async (collectionKey) => {
   const key = Object.keys(collectionKey)[0];
