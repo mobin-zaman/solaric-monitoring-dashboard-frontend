@@ -277,9 +277,8 @@ export default function Impact({
       </span>
       <div className="flex space-x-4 items-end justify-end h-6">
         <button
-          className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${
-            defaultData ? "bg-[#39B54A] text-white" : "bg-white text-[#39B54A]"
-          }`}
+          className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${defaultData ? "bg-[#39B54A] text-white" : "bg-white text-[#39B54A]"
+            }`}
           onClick={() => handleDefaultData()}
         >
           Default
@@ -359,8 +358,8 @@ export default function Impact({
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",") === "NaN"
               ? 0
               : Math.round(impactDataStore?.treesPlanted)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </span>
           <span className="text-[#44576b] font-semibold text-[0.7rem] 2xl:text-sm">
             Trees
@@ -383,8 +382,8 @@ export default function Impact({
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",") === "NaN"
               ? 0
               : Math.round(impactDataStore?.co2EmissionReduction)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </span>
           <span className="text-[#44576b] font-semibold text-[0.7rem] 2xl:text-sm">
             MT
@@ -402,13 +401,13 @@ export default function Impact({
             </div>
           </div>
           <span className="text-[0.7rem] 2xl:text-sm text-[#44576b] font-semibold">
-            {Math.round(impactDataStore?.treesSaved)
+            {Math.round(impactDataStore?.moneySaved)
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",") === "NaN"
               ? 0
-              : Math.round(impactDataStore?.treesSaved)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              : Math.round(impactDataStore?.moneySaved)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </span>
           <span className="text-[#44576b] font-semibold text-[0.7rem] 2xl:text-sm">
             USD
