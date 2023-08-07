@@ -76,6 +76,7 @@ export const updateUser = async (data) => {
     role: data.role,
     status: data.status,
     address: data.address,
+    companyName: data.companyName,
   };
 
   const response = await todoApi.put(`/user/${id}`, d, {

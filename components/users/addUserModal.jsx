@@ -10,6 +10,7 @@ export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("ADMIN");
+  const [companyName, setCompanyName] = useState("");
   const [address, setAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -26,7 +27,7 @@ export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
   const addNewUser = (e) => {
     newUserCreated(false);
     setErrorMessage("");
-    if (!name || !email || !password || !confirmPassword || !role || !address) {
+    if (!name || !email || !password || !confirmPassword || !role || !companyName || !address) {
       setErrorMessage("Please fill all the fields");
       return;
     }
@@ -40,13 +41,14 @@ export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
       password,
       role,
       address,
+      companyName,
     });
   };
 
   return (
     <>
       <div className="flex items-center bg-opacity-70 bg-gray-300 fixed inset-0 z-50">
-        <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] h-[30rem] sm:w-[26rem] sm:h-[38rem]">
+        <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] sm:w-[26rem]">
           <div className="flex justify-between pb-3">
             <span className="text-[#373737] font-semibold text-2xl">
               Add New User
@@ -117,6 +119,18 @@ export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
                 <option value="ENGINEER">Engineer</option>
                 <option value="USER">User</option>
               </select>
+            </div>
+            <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
+              <div className="font-medium text-lg">Company Name</div>
+              <div className="flex items-center border-b-2 border-[#168636]">
+                <input
+                  className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                  type="text"
+                  placeholder="Enter company name"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                />
+              </div>
             </div>
             <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
               <div className="font-medium text-lg">Address</div>

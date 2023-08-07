@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { updateUser } from "@/lib/Helper";
 
 export default function AddUserModal({
@@ -9,6 +9,7 @@ export default function AddUserModal({
   editUserData,
   userEdited,
 }) {
+  const queryClient = useQueryClient();
   const [name, setName] = useState(editUserData?.name || "");
   const [email, setEmail] = useState(editUserData?.email || "");
   const [role, setRole] = useState(editUserData?.role || "");
@@ -16,6 +17,7 @@ export default function AddUserModal({
     editUserData?.status === "ACTIVE" ? true : false
   );
   console.log(statusValue);
+  const [companyName, setCompanyName] = useState(editUserData?.companyName || "");
   const [address, setAddress] = useState(editUserData?.address || "");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -23,6 +25,7 @@ export default function AddUserModal({
     onSuccess: () => {
       userEdited(true);
       editUserModalOpen(false);
+      queryClient.invalidateQueries("currentUser");
     },
     onError: (error) => {
       setErrorMessage(error.response.data.message);
@@ -34,7 +37,7 @@ export default function AddUserModal({
     userEdited(false);
     setErrorMessage("");
     setErrorMessage("");
-    if (!name || !email || !role || !address) {
+    if (!name || !email || !role || !companyName || !address) {
       setErrorMessage("Please fill all the fields");
       return;
     }
@@ -47,6 +50,7 @@ export default function AddUserModal({
       name,
       email,
       role,
+      companyName,
       address,
       status: statusValue ? "ACTIVE" : "DISABLED",
     });
@@ -55,7 +59,7 @@ export default function AddUserModal({
   return (
     <>
       <div className="flex items-center bg-opacity-70 bg-gray-300 fixed inset-0 z-50">
-        <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] h-[30rem] sm:w-[26rem] sm:h-[30rem]">
+        <div className="grid grid-cols-1 bg-white rounded-md items-center relative mx-auto p-6 w-[20rem] sm:w-[26rem]">
           <div className="flex justify-between pb-3">
             <span className="text-[#373737] font-semibold text-2xl">
               Edit User
@@ -114,18 +118,6 @@ export default function AddUserModal({
               onChange={(e) => setConfirmPassword(e.target.value)}
             /></div>
           </div> */}
-            <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
-              <div className="font-medium text-lg">Address</div>
-              <div className="flex items-center border-b-2 border-[#168636]">
-                <input
-                  className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-                  type="text"
-                  placeholder="Enter address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-              </div>
-            </div>
             <div className="flex items-center space-x-3 text-[#373737] font-medium text-sm py-2">
               <div className="font-medium text-lg">Role: </div>
               <select
@@ -142,6 +134,30 @@ export default function AddUserModal({
                   User
                 </option>
               </select>
+            </div>
+            <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
+              <div className="font-medium text-lg">Company Name</div>
+              <div className="flex items-center border-b-2 border-[#168636]">
+                <input
+                  className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                  type="text"
+                  placeholder="Enter company name"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className=" text-[#373737] font-medium text-sm py-2 space-x-1">
+              <div className="font-medium text-lg">Address</div>
+              <div className="flex items-center border-b-2 border-[#168636]">
+                <input
+                  className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                  type="text"
+                  placeholder="Enter address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
             </div>
             <div className="flex items-center space-x-3 text-[#373737] font-medium text-sm py-2">
               <div className="font-medium text-lg">Status: </div>
