@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import HistoricalPeakPower from "./historicalPeakPower";
 import { getDailyViewCollectTime, getHistoricalData, getHistoricalDataWithDateKey } from "../../lib/Helper";
 import { useQuery } from "react-query";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGlobe,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Historical({
   historicalDataForProject,
@@ -59,7 +63,7 @@ export default function Historical({
     selectedOptionIdInverter,
   ]);
 
-  const [ defaultData, setDefaultData ] = useState(true);
+  const [defaultData, setDefaultData] = useState(true);
 
   const {
     data: HistoricalData,
@@ -201,7 +205,7 @@ export default function Historical({
     }
   );
 
-  const [ historicalDataStore, setHistoricalDataStore] = useState();
+  const [historicalDataStore, setHistoricalDataStore] = useState();
 
   useEffect(() => {
     if (!HistoricalDataWithDateKeyIsLoading && HistoricalDataWithDateKey) {
@@ -274,14 +278,13 @@ export default function Historical({
         <div className="flex flex-col justify-center items-end col-span-3 space-y-3">
           <div className="flex space-x-4">
             <button
-              className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${
-                defaultData
-                  ? "bg-[#39B54A] text-white"
-                  : "bg-white text-[#39B54A]"
-              }`}
+              className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border-2 ${defaultData
+                ? "bg-[#39B54A] text-white border-[#39B54A]"
+                : "bg-white text-[#25476A] border-[#25476A]"
+                }`}
               onClick={() => handleDefaultData()}
             >
-              Default
+              <FontAwesomeIcon icon={faGlobe} />
             </button>
             <select
               className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
@@ -342,7 +345,7 @@ export default function Historical({
           </div>
           <table className="table-fixed w-full border rounded-md select-none text-[#25476A] text-sm">
             <tbody className="text-center">
-              <tr className="bg-gray-200 h-16 font-semibold">
+              <tr className="bg-gray-200 h-12 font-semibold">
                 <td></td>
                 <td>Prod</td>
                 <td>Export</td>
@@ -358,7 +361,7 @@ export default function Historical({
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.export?.today?.toFixed(
-                   0
+                    0
                   ) || 0}
                 </td>
                 <td>
@@ -386,7 +389,7 @@ export default function Historical({
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.import?.thisMonth?.toFixed(
-                   0
+                    0
                   ) || 0}
                 </td>
                 <td>

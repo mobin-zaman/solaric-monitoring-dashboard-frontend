@@ -155,10 +155,10 @@ export default function DailyView({
         const date = localStorage.getItem("date").split("-");
         setSelectedDay1(date[2]);
       } else {
-        const sortedDays =       monthsFromData
-        .filter((item) => item.split("-")[0] === selectedMonth1)
-        .map((item) => item.split("-")[1])
-        .sort((a, b) => a.localeCompare(b));
+        const sortedDays = monthsFromData
+          .filter((item) => item.split("-")[0] === selectedMonth1)
+          .map((item) => item.split("-")[1])
+          .sort((a, b) => a.localeCompare(b));
 
         const lastIdx = sortedDays.length - 1;
         setSelectedDay1(sortedDays[lastIdx]);
@@ -200,8 +200,8 @@ export default function DailyView({
           MW: frameItem.value,
           collectTime: new Date(
             new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
-              6 * 60 * 60 * 1000 
-              // + 50 * 60 * 1000
+            6 * 60 * 60 * 1000
+            // + 50 * 60 * 1000
           ).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
         }))
       );
@@ -219,10 +219,10 @@ export default function DailyView({
   }, [dateKey]);
 
   useEffect(() => {
-      // const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
-      // setSelectedYear1(sortedYears[0]);
-      // const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
-      // setSelectedMonth1(sortedMonths[0]);
+    // const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
+    // setSelectedYear1(sortedYears[0]);
+    // const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
+    // setSelectedMonth1(sortedMonths[0]);
     // const sortedDays = monthsFromData
     //   ?.map((item, Index) => {
     //     if (item.split("-")[0] === sortedMonths[0]) {
@@ -231,7 +231,7 @@ export default function DailyView({
     //   })
     //   .sort();
     //   setSelectedDay1(sortedDays[0]);
-    
+
   }, [selectedOptionId, uniqueYears1, uniqueMonths1, monthsFromData]);
 
 
@@ -349,17 +349,17 @@ export default function DailyView({
           </div>
         </div>
         <div className="w-full h-full p-3 rounded-md relative text-xs font-semibold text-gray-600">
-      {/* Add the div element to display Generation and Sun Hours */}
-      <div className="flex flex-col justify-between mb-2 absolute top-8 left-20 bg-white p-2 rounded-md space-y-0.5">
-      <div className="flex items-center space-x-2">
-          <span className="">Generation:</span>
-          <span className="">{Math.round(generationData).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} MWH</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <span className="">Sun Hours:</span>
-          <span className="">{sunHoursData} Hrs.</span>
-        </div>
-      </div>
+          {/* Add the div element to display Generation and Sun Hours */}
+          <div className="flex flex-col justify-between mb-2 absolute top-8 left-20 bg-white p-2 rounded-md space-y-0.5">
+            <div className="flex items-center space-x-2">
+              <span className="">Generation:</span>
+              <span className="">{(Math.round(generationData * 100) / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} MWH</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="">Sun Hours:</span>
+              <span className="">{sunHoursData} Hrs.</span>
+            </div>
+          </div>
           <div
             style={{ width: "100%", height: "100%" }}
             className="text-xs font-semibold"

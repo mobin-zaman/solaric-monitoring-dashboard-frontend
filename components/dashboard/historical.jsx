@@ -226,21 +226,19 @@ export default function Historical({
             <div className="flex justify-end items-center space-x-5">
               <div className="flex rounded-md bg-gray-200">
                 <button
-                  className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${
-                    peakPowerOpen
-                      ? "bg-[#39B54A] text-white"
-                      : "bg-white text-[#39B54A]"
-                  }`}
+                  className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${peakPowerOpen
+                    ? "bg-[#39B54A] text-white"
+                    : "bg-white text-[#39B54A]"
+                    }`}
                   onClick={() => handlePeakPowerOpen()}
                 >
                   Peak Power
                 </button>
                 <button
-                  className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${
-                    sunHoursOpen
-                      ? "bg-[#39B54A] text-white"
-                      : "bg-white text-[#39B54A]"
-                  }`}
+                  className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${sunHoursOpen
+                    ? "bg-[#39B54A] text-white"
+                    : "bg-white text-[#39B54A]"
+                    }`}
                   onClick={() => handleSunHoursOpen()}
                 >
                   Sun Hours
@@ -251,94 +249,98 @@ export default function Historical({
         </div>
 
 
-          {sunHoursOpen ? (
-            <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
-              <div className="flex space-x-3 justify-end">
-                <select
-                  className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-                  value={historicalDataForProjectSunHrsBarChartDataYearSelected}
-                  onChange={(e) =>
-                    setHistoricalDataForProjectSunHrsBarChartDataSelected(
-                      e.target.value
-                    )
-                  }
-                >
-                  <option disabled>Year</option>
-                  {historicalDataForProjectSunHrsBarChartDataYearCount?.map(
-                    (item, Index) => {
-                      return <option key={Index}>{item}</option>;
-                    }
-                  )}
-                </select>
-                <select
-                  className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-                  value={
-                    historicalDataForProjectSunHrsBarChartDataMonthSelected
-                  }
-                  onChange={(e) =>
-                    setHistoricalDataForProjectSunHrsBarChartDataMonthSelected(
-                      e.target.value
-                    )
-                  }
-                >
-                  <option disabled>Month</option>
-                  {historicalDataForProjectSunHrsBarChartDataMonthCount?.map(
-                    (item, Index) => {
-                      if (
-                        historicalDataForProjectSunHrsBarChartDataYearSelected ===
-                        item?.split("-")[0]
-                      ) {
-                        return (
-                          <option key={Index} value={item}>
-                            {digitToMonth(item?.split("-")[1])}
-                          </option>
-                        );
-                      }
-                    }
-                  )}
-                </select>
-              </div>
-
-              <div
-                className="flex items-center justify-center text-xs font-semibold"
-                style={{ width: "100%", height: "100%" }}
+        {sunHoursOpen ? (
+          <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
+            <div className="flex space-x-3 justify-end">
+              <select
+                className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                value={historicalDataForProjectSunHrsBarChartDataYearSelected}
+                onChange={(e) =>
+                  setHistoricalDataForProjectSunHrsBarChartDataSelected(
+                    e.target.value
+                  )
+                }
               >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    width={500}
-                    height={300}
-                    data={
-                      historicalDataForProjectSunHrsBarChartDataMonthly
-                        ? historicalDataForProjectSunHrsBarChartDataMonthly
-                        : historicalDataForProjectSunHrsBarChartDataYearly
+                <option disabled>Year</option>
+                {historicalDataForProjectSunHrsBarChartDataYearCount?.map(
+                  (item, Index) => {
+                    return <option key={Index}>{item}</option>;
+                  }
+                )}
+              </select>
+              <select
+                className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                value={
+                  historicalDataForProjectSunHrsBarChartDataMonthSelected
+                }
+                onChange={(e) =>
+                  setHistoricalDataForProjectSunHrsBarChartDataMonthSelected(
+                    e.target.value
+                  )
+                }
+              >
+                <option disabled>Month</option>
+                {historicalDataForProjectSunHrsBarChartDataMonthCount?.map(
+                  (item, Index) => {
+                    if (
+                      historicalDataForProjectSunHrsBarChartDataYearSelected ===
+                      item?.split("-")[0]
+                    ) {
+                      return (
+                        <option key={Index} value={item}>
+                          {digitToMonth(item?.split("-")[1])}
+                        </option>
+                      );
                     }
-                    margin={{
-                      top: 5,
-                      right: 30,
-                      left: 20,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    {/* <Legend /> */}
-                    <Bar dataKey="sunHours" fill="#82ca9d" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+                  }
+                )}
+              </select>
             </div>
-          ) : (
-            <HistoricalPeakPower
-              firstProjectForDefaultViewId={firstProjectForDefaultViewId}
-              selectedOptionId={selectedOptionId}
-              selectedOptionIdCompany={selectedOptionIdCompany}
-              selectedOptionIdBuilding={selectedOptionIdBuilding}
-              selectedOptionIdInverter={selectedOptionIdInverter}
-            />
-          )}
-       
+
+            <div
+              className="flex items-center justify-center text-xs font-semibold"
+              style={{ width: "100%", height: "100%" }}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={
+                    historicalDataForProjectSunHrsBarChartDataMonthly
+                      ? historicalDataForProjectSunHrsBarChartDataMonthly
+                      : historicalDataForProjectSunHrsBarChartDataYearly
+                  }
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  {/* <Legend /> */}
+                  <Bar dataKey="sunHours" fill="#82ca9d" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        ) : (
+          <HistoricalPeakPower
+            handlePeakPowerOpen={handlePeakPowerOpen}
+            handleSunHoursOpen={handleSunHoursOpen}
+            peakPowerOpen={peakPowerOpen}
+            sunHoursOpen={sunHoursOpen}
+            firstProjectForDefaultViewId={firstProjectForDefaultViewId}
+            selectedOptionId={selectedOptionId}
+            selectedOptionIdCompany={selectedOptionIdCompany}
+            selectedOptionIdBuilding={selectedOptionIdBuilding}
+            selectedOptionIdInverter={selectedOptionIdInverter}
+          />
+        )}
+
       </div>
     </>
   );

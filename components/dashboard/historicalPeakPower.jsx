@@ -19,6 +19,10 @@ import {
 import ReactLoading from 'react-loading';
 
 export default function HistoricalPeakPower({
+  handlePeakPowerOpen,
+  handleSunHoursOpen,
+  peakPowerOpen,
+  sunHoursOpen,
   selectedOptionId,
   selectedOptionIdCompany,
   selectedOptionIdBuilding,
@@ -335,6 +339,30 @@ export default function HistoricalPeakPower({
     <>
       <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
         <div className="flex space-x-3 justify-end">
+          <div className="flex">
+            <div className="flex justify-end items-center space-x-5">
+              <div className="flex rounded-md bg-gray-200">
+                <button
+                  className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${peakPowerOpen
+                    ? "bg-[#39B54A] text-white"
+                    : "bg-white text-[#39B54A]"
+                    }`}
+                  onClick={() => handlePeakPowerOpen()}
+                >
+                  Peak Power
+                </button>
+                <button
+                  className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${sunHoursOpen
+                    ? "bg-[#39B54A] text-white"
+                    : "bg-white text-[#39B54A]"
+                    }`}
+                  onClick={() => handleSunHoursOpen()}
+                >
+                  Sun Hours
+                </button>
+              </div>
+            </div>
+          </div>
           <select
             className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
             value={selectedYear}

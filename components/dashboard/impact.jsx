@@ -6,6 +6,10 @@ import {
 } from "../../lib/Helper";
 import { useQuery } from "react-query";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGlobe,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Impact({
   selectedOptionIdInverter,
@@ -277,11 +281,13 @@ export default function Impact({
       </span>
       <div className="flex space-x-4 items-end justify-end h-6">
         <button
-          className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border border-[#39B54A] ${defaultData ? "bg-[#39B54A] text-white" : "bg-white text-[#39B54A]"
+          className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border-2 ${defaultData
+            ? "bg-[#39B54A] text-white border-[#39B54A]"
+            : "bg-white text-[#25476A] border-[#25476A]"
             }`}
           onClick={() => handleDefaultData()}
         >
-          Default
+          <FontAwesomeIcon icon={faGlobe} />
         </button>
         <select
           className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
