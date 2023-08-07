@@ -31,11 +31,12 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FormatDateTime from "@/lib/FormatDateTime";
 import Link from "next/link";
+import ReactLoading from 'react-loading';
 
 export default function Project({ projectId }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  
+
   const [createUserInProjectModalOpen, setCreateUserInProjectModalOpen] =
     useState(false);
   const [createCompanyInProjectModalOpen, setCreateCompanyInProjectModalOpen] =
@@ -80,7 +81,7 @@ export default function Project({ projectId }) {
     queryClient.invalidateQueries("project");
   }, []);
 
-  
+
 
   // Handle copy button for project id and solarman plant id
   const handleCopyButton = (data) => {
@@ -237,14 +238,16 @@ export default function Project({ projectId }) {
     }
   }, [projectUpdated]);
 
+  const [fakeLoader, setFakeLoader] = useState(false);
 
   const mutation = useMutation(updateInvertersInProject, {
     onSuccess: (data) => {
       if (data) {
+        setFakeLoader(true)
         console.log(data);
         //refresh the page or project data
         queryClient.invalidateQueries("project");
-        
+
       }
     },
     onError: (error) => {
@@ -253,45 +256,51 @@ export default function Project({ projectId }) {
   });
 
   const handleRefreshInverters = (e) => {
-
+    setFakeLoader(true);
     mutation.mutate({
       projectId: parseInt(data?.id),
     });
   };
 
+  useEffect(() => {
+    if (!mutation?.isLoading) {
+      setFakeLoader(false);
+    }
+  }, [mutation, fakeLoader]);
+
   return (
     <>
       <div className="space-y-1.5 relative">
         <div className="sticky -top-0 z-50 bg-gray-200 rounded-b-md select-none">
-        <div className="text-sm breadcrumbs text-[#25476A]">
-          <ul>
-            <li>
-            <Link href="/dashboard">
-            <FontAwesomeIcon
-              icon={faHouse}
-              className={`w-4 h-4`}
-              title="Dashboard"
-            />
-                <span className="ml-2">Dashboard</span>
-              </Link>
-            </li>
-            <li>
-            <Link href="/project">
-            <FontAwesomeIcon
-              icon={faCubesStacked}
-              className={`w-4 h-4`}
-              title="Dashboard"
-            />
-                <span className="ml-2">Projects</span>
-              </Link>
-            </li>
-            <li>
-            <Link href={`/project/${data?.id}`}>
-                <span className="">{data?.name}</span>
-            </Link>
-            </li>
-          </ul>
-        </div>
+          <div className="text-sm breadcrumbs text-[#25476A]">
+            <ul>
+              <li>
+                <Link href="/dashboard">
+                  <FontAwesomeIcon
+                    icon={faHouse}
+                    className={`w-4 h-4`}
+                    title="Dashboard"
+                  />
+                  <span className="ml-2">Dashboard</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/project">
+                  <FontAwesomeIcon
+                    icon={faCubesStacked}
+                    className={`w-4 h-4`}
+                    title="Dashboard"
+                  />
+                  <span className="ml-2">Projects</span>
+                </Link>
+              </li>
+              <li>
+                <Link href={`/project/${data?.id}`}>
+                  <span className="">{data?.name}</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
           <div className="space-y-1.5">
             <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
               <div className="flex items-center space-x-3 select-none">
@@ -306,38 +315,38 @@ export default function Project({ projectId }) {
                     <span>Id:</span>
                     <span>{data?.solarmanPlantId}</span>
                     <button
-                        className="text-[#25476A]"
-                        onClick={() =>
-                          handleCopyButton({
-                            solarmanPlantId: data?.solarmanPlantId,
-                          })
-                        }
-                      >
-                        {solarmanPlantIdCopy ? (
-                          <FontAwesomeIcon icon={faCopy} />
-                        ) : (
-                          <FontAwesomeIcon icon={faClipboard} />
-                        )}
-                      </button>
+                      className="text-[#25476A]"
+                      onClick={() =>
+                        handleCopyButton({
+                          solarmanPlantId: data?.solarmanPlantId,
+                        })
+                      }
+                    >
+                      {solarmanPlantIdCopy ? (
+                        <FontAwesomeIcon icon={faCopy} />
+                      ) : (
+                        <FontAwesomeIcon icon={faClipboard} />
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>
               <button
-              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
-              onClick={() => setUpdateProjectModalOpen(true)}
-            >
-              <span className="">Edit</span>
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </button>
-            
-            
-            {updateProjectModalOpen && (
-              <UpdateProjectModal
-                editProjectData={data}
-                updateProjectModalOpen={setUpdateProjectModalOpen}
-                projectUpdated={setProjectUpdated}
-              />
-            )}
+                className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
+                onClick={() => setUpdateProjectModalOpen(true)}
+              >
+                <span className="">Edit</span>
+                <FontAwesomeIcon icon={faPenToSquare} />
+              </button>
+
+
+              {updateProjectModalOpen && (
+                <UpdateProjectModal
+                  editProjectData={data}
+                  updateProjectModalOpen={setUpdateProjectModalOpen}
+                  projectUpdated={setProjectUpdated}
+                />
+              )}
             </div>
             <div className="bg-white rounded-md shadow-md flex">
               <Image
@@ -351,7 +360,7 @@ export default function Project({ projectId }) {
                 <div className="grid grid-cols-3 gap-4 w-full">
                   <div>
                     <p className="text-gray-700 text-sm font-medium select-none">
-                    Funding Type:
+                      Funding Type:
                     </p>
                     <div className="flex items-center space-x-2">
                       <span className="text-gray-700 font-medium select-none">
@@ -634,91 +643,91 @@ export default function Project({ projectId }) {
             <div className="space-y-1.5 h-64 overflow-y-auto">
               {searchResultCompany?.length >= 0
                 ? searchResultCompany?.map((company) => (
+                  <div
+                    className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
+                    key={Math.random()}
+                  >
                     <div
-                      className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
-                      key={Math.random()}
+                      className="grid grid-cols-12 col-span-11 border-r border-gray-300 items-center p-2 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
+                      onClick={() => {
+                        handleCompanyClick(company.id);
+                      }}
                     >
-                      <div
-                        className="grid grid-cols-12 col-span-11 border-r border-gray-300 items-center p-2 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
-                        onClick={() => {
-                          handleCompanyClick(company.id);
-                        }}
-                      >
-                        <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
-                          <Image
-                            src={Placeholder}
-                            alt="logo"
-                            className="w-12 h-12 rounded-full"
-                          />
-                          <div>
-                            <div className="select-text font-semibold">
-                              {company?.name}
-                            </div>
-                            <div className="select-text text-sm flex items-center space-x-1">
-                              <span>Id:</span>
-                              <span>{company?.id}</span>
-                            </div>
+                      <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                        <Image
+                          src={Placeholder}
+                          alt="logo"
+                          className="w-12 h-12 rounded-full"
+                        />
+                        <div>
+                          <div className="select-text font-semibold">
+                            {company?.name}
+                          </div>
+                          <div className="select-text text-sm flex items-center space-x-1">
+                            <span>Id:</span>
+                            <span>{company?.id}</span>
                           </div>
                         </div>
-                        <div className="flex items-center justify-center select-all text-sm col-span-3">
-                          {company?.code}
-                        </div>
                       </div>
-                      <div className="flex justify-center col-span-1">
-                        <button
-                          className="flex items-center space-x-1 text-sm hover:text-red-500"
-                          onClick={() => handleDeleteCompany(company)}
-                          title="Delete"
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} />
-                          <span className="hidden xl:block">Delete</span>
-                        </button>
+                      <div className="flex items-center justify-center select-all text-sm col-span-3">
+                        {company?.code}
                       </div>
                     </div>
-                  ))
+                    <div className="flex justify-center col-span-1">
+                      <button
+                        className="flex items-center space-x-1 text-sm hover:text-red-500"
+                        onClick={() => handleDeleteCompany(company)}
+                        title="Delete"
+                      >
+                        <FontAwesomeIcon icon={faTrashCan} />
+                        <span className="hidden xl:block">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                ))
                 : data?.companies?.map((company) => (
+                  <div
+                    className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
+                    key={Math.random()}
+                  >
                     <div
-                      className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
-                      key={Math.random()}
+                      className="grid grid-cols-12 col-span-11 border-r border-gray-300 items-center p-2 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
+                      onClick={() => {
+                        handleCompanyClick(company.id);
+                      }}
                     >
-                      <div
-                        className="grid grid-cols-12 col-span-11 border-r border-gray-300 items-center p-2 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
-                        onClick={() => {
-                          handleCompanyClick(company.id);
-                        }}
-                      >
-                        <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
-                          <Image
-                            src={Placeholder}
-                            alt="logo"
-                            className="w-12 h-12 rounded-full"
-                          />
-                          <div>
-                            <div className="select-text font-semibold">
-                              {company?.name}
-                            </div>
-                            <div className="select-text text-sm flex items-center space-x-1">
-                              <span>Id:</span>
-                              <span>{company?.id}</span>
-                            </div>
+                      <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                        <Image
+                          src={Placeholder}
+                          alt="logo"
+                          className="w-12 h-12 rounded-full"
+                        />
+                        <div>
+                          <div className="select-text font-semibold">
+                            {company?.name}
+                          </div>
+                          <div className="select-text text-sm flex items-center space-x-1">
+                            <span>Id:</span>
+                            <span>{company?.id}</span>
                           </div>
                         </div>
-                        <div className="flex items-center justify-center select-all text-sm col-span-3">
-                          {company?.code}
-                        </div>
                       </div>
-                      <div className="flex justify-center col-span-1">
-                        <button
-                          className="flex items-center space-x-1 text-sm hover:text-red-500"
-                          onClick={() => handleDeleteCompany(company)}
-                          title="Delete"
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} />
-                          <span className="hidden xl:block">Delete</span>
-                        </button>
+                      <div className="flex items-center justify-center select-all text-sm col-span-3">
+                        {company?.code}
                       </div>
                     </div>
-                  ))}
+                    <div className="flex justify-center col-span-1">
+                      <button
+                        className="flex items-center space-x-1 text-sm hover:text-red-500"
+                        onClick={() => handleDeleteCompany(company)}
+                        title="Delete"
+                      >
+                        <FontAwesomeIcon icon={faTrashCan} />
+                        <span className="hidden xl:block">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
@@ -741,70 +750,76 @@ export default function Project({ projectId }) {
             >
               <span className="">Refresh</span>
               <FontAwesomeIcon icon={faRotate} />
-                          </button>
+            </button>
           </div>
-          <div className="p-3 space-y-1.5 bg-white rounded-b-md">
-            <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
-              <div className="grid grid-cols-12 items-center h-9">
-                <div className="flex justify-center col-span-4 xl:col-span-3">
-                  Device Serial Number
-                </div>
-                <div className="flex justify-center col-span-2">Device Id</div>
-                <div className="flex justify-center col-span-2">Capacity</div>
-                <div className="hidden xl:block col-span-1">
-                  <div className="flex justify-center">Code</div>
-                </div>
-                <div className="flex justify-center col-span-2">Project Id</div>
-                <div className="flex justify-center col-span-2">
-                  Building Id
+          {!fakeLoader ? (
+            <div className="p-3 space-y-1.5 bg-white rounded-b-md">
+              <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
+                <div className="grid grid-cols-12 items-center h-9">
+                  <div className="flex justify-center col-span-4 xl:col-span-3">
+                    Device Serial Number
+                  </div>
+                  <div className="flex justify-center col-span-2">Device Id</div>
+                  <div className="flex justify-center col-span-2">Capacity</div>
+                  <div className="hidden xl:block col-span-1">
+                    <div className="flex justify-center">Code</div>
+                  </div>
+                  <div className="flex justify-center col-span-2">Project Id</div>
+                  <div className="flex justify-center col-span-2">
+                    Building Id
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="space-y-1.5 h-64 overflow-y-auto">
-              {data?.inverters?.map((inverter) => (
-                <div
-                  key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A] p-4 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
-                  onClick={() => handleInverterClick(inverter?.id)}
-                >
-                  <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
-                    <div className="select-none font-semibold">
-                      {inverter.deviceSn}
+              <div className="space-y-1.5 h-64 overflow-y-auto">
+                {data?.inverters?.map((inverter) => (
+                  <div
+                    key={Math.random()}
+                    className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A] p-4 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
+                    onClick={() => handleInverterClick(inverter?.id)}
+                  >
+                    <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
+                      <div className="select-none font-semibold">
+                        {inverter.deviceSn}
+                      </div>
+                      <div className="select-none text-xs flex items-center space-x-1">
+                        <span>Id:</span>
+                        <span>{inverter.id}</span>
+                      </div>
                     </div>
-                    <div className="select-none text-xs flex items-center space-x-1">
-                      <span>Id:</span>
-                      <span>{inverter.id}</span>
+                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
+                      <span>{inverter?.deviceId}</span>
+                    </div>
+                    <div className="flex justify-center select-all text-sm col-span-2">
+                      {inverter?.capacity ? (
+                        <span>{inverter?.capacity} kWp</span>
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                    <div className="select-all text-sm hidden xl:block col-span-1">
+                      <div className="flex justify-center">
+                        {inverter?.code ? inverter.code : "N/A"}
+                      </div>
+                    </div>
+                    <div className="flex col-span-2">
+                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                        {inverter?.projectId || "N/A"}
+                      </span>
+                    </div>
+                    <div className="flex col-span-2">
+                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                        {inverter?.buildingId || "N/A"}
+                      </span>
                     </div>
                   </div>
-                  <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                    <span>{inverter?.deviceId}</span>
-                  </div>
-                  <div className="flex justify-center select-all text-sm col-span-2">
-                    {inverter?.capacity ? (
-                      <span>{inverter?.capacity} kWp</span>
-                    ) : (
-                      "N/A"
-                    )}
-                  </div>
-                  <div className="select-all text-sm hidden xl:block col-span-1">
-                    <div className="flex justify-center">
-                      {inverter?.code ? inverter.code : "N/A"}
-                    </div>
-                  </div>
-                  <div className="flex col-span-2">
-                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                      {inverter?.projectId || "N/A"}
-                    </span>
-                  </div>
-                  <div className="flex col-span-2">
-                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                      {inverter?.buildingId || "N/A"}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                ))}
+              </div>
+            </div>) :
+            (
+              <div className="p-3 bg-white rounded-b-md flex items-center justify-center">
+                <ReactLoading type="spokes" color="#25476A" height={50} width={50} />
+              </div>
+            )}
         </div>
       </div>
       {createUserInProjectModalOpen && (

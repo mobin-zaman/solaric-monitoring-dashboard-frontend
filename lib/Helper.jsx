@@ -813,11 +813,13 @@ export const getDailyViewData = async (data) => {
 // Api call for update inverters in project
 export const updateInvertersInProject = async (data) => {
   const projectId = data?.projectId;
-  const response = await todoApi.put(`/project/${projectId}/update-inverters`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-  });
+  const response = await todoApi.put(`/project/${projectId}/update-inverters`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    });
   return response.data;
 };
 
