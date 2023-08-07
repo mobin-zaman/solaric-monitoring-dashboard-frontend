@@ -330,12 +330,12 @@ export default function HistoricalPeakPower({
   useEffect(() => {
     setTimeout(() => {
       setFakeLoader(true);
-    }, 500);
+    }, 1000);
   }, []);
 
   return (
     <>
-      <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
+      <div className="flex flex-col col-span-5 h-full">
         <div className="flex items-center justify-between">
           <span className="text-xl font-semibold tracking-wide text-[#25476A]">
             Historical Peak Power / Sun-Hrs
@@ -408,12 +408,7 @@ export default function HistoricalPeakPower({
                 width={500}
                 height={300}
                 data={storeHistoricalPeakPowerData}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
+                margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />

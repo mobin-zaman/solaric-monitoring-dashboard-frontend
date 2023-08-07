@@ -348,7 +348,7 @@ export default function DailyView({
             </select>
           </div>
         </div>
-        <div className="w-full h-full p-3 rounded-md relative text-xs font-semibold text-gray-600">
+        <div className="w-full h-full pb-6 rounded-md relative text-xs font-semibold">
           {/* Add the div element to display Generation and Sun Hours */}
           <div className="flex flex-col justify-between mb-2 absolute top-8 left-20 bg-white p-2 rounded-md space-y-0.5">
             <div className="flex items-center space-x-2">
@@ -369,7 +369,7 @@ export default function DailyView({
                 width={730}
                 height={250}
                 data={storeDailyViewData}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
               >
                 <defs>
                   <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
