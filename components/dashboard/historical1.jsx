@@ -65,20 +65,20 @@ export default function Historical({
 
   const [defaultData, setDefaultData] = useState(true);
 
-  const {
-    data: HistoricalData,
-    isLoading: HistoricalDataIsLoading,
-    error: HistoricalDataError,
-  } = useQuery(
-    ["HistoricalData", collectionKey],
-    () => getHistoricalData(collectionKey),
-    {
-      enabled: !!collectionKey && defaultData,
-      onSuccess: (data) => {
-        console.log("data", data);
-      },
-    }
-  );
+  // const {
+  //   data: HistoricalData,
+  //   isLoading: HistoricalDataIsLoading,
+  //   error: HistoricalDataError,
+  // } = useQuery(
+  //   ["HistoricalData", collectionKey],
+  //   () => getHistoricalData(collectionKey),
+  //   {
+  //     enabled: !!collectionKey && defaultData,
+  //     onSuccess: (data) => {
+  //       console.log("data", data);
+  //     },
+  //   }
+  // );
 
   const {
     data: DailyViewCollectTimeData,
@@ -100,7 +100,7 @@ export default function Historical({
   const [daysFromData, setDaysFromData] = useState([]);
   const [uniqueYears1, setUniqueYears1] = useState([]);
   const [uniqueMonths1, setUniqueMonths1] = useState([]);
-  const [uniqueDays1, setUniqueDays1] = useState([]);
+  // const [uniqueDays1, setUniqueDays1] = useState([]);
 
   useEffect(() => {
     if (!DailyViewCollectTimeIsLoading && DailyViewCollectTimeData) {
@@ -132,55 +132,41 @@ export default function Historical({
   useEffect(() => {
     setUniqueYears1(removeDuplicatesFromArray(yearsFromData));
     setUniqueMonths1(removeDuplicatesMonthsFromArray(monthsFromData));
-    setUniqueDays1(removeDuplicatesFromArray(daysFromData));
+    // setUniqueDays1(removeDuplicatesFromArray(daysFromData));
   }, [yearsFromData, monthsFromData, daysFromData]);
 
   const [selectedYear1, setSelectedYear1] = useState("");
   const [selectedMonth1, setSelectedMonth1] = useState("");
   const [selectedDay1, setSelectedDay1] = useState("");
 
-  // useEffect(() => {
-  //   if (uniqueYears1.length > 0) {
-  //     if (localStorage.getItem("date")) {
-  //       const date = localStorage.getItem("date").split("-");
-  //       setSelectedYear1(date[0]);
-  //     } else {
-  //       const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
-  //       const lastIdx = sortedYears.length - 1;
-  //       setSelectedYear1(sortedYears[lastIdx]);
-  //     }
-  //   }
-  // }, [uniqueYears1]);
+  useEffect(() => {
+    if (uniqueYears1.length > 0) {
 
-  // useEffect(() => {
-  //   if (uniqueMonths1.length > 0) {
-  //     if (localStorage.getItem("date")) {
-  //       const date = localStorage.getItem("date").split("-");
-  //       setSelectedMonth1(date[1]);
-  //     } else {
-  //       const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
-  //       const lastIdx = sortedMonths.length - 1;
-  //       setSelectedMonth1(sortedMonths[lastIdx]);
-  //     }
-  //   }
-  // }, [uniqueMonths1]);
+        const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
+        const lastIdx = sortedYears.length - 1;
+        setSelectedYear1(sortedYears[lastIdx]);
+      }
+  }, [uniqueYears1]);
 
-  // useEffect(() => {
-  //   if (monthsFromData.length > 0) {
-  //     if (localStorage.getItem("date")) {
-  //       const date = localStorage.getItem("date").split("-");
-  //       setSelectedDay1(date[2]);
-  //     } else {
-  //       const sortedDays =       monthsFromData
-  //       .filter((item) => item.split("-")[0] === selectedMonth1)
-  //       .map((item) => item.split("-")[1])
-  //       .sort((a, b) => a.localeCompare(b));
+  useEffect(() => {
+    if (uniqueMonths1.length > 0) {
+      const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
+      const lastIdx = sortedMonths.length - 1;
+      setSelectedMonth1(sortedMonths[lastIdx]);
+    }
+  }, [uniqueMonths1]);
 
-  //       const lastIdx = sortedDays.length - 1;
-  //       setSelectedDay1(sortedDays[lastIdx]);
-  //     }
-  //   }
-  // }, [selectedMonth1, monthsFromData]);
+  useEffect(() => {
+    if (monthsFromData.length > 0) {
+      const sortedDays =       monthsFromData
+      .filter((item) => item.split("-")[0] === selectedMonth1)
+      .map((item) => item.split("-")[1])
+      .sort((a, b) => a.localeCompare(b));
+
+      const lastIdx = sortedDays.length - 1;
+      setSelectedDay1(sortedDays[lastIdx]);
+    }
+  }, [selectedMonth1, monthsFromData]);
 
   const [dateKey, setDateKey] = useState("");
 
@@ -210,33 +196,31 @@ export default function Historical({
   useEffect(() => {
     if (!HistoricalDataWithDateKeyIsLoading && HistoricalDataWithDateKey) {
       setHistoricalDataStore(HistoricalDataWithDateKey);
-    } else {
-      setHistoricalDataStore(HistoricalData);
-    }
-  }, [HistoricalDataWithDateKey, HistoricalDataWithDateKeyIsLoading, HistoricalData]);
+    } 
+  }, [HistoricalDataWithDateKey, HistoricalDataWithDateKeyIsLoading]);
 
-  const handleSelectedYear1 = (value) => {
-    setDefaultData(false);
-    setSelectedYear1(value);
-  };
+  // const handleSelectedYear1 = (value) => {
+  //   setDefaultData(false);
+  //   setSelectedYear1(value);
+  // };
 
-  const handleDefaultData = () => {
-    setDefaultData(true);
-    setSelectedYear1("");
-    setSelectedMonth1("");
-    setSelectedDay1("");
-    setDateKey("");
-    setHistoricalDataStore(HistoricalData);
-  };
+  // const handleDefaultData = () => {
+  //   setDefaultData(true);
+  //   setSelectedYear1("");
+  //   setSelectedMonth1("");
+  //   setSelectedDay1("");
+  //   setDateKey("");
+  //   setHistoricalDataStore(HistoricalData);
+  // };
 
-  useEffect(() => {
-    setSelectedMonth1("");
-    setSelectedDay1("");
-  }, [selectedYear1]);
+  // useEffect(() => {
+  //   setSelectedMonth1("");
+  //   setSelectedDay1("");
+  // }, [selectedYear1]);
 
-  useEffect(() => {
-    setSelectedDay1("");
-  }, [selectedMonth1]);
+  // useEffect(() => {
+  //   setSelectedDay1("");
+  // }, [selectedMonth1]);
 
   const digitToMonth = (digit) => {
     switch (digit) {
@@ -277,7 +261,7 @@ export default function Historical({
         </div>
         <div className="flex flex-col justify-center items-end col-span-3 space-y-3">
           <div className="flex space-x-4">
-            <button
+            {/* <button
               className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border-2 ${defaultData
                 ? "bg-[#39B54A] text-white border-[#39B54A]"
                 : "bg-white text-[#25476A] border-[#25476A]"
@@ -285,11 +269,11 @@ export default function Historical({
               onClick={() => handleDefaultData()}
             >
               <FontAwesomeIcon icon={faGlobe} />
-            </button>
+            </button> */}
             <select
               className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
               value={selectedYear1 ? selectedYear1 : "Year"}
-              onChange={(e) => handleSelectedYear1(e.target.value)}
+              onChange={(e) => setSelectedYear1(e.target.value)}
             >
               <option disabled>Year</option>
               {uniqueYears1?.map((item, Index) => {
@@ -302,7 +286,7 @@ export default function Historical({
             </select>
             <select
               className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={selectedMonth1 ? selectedMonth1 : "Month"}
+              value={selectedMonth1}
               onChange={(e) => setSelectedMonth1(e.target.value)}
               disabled={!selectedYear1}
             >
