@@ -181,6 +181,14 @@ export default function HistoricalPeakPower({
     }
   }, [uniqueYears]);
 
+  useEffect(() => {
+    if (uniqueMonths.length > 0) {
+      const sortedMonths = uniqueMonths.sort(); // Sort the uniqueMonths1 array
+      const lastIdx = sortedMonths.length - 1;
+      setSelectedMonth(sortedMonths[lastIdx]);
+    }
+  }, [uniqueMonths]);
+
   // useEffect(() => {
   //   if (selectedMonth != "Month" && localStorage.getItem("historicalPeakPowerDate")) {
   //     const date = localStorage.getItem("historicalPeakPowerDate").split("-");
@@ -188,9 +196,9 @@ export default function HistoricalPeakPower({
   //   }
   // }, [selectedMonth]);
 
-  useEffect(() => {
-    setSelectedMonth("Month");
-  }, [selectedYear]);
+  // useEffect(() => {
+  //   setSelectedMonth("Month");
+  // }, [selectedYear]);
 
   const [dateKey, setDateKey] = useState("");
 
@@ -331,7 +339,7 @@ export default function HistoricalPeakPower({
   useEffect(() => {
     setTimeout(() => {
       setFakeLoader(true);
-    }, 500);
+    }, 1000);
 
   }, []);
 
