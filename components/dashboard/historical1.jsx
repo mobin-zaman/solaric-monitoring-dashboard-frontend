@@ -141,7 +141,6 @@ export default function Historical({
 
   useEffect(() => {
     if (uniqueYears1.length > 0) {
-
         const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
         const lastIdx = sortedYears.length - 1;
         setSelectedYear1(sortedYears[lastIdx]);
@@ -256,7 +255,7 @@ export default function Historical({
   return (
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md space-y-2.5">
-        <div className="text-xl font-semibold tracking-wide text-[#25476A]">
+        <div className="text-lg font-semibold tracking-wide text-[#25476A]">
           Historical Generation (MWH)
         </div>
         <div className="flex flex-col justify-center items-end col-span-3 space-y-3">
@@ -329,14 +328,14 @@ export default function Historical({
           </div>
           <table className="table-fixed w-full border rounded-md select-none text-[#25476A] text-sm">
             <tbody className="text-center">
-              <tr className="bg-gray-200 h-12 font-semibold">
+              <tr className="bg-gray-200 h-8 font-semibold">
                 <td></td>
                 <td>Prod</td>
                 <td>Export</td>
                 <td>Import</td>
                 <td>Sun-Hrs</td>
               </tr>
-              <tr className="h-12">
+              <tr className="h-16">
                 <td>Today</td>
                 <td>
                   {historicalDataStore?.historicalTableData?.production?.totalGenerationToday?.toFixed(
@@ -359,7 +358,7 @@ export default function Historical({
                   ) || 0}
                 </td>
               </tr>
-              <tr className="h-12">
+              <tr className="h-16">
                 <td>This Month</td>
                 <td>
                   {historicalDataStore?.historicalTableData?.production?.totalGenerationThisMonth?.toFixed(
@@ -382,7 +381,7 @@ export default function Historical({
                   ) || 0}
                 </td>
               </tr>
-              <tr className="h-12">
+              <tr className="h-16">
                 <td>This Year</td>
                 <td>
                   {historicalDataStore?.historicalTableData?.production?.totalGenerationThisYear?.toFixed(
@@ -405,7 +404,7 @@ export default function Historical({
                   ) || 0}
                 </td>
               </tr>
-              <tr className="h-12">
+              <tr className="h-16">
                 <td>All Time</td>
                 <td>
                   {historicalDataStore?.historicalTableData?.production?.totalGenerationAllTime?.toFixed(
