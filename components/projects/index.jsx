@@ -41,7 +41,7 @@ export default function Users() {
 
   useEffect(() => {
     queryClient.invalidateQueries("projects");
-  }, []);
+  }, [queryClient]);
 
   const handleDeleteProject = (project) => {
     setDeleteProjectModalOpen(true);
@@ -114,30 +114,30 @@ export default function Users() {
     <>
       <div className="space-y-1.5 relative select-none">
         <div className="sticky -top-0 z-50 bg-gray-200 rounded-b-md">
-        <div className="text-sm breadcrumbs text-[#25476A] pl-1">
-          <ul>
-            <li>
-            <Link href="/dashboard">
-            <FontAwesomeIcon
-              icon={faHouse}
-              className={`w-4 h-4`}
-              title="Dashboard"
-            />
-                <span className="ml-2">Dashboard</span>
-              </Link>
-            </li>
-            <li>
-            <Link href="/project">
-            <FontAwesomeIcon
-              icon={faCubesStacked}
-              className={`w-4 h-4`}
-              title="Dashboard"
-            />
-                <span className="ml-2">Projects</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
+          <div className="text-sm breadcrumbs text-[#25476A] pl-1">
+            <ul>
+              <li>
+                <Link href="/dashboard">
+                  <FontAwesomeIcon
+                    icon={faHouse}
+                    className={`w-4 h-4`}
+                    title="Dashboard"
+                  />
+                  <span className="ml-2">Dashboard</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/project">
+                  <FontAwesomeIcon
+                    icon={faCubesStacked}
+                    className={`w-4 h-4`}
+                    title="Dashboard"
+                  />
+                  <span className="ml-2">Projects</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
           <div className="space-y-1.5">
             <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
               <div className="flex items-center space-x-3 select-none">

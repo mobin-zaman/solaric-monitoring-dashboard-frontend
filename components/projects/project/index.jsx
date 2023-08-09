@@ -79,7 +79,7 @@ export default function Project({ projectId }) {
 
   useEffect(() => {
     queryClient.invalidateQueries("project");
-  }, []);
+  }, [queryClient]);
 
 
 

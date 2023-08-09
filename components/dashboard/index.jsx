@@ -16,7 +16,6 @@ import {
   searchBuilding,
   getBuilding,
   searchInverterForBuilding,
-  getHistoricalDataForProject,
   getHistoricalDataForCompany,
   getHistoricalDataForBuilding,
   getHistoricalDataForInverter,
@@ -1400,7 +1399,7 @@ export default function Index() {
             />
           </div>
           <div className="col-span-3">
-            <Impact               selectedOptionId={selectedOptionId}
+            <Impact selectedOptionId={selectedOptionId}
               selectedOptionIdCompany={selectedOptionIdCompany}
               selectedOptionIdBuilding={selectedOptionIdBuilding}
               selectedOptionIdInverter={selectedOptionIdInverter} />
