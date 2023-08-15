@@ -84,7 +84,7 @@ export default function DailyView({
   const [daysFromData, setDaysFromData] = useState([]);
   const [uniqueYears1, setUniqueYears1] = useState([]);
   const [uniqueMonths1, setUniqueMonths1] = useState([]);
-  const [uniqueDays1, setUniqueDays1] = useState([]);
+  // const [uniqueDays1, setUniqueDays1] = useState([]);
 
   useEffect(() => {
     if (!DailyViewCollectTimeIsLoading && DailyViewCollectTimeData) {
@@ -116,7 +116,7 @@ export default function DailyView({
   useEffect(() => {
     setUniqueYears1(removeDuplicatesFromArray(yearsFromData));
     setUniqueMonths1(removeDuplicatesMonthsFromArray(monthsFromData));
-    setUniqueDays1(removeDuplicatesFromArray(daysFromData));
+    // setUniqueDays1(removeDuplicatesFromArray(daysFromData));
   }, [yearsFromData, monthsFromData, daysFromData]);
 
   const [selectedYear1, setSelectedYear1] = useState("");
@@ -200,7 +200,7 @@ export default function DailyView({
           MW: frameItem.value,
           collectTime: new Date(
             new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
-            6 * 60 * 60 * 1000
+              6 * 60 * 60 * 1000
             // + 50 * 60 * 1000
           ).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
         }))
@@ -231,9 +231,7 @@ export default function DailyView({
     //   })
     //   .sort();
     //   setSelectedDay1(sortedDays[0]);
-
   }, [selectedOptionId, uniqueYears1, uniqueMonths1, monthsFromData]);
-
 
   const digitToMonth = (digit) => {
     switch (digit) {
@@ -275,7 +273,9 @@ export default function DailyView({
       return (
         <div className="custom-tooltip bg-white px-5 py-3 text-sm rounded-md border-2 border-gray-300 space-y-0.5">
           <p>{`Time: ${collectTime}`}</p>
-          <p>{`${Math.round(MW).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} KW`}</p>
+          <p>{`${Math.round(MW)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} KW`}</p>
         </div>
       );
     }
@@ -286,9 +286,9 @@ export default function DailyView({
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md">
         <div className="flex items-center justify-between">
-          <span className="text-xl font-semibold tracking-wide text-[#25476A]">
+          <div className="text-md font-semibold tracking-wide text-[#25476A]">
             Daily Generation
-          </span>
+          </div>
           {/* <FontAwesomeIcon icon={faRotate} /> */}
           <div className="flex space-x-4">
             <select
@@ -297,7 +297,6 @@ export default function DailyView({
               onChange={(e) => setSelectedYear1(e.target.value)}
             >
               <option disabled>Year</option>
-
               {uniqueYears1?.map((item, Index) => {
                 return (
                   <option key={Index} value={item}>
@@ -353,7 +352,12 @@ export default function DailyView({
           <div className="flex flex-col justify-between mb-2 absolute top-8 left-20 bg-white p-2 rounded-md space-y-0.5">
             <div className="flex items-center space-x-2">
               <span className="">Generation:</span>
-              <span className="">{(Math.round(generationData * 100) / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} MWH</span>
+              <span className="">
+                {(Math.round(generationData * 100) / 100)
+                  .toFixed(2)
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                MWH
+              </span>
             </div>
             <div className="flex items-center space-x-2">
               <span className="">Sun Hours:</span>

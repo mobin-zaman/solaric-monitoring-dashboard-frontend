@@ -12,11 +12,8 @@ import {
 import { useEffect, useState } from "react";
 import { data } from "autoprefixer";
 import { useQuery, useMutation } from "react-query";
-import {
-  getDailyViewCollectTime,
-  getHistoricalSunHours,
-} from "@/lib/Helper";
-import ReactLoading from 'react-loading';
+import { getDailyViewCollectTime, getHistoricalSunHours } from "@/lib/Helper";
+import ReactLoading from "react-loading";
 
 export default function HistoricalPeakPower({
   handlePeakPowerOpen,
@@ -231,23 +228,22 @@ export default function HistoricalPeakPower({
   useEffect(() => {
     if (!historicalPeakPowerDataIsLoading && historicalPeakPowerData) {
       setStoreHistoricalPeakPowerData(
-        historicalPeakPowerData?.map((item) => {
+        historicalPeakPowerData
+          ?.map((item) => {
+            // If collectTime has 3 parts, it's not a monthly data point
+            if (item.collectTime.split("-").length === 3) {
+              return {
+                name: parseInt(item.collectTime.split("-")[2]),
+                sunHours: item.sunHours,
+              };
+            }
 
-
-          // If collectTime has 3 parts, it's not a monthly data point
-          if (item.collectTime.split("-").length === 3) {
+            // Create an object with the name (converted month) and peakPower
             return {
-              name: parseInt(item.collectTime.split("-")[2]),
+              name: digitToMonth(item.collectTime.split("-")[1]),
               sunHours: item.sunHours,
             };
-          }
-
-          // Create an object with the name (converted month) and peakPower
-          return {
-            name: digitToMonth(item.collectTime.split("-")[1]),
-            sunHours: item.sunHours,
-          };
-        })
+          })
           .sort((a, b) => {
             const monthA = a.name;
             const monthB = b.name;
@@ -340,16 +336,15 @@ export default function HistoricalPeakPower({
     setTimeout(() => {
       setFakeLoader(true);
     }, 1000);
-
   }, []);
 
   return (
     <>
       <div className="flex flex-col col-span-5 h-full">
-      <div className="flex items-center justify-between">
-          <span className="text-xl font-semibold tracking-wide text-[#25476A]">
+        <div className="flex items-center justify-between">
+          <div className="text-md font-semibold tracking-wide text-[#25476A]">
             Historical Peak Power / Sun-Hrs
-          </span>
+          </div>
           <div className="flex justify-end items-center space-x-5">
             <div className="flex rounded-md bg-gray-200">
               <button
@@ -426,9 +421,19 @@ export default function HistoricalPeakPower({
                 {/* <Legend /> */}
                 <Bar dataKey="sunHours" fill="#82ca9d" barSize={30} />
               </BarChart>
-            </ResponsiveContainer>) : (
-            <div width="100%" height="100%" className="flex items-center justify-center border w-full h-full">
-              <ReactLoading type="spokes" color="#25476A" height={50} width={50} />
+            </ResponsiveContainer>
+          ) : (
+            <div
+              width="100%"
+              height="100%"
+              className="flex items-center justify-center border w-full h-full"
+            >
+              <ReactLoading
+                type="spokes"
+                color="#25476A"
+                height={50}
+                width={50}
+              />
             </div>
           )}
         </div>

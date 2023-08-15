@@ -7,9 +7,7 @@ import {
 import { useQuery } from "react-query";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faGlobe,
-} from "@fortawesome/free-solid-svg-icons";
+import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 
 export default function Impact({
   selectedOptionIdInverter,
@@ -276,15 +274,16 @@ export default function Impact({
 
   return (
     <div className="w-full bg-white p-3 rounded-md space-y-2.5 h-96">
-      <span className="w-full text-xl font-semibold tracking-wide text-[#25476A] h-10">
+      <div className="text-md font-semibold tracking-wide text-[#25476A]">
         Impact
-      </span>
+      </div>
       <div className="flex space-x-4 items-end justify-end h-6">
         <button
-          className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border-2 ${defaultData
-            ? "bg-[#39B54A] text-white border-[#39B54A]"
-            : "bg-white text-[#25476A] border-[#25476A]"
-            }`}
+          className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border-2 ${
+            defaultData
+              ? "bg-[#39B54A] text-white border-[#39B54A]"
+              : "bg-white text-[#25476A] border-[#25476A]"
+          }`}
           onClick={() => handleDefaultData()}
         >
           <FontAwesomeIcon icon={faGlobe} />
@@ -364,8 +363,8 @@ export default function Impact({
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",") === "NaN"
               ? 0
               : Math.round(impactDataStore?.treesPlanted)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </span>
           <span className="text-[#44576b] font-semibold text-[0.7rem] 2xl:text-sm">
             Trees
@@ -388,8 +387,8 @@ export default function Impact({
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",") === "NaN"
               ? 0
               : Math.round(impactDataStore?.co2EmissionReduction)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </span>
           <span className="text-[#44576b] font-semibold text-[0.7rem] 2xl:text-sm">
             MT
@@ -412,8 +411,8 @@ export default function Impact({
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",") === "NaN"
               ? 0
               : Math.round(impactDataStore?.moneySaved)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </span>
           <span className="text-[#44576b] font-semibold text-[0.7rem] 2xl:text-sm">
             USD

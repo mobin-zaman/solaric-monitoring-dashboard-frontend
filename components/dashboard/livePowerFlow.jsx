@@ -22,7 +22,6 @@ export default function LivePowerFlow({
   selectedOptionIdCompany,
   selectedOptionId,
 }) {
-
   const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
@@ -90,16 +89,11 @@ export default function LivePowerFlow({
   useEffect(() => {
     if (!LivePowerFlowIsLoading && LivePowerFlowData) {
       setLivePowerFlowDataStore(LivePowerFlowData);
-    } 
+    }
     console.log("LivePowerFlowDataStore", LivePowerFlowDataStore);
   }, [LivePowerFlowData, LivePowerFlowIsLoading, LivePowerFlowDataStore]);
 
-
-////////////////////////////////////////
-
-
-
-
+  ////////////////////////////////////////
 
   const [value0, setValue0] = useState(0);
 
@@ -145,9 +139,9 @@ export default function LivePowerFlow({
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md space-y-5">
         <div className="flex items-center justify-between">
-          <span className="text-xl font-semibold tracking-wide text-[#25476A]">
+          <div className="text-md font-semibold tracking-wide text-[#25476A]">
             Live Power Flow
-          </span>
+          </div>
         </div>
         {selectedOptionId &&
           !selectedOptionIdCompany &&
@@ -358,6 +352,23 @@ export default function LivePowerFlow({
                   />
                 </div>
                 <div className="flex flex-col items-center justify-center col-span-2 space-y-7">
+                  <div className="flex flex-col items-center justify-center ">
+                    <span>
+                      {LivePowerFlowDataStore?.currrentMeterPower?.import === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currrentMeterPower?.import?.toFixed(
+                            2
+                          ) || 0}
+                    </span>
+                    <div className="w-48 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                      <div
+                        className={`h-full bg-red-600 transition-all duration-300 ${
+                          value0 === 100 ? "reset-width" : ""
+                        }`}
+                        style={{ width: `${value0}%` }}
+                      ></div>
+                    </div>
+                  </div>
                   <div className="flex flex-col items-center justify-center">
                     <div className="w-48 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                       <div
@@ -367,7 +378,13 @@ export default function LivePowerFlow({
                         style={{ width: `${value1}%` }}
                       ></div>
                     </div>
-                    <span>5</span>
+                    <span>
+                      {LivePowerFlowDataStore?.currrentMeterPower?.export === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currrentMeterPower?.export?.toFixed(
+                            2
+                          ) || 0}
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-center justify-center">
@@ -388,7 +405,13 @@ export default function LivePowerFlow({
                         style={{ width: `${value1}%` }}
                       ></div>
                     </div>
-                    <span>8</span>
+                    <span>
+                      {LivePowerFlowDataStore?.currentInverterPower === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentInverterPower?.toFixed(
+                            2
+                          ) || 0}
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-center justify-center">
@@ -400,18 +423,24 @@ export default function LivePowerFlow({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-7 items-center justify-center">
+              <div className="grid grid-cols-7 items-center justify-center pr-10">
                 <div className="col-span-7 flex items-center justify-center space-x-7">
                   <div className="flex space-x-2 items-center">
-                    <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                    <span>
+                      {LivePowerFlowDataStore?.currentLoad?.solar === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentLoad?.solar?.toFixed(
+                            2
+                          ) || 0}
+                    </span>
+                    <div className="h-24 w-2.5 bg-red-600 rounded-md overflow-hidden relative">
                       <div
-                        className={`h-full bg-green-600 transition-all duration-300 ${
+                        className={`h-full bg-gray-300 transition-all duration-300 ${
                           value0 === 0 ? "reset-width" : ""
                         }`}
-                        style={{ height: `${value0}%` }}
+                        style={{ height: `${value1}%` }}
                       ></div>
                     </div>
-                    <span>3</span>
                   </div>
                 </div>
               </div>
@@ -429,12 +458,11 @@ export default function LivePowerFlow({
               </div>
             </div>
           )}
-          {selectedOptionId &&
+        {selectedOptionId &&
           selectedOptionIdCompany &&
           selectedOptionIdBuilding &&
           selectedOptionIdInverter && (
-            <div className="w-full h-[19.5rem] grid">
-            </div>
+            <div className="w-full h-[19.5rem] grid"></div>
           )}
       </div>
     </>

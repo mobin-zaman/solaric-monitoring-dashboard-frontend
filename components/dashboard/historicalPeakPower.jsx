@@ -345,9 +345,9 @@ export default function HistoricalPeakPower({
     <>
       <div className="flex flex-col col-span-5 h-full">
         <div className="flex items-center justify-between">
-          <span className="text-xl font-semibold tracking-wide text-[#25476A]">
-            Historical Peak Power / Sun-Hrs
-          </span>
+          <div className="text-md font-semibold tracking-wide text-[#25476A]">
+          Historical Peak Power / Sun-Hrs
+          </div>
           <div className="flex justify-end items-center space-x-5">
             <div className="flex rounded-md bg-gray-200">
               <button

@@ -927,7 +927,7 @@ export const getLivePowerFlowData = async (collectionKey) => {
   const key = Object.keys(collectionKey)[0];
   const id = collectionKey[key];
   const response = await todoApi.get(
-    `/dashboard/real-time/${key}/${id}`,
+    `/dashboard/live-view/${key}/${id}`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Token")}`,
