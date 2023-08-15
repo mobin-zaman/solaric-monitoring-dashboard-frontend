@@ -922,4 +922,17 @@ export const getImpactDataWithDateKey = async (data) => {
   return response.data;
 }
 
-
+// Api call for get Live Power Flow Data
+export const getLivePowerFlowData = async (collectionKey) => {
+  const key = Object.keys(collectionKey)[0];
+  const id = collectionKey[key];
+  const response = await todoApi.get(
+    `/dashboard/real-time/${key}/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    }
+  );
+  return response.data;
+}

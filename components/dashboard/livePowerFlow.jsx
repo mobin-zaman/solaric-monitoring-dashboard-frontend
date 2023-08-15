@@ -13,6 +13,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import { getLivePowerFlowData } from "../../lib/Helper";
+import { useQuery } from "react-query";
 
 export default function LivePowerFlow({
   selectedOptionIdInverter,
@@ -20,6 +22,85 @@ export default function LivePowerFlow({
   selectedOptionIdCompany,
   selectedOptionId,
 }) {
+
+  const [collectionKey, setCollectionKey] = useState({});
+
+  useEffect(() => {
+    if (
+      selectedOptionId &&
+      !selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        project: selectedOptionId,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        company: selectedOptionIdCompany,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        building: selectedOptionIdBuilding,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        inverter: selectedOptionIdInverter,
+      });
+    }
+  }, [
+    selectedOptionId,
+    selectedOptionIdCompany,
+    selectedOptionIdBuilding,
+    selectedOptionIdInverter,
+  ]);
+
+  const {
+    data: LivePowerFlowData,
+    isLoading: LivePowerFlowIsLoading,
+    error: LivePowerFlowError,
+  } = useQuery(
+    ["LivePowerFlowData", collectionKey],
+    () => getLivePowerFlowData(collectionKey),
+    {
+      enabled: !!collectionKey,
+      onSuccess: (data) => {
+        console.log("LivePowerFlowData", data);
+      },
+    }
+  );
+
+  const [LivePowerFlowDataStore, setLivePowerFlowDataStore] = useState();
+
+  useEffect(() => {
+    if (!LivePowerFlowIsLoading && LivePowerFlowData) {
+      setLivePowerFlowDataStore(LivePowerFlowData);
+    } 
+    console.log("LivePowerFlowDataStore", LivePowerFlowDataStore);
+  }, [LivePowerFlowData, LivePowerFlowIsLoading, LivePowerFlowDataStore]);
+
+
+////////////////////////////////////////
+
+
+
+
+
   const [value0, setValue0] = useState(0);
 
   useEffect(() => {
@@ -353,7 +434,6 @@ export default function LivePowerFlow({
           selectedOptionIdBuilding &&
           selectedOptionIdInverter && (
             <div className="w-full h-[19.5rem] grid">
-
             </div>
           )}
       </div>

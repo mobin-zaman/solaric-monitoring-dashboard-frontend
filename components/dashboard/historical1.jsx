@@ -255,7 +255,7 @@ export default function Historical({
   return (
     <>
       <div className="w-full h-96 bg-white p-3 rounded-md space-y-2.5">
-        <div className="text-lg font-semibold tracking-wide text-[#25476A]">
+        <div className="text-md font-semibold tracking-wide text-[#25476A]">
           Historical Generation (MWH)
         </div>
         <div className="flex flex-col justify-center items-end col-span-3 space-y-3">
