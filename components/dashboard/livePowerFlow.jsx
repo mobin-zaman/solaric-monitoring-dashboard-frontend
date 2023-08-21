@@ -199,7 +199,11 @@ export default function LivePowerFlow({
                         style={{ width: `${value1}%` }}
                       ></div>
                     </div>
-                    <span>8</span>
+                    <span>                      {LivePowerFlowDataStore?.currentInverterPower === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentInverterPower?.toFixed(
+                            2
+                          ) || 0}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-center">
@@ -296,7 +300,11 @@ export default function LivePowerFlow({
                         style={{ width: `${value1}%` }}
                       ></div>
                     </div>
-                    <span>8</span>
+                    <span>                      {LivePowerFlowDataStore?.currentInverterPower === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentInverterPower?.toFixed(
+                            2
+                          ) || 0}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-center">
