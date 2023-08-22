@@ -422,7 +422,7 @@ export default function Historical({
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursTillToday?.toFixed(
+                  {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursAllTime?.toFixed(
                     2
                   ) || 0}
                 </td>
