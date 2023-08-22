@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import HistoricalPeakPower from "./historicalPeakPower";
-import { getDailyViewCollectTime, getHistoricalData, getHistoricalDataWithDateKey } from "../../lib/Helper";
+import {
+  getDailyViewCollectTime,
+  getHistoricalData,
+  getHistoricalDataWithDateKey,
+} from "../../lib/Helper";
 import { useQuery } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faGlobe,
-} from "@fortawesome/free-solid-svg-icons";
+import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 
 export default function Historical({
   historicalDataForProject,
@@ -15,7 +17,6 @@ export default function Historical({
   selectedOptionIdCompany,
   selectedOptionId,
 }) {
-
   const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
@@ -141,10 +142,10 @@ export default function Historical({
 
   useEffect(() => {
     if (uniqueYears1.length > 0) {
-        const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
-        const lastIdx = sortedYears.length - 1;
-        setSelectedYear1(sortedYears[lastIdx]);
-      }
+      const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
+      const lastIdx = sortedYears.length - 1;
+      setSelectedYear1(sortedYears[lastIdx]);
+    }
   }, [uniqueYears1]);
 
   useEffect(() => {
@@ -157,10 +158,10 @@ export default function Historical({
 
   useEffect(() => {
     if (monthsFromData.length > 0) {
-      const sortedDays =       monthsFromData
-      .filter((item) => item.split("-")[0] === selectedMonth1)
-      .map((item) => item.split("-")[1])
-      .sort((a, b) => a.localeCompare(b));
+      const sortedDays = monthsFromData
+        .filter((item) => item.split("-")[0] === selectedMonth1)
+        .map((item) => item.split("-")[1])
+        .sort((a, b) => a.localeCompare(b));
 
       const lastIdx = sortedDays.length - 1;
       setSelectedDay1(sortedDays[lastIdx]);
@@ -195,7 +196,7 @@ export default function Historical({
   useEffect(() => {
     if (!HistoricalDataWithDateKeyIsLoading && HistoricalDataWithDateKey) {
       setHistoricalDataStore(HistoricalDataWithDateKey);
-    } 
+    }
   }, [HistoricalDataWithDateKey, HistoricalDataWithDateKeyIsLoading]);
 
   // const handleSelectedYear1 = (value) => {
@@ -343,14 +344,18 @@ export default function Historical({
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataStore?.historicalTableData?.export?.today?.toFixed(
-                    0
-                  ) || 0}
+                  {Math.round(
+                    historicalDataStore?.historicalTableData?.export?.today || 0
+                  )
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </td>
                 <td>
-                  {historicalDataStore?.historicalTableData?.import?.today?.toFixed(
-                    0
-                  ) || 0}
+                  {Math.round(
+                    historicalDataStore?.historicalTableData?.import?.today || 0
+                  )
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursToday?.toFixed(
@@ -366,14 +371,20 @@ export default function Historical({
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataStore?.historicalTableData?.export?.thisMonth?.toFixed(
-                    0
-                  ) || 0}
+                  {Math.round(
+                    historicalDataStore?.historicalTableData?.export
+                      ?.thisMonth || 0
+                  )
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </td>
                 <td>
-                  {historicalDataStore?.historicalTableData?.import?.thisMonth?.toFixed(
-                    0
-                  ) || 0}
+                  {Math.round(
+                    historicalDataStore?.historicalTableData?.import
+                      ?.thisMonth || 0
+                  )
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursThisMonth?.toFixed(
@@ -389,14 +400,20 @@ export default function Historical({
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataStore?.historicalTableData?.export?.thisYear?.toFixed(
-                    0
-                  ) || 0}
+                  {Math.round(
+                    historicalDataStore?.historicalTableData?.export
+                      ?.thisYear || 0
+                  )
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </td>
                 <td>
-                  {historicalDataStore?.historicalTableData?.import?.thisYear?.toFixed(
-                    0
-                  ) || 0}
+                  {Math.round(
+                    historicalDataStore?.historicalTableData?.import
+                      ?.thisYear || 0
+                  )
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursThisYear?.toFixed(
@@ -412,14 +429,20 @@ export default function Historical({
                   ) || 0}
                 </td>
                 <td>
-                  {historicalDataStore?.historicalTableData?.export?.allTime?.toFixed(
-                    0
-                  ) || 0}
+                  {Math.round(
+                    historicalDataStore?.historicalTableData?.export?.allTime ||
+                      0
+                  )
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </td>
                 <td>
-                  {historicalDataStore?.historicalTableData?.import?.allTime?.toFixed(
-                    0
-                  ) || 0}
+                  {Math.round(
+                    historicalDataStore?.historicalTableData?.import?.allTime ||
+                      0
+                  )
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </td>
                 <td>
                   {historicalDataStore?.historicalTableData?.sunHrs?.sunHoursAllTime?.toFixed(

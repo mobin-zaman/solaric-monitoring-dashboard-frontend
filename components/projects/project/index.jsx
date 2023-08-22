@@ -438,7 +438,9 @@ export default function Project({ projectId }) {
                       Export Meter Serial Number:
                     </p>
                     <p className="text-gray-700">
-                      {data?.exportMeterSerialNumber || "N/A"}
+                      {Math.round(data?.exportMeterSerialNumber || 0)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     </p>
                   </div>
                   <div>
@@ -446,7 +448,9 @@ export default function Project({ projectId }) {
                       Import Meter Serial Number:
                     </p>
                     <p className="text-gray-700">
-                      {data?.importMeterSerialNumber || "N/A"}
+                      {Math.round(data?.importMeterSerialNumber || 0)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     </p>
                   </div>
                   <div>
