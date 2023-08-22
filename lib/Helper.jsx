@@ -147,6 +147,8 @@ export const updateProject = async (data) => {
     fundingType: data.fundingType,
     tarrif: data.tarrif,
     dollarRate: data.dollarRate,
+    exportMeterSerialNumber: data.exportMeterSerialNumber,
+    importMeterSerialNumber: data.importMeterSerialNumber,
   };
   const response = await todoApi.put(`/project/${id}`, d, {
     headers: {

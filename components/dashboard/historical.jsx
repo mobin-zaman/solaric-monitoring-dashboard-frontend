@@ -232,7 +232,83 @@ export default function Historical({
             selectedOptionIdInverter={selectedOptionIdInverter}
           />
         ) : (
+          // <div className="flex flex-col col-span-5 h-[20rem] space-y-3">
+          //   <div className="flex space-x-3 justify-end">
+          //     <select
+          //       className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+          //       value={historicalDataForProjectSunHrsBarChartDataYearSelected}
+          //       onChange={(e) =>
+          //         setHistoricalDataForProjectSunHrsBarChartDataSelected(
+          //           e.target.value
+          //         )
+          //       }
+          //     >
+          //       <option disabled>Year</option>
+          //       {historicalDataForProjectSunHrsBarChartDataYearCount?.map(
+          //         (item, Index) => {
+          //           return <option key={Index}>{item}</option>;
+          //         }
+          //       )}
+          //     </select>
+          //     <select
+          //       className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+          //       value={
+          //         historicalDataForProjectSunHrsBarChartDataMonthSelected
+          //       }
+          //       onChange={(e) =>
+          //         setHistoricalDataForProjectSunHrsBarChartDataMonthSelected(
+          //           e.target.value
+          //         )
+          //       }
+          //     >
+          //       <option disabled>Month</option>
+          //       {historicalDataForProjectSunHrsBarChartDataMonthCount?.map(
+          //         (item, Index) => {
+          //           if (
+          //             historicalDataForProjectSunHrsBarChartDataYearSelected ===
+          //             item?.split("-")[0]
+          //           ) {
+          //             return (
+          //               <option key={Index} value={item}>
+          //                 {digitToMonth(item?.split("-")[1])}
+          //               </option>
+          //             );
+          //           }
+          //         }
+          //       )}
+          //     </select>
+          //   </div>
 
+          //   <div
+          //     className="flex items-center justify-center text-xs font-semibold"
+          //     style={{ width: "100%", height: "100%" }}
+          //   >
+          //     <ResponsiveContainer width="100%" height="100%">
+          //       <BarChart
+          //         width={500}
+          //         height={300}
+          //         data={
+          //           historicalDataForProjectSunHrsBarChartDataMonthly
+          //             ? historicalDataForProjectSunHrsBarChartDataMonthly
+          //             : historicalDataForProjectSunHrsBarChartDataYearly
+          //         }
+          //         margin={{
+          //           top: 5,
+          //           right: 30,
+          //           left: 20,
+          //           bottom: 5,
+          //         }}
+          //       >
+          //         <CartesianGrid strokeDasharray="3 3" />
+          //         <XAxis dataKey="name" />
+          //         <YAxis />
+          //         <Tooltip />
+          //         {/* <Legend /> */}
+          //         <Bar dataKey="sunHours" fill="#82ca9d" />
+          //       </BarChart>
+          //     </ResponsiveContainer>
+          //   </div>
+          // </div>
           <HistoricalPeakPower
             handlePeakPowerOpen={handlePeakPowerOpen}
             handleSunHoursOpen={handleSunHoursOpen}

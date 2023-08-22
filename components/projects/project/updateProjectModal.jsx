@@ -16,6 +16,12 @@ export default function AddUserModal({
   const [fundingType, setFundingType] = useState(editProjectData?.fundingType);
   const [tarrif, setTarrif] = useState(editProjectData?.tarrif);
   const [dollarRate, setDollarRate] = useState(editProjectData?.dollarRate);
+  const [exportMeterSerialNumber, setExportMeterSerialNumber] = useState(
+    editProjectData?.exportMeterSerialNumber
+  );
+  const [importMeterSerialNumber, setImportMeterSerialNumber] = useState(
+    editProjectData?.importMeterSerialNumber
+  );
   const [errorMessage, setErrorMessage] = useState("");
 
   const mutation = useMutation(updateProject, {
@@ -32,7 +38,14 @@ export default function AddUserModal({
   const handleCreateProject = (e) => {
     projectUpdated(false);
     setErrorMessage("");
-    if (!name || !fundingType || !tarrif || !dollarRate) {
+    if (
+      !name ||
+      !fundingType ||
+      !tarrif ||
+      !dollarRate ||
+      !exportMeterSerialNumber ||
+      !importMeterSerialNumber
+    ) {
       setErrorMessage("Please fill all the fields");
       return;
     }
@@ -43,6 +56,8 @@ export default function AddUserModal({
       fundingType,
       tarrif: parseFloat(tarrif),
       dollarRate: parseFloat(dollarRate),
+      exportMeterSerialNumber,
+      importMeterSerialNumber,
     });
   };
 
@@ -122,6 +137,36 @@ export default function AddUserModal({
                     placeholder="Enter dollar rate"
                     value={dollarRate}
                     onChange={(e) => setDollarRate(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="text-[#373737] font-medium text-sm space-x-1">
+                <div className="font-medium text-lg text-[#25476A] space-x-0.5">
+                  <span>Export Meter Serial Number</span>
+                  <span className="text-red-500">*</span>
+                </div>
+                <div className="flex items-center border-b-2 border-[#25476A]">
+                  <input
+                    className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                    type="text"
+                    placeholder="Enter export meter serial number"
+                    value={exportMeterSerialNumber}
+                    onChange={(e) => setExportMeterSerialNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="text-[#373737] font-medium text-sm space-x-1">
+                <div className="font-medium text-lg text-[#25476A] space-x-0.5">
+                  <span>Import Meter Serial Number</span>
+                  <span className="text-red-500">*</span>
+                </div>
+                <div className="flex items-center border-b-2 border-[#25476A]">
+                  <input
+                    className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                    type="text"
+                    placeholder="Enter import meter serial number"
+                    value={importMeterSerialNumber}
+                    onChange={(e) => setImportMeterSerialNumber(e.target.value)}
                   />
                 </div>
               </div>

@@ -17,7 +17,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
-import { getProject, searchCompany, updateInvertersInProject } from "@/lib/Helper";
+import {
+  getProject,
+  searchCompany,
+  updateInvertersInProject,
+} from "@/lib/Helper";
 import Image from "next/image";
 import CreateUserInProjectModal from "./createUserInProjectModal";
 import CreateCompanyInProjectModal from "./createCompanyInProjectModal";
@@ -31,7 +35,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FormatDateTime from "@/lib/FormatDateTime";
 import Link from "next/link";
-import ReactLoading from 'react-loading';
+import ReactLoading from "react-loading";
 
 export default function Project({ projectId }) {
   const router = useRouter();
@@ -80,8 +84,6 @@ export default function Project({ projectId }) {
   useEffect(() => {
     queryClient.invalidateQueries("project");
   }, [queryClient]);
-
-
 
   // Handle copy button for project id and solarman plant id
   const handleCopyButton = (data) => {
@@ -243,11 +245,10 @@ export default function Project({ projectId }) {
   const mutation = useMutation(updateInvertersInProject, {
     onSuccess: (data) => {
       if (data) {
-        setFakeLoader(true)
+        setFakeLoader(true);
         console.log(data);
         //refresh the page or project data
         queryClient.invalidateQueries("project");
-
       }
     },
     onError: (error) => {
@@ -338,7 +339,6 @@ export default function Project({ projectId }) {
                 <span className="">Edit</span>
                 <FontAwesomeIcon icon={faPenToSquare} />
               </button>
-
 
               {updateProjectModalOpen && (
                 <UpdateProjectModal
@@ -431,6 +431,22 @@ export default function Project({ projectId }) {
                     </p>
                     <p className="text-gray-700">
                       {data?.dollarRate.toFixed(2) || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-700 text-sm font-medium select-none">
+                      Export Meter Serial Number:
+                    </p>
+                    <p className="text-gray-700">
+                      {data?.exportMeterSerialNumber || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-700 text-sm font-medium select-none">
+                      Import Meter Serial Number:
+                    </p>
+                    <p className="text-gray-700">
+                      {data?.importMeterSerialNumber || "N/A"}
                     </p>
                   </div>
                   <div>
@@ -659,91 +675,91 @@ export default function Project({ projectId }) {
             <div className="space-y-1.5 h-64 overflow-y-auto">
               {searchResultCompany?.length >= 0
                 ? searchResultCompany?.map((company) => (
-                  <div
-                    className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
-                    key={Math.random()}
-                  >
                     <div
-                      className="grid grid-cols-12 col-span-11 border-r border-gray-300 items-center p-2 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
-                      onClick={() => {
-                        handleCompanyClick(company.id);
-                      }}
+                      className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
+                      key={Math.random()}
                     >
-                      <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
-                        <Image
-                          src={Placeholder}
-                          alt="logo"
-                          className="w-12 h-12 rounded-full"
-                        />
-                        <div>
-                          <div className="select-text font-semibold">
-                            {company?.name}
-                          </div>
-                          <div className="select-text text-sm flex items-center space-x-1">
-                            <span>Id:</span>
-                            <span>{company?.id}</span>
+                      <div
+                        className="grid grid-cols-12 col-span-11 border-r border-gray-300 items-center p-2 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
+                        onClick={() => {
+                          handleCompanyClick(company.id);
+                        }}
+                      >
+                        <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                          <Image
+                            src={Placeholder}
+                            alt="logo"
+                            className="w-12 h-12 rounded-full"
+                          />
+                          <div>
+                            <div className="select-text font-semibold">
+                              {company?.name}
+                            </div>
+                            <div className="select-text text-sm flex items-center space-x-1">
+                              <span>Id:</span>
+                              <span>{company?.id}</span>
+                            </div>
                           </div>
                         </div>
+                        <div className="flex items-center justify-center select-all text-sm col-span-3">
+                          {company?.code}
+                        </div>
                       </div>
-                      <div className="flex items-center justify-center select-all text-sm col-span-3">
-                        {company?.code}
+                      <div className="flex justify-center col-span-1">
+                        <button
+                          className="flex items-center space-x-1 text-sm hover:text-red-500"
+                          onClick={() => handleDeleteCompany(company)}
+                          title="Delete"
+                        >
+                          <FontAwesomeIcon icon={faTrashCan} />
+                          <span className="hidden xl:block">Delete</span>
+                        </button>
                       </div>
                     </div>
-                    <div className="flex justify-center col-span-1">
-                      <button
-                        className="flex items-center space-x-1 text-sm hover:text-red-500"
-                        onClick={() => handleDeleteCompany(company)}
-                        title="Delete"
-                      >
-                        <FontAwesomeIcon icon={faTrashCan} />
-                        <span className="hidden xl:block">Delete</span>
-                      </button>
-                    </div>
-                  </div>
-                ))
+                  ))
                 : data?.companies?.map((company) => (
-                  <div
-                    className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
-                    key={Math.random()}
-                  >
                     <div
-                      className="grid grid-cols-12 col-span-11 border-r border-gray-300 items-center p-2 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
-                      onClick={() => {
-                        handleCompanyClick(company.id);
-                      }}
+                      className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
+                      key={Math.random()}
                     >
-                      <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
-                        <Image
-                          src={Placeholder}
-                          alt="logo"
-                          className="w-12 h-12 rounded-full"
-                        />
-                        <div>
-                          <div className="select-text font-semibold">
-                            {company?.name}
-                          </div>
-                          <div className="select-text text-sm flex items-center space-x-1">
-                            <span>Id:</span>
-                            <span>{company?.id}</span>
+                      <div
+                        className="grid grid-cols-12 col-span-11 border-r border-gray-300 items-center p-2 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
+                        onClick={() => {
+                          handleCompanyClick(company.id);
+                        }}
+                      >
+                        <div className="flex items-center font-medium space-x-2 px-5 col-span-9">
+                          <Image
+                            src={Placeholder}
+                            alt="logo"
+                            className="w-12 h-12 rounded-full"
+                          />
+                          <div>
+                            <div className="select-text font-semibold">
+                              {company?.name}
+                            </div>
+                            <div className="select-text text-sm flex items-center space-x-1">
+                              <span>Id:</span>
+                              <span>{company?.id}</span>
+                            </div>
                           </div>
                         </div>
+                        <div className="flex items-center justify-center select-all text-sm col-span-3">
+                          {company?.code}
+                        </div>
                       </div>
-                      <div className="flex items-center justify-center select-all text-sm col-span-3">
-                        {company?.code}
+                      <div className="flex justify-center col-span-1">
+                        <button
+                          className="flex items-center space-x-1 text-sm hover:text-red-500"
+                          onClick={() => handleDeleteCompany(company)}
+                          title="Delete"
+                        >
+                          <FontAwesomeIcon icon={faTrashCan} />
+                          <span className="hidden xl:block">Delete</span>
+                        </button>
                       </div>
                     </div>
-                    <div className="flex justify-center col-span-1">
-                      <button
-                        className="flex items-center space-x-1 text-sm hover:text-red-500"
-                        onClick={() => handleDeleteCompany(company)}
-                        title="Delete"
-                      >
-                        <FontAwesomeIcon icon={faTrashCan} />
-                        <span className="hidden xl:block">Delete</span>
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  ))}
             </div>
           </div>
         </div>
@@ -775,12 +791,16 @@ export default function Project({ projectId }) {
                   <div className="flex justify-center col-span-4 xl:col-span-3">
                     Device Serial Number
                   </div>
-                  <div className="flex justify-center col-span-2">Device Id</div>
+                  <div className="flex justify-center col-span-2">
+                    Device Id
+                  </div>
                   <div className="flex justify-center col-span-2">Capacity</div>
                   <div className="hidden xl:block col-span-1">
                     <div className="flex justify-center">Code</div>
                   </div>
-                  <div className="flex justify-center col-span-2">Project Id</div>
+                  <div className="flex justify-center col-span-2">
+                    Project Id
+                  </div>
                   <div className="flex justify-center col-span-2">
                     Building Id
                   </div>
@@ -830,12 +850,17 @@ export default function Project({ projectId }) {
                   </div>
                 ))}
               </div>
-            </div>) :
-            (
-              <div className="p-3 bg-white rounded-b-md flex items-center justify-center">
-                <ReactLoading type="spokes" color="#25476A" height={50} width={50} />
-              </div>
-            )}
+            </div>
+          ) : (
+            <div className="p-3 bg-white rounded-b-md flex items-center justify-center">
+              <ReactLoading
+                type="spokes"
+                color="#25476A"
+                height={50}
+                width={50}
+              />
+            </div>
+          )}
         </div>
       </div>
       {createUserInProjectModalOpen && (
