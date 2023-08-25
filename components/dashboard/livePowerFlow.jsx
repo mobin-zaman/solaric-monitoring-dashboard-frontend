@@ -159,7 +159,6 @@ export default function LivePowerFlow({
                 </div>
                 <div className="flex flex-col items-center justify-center col-span-2 space-y-7">
                   <div className="flex flex-col items-center justify-center ">
-                    <span>1</span>
                     <div className="w-48 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                       <div
                         className={`h-full bg-red-600 transition-all duration-300 ${
@@ -168,17 +167,11 @@ export default function LivePowerFlow({
                         style={{ width: `${value0}%` }}
                       ></div>
                     </div>
-                  </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-48 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-gray-300 transition-all duration-300 ${
-                          value0 === 0 ? "reset-width" : ""
-                        }`}
-                        style={{ width: `${value1}%` }}
-                      ></div>
-                    </div>
-                    <span>5</span>
+                    <span>                      {LivePowerFlowDataStore?.currentMeterPower?.import === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentMeterPower?.import.toFixed(
+                            2
+                          ) || 0}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-center">
@@ -218,13 +211,17 @@ export default function LivePowerFlow({
               <div className="grid grid-cols-7 items-center justify-center">
                 <div className="col-span-7 flex items-center justify-center space-x-7">
                   <div className="flex space-x-2 items-center">
-                    <span>8</span>
-                    <div className="h-24 w-2.5 bg-red-600 rounded-md overflow-hidden relative">
+                  <span>                      {LivePowerFlowDataStore?.currentLoad?.grid === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentLoad?.grid?.toFixed(
+                            2
+                          ) || 0}</span>
+                    <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                       <div
-                        className={`h-full bg-gray-300 transition-all duration-300 ${
+                        className={`h-full bg-red-600 transition-all duration-300 ${
                           value0 === 0 ? "reset-width" : ""
                         }`}
-                        style={{ height: `${value1}%` }}
+                        style={{ height: `${value0}%` }}
                       ></div>
                     </div>
                   </div>
@@ -237,7 +234,11 @@ export default function LivePowerFlow({
                         style={{ height: `${value0}%` }}
                       ></div>
                     </div>
-                    <span>3</span>
+                    <span>                      {LivePowerFlowDataStore?.currentLoad?.solar === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentLoad?.solar.toFixed(
+                            2
+                          ) || 0}</span>
                   </div>
                 </div>
               </div>
@@ -279,7 +280,11 @@ export default function LivePowerFlow({
                         style={{ width: `${value1}%` }}
                       ></div>
                     </div>
-                    <span>5</span>
+                    <span>                      {LivePowerFlowDataStore?.currentMeterPower?.export === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentMeterPower?.export?.toFixed(
+                            2
+                          ) || 0}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-center">
@@ -318,7 +323,7 @@ export default function LivePowerFlow({
               </div>
               <div className="grid grid-cols-7 items-center justify-center">
                 <div className="col-span-7 flex items-center justify-center space-x-7">
-                  <div className="flex space-x-2 items-center">
+                  <div className="flex space-x-2 items-center pl-14">
                     <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                       <div
                         className={`h-full bg-green-600 transition-all duration-300 ${
@@ -327,7 +332,11 @@ export default function LivePowerFlow({
                         style={{ height: `${value0}%` }}
                       ></div>
                     </div>
-                    <span>3</span>
+                    <span>                      {LivePowerFlowDataStore?.currentLoad?.solar === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentLoad?.solar.toFixed(
+                            2
+                          ) || 0}</span>
                   </div>
                 </div>
               </div>
@@ -361,13 +370,6 @@ export default function LivePowerFlow({
                 </div>
                 <div className="flex flex-col items-center justify-center col-span-2 space-y-7">
                   <div className="flex flex-col items-center justify-center ">
-                    <span>
-                      {LivePowerFlowDataStore?.currrentMeterPower?.import === 0
-                        ? 0
-                        : LivePowerFlowDataStore?.currrentMeterPower?.import?.toFixed(
-                            2
-                          ) || 0}
-                    </span>
                     <div className="w-48 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                       <div
                         className={`h-full bg-red-600 transition-all duration-300 ${
@@ -376,20 +378,10 @@ export default function LivePowerFlow({
                         style={{ width: `${value0}%` }}
                       ></div>
                     </div>
-                  </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-48 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-gray-300 transition-all duration-300 ${
-                          value0 === 0 ? "reset-width" : ""
-                        }`}
-                        style={{ width: `${value1}%` }}
-                      ></div>
-                    </div>
                     <span>
-                      {LivePowerFlowDataStore?.currrentMeterPower?.export === 0
+                      {LivePowerFlowDataStore?.currentMeterPower?.import === 0
                         ? 0
-                        : LivePowerFlowDataStore?.currrentMeterPower?.export?.toFixed(
+                        : LivePowerFlowDataStore?.currentMeterPower?.import?.toFixed(
                             2
                           ) || 0}
                     </span>
@@ -431,9 +423,34 @@ export default function LivePowerFlow({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-7 items-center justify-center pr-10">
+              <div className="grid grid-cols-7 items-center justify-center">
                 <div className="col-span-7 flex items-center justify-center space-x-7">
                   <div className="flex space-x-2 items-center">
+                    <span>
+                      {LivePowerFlowDataStore?.currentLoad?.grid === 0
+                        ? 0
+                        : LivePowerFlowDataStore?.currentLoad?.grid?.toFixed(
+                            2
+                          ) || 0}
+                    </span>
+                    <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                      <div
+                        className={`h-full bg-green-600 transition-all duration-300 ${
+                          value0 === 0 ? "reset-width" : ""
+                        }`}
+                        style={{ height: `${value0}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2 items-center">
+                  <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                      <div
+                        className={`h-full bg-green-600 transition-all duration-300 ${
+                          value0 === 0 ? "reset-width" : ""
+                        }`}
+                        style={{ height: `${value0}%` }}
+                      ></div>
+                    </div>
                     <span>
                       {LivePowerFlowDataStore?.currentLoad?.solar === 0
                         ? 0
@@ -441,14 +458,6 @@ export default function LivePowerFlow({
                             2
                           ) || 0}
                     </span>
-                    <div className="h-24 w-2.5 bg-red-600 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-gray-300 transition-all duration-300 ${
-                          value0 === 0 ? "reset-width" : ""
-                        }`}
-                        style={{ height: `${value1}%` }}
-                      ></div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -466,12 +475,12 @@ export default function LivePowerFlow({
               </div>
             </div>
           )}
-        {selectedOptionId &&
+        {/* {selectedOptionId &&
           selectedOptionIdCompany &&
           selectedOptionIdBuilding &&
           selectedOptionIdInverter && (
             <div className="w-full h-[19.5rem] grid"></div>
-          )}
+          )} */}
       </div>
     </>
   );
