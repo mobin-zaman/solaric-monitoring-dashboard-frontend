@@ -1,5 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "react-query";
 import { getMeters, searchMeter, getBuilding } from "@/lib/Helper";
 import { useState, useEffect, useCallback } from "react";
@@ -16,7 +19,6 @@ export default function Meters() {
   const [deleteMeterModalOpen, setDeleteMeterModalOpen] = useState(false);
   const [meterData, setMeterData] = useState(null);
   const [meterDeleted, setMeterDeleted] = useState(false);
-
 
   const { data, isLoading, isError } = useQuery("meters", () => getMeters(), {
     enabled: true, //enable query
@@ -57,21 +59,21 @@ export default function Meters() {
     setMeterData(meter);
   };
 
-    // notifyForMeterDeleted function to show toast notification when meter is deleted
-    const notifyForMeterDeleted = () => {
-      toast.error("Meter deleted successfully!", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
-      });
-    };
-  
-    // Call notifyForMeterDeleted function when meterDeleted state is true
-    useEffect(() => {
-      if (meterDeleted) {
-        notifyForMeterDeleted();
-        setMeterDeleted(false);
-      }
-    }, [meterDeleted]);
+  // notifyForMeterDeleted function to show toast notification when meter is deleted
+  const notifyForMeterDeleted = () => {
+    toast.error("Meter deleted successfully!", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+    });
+  };
+
+  // Call notifyForMeterDeleted function when meterDeleted state is true
+  useEffect(() => {
+    if (meterDeleted) {
+      notifyForMeterDeleted();
+      setMeterDeleted(false);
+    }
+  }, [meterDeleted]);
 
   return (
     <>
@@ -105,30 +107,28 @@ export default function Meters() {
             </div>
           </div>
           {!isLoading && !isError && !searchResultEmpty && (
-              <div className="text-white bg-[#2e5984] font-medium rounded-md p-1.5">
-                                <div className="grid grid-cols-12 items-center h-9 text-sm md:text-base">
-
-              <div className="grid grid-cols-12 col-span-11 items-center h-9">
-
-                <div className="flex justify-center col-span-2">Id</div>
-                <div className="flex justify-center col-span-2">
-                  Import Code
+            <div className="text-white bg-[#2e5984] font-medium rounded-md p-1.5">
+              <div className="grid grid-cols-12 items-center h-9 text-sm md:text-base">
+                <div className="grid grid-cols-12 col-span-11 items-center h-9">
+                  <div className="flex justify-center col-span-2">Id</div>
+                  <div className="flex justify-center col-span-2">
+                    Import Code
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    Export Code
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    Import Serial Number
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    Export Serial Number
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    Building Id
+                  </div>
                 </div>
-                <div className="flex justify-center col-span-2">
-                  Export Code
-                </div>
-                <div className="flex justify-center col-span-2">
-                  Import Serial Number
-                </div>
-                <div className="flex justify-center col-span-2">
-                  Export Serial Number
-                </div>
-                <div className="flex justify-center col-span-2">
-                  Building Id
-                </div>
+                <div className=""></div>
               </div>
-              <div className=""></div>
-</div>
             </div>
           )}
         </div>
@@ -142,35 +142,34 @@ export default function Meters() {
                   key={Math.random()}
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
                 >
-                  <div                     className="grid grid-cols-12 col-span-11 border-r items-center p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
-                  onClick={() => handleClickMeter(meter?.id)}
->
-                  <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-2">
-                    <div className="select-none">
-                      {meter.id}
+                  <div
+                    className="grid grid-cols-12 col-span-11 border-r items-center p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    onClick={() => handleClickMeter(meter?.id)}
+                  >
+                    <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-2">
+                      <div className="select-none">{meter.id}</div>
                     </div>
-                  </div>
-                  <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                    <span>{meter?.importMeterCode || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-center select-all text-sm col-span-2">
-                    {meter?.exportMeterCode || "N/A"}
-                  </div>
-                  <div className="select-all text-sm hidden xl:block col-span-2">
-                    <div className="flex justify-center">
-                      {meter?.importMeterSerialNumber || "N/A"}
+                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
+                      <span>{meter?.importMeterCode || "N/A"}</span>
                     </div>
-                  </div>
-                  <div className="flex col-span-2">
-                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                      {meter?.exportMeterSerialNumber || "N/A"}
-                    </span>
-                  </div>
-                  <div className="flex col-span-2">
-                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                      {meter?.buildingId || "N/A"}
-                    </span>
-                  </div>
+                    <div className="flex justify-center select-all text-sm col-span-2">
+                      {meter?.exportMeterCode || "N/A"}
+                    </div>
+                    <div className="select-all text-sm hidden xl:block col-span-2">
+                      <div className="flex justify-center">
+                        {meter?.importMeterSerialNumber || "N/A"}
+                      </div>
+                    </div>
+                    <div className="flex col-span-2">
+                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                        {meter?.exportMeterSerialNumber || "N/A"}
+                      </span>
+                    </div>
+                    <div className="flex col-span-2">
+                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                        {meter?.buildingId || "N/A"}
+                      </span>
+                    </div>
                   </div>
                   <div className="flex justify-center col-span-1">
                     <button
@@ -202,35 +201,34 @@ export default function Meters() {
                   key={Math.random()}
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
                 >
-                  <div                     className="grid grid-cols-12 col-span-11 border-r items-center p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
-                  onClick={() => handleClickMeter(meter?.id)}
->
-                  <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-2">
-                    <div className="select-none">
-                      {meter.id}
+                  <div
+                    className="grid grid-cols-12 col-span-11 border-r items-center p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    onClick={() => handleClickMeter(meter?.id)}
+                  >
+                    <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-2">
+                      <div className="select-none">{meter.id}</div>
                     </div>
-                  </div>
-                  <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                    <span>{meter?.importMeterCode || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-center select-all text-sm col-span-2">
-                    {meter?.exportMeterCode || "N/A"}
-                  </div>
-                  <div className="select-all text-sm hidden xl:block col-span-2">
-                    <div className="flex justify-center">
-                      {meter?.importMeterSerialNumber || "N/A"}
+                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
+                      <span>{meter?.importMeterCode || "N/A"}</span>
                     </div>
-                  </div>
-                  <div className="flex col-span-2">
-                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                      {meter?.exportMeterSerialNumber || "N/A"}
-                    </span>
-                  </div>
-                  <div className="flex col-span-2">
-                    <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                      {meter?.buildingId || "N/A"}
-                    </span>
-                  </div>
+                    <div className="flex justify-center select-all text-sm col-span-2">
+                      {meter?.exportMeterCode || "N/A"}
+                    </div>
+                    <div className="select-all text-sm hidden xl:block col-span-2">
+                      <div className="flex justify-center">
+                        {meter?.importMeterSerialNumber || "N/A"}
+                      </div>
+                    </div>
+                    <div className="flex col-span-2">
+                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                        {meter?.exportMeterSerialNumber || "N/A"}
+                      </span>
+                    </div>
+                    <div className="flex col-span-2">
+                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                        {meter?.buildingId || "N/A"}
+                      </span>
+                    </div>
                   </div>
                   <div className="flex justify-center col-span-1">
                     <button

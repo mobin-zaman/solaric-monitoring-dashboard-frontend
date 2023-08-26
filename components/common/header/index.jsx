@@ -8,6 +8,8 @@ import { getCurrentUser } from "@/lib/Helper";
 import Image from "next/image";
 import placeholderImage from "@/public/placeholderImage.jpg";
 import Notification from "@/public/icons/Notification.png";
+import { useState } from "react";
+import { uploadImage } from "@/lib/Helper";
 
 export default function Header() {
   const { data } = useQuery("currentUser", getCurrentUser);
@@ -18,12 +20,37 @@ export default function Header() {
     window.location.href = "/";
   };
 
+  const [base64ImageData, setBase64ImageData] = useState('');
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+  
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const base64Data = e.target.result.split(',')[1]; // Extract base64 portion
+        setBase64ImageData(e.target.result);
+  
+        try {
+          const response = await uploadImage(base64Data);
+          console.log('Uploaded image data:', response);
+          // Do something with the uploaded image data, such as displaying it or further processing
+        } catch (error) {
+          console.error('Error uploading image:', error);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <>
       <div className="w-full h-16 bg-white flex justify-between space-x-6 items-center px-5 border-b-2 border-gray-300 text-[#25476A] font-semibold tracking-wide">
         <h1 className="text-[#39B54A] font-semibold text-md flex space-x-2 items-center justify-center">
           <FontAwesomeIcon icon={faBuilding} />
           <span className="text-sm ">{data?.companyName.toUpperCase()}</span>
+          {/* TODO*/}
+          {/* <input type="file" accept="image/*" onChange={handleImageUpload} /> */}
         </h1>
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-3">

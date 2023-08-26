@@ -938,3 +938,23 @@ export const getLivePowerFlowData = async (collectionKey) => {
   );
   return response.data;
 }
+
+export const uploadImage = async (data) => {
+  const apiKey = "NEXT_PUBLIC_IMGBB_API_KEY";
+  const apiUrl = "https://api.imgbb.com/1/upload";
+
+  const formData = new FormData();
+  formData.append("image", data);
+  formData.append("key", apiKey);
+
+  try {
+    const response = await axios.post(apiUrl, formData);
+    return response.data;
+  } catch (error) {
+    console.error('Image upload failed:', error);
+    throw error;
+  }
+}
+
+
+  
