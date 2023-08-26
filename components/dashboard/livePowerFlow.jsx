@@ -435,7 +435,7 @@ export default function LivePowerFlow({
                     </span>
                     <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                       <div
-                        className={`h-full bg-green-600 transition-all duration-300 ${
+                        className={`h-full bg-red-600 transition-all duration-300 ${
                           value0 === 0 ? "reset-width" : ""
                         }`}
                         style={{ height: `${value0}%` }}

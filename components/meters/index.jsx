@@ -124,7 +124,7 @@ export default function Meters() {
                   Export Serial Number
                 </div>
                 <div className="flex justify-center col-span-2">
-                  Building Name
+                  Building Id
                 </div>
               </div>
               <div className=""></div>
