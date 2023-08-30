@@ -64,20 +64,20 @@ export default function Impact({
 
   const [defaultData, setDefaultData] = useState(true);
 
-  const {
-    data: ImpactData,
-    isLoading: ImpactDataIsLoading,
-    error: ImpactDataError,
-  } = useQuery(
-    ["ImpactData", collectionKey],
-    () => getImpactData(collectionKey),
-    {
-      enabled: !!collectionKey && defaultData,
-      onSuccess: (data) => {
-        console.log("data", data);
-      },
-    }
-  );
+  // const {
+  //   data: HistoricalData,
+  //   isLoading: HistoricalDataIsLoading,
+  //   error: HistoricalDataError,
+  // } = useQuery(
+  //   ["HistoricalData", collectionKey],
+  //   () => getHistoricalData(collectionKey),
+  //   {
+  //     enabled: !!collectionKey && defaultData,
+  //     onSuccess: (data) => {
+  //       console.log("data", data);
+  //     },
+  //   }
+  // );
 
   const {
     data: DailyViewCollectTimeData,
@@ -99,13 +99,39 @@ export default function Impact({
   const [daysFromData, setDaysFromData] = useState([]);
   const [uniqueYears1, setUniqueYears1] = useState([]);
   const [uniqueMonths1, setUniqueMonths1] = useState([]);
-  const [uniqueDays1, setUniqueDays1] = useState([]);
+  // const [uniqueDays1, setUniqueDays1] = useState([]);
+  const [storeYearMonth1, setStoreYearMonth1] = useState([]);
+  const [storeYearMonthDay1, setStoreYearMonthDay1] = useState([]);
+
+  function removeDuplicatesFromArray(arr) {
+    return [...new Set(arr)];
+  }
 
   useEffect(() => {
     if (!DailyViewCollectTimeIsLoading && DailyViewCollectTimeData) {
       const tempYears = [];
       const tempMonthsDays = [];
       const tempDays = [];
+      const storeYearMonth = [];
+      const storeYearMonthDay = [];
+      storeYearMonth.push(
+        ...DailyViewCollectTimeData?.map(
+          (item) => item.split("-")[0] + "-" + item.split("-")[1]
+        )
+      );
+      storeYearMonthDay.push(
+        ...DailyViewCollectTimeData?.map(
+          (item) =>
+            item.split("-")[0] +
+            "-" +
+            item.split("-")[1] +
+            "-" +
+            item.split("-")[2]
+        )
+      );
+
+      setStoreYearMonth1(removeDuplicatesFromArray(storeYearMonth));
+      setStoreYearMonthDay1(removeDuplicatesFromArray(storeYearMonthDay));
 
       DailyViewCollectTimeData?.forEach((item) => {
         const [year, month, day] = item.split("-");
@@ -120,9 +146,9 @@ export default function Impact({
     }
   }, [DailyViewCollectTimeData, DailyViewCollectTimeIsLoading]);
 
-  function removeDuplicatesFromArray(arr) {
-    return [...new Set(arr)];
-  }
+  // function removeDuplicatesFromArray(arr) {
+  //   return [...new Set(arr)];
+  // }
 
   function removeDuplicatesMonthsFromArray(arr) {
     return [...new Set(arr?.map((item) => item.split("-")[0]))];
@@ -131,7 +157,7 @@ export default function Impact({
   useEffect(() => {
     setUniqueYears1(removeDuplicatesFromArray(yearsFromData));
     setUniqueMonths1(removeDuplicatesMonthsFromArray(monthsFromData));
-    setUniqueDays1(removeDuplicatesFromArray(daysFromData));
+    // setUniqueDays1(removeDuplicatesFromArray(daysFromData));
   }, [yearsFromData, monthsFromData, daysFromData]);
 
   const [selectedYear1, setSelectedYear1] = useState("");
@@ -140,46 +166,30 @@ export default function Impact({
 
   // useEffect(() => {
   //   if (uniqueYears1.length > 0) {
-  //     if (localStorage.getItem("date")) {
-  //       const date = localStorage.getItem("date").split("-");
-  //       setSelectedYear1(date[0]);
-  //     } else {
-  //       const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
-  //       const lastIdx = sortedYears.length - 1;
-  //       setSelectedYear1(sortedYears[lastIdx]);
-  //     }
+  //     setSelectedYear1(uniqueYears1[0]); // Remove the dot before [0]
   //   }
   // }, [uniqueYears1]);
 
   // useEffect(() => {
   //   if (uniqueMonths1.length > 0) {
-  //     if (localStorage.getItem("date")) {
-  //       const date = localStorage.getItem("date").split("-");
-  //       setSelectedMonth1(date[1]);
-  //     } else {
-  //       const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
-  //       const lastIdx = sortedMonths.length - 1;
-  //       setSelectedMonth1(sortedMonths[lastIdx]);
-  //     }
+  //     setSelectedMonth1(uniqueMonths1[0]);
   //   }
   // }, [uniqueMonths1]);
 
   // useEffect(() => {
-  //   if (monthsFromData.length > 0) {
-  //     if (localStorage.getItem("date")) {
-  //       const date = localStorage.getItem("date").split("-");
-  //       setSelectedDay1(date[2]);
-  //     } else {
-  //       const sortedDays =       monthsFromData
-  //       .filter((item) => item.split("-")[0] === selectedMonth1)
-  //       .map((item) => item.split("-")[1])
+  //   if (storeYearMonthDay1.length > 0) {
+  //     const sortedDays = storeYearMonthDay1
+  //       .filter(
+  //         (item) =>
+  //           item.split("-")[0] === selectedYear1 &&
+  //           item.split("-")[1] === selectedMonth1
+  //       )
+  //       .map((item) => item.split("-")[2])
   //       .sort((a, b) => a.localeCompare(b));
-
-  //       const lastIdx = sortedDays.length - 1;
-  //       setSelectedDay1(sortedDays[lastIdx]);
-  //     }
+  //     const lastIdx = sortedDays.length - 1;
+  //     setSelectedDay1(sortedDays[lastIdx]);
   //   }
-  // }, [selectedMonth1, monthsFromData]);
+  // }, [selectedMonth1, storeYearMonthDay1, selectedYear1]);
 
   const [dateKey, setDateKey] = useState("");
 
@@ -192,6 +202,21 @@ export default function Impact({
       setDateKey(`${selectedYear1}-${selectedMonth1}-${selectedDay1}`);
     }
   }, [selectedYear1, selectedMonth1, selectedDay1]);
+
+  const {
+    data: ImpactData,
+    isLoading: ImpactDataIsLoading,
+    error: ImpactDataError,
+  } = useQuery(
+    ["ImpactData", collectionKey],
+    () => getImpactData(collectionKey),
+    {
+      enabled: !!collectionKey && defaultData,
+      onSuccess: (data) => {
+        console.log("data", data);
+      },
+    }
+  );
 
   const {
     data: ImpactDataWithDateKey,
@@ -295,12 +320,12 @@ export default function Impact({
         >
           <option disabled>Year</option>
           {uniqueYears1?.map((item, Index) => {
-            return (
-              <option key={Index} value={item}>
-                {item}
-              </option>
-            );
-          })}
+                return (
+                  <option key={Index} value={item}>
+                    {item}
+                  </option>
+                );
+              })}
         </select>
         <select
           className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
@@ -309,13 +334,16 @@ export default function Impact({
           disabled={!selectedYear1}
         >
           <option disabled>Month</option>
-          {uniqueMonths1?.sort().map((item, index) => {
-            return (
-              <option key={index} value={item}>
-                {digitToMonth(item)}
-              </option>
-            );
-          })}
+          {storeYearMonth1.map((item1, index) => {
+                if (item1.split("-")[0] === selectedYear1) {
+                  return (
+                    <option key={index} value={item1.split("-")[1]}>
+                      {digitToMonth(item1.split("-")[1])}
+                    </option>
+                  );
+                }
+                return null; // Make sure to return null when conditions are not met
+              })}
         </select>
         <select
           className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
@@ -324,25 +352,20 @@ export default function Impact({
           disabled={!selectedMonth1}
         >
           <option disabled>Day</option>
-          {monthsFromData
-            ?.map((item, Index) => {
-              if (item.split("-")[0] === selectedMonth1) {
-                return item; // Return the original item
-              } else {
-                return null; // Skip items that don't match the condition
-              }
-            })
-            .filter((item) => item !== null) // Filter out null items
-            .sort((a, b) => {
-              const aValue = a.split("-")[1];
-              const bValue = b.split("-")[1];
-              return aValue.localeCompare(bValue); // Sort based on the split value
-            })
-            .map((item, index) => (
-              <option key={index} value={item.split("-")[1]}>
-                {item.split("-")[1]}
-              </option>
-            ))}
+          {storeYearMonthDay1
+                .filter(
+                  (item1) =>
+                    item1.split("-")[0] === selectedYear1 &&
+                    item1.split("-")[1] === selectedMonth1
+                )
+                .map((item1) => item1.split("-")[2]) // Extract day values
+                .sort((a, b) => a.localeCompare(b)) // Sort day values
+                .reverse() // Reverse the array order
+                .map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
         </select>
       </div>
       <div className="grid grid-cols-1 h-72">

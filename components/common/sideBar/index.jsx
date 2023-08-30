@@ -27,10 +27,10 @@ export default function SideBar() {
 
   return (
     <>
-      <div className="w-[5.5rem] h-full bg-white border-r-2 border-gray-300 space-y-10 text-[#25476A] font-semibold">
-        <div className="flex items-center justify-center py-2">
+      <div className="w-[5.5rem] h-full bg-white border-r-2 border-gray-300 space-y-10 text-[#25476A] font-semibold pt-16">
+        {/* <div className="flex items-center justify-center py-2">
           <Image src={logo} alt="logo" className="w-16" />
-        </div>
+        </div> */}
         <div className="flex flex-col items-center space-y-10">
           {/* <Image src={Home} alt="Home" className="w-5" /> */}
           <Link href="/dashboard">

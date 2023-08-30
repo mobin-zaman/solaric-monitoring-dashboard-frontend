@@ -75,6 +75,23 @@ export default function HistoricalPeakPower({
     selectedOptionIdInverter,
   ]);
 
+  const [defaultData, setDefaultData] = useState(true);
+
+  // const {
+  //   data: HistoricalData,
+  //   isLoading: HistoricalDataIsLoading,
+  //   error: HistoricalDataError,
+  // } = useQuery(
+  //   ["HistoricalData", collectionKey],
+  //   () => getHistoricalData(collectionKey),
+  //   {
+  //     enabled: !!collectionKey && defaultData,
+  //     onSuccess: (data) => {
+  //       console.log("data", data);
+  //     },
+  //   }
+  // );
+
   const {
     data: DailyViewCollectTimeData,
     isLoading: DailyViewCollectTimeIsLoading,
@@ -93,15 +110,41 @@ export default function HistoricalPeakPower({
   const [yearsFromData, setYearsFromData] = useState([]);
   const [monthsFromData, setMonthsFromData] = useState([]);
   const [daysFromData, setDaysFromData] = useState([]);
-  const [uniqueYears, setUniqueYears] = useState([]);
-  const [uniqueMonths, setUniqueMonths] = useState([]);
-  const [uniqueDays, setUniqueDays] = useState([]);
+  const [uniqueYears, setuniqueYears] = useState([]);
+  const [uniqueMonths1, setUniqueMonths1] = useState([]);
+  // const [uniqueDays1, setUniqueDays1] = useState([]);
+  const [storeYearMonth1, setStoreYearMonth1] = useState([]);
+  const [storeYearMonthDay1, setStoreYearMonthDay1] = useState([]);
+
+  function removeDuplicatesFromArray(arr) {
+    return [...new Set(arr)];
+  }
 
   useEffect(() => {
     if (!DailyViewCollectTimeIsLoading && DailyViewCollectTimeData) {
       const tempYears = [];
       const tempMonthsDays = [];
       const tempDays = [];
+      const storeYearMonth = [];
+      const storeYearMonthDay = [];
+      storeYearMonth.push(
+        ...DailyViewCollectTimeData?.map(
+          (item) => item.split("-")[0] + "-" + item.split("-")[1]
+        )
+      );
+      storeYearMonthDay.push(
+        ...DailyViewCollectTimeData?.map(
+          (item) =>
+            item.split("-")[0] +
+            "-" +
+            item.split("-")[1] +
+            "-" +
+            item.split("-")[2]
+        )
+      );
+
+      setStoreYearMonth1(removeDuplicatesFromArray(storeYearMonth));
+      setStoreYearMonthDay1(removeDuplicatesFromArray(storeYearMonthDay));
 
       DailyViewCollectTimeData?.forEach((item) => {
         const [year, month, day] = item.split("-");
@@ -116,89 +159,50 @@ export default function HistoricalPeakPower({
     }
   }, [DailyViewCollectTimeData, DailyViewCollectTimeIsLoading]);
 
-  function removeDuplicatesFromArray(arr) {
-    return [...new Set(arr)];
-  }
+  // function removeDuplicatesFromArray(arr) {
+  //   return [...new Set(arr)];
+  // }
 
   function removeDuplicatesMonthsFromArray(arr) {
     return [...new Set(arr?.map((item) => item.split("-")[0]))];
   }
 
   useEffect(() => {
-    setUniqueYears(removeDuplicatesFromArray(yearsFromData));
-    setUniqueMonths(removeDuplicatesMonthsFromArray(monthsFromData));
-    setUniqueDays(removeDuplicatesFromArray(daysFromData));
+    setuniqueYears(removeDuplicatesFromArray(yearsFromData));
+    setUniqueMonths1(removeDuplicatesMonthsFromArray(monthsFromData));
+    // setUniqueDays1(removeDuplicatesFromArray(daysFromData));
   }, [yearsFromData, monthsFromData, daysFromData]);
-
-  // const [yearsFromData, setYearsFromData] = useState([]);
-  // const [monthsFromData, setMonthsFromData] = useState([]);
-  // const [uniqueYears, setUniqueYears] = useState([]);
-  // const [uniqueMonths, setUniqueMonths] = useState([]);
-
-  // useEffect(() => {
-  //   if (!isLoading && historicalPeakPowerData) {
-  //     const tempYears = [];
-  //     const tempMonths = [];
-
-  //     Object.keys(historicalPeakPowerData)?.map((item) => {
-  //       const [year, month] = item.split("-");
-  //       tempYears.push(year);
-  //       tempMonths.push(month);
-  //     });
-
-  //     setYearsFromData(tempYears);
-  //     setMonthsFromData(tempMonths);
-  //   }
-  // }, [isLoading, historicalPeakPowerData]);
-
-  // function removeDuplicatesFromArray(arr) {
-  //   return [...new Set(arr)];
-  // }
-
-  // useEffect(() => {
-  //   setUniqueYears(removeDuplicatesFromArray(yearsFromData));
-  //   setUniqueMonths(removeDuplicatesFromArray(monthsFromData));
-  // }, [yearsFromData, monthsFromData]);
 
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
-  const [storeYearlyData, setStoreYearlyData] = useState([]);
-  const [storeMonthlyData, setStoreMonthlyData] = useState([]);
+  const [selectedDay1, setSelectedDay1] = useState("");
 
   useEffect(() => {
     if (uniqueYears.length > 0) {
-      // if (localStorage.getItem("historicalPeakPowerDate")) {
-      //   const date = localStorage.getItem("historicalPeakPowerDate").split("-");
-      //   setSelectedYear(date[0]);
-      // } else {
-      //   const sortedYears = uniqueYears.sort(); // Sort the uniqueYears1 array
-      //   const lastIdx = sortedYears.length - 1;
-      //   setSelectedYear(sortedYears[lastIdx]);
-      // }
-      const sortedYears = uniqueYears.sort(); // Sort the uniqueYears1 array
-      const lastIdx = sortedYears.length - 1;
-      setSelectedYear(sortedYears[lastIdx]);
+      setSelectedYear(uniqueYears[0]); // Remove the dot before [0]
     }
   }, [uniqueYears]);
 
   useEffect(() => {
-    if (uniqueMonths.length > 0) {
-      const sortedMonths = uniqueMonths.sort(); // Sort the uniqueMonths1 array
-      const lastIdx = sortedMonths.length - 1;
-      setSelectedMonth(sortedMonths[lastIdx]);
+    if (uniqueMonths1.length > 0) {
+      setSelectedMonth(uniqueMonths1[0]);
     }
-  }, [uniqueMonths]);
+  }, [uniqueMonths1]);
 
-  // useEffect(() => {
-  //   if (selectedMonth != "Month" && localStorage.getItem("historicalPeakPowerDate")) {
-  //     const date = localStorage.getItem("historicalPeakPowerDate").split("-");
-  //     setSelectedMonth(date[1]);
-  //   }
-  // }, [selectedMonth]);
-
-  // useEffect(() => {
-  //   setSelectedMonth("Month");
-  // }, [selectedYear]);
+  useEffect(() => {
+    if (storeYearMonthDay1.length > 0) {
+      const sortedDays = storeYearMonthDay1
+        .filter(
+          (item) =>
+            item.split("-")[0] === selectedYear &&
+            item.split("-")[1] === selectedMonth
+        )
+        .map((item) => item.split("-")[2])
+        .sort((a, b) => a.localeCompare(b));
+      const lastIdx = sortedDays.length - 1;
+      setSelectedDay1(sortedDays[lastIdx]);
+    }
+  }, [selectedMonth, storeYearMonthDay1, selectedYear]);
 
   const [dateKey, setDateKey] = useState("");
 
@@ -379,7 +383,7 @@ export default function HistoricalPeakPower({
               }}
             >
               <option disabled>Year</option>
-              {uniqueYears?.sort().map((item, Index) => {
+              {uniqueYears?.map((item, Index) => {
                 return (
                   <option key={Index} value={item}>
                     {item}
@@ -395,12 +399,15 @@ export default function HistoricalPeakPower({
               }}
             >
               <option>Month</option>
-              {uniqueMonths?.sort().map((item, index) => {
-                return (
-                  <option key={index} value={item}>
-                    {digitToMonth(item)}
-                  </option>
-                );
+              {storeYearMonth1.map((item1, index) => {
+                if (item1.split("-")[0] === selectedYear) {
+                  return (
+                    <option key={index} value={item1.split("-")[1]}>
+                      {digitToMonth(item1.split("-")[1])}
+                    </option>
+                  );
+                }
+                return null; // Make sure to return null when conditions are not met
               })}
             </select>
           </div>
