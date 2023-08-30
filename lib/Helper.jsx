@@ -149,6 +149,7 @@ export const updateProject = async (data) => {
     dollarRate: data.dollarRate,
     exportMeterSerialNumber: data.exportMeterSerialNumber,
     importMeterSerialNumber: data.importMeterSerialNumber,
+    imageUrl: data.imageUrl,
   };
   const response = await todoApi.put(`/project/${id}`, d, {
     headers: {

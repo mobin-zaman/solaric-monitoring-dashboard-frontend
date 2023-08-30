@@ -4,6 +4,8 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { updateProject } from "@/lib/Helper";
+import { uploadImage } from "@/lib/Helper";
+import Image from "next/image";
 
 export default function AddUserModal({
   updateProjectModalOpen,
@@ -22,6 +24,10 @@ export default function AddUserModal({
   const [importMeterSerialNumber, setImportMeterSerialNumber] = useState(
     editProjectData?.importMeterSerialNumber
   );
+  const [file, setFile] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [imageSrc, setImageSrc] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const mutation = useMutation(updateProject, {
@@ -34,6 +40,12 @@ export default function AddUserModal({
       console.log(error);
     },
   });
+
+  const handleImageUpload = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setImageSrc(URL.createObjectURL(selectedFile));
+  };
 
   const handleCreateProject = (e) => {
     projectUpdated(false);
@@ -50,16 +62,68 @@ export default function AddUserModal({
       return;
     }
 
-    mutation.mutate({
-      id: editProjectData?.id,
-      name,
-      fundingType,
-      tarrif: parseFloat(tarrif),
-      dollarRate: parseFloat(dollarRate),
-      exportMeterSerialNumber,
-      importMeterSerialNumber,
-    });
+    if (file) {
+      setSelectedImage(URL.createObjectURL(file));
+
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const base64Data = e.target.result.split(",")[1]; // Extract base64 portion
+
+        try {
+          const response = await uploadImage(base64Data);
+          mutation.mutate({
+            id: editProjectData?.id,
+            name,
+            fundingType,
+            tarrif: parseFloat(tarrif),
+            dollarRate: parseFloat(dollarRate),
+            exportMeterSerialNumber,
+            importMeterSerialNumber,
+            imageUrl: response.data.url,
+          });
+          // Do something with the uploaded image data, such as displaying it or further processing
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          setUploadedImageUrl("Error uploading image");
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      mutation.mutate({
+        id: editProjectData?.id,
+        name,
+        fundingType,
+        tarrif: parseFloat(tarrif),
+        dollarRate: parseFloat(dollarRate),
+        exportMeterSerialNumber,
+        importMeterSerialNumber,
+        imageUrl: editProjectData?.imageUrl,
+      });
+    }
   };
+
+  const [base64ImageData, setBase64ImageData] = useState("");
+
+  // const handleImageUpload = async (event) => {
+  //   const file = event.target.files[0];
+
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = async (e) => {
+  //       const base64Data = e.target.result.split(',')[1]; // Extract base64 portion
+  //       setBase64ImageData(e.target.result);
+
+  //       try {
+  //         const response = await uploadImage(base64Data);
+  //         console.log('Uploaded image data:', response);
+  //         // Do something with the uploaded image data, such as displaying it or further processing
+  //       } catch (error) {
+  //         console.error('Error uploading image:', error);
+  //       }
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   return (
     <>
@@ -169,7 +233,15 @@ export default function AddUserModal({
                     onChange={(e) => setImportMeterSerialNumber(e.target.value)}
                   />
                 </div>
-              </div>
+              </div>{" "}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
+              {imageSrc && (
+                <Image src={imageSrc} alt="Selected" width={50} height={50} />
+              )}
             </div>
             <div className="flex justify-between items-center">
               <div className="text-red-700 text-sm h-8 flex justify-center items-center">
