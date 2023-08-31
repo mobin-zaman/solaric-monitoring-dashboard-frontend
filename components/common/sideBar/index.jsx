@@ -9,6 +9,7 @@ import {
   faCalculator,
   faCubesStacked,
   faMicrochip,
+  faFileArrowDown
 } from "@fortawesome/free-solid-svg-icons";
 import Home from "@/public/icons/Home.png";
 import Users from "@/public/icons/Users.png";
@@ -91,6 +92,19 @@ export default function SideBar() {
                   link === "/meter"
                     ? "text-[#38EB1A]"
                     : link === "/meter/[meterId]"
+                    ? "text-[#38EB1A]"
+                    : ""
+                }`}
+                title="Meter"
+              />
+            </Link>
+          )}
+                                        {data?.role === "ADMIN" && (
+            <Link href="/export">
+              <FontAwesomeIcon
+                icon={faFileArrowDown}
+                className={`w-5 h-5 ${
+                  link === "/export"
                     ? "text-[#38EB1A]"
                     : ""
                 }`}
