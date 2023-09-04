@@ -218,7 +218,11 @@ export default function Historical({
 
   return (
     <>
-      <div className="w-full h-96 bg-white p-3 rounded-md">
+    
+    <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5">
+       Historical Peak Power / Sun-Hrs
+          </div>
+          <div className="w-full h-96 bg-white p-3 rounded-b-lg border border-gray-300">
         {sunHoursOpen ? (
           <HistoricalSunHours
             handlePeakPowerOpen={handlePeakPowerOpen}
@@ -321,7 +325,7 @@ export default function Historical({
             selectedOptionIdInverter={selectedOptionIdInverter}
           />
         )}
-      </div>
+        </div>
     </>
   );
 }

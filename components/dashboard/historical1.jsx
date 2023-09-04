@@ -265,11 +265,11 @@ export default function Historical({
 
   return (
     <>
-      <div className="w-full h-96 bg-white p-3 rounded-md space-y-2.5">
-        <div className="text-md font-semibold tracking-wide text-[#25476A]">
-          Historical Generation (MWH)
-        </div>
-        <div className="flex flex-col justify-center items-end col-span-3 space-y-3">
+              <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5">
+              Historical Generation (MWH)
+          </div>
+      <div className="w-full h-96 bg-white p-3 rounded-b-lg space-y-2.5 border border-gray-300">
+        <div className="flex flex-col justify-center items-center col-span-3 space-y-3">
           <div className="flex space-x-4">
             {/* <button
               className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border-2 ${defaultData

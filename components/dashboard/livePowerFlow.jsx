@@ -137,12 +137,10 @@ export default function LivePowerFlow({
 
   return (
     <>
-      <div className="w-full h-96 bg-white p-3 rounded-md space-y-5">
-        <div className="flex items-center justify-between">
-          <div className="text-md font-semibold tracking-wide text-[#25476A]">
-            Live Power Flow
+          <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5">
+          Live Power Flow
           </div>
-        </div>
+          <div className="w-full h-96 bg-white p-3 rounded-b-lg border border-gray-300 flex items-center justify-center">
         {selectedOptionId &&
           !selectedOptionIdCompany &&
           !selectedOptionIdBuilding &&
@@ -165,7 +163,7 @@ export default function LivePowerFlow({
                           2
                         )}
                       </span>
-                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -177,7 +175,7 @@ export default function LivePowerFlow({
                   ) : null}
                   {LivePowerFlowDataStore?.currentMeterPower?.import ? (
                     <div className="flex flex-col items-center justify-center ">
-                      <div className="w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                      <div className="w-36 2xl:w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-red-600 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -204,7 +202,7 @@ export default function LivePowerFlow({
                 <div className="flex items-center justify-center col-span-2">
                   {LivePowerFlowDataStore?.currentInverterPower ? (
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 0 ? "reset-width" : ""
@@ -336,7 +334,7 @@ export default function LivePowerFlow({
                           2
                         )}
                       </span>
-                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -348,7 +346,7 @@ export default function LivePowerFlow({
                   ) : null}
                   {LivePowerFlowDataStore?.currentMeterPower?.import ? (
                     <div className="flex flex-col items-center justify-center ">
-                      <div className="w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-red-600 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -375,7 +373,7 @@ export default function LivePowerFlow({
                 <div className="flex items-center justify-center col-span-2">
                   {LivePowerFlowDataStore?.currentInverterPower ? (
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 0 ? "reset-width" : ""
@@ -507,7 +505,7 @@ export default function LivePowerFlow({
                           2
                         )}
                       </span>
-                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -519,7 +517,7 @@ export default function LivePowerFlow({
                   ) : null}
                   {LivePowerFlowDataStore?.currentMeterPower?.import ? (
                     <div className="flex flex-col items-center justify-center ">
-                      <div className="w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-red-600 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -546,7 +544,7 @@ export default function LivePowerFlow({
                 <div className="flex items-center justify-center col-span-2">
                   {LivePowerFlowDataStore?.currentInverterPower ? (
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 0 ? "reset-width" : ""

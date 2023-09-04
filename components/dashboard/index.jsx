@@ -1071,9 +1071,9 @@ export default function Index() {
 
   return (
     <>
-      <div className="flex flex-col w-full h-full space-y-1.5">
+      <div className="flex flex-col w-full h-full space-y-2">
         <div
-          className={`flex items-center justify-between space-x-5 bg-[#25476A] rounded-md p-3.5 select-none`}
+          className={`flex items-center justify-between space-x-5 bg-gray-700 rounded-md p-3.5 select-none`}
         >
           <div className="flex items-center space-x-3 select-none">
             <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
@@ -1371,8 +1371,8 @@ export default function Index() {
           </div>
         </div>
         {/* {loading ? <> */}
-        <div className="grid grid-cols-12 gap-1.5">
-          <div className="col-span-3">
+        <div className="grid grid-cols-12 gap-2">
+          <div className="col-span-4">
             <Historical1
               historicalDataForProject={mainHistoricalTableData}
               historicalDataForProjectSunHrsBarChartData={
@@ -1385,7 +1385,7 @@ export default function Index() {
               selectedOptionIdInverter={selectedOptionIdInverter}
             />
           </div>
-          <div className="col-span-6">
+          <div className="col-span-5">
             <DailyView
               dailyViewData={mainDailyViewData}
               collectTimeForInverterHourlyData={
@@ -1405,7 +1405,7 @@ export default function Index() {
               selectedOptionIdInverter={selectedOptionIdInverter} />
           </div>
         </div>
-        <div className="grid grid-cols-12 gap-1.5">
+        <div className="grid grid-cols-12 gap-2">
           <div className="col-span-6">
             <LivePowerFlow selectedOptionId={selectedOptionId}
               selectedOptionIdCompany={selectedOptionIdCompany}

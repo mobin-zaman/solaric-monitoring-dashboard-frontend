@@ -298,21 +298,22 @@ export default function Impact({
   };
 
   return (
-    <div className="w-full bg-white p-3 rounded-md space-y-2.5 h-96">
-      <div className="text-md font-semibold tracking-wide text-[#25476A]">
-        Impact
-      </div>
-      <div className="flex space-x-4 items-end justify-end h-6">
-        <button
-          className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-md select-none border-2 ${
-            defaultData
-              ? "bg-[#39B54A] text-white border-[#39B54A]"
-              : "bg-white text-[#25476A] border-[#25476A]"
-          }`}
+    <>              <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5 space-x-2">
+    <span>Impact</span>
+    <button
           onClick={() => handleDefaultData()}
         >
-          <FontAwesomeIcon icon={faGlobe} />
+          <FontAwesomeIcon icon={faGlobe} 
+                    className={`flex items-center justify-center text-md font-semibold rounded-md p-0.5 h-4 select-none border-2 ${
+                      defaultData
+                        ? "bg-[#39B54A] text-white border-[#39B54A]"
+                        : "bg-orange-500 text-white border-orange-500"
+                    }`}
+                  />
         </button>
+</div>
+    <div className="w-full bg-white p-3 rounded-b-lg space-y-2.5 h-96 border border-gray-300">
+      <div className="flex space-x-4 items-center justify-center h-6">
         <select
           className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
           value={selectedYear1 ? selectedYear1 : "Year"}
@@ -443,5 +444,6 @@ export default function Impact({
         </div>
       </div>
     </div>
+    </>
   );
 }
