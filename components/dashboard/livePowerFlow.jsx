@@ -157,21 +157,41 @@ export default function LivePowerFlow({
                     height={90}
                   />
                 </div>
-                <div className="flex flex-col items-center justify-center col-span-2 space-y-7">
-                  <div className="flex flex-col items-center justify-center ">
-                    <div className="w-48 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-red-600 transition-all duration-300 ${value0 === 100 ? "reset-width" : ""
+                <div className="flex flex-col items-center justify-center col-span-2 space-y-4">
+                  {LivePowerFlowDataStore?.currentMeterPower?.export ? (
+                    <div className="flex flex-col items-center justify-center ">
+                      <span className="flex items-center justify-center text-xs font-semibold text-green-600">
+                        {LivePowerFlowDataStore?.currentMeterPower?.export?.toFixed(
+                          2
+                        )}
+                      </span>
+                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-gray-300 transition-all duration-300 ${
+                            value0 === 100 ? "reset-width" : ""
                           }`}
-                        style={{ width: `${value0}%` }}
-                      ></div>
+                          style={{ width: `${value1}%` }}
+                        ></div>
+                      </div>
                     </div>
-                    <span>                      {LivePowerFlowDataStore?.currentMeterPower?.import === 0
-                      ? 0
-                      : LivePowerFlowDataStore?.currentMeterPower?.import?.toFixed(
-                        2
-                      ) || 0}</span>
-                  </div>
+                  ) : null}
+                  {LivePowerFlowDataStore?.currentMeterPower?.import ? (
+                    <div className="flex flex-col items-center justify-center ">
+                      <div className="w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-red-600 transition-all duration-300 ${
+                            value0 === 100 ? "reset-width" : ""
+                          }`}
+                          style={{ width: `${value0}%` }}
+                        ></div>
+                      </div>
+                      <span className="flex items-center justify-center text-xs font-semibold text-red-600">
+                        {LivePowerFlowDataStore?.currentMeterPower?.import?.toFixed(
+                          2
+                        )}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-center">
                   <Image
@@ -182,20 +202,23 @@ export default function LivePowerFlow({
                   />
                 </div>
                 <div className="flex items-center justify-center col-span-2">
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-48 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-gray-300 transition-all duration-300 ${value0 === 0 ? "reset-width" : ""
+                  {LivePowerFlowDataStore?.currentInverterPower ? (
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-gray-300 transition-all duration-300 ${
+                            value0 === 0 ? "reset-width" : ""
                           }`}
-                        style={{ width: `${value1}%` }}
-                      ></div>
+                          style={{ width: `${value1}%` }}
+                        ></div>
+                      </div>
+                      <span className="flex items-center justify-center text-xs font-semibold text-green-600">
+                        {LivePowerFlowDataStore?.currentInverterPower?.toFixed(
+                          2
+                        )}
+                      </span>
                     </div>
-                    <span>                      {LivePowerFlowDataStore?.currentInverterPower === 0
-                      ? 0
-                      : LivePowerFlowDataStore?.currentInverterPower?.toFixed(
-                        2
-                      ) || 0}</span>
-                  </div>
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-center">
                   <Image
@@ -206,37 +229,76 @@ export default function LivePowerFlow({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-7 items-center justify-center">
-                <div className="col-span-7 flex items-center justify-center space-x-7">
-                  <div className="flex space-x-2 items-center">
-                    <span>                      {LivePowerFlowDataStore?.currentLoad?.grid === 0
-                      ? 0
-                      : LivePowerFlowDataStore?.currentLoad?.grid?.toFixed(
-                        2
-                      ) || 0}</span>
-                    <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-red-600 transition-all duration-300 ${value0 === 0 ? "reset-width" : ""
+              <div
+                className={`grid items-center justify-center ${
+                  LivePowerFlowDataStore?.currentLoad?.grid &&
+                  LivePowerFlowDataStore?.currentLoad?.solar
+                    ? "grid-cols-8 gap-4"
+                    : "grid-cols-4"
+                }`}
+              >
+                {LivePowerFlowDataStore?.currentLoad?.grid ? (
+                  <div
+                    className={`col-span-4 flex items-center space-x-4 ${
+                      LivePowerFlowDataStore?.currentLoad?.grid &&
+                      LivePowerFlowDataStore?.currentLoad?.solar
+                        ? "justify-end"
+                        : "justify-center"
+                    }`}
+                  >
+                    <div
+                      className={`flex space-x-2 items-center ${
+                        LivePowerFlowDataStore?.currentLoad?.grid &&
+                        LivePowerFlowDataStore?.currentLoad?.solar
+                          ? ""
+                          : "grid grid-cols-2 justify-items-end"
+                      }`}
+                    >
+                      <span className="flex items-center justify-center text-xs font-semibold text-red-600">
+                        {LivePowerFlowDataStore?.currentLoad?.grid?.toFixed(2)}
+                      </span>
+                      <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-red-600 transition-all duration-300 ${
+                            value0 === 0 ? "reset-width" : ""
                           }`}
-                        style={{ height: `${value0}%` }}
-                      ></div>
+                          style={{ height: `${value0}%` }}
+                        ></div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex space-x-2 items-center">
-                    <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-green-600 transition-all duration-300 ${value0 === 0 ? "reset-width" : ""
+                ) : null}
+                {LivePowerFlowDataStore?.currentLoad?.solar ? (
+                  <div
+                    className={`col-span-4 flex items-center space-x-4 ${
+                      LivePowerFlowDataStore?.currentLoad?.grid &&
+                      LivePowerFlowDataStore?.currentLoad?.solar
+                        ? "justify-start"
+                        : "justify-center"
+                    }`}
+                  >
+                    <div
+                      className={`flex space-x-2 items-center ${
+                        LivePowerFlowDataStore?.currentLoad?.grid &&
+                        LivePowerFlowDataStore?.currentLoad?.solar
+                          ? ""
+                          : "grid grid-cols-2 justify-items-end"
+                      }`}
+                    >
+                      <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-green-600 transition-all duration-300 ${
+                            value0 === 0 ? "reset-width" : ""
                           }`}
-                        style={{ height: `${value0}%` }}
-                      ></div>
+                          style={{ height: `${value0}%` }}
+                        ></div>
+                      </div>
+                      <span className="flex items-center justify-center text-xs font-semibold text-green-600">
+                        {LivePowerFlowDataStore?.currentLoad?.solar?.toFixed(2)}
+                      </span>
                     </div>
-                    <span>                      {LivePowerFlowDataStore?.currentLoad?.solar === 0
-                      ? 0
-                      : LivePowerFlowDataStore?.currentLoad?.solar?.toFixed(
-                        2
-                      ) || 0}</span>
                   </div>
-                </div>
+                ) : null}
               </div>
               <div className="grid grid-cols-7 items-center justify-center">
                 <div className="col-span-7 flex items-center justify-center">
@@ -266,21 +328,41 @@ export default function LivePowerFlow({
                     height={90}
                   />
                 </div>
-                <div className="flex flex-col items-center justify-center col-span-2 space-y-7">
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-48 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-gray-300 transition-all duration-300 ${value0 === 0 ? "reset-width" : ""
+                <div className="flex flex-col items-center justify-center col-span-2 space-y-4">
+                  {LivePowerFlowDataStore?.currentMeterPower?.export ? (
+                    <div className="flex flex-col items-center justify-center ">
+                      <span className="flex items-center justify-center text-xs font-semibold text-green-600">
+                        {LivePowerFlowDataStore?.currentMeterPower?.export?.toFixed(
+                          2
+                        )}
+                      </span>
+                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-gray-300 transition-all duration-300 ${
+                            value0 === 100 ? "reset-width" : ""
                           }`}
-                        style={{ width: `${value1}%` }}
-                      ></div>
+                          style={{ width: `${value1}%` }}
+                        ></div>
+                      </div>
                     </div>
-                    <span>                      {LivePowerFlowDataStore?.currentMeterPower?.export === 0
-                      ? 0
-                      : LivePowerFlowDataStore?.currentMeterPower?.export?.toFixed(
-                        2
-                      ) || 0}</span>
-                  </div>
+                  ) : null}
+                  {LivePowerFlowDataStore?.currentMeterPower?.import ? (
+                    <div className="flex flex-col items-center justify-center ">
+                      <div className="w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-red-600 transition-all duration-300 ${
+                            value0 === 100 ? "reset-width" : ""
+                          }`}
+                          style={{ width: `${value0}%` }}
+                        ></div>
+                      </div>
+                      <span className="flex items-center justify-center text-xs font-semibold text-red-600">
+                        {LivePowerFlowDataStore?.currentMeterPower?.import?.toFixed(
+                          2
+                        )}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-center">
                   <Image
@@ -291,20 +373,23 @@ export default function LivePowerFlow({
                   />
                 </div>
                 <div className="flex items-center justify-center col-span-2">
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-48 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-gray-300 transition-all duration-300 ${value0 === 0 ? "reset-width" : ""
+                  {LivePowerFlowDataStore?.currentInverterPower ? (
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-gray-300 transition-all duration-300 ${
+                            value0 === 0 ? "reset-width" : ""
                           }`}
-                        style={{ width: `${value1}%` }}
-                      ></div>
+                          style={{ width: `${value1}%` }}
+                        ></div>
+                      </div>
+                      <span className="flex items-center justify-center text-xs font-semibold text-green-600">
+                        {LivePowerFlowDataStore?.currentInverterPower?.toFixed(
+                          2
+                        )}
+                      </span>
                     </div>
-                    <span>                      {LivePowerFlowDataStore?.currentInverterPower === 0
-                      ? 0
-                      : LivePowerFlowDataStore?.currentInverterPower?.toFixed(
-                        2
-                      ) || 0}</span>
-                  </div>
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-center">
                   <Image
@@ -315,23 +400,76 @@ export default function LivePowerFlow({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-7 items-center justify-center">
-                <div className="col-span-7 flex items-center justify-center space-x-7">
-                  <div className="flex space-x-2 items-center pl-14">
-                    <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-green-600 transition-all duration-300 ${value0 === 0 ? "reset-width" : ""
+              <div
+                className={`grid items-center justify-center ${
+                  LivePowerFlowDataStore?.currentLoad?.grid &&
+                  LivePowerFlowDataStore?.currentLoad?.solar
+                    ? "grid-cols-8 gap-4"
+                    : "grid-cols-4"
+                }`}
+              >
+                {LivePowerFlowDataStore?.currentLoad?.grid ? (
+                  <div
+                    className={`col-span-4 flex items-center space-x-4 ${
+                      LivePowerFlowDataStore?.currentLoad?.grid &&
+                      LivePowerFlowDataStore?.currentLoad?.solar
+                        ? "justify-end"
+                        : "justify-center"
+                    }`}
+                  >
+                    <div
+                      className={`flex space-x-2 items-center ${
+                        LivePowerFlowDataStore?.currentLoad?.grid &&
+                        LivePowerFlowDataStore?.currentLoad?.solar
+                          ? ""
+                          : "grid grid-cols-2 justify-items-end"
+                      }`}
+                    >
+                      <span className="flex items-center justify-center text-xs font-semibold text-red-600">
+                        {LivePowerFlowDataStore?.currentLoad?.grid?.toFixed(2)}
+                      </span>
+                      <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-red-600 transition-all duration-300 ${
+                            value0 === 0 ? "reset-width" : ""
                           }`}
-                        style={{ height: `${value0}%` }}
-                      ></div>
+                          style={{ height: `${value0}%` }}
+                        ></div>
+                      </div>
                     </div>
-                    <span>                      {LivePowerFlowDataStore?.currentLoad?.solar === 0
-                      ? 0
-                      : LivePowerFlowDataStore?.currentLoad?.solar?.toFixed(
-                        2
-                      ) || 0}</span>
                   </div>
-                </div>
+                ) : null}
+                {LivePowerFlowDataStore?.currentLoad?.solar ? (
+                  <div
+                    className={`col-span-4 flex items-center space-x-4 ${
+                      LivePowerFlowDataStore?.currentLoad?.grid &&
+                      LivePowerFlowDataStore?.currentLoad?.solar
+                        ? "justify-start"
+                        : "justify-center"
+                    }`}
+                  >
+                    <div
+                      className={`flex space-x-2 items-center ${
+                        LivePowerFlowDataStore?.currentLoad?.grid &&
+                        LivePowerFlowDataStore?.currentLoad?.solar
+                          ? ""
+                          : "grid grid-cols-2 justify-items-end"
+                      }`}
+                    >
+                      <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-green-600 transition-all duration-300 ${
+                            value0 === 0 ? "reset-width" : ""
+                          }`}
+                          style={{ height: `${value0}%` }}
+                        ></div>
+                      </div>
+                      <span className="flex items-center justify-center text-xs font-semibold text-green-600">
+                        {LivePowerFlowDataStore?.currentLoad?.solar?.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
               </div>
               <div className="grid grid-cols-7 items-center justify-center">
                 <div className="col-span-7 flex items-center justify-center">
@@ -361,23 +499,41 @@ export default function LivePowerFlow({
                     height={90}
                   />
                 </div>
-                <div className="flex flex-col items-center justify-center col-span-2 space-y-7">
-                  <div className="flex flex-col items-center justify-center ">
-                    <div className="w-48 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-red-600 transition-all duration-300 ${value0 === 100 ? "reset-width" : ""
-                          }`}
-                        style={{ width: `${value0}%` }}
-                      ></div>
-                    </div>
-                    <span>
-                      {LivePowerFlowDataStore?.currentMeterPower?.import === 0
-                        ? 0
-                        : LivePowerFlowDataStore?.currentMeterPower?.import?.toFixed(
+                <div className="flex flex-col items-center justify-center col-span-2 space-y-4">
+                  {LivePowerFlowDataStore?.currentMeterPower?.export ? (
+                    <div className="flex flex-col items-center justify-center ">
+                      <span className="flex items-center justify-center text-xs font-semibold text-green-600">
+                        {LivePowerFlowDataStore?.currentMeterPower?.export?.toFixed(
                           2
-                        ) || 0}
-                    </span>
-                  </div>
+                        )}
+                      </span>
+                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-gray-300 transition-all duration-300 ${
+                            value0 === 100 ? "reset-width" : ""
+                          }`}
+                          style={{ width: `${value1}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ) : null}
+                  {LivePowerFlowDataStore?.currentMeterPower?.import ? (
+                    <div className="flex flex-col items-center justify-center ">
+                      <div className="w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-red-600 transition-all duration-300 ${
+                            value0 === 100 ? "reset-width" : ""
+                          }`}
+                          style={{ width: `${value0}%` }}
+                        ></div>
+                      </div>
+                      <span className="flex items-center justify-center text-xs font-semibold text-red-600">
+                        {LivePowerFlowDataStore?.currentMeterPower?.import?.toFixed(
+                          2
+                        )}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-center">
                   <Image
@@ -388,22 +544,23 @@ export default function LivePowerFlow({
                   />
                 </div>
                 <div className="flex items-center justify-center col-span-2">
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-48 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-gray-300 transition-all duration-300 ${value0 === 0 ? "reset-width" : ""
+                  {LivePowerFlowDataStore?.currentInverterPower ? (
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-gray-300 transition-all duration-300 ${
+                            value0 === 0 ? "reset-width" : ""
                           }`}
-                        style={{ width: `${value1}%` }}
-                      ></div>
-                    </div>
-                    <span>
-                      {LivePowerFlowDataStore?.currentInverterPower === 0
-                        ? 0
-                        : LivePowerFlowDataStore?.currentInverterPower?.toFixed(
+                          style={{ width: `${value1}%` }}
+                        ></div>
+                      </div>
+                      <span className="flex items-center justify-center text-xs font-semibold text-green-600">
+                        {LivePowerFlowDataStore?.currentInverterPower?.toFixed(
                           2
-                        ) || 0}
-                    </span>
-                  </div>
+                        )}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-center">
                   <Image
@@ -414,41 +571,76 @@ export default function LivePowerFlow({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-7 items-center justify-center">
-                <div className="col-span-7 flex items-center justify-center space-x-7">
-                  <div className="flex space-x-2 items-center">
-                    <span>
-                      {LivePowerFlowDataStore?.currentLoad?.grid === 0
-                        ? 0
-                        : LivePowerFlowDataStore?.currentLoad?.grid?.toFixed(
-                          2
-                        ) || 0}
-                    </span>
-                    <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-red-600 transition-all duration-300 ${value0 === 0 ? "reset-width" : ""
+              <div
+                className={`grid items-center justify-center ${
+                  LivePowerFlowDataStore?.currentLoad?.grid &&
+                  LivePowerFlowDataStore?.currentLoad?.solar
+                    ? "grid-cols-8 gap-4"
+                    : "grid-cols-4"
+                }`}
+              >
+                {LivePowerFlowDataStore?.currentLoad?.grid ? (
+                  <div
+                    className={`col-span-4 flex items-center space-x-4 ${
+                      LivePowerFlowDataStore?.currentLoad?.grid &&
+                      LivePowerFlowDataStore?.currentLoad?.solar
+                        ? "justify-end"
+                        : "justify-center"
+                    }`}
+                  >
+                    <div
+                      className={`flex space-x-2 items-center ${
+                        LivePowerFlowDataStore?.currentLoad?.grid &&
+                        LivePowerFlowDataStore?.currentLoad?.solar
+                          ? ""
+                          : "grid grid-cols-2 justify-items-end"
+                      }`}
+                    >
+                      <span className="flex items-center justify-center text-xs font-semibold text-red-600">
+                        {LivePowerFlowDataStore?.currentLoad?.grid?.toFixed(2)}
+                      </span>
+                      <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-red-600 transition-all duration-300 ${
+                            value0 === 0 ? "reset-width" : ""
                           }`}
-                        style={{ height: `${value0}%` }}
-                      ></div>
+                          style={{ height: `${value0}%` }}
+                        ></div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex space-x-2 items-center">
-                    <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
-                      <div
-                        className={`h-full bg-green-600 transition-all duration-300 ${value0 === 0 ? "reset-width" : ""
+                ) : null}
+                {LivePowerFlowDataStore?.currentLoad?.solar ? (
+                  <div
+                    className={`col-span-4 flex items-center space-x-4 ${
+                      LivePowerFlowDataStore?.currentLoad?.grid &&
+                      LivePowerFlowDataStore?.currentLoad?.solar
+                        ? "justify-start"
+                        : "justify-center"
+                    }`}
+                  >
+                    <div
+                      className={`flex space-x-2 items-center ${
+                        LivePowerFlowDataStore?.currentLoad?.grid &&
+                        LivePowerFlowDataStore?.currentLoad?.solar
+                          ? ""
+                          : "grid grid-cols-2 justify-items-end"
+                      }`}
+                    >
+                      <div className="h-24 w-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                        <div
+                          className={`h-full bg-green-600 transition-all duration-300 ${
+                            value0 === 0 ? "reset-width" : ""
                           }`}
-                        style={{ height: `${value0}%` }}
-                      ></div>
+                          style={{ height: `${value0}%` }}
+                        ></div>
+                      </div>
+                      <span className="flex items-center justify-center text-xs font-semibold text-green-600">
+                        {LivePowerFlowDataStore?.currentLoad?.solar?.toFixed(2)}
+                      </span>
                     </div>
-                    <span>
-                      {LivePowerFlowDataStore?.currentLoad?.solar === 0
-                        ? 0
-                        : LivePowerFlowDataStore?.currentLoad?.solar?.toFixed(
-                          2
-                        ) || 0}
-                    </span>
                   </div>
-                </div>
+                ) : null}
               </div>
               <div className="grid grid-cols-7 items-center justify-center">
                 <div className="col-span-7 flex items-center justify-center">

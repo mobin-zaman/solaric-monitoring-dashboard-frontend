@@ -9,7 +9,7 @@ import {
   faCalculator,
   faCubesStacked,
   faMicrochip,
-  faFileArrowDown
+  faFileArrowUp
 } from "@fortawesome/free-solid-svg-icons";
 import Home from "@/public/icons/Home.png";
 import Users from "@/public/icons/Users.png";
@@ -102,7 +102,7 @@ export default function SideBar() {
                                         {data?.role === "ADMIN" && (
             <Link href="/export">
               <FontAwesomeIcon
-                icon={faFileArrowDown}
+                icon={faFileArrowUp}
                 className={`w-5 h-5 ${
                   link === "/export"
                     ? "text-[#38EB1A]"

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { postFile } from "../../lib/Helper";
 import { useMutation } from "react-query";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 export default function Index() {
 
@@ -35,10 +37,11 @@ export default function Index() {
           >
             <input type="file" onChange={(e) => setFile(e.target.files[0])} />
             <button
-              className="bg-[#25476A] text-white rounded-md px-3 py-1.5"
+              className="bg-teal-500 text-white rounded-md px-3 py-1.5 space-x-2 flex items-center"
               onClick={handleFile}
             >
-              Import
+              <FontAwesomeIcon icon={faUpload} />
+              <span>Import</span>
             </button>
           </div>
         </div>
