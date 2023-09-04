@@ -940,6 +940,7 @@ export const getLivePowerFlowData = async (collectionKey) => {
   return response.data;
 }
 
+// Api call for upload image to imgbb
 export const uploadImage = async (data) => {
   const apiKey = "NEXT_PUBLIC_IMGBB_API_KEY";
   const apiUrl = "https://api.imgbb.com/1/upload";
@@ -957,5 +958,21 @@ export const uploadImage = async (data) => {
   }
 }
 
+//api call for post file 
+export const postFile = async (data) => {
+  const d = {
+    file: data
+  }
 
-  
+  console.log({ data });
+  const response = await todoApi.post(`/project/excel-upload`, d, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+  });
+  return response.data;
+}
+
+
+
