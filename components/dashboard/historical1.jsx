@@ -336,7 +336,7 @@ export default function Historical({
     ))}
             </select>
           </div>
-          <table className="w-full border rounded-md select-none text-[#25476A] text-sm">
+          <table className="w-full border rounded-md select-none text-[#25476A] text-xs xl:text-sm">
             <tbody className="text-center">
               <tr className="bg-gray-200 h-8 font-semibold">
                 <td></td>
