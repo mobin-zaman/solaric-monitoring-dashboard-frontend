@@ -16,7 +16,6 @@ export default function Header() {
   const link = useRouter().pathname;
   const { data } = useQuery("currentUser", getCurrentUser);
   const [projectImageUrl, setProjectImageUrl] = useState();
-  const [projectDefaultImageUrl, setProjectDefaultImageUrl] = useState(localStorage.getItem("projectDefaultImageUrl"));
 
   useEffect(() => {
     if(link === "/dashboard") {
@@ -25,10 +24,10 @@ export default function Header() {
     setProjectImageUrl(localStorage.getItem("projectImageUrl"));
     }, 1);
   } else {
-    setProjectImageUrl(projectDefaultImageUrl);
+    setProjectImageUrl(localStorage.getItem("projectDefaultImageUrl"));
   }
 
-  }, [projectDefaultImageUrl, link]);
+  }, [link]);
 
   const handleSignOut = () => {
     localStorage.removeItem("Token");
