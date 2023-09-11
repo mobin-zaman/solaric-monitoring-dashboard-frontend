@@ -53,6 +53,19 @@ export default function Index() {
     if (allProject) {
       setSelectedOption(allProject[0]?.name);
       setSelectedOptionId(allProject[0]?.id);
+      if (allProject[0]?.imageUrl === null || allProject[0]?.imageUrl === "" || allProject[0]?.imageUrl === undefined) {
+        localStorage.setItem("projectImageUrl", "");
+      } else {
+        localStorage.setItem(
+          "projectImageUrl",
+          allProject[0]?.imageUrl
+        );
+        localStorage.setItem(
+          "projectDefaultImageUrl",
+          allProject[0]?.imageUrl
+        );
+      }
+  
       setFirstProjectForDefaultViewId(allProject[0]?.id);
     }
   }, [allProject]);
@@ -72,7 +85,16 @@ export default function Index() {
     setIsOpen(!isOpen);
   };
 
-  const selectOption = (id, name) => {
+  const selectOption = (id, name, imageUrl) => {
+    if (imageUrl === null || imageUrl === "" || imageUrl === undefined) {
+      localStorage.setItem("projectImageUrl", "");
+    } else
+      localStorage.setItem(
+        "projectImageUrl",
+        imageUrl
+      );
+
+
     setSelectedOptionId(id);
     setSelectedOption(name);
     setIsOpen(false);
@@ -1120,7 +1142,7 @@ export default function Index() {
                         <li
                           key={option.id}
                           className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() => selectOption(option?.id, option?.name)}
+                          onClick={() => selectOption(option?.id, option?.name, option?.imageUrl)}
                         >
                           {option?.name}
                         </li>
@@ -1131,7 +1153,7 @@ export default function Index() {
                         <li
                           key={option.id}
                           className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() => selectOption(option?.id, option?.name)}
+                          onClick={() => selectOption(option?.id, option?.name, option?.imageUrl)}
                         >
                           {option?.name}
                         </li>

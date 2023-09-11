@@ -422,7 +422,7 @@ export default function Project({ projectId }) {
                       Tarrif:
                     </p>
                     <p className="text-gray-700">
-                      {data?.tarrif.toFixed(0) || "N/A"}
+                      {data?.tarrif?.toFixed(0) || "N/A"}
                     </p>
                   </div>
                   <div>
@@ -430,7 +430,7 @@ export default function Project({ projectId }) {
                       Dollar Rate:
                     </p>
                     <p className="text-gray-700">
-                      {data?.dollarRate.toFixed(2) || "N/A"}
+                      {data?.dollarRate?.toFixed(2) || "N/A"}
                     </p>
                   </div>
                   <div>

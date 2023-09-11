@@ -8,11 +8,27 @@ import { getCurrentUser } from "@/lib/Helper";
 import Image from "next/image";
 import placeholderImage from "@/public/placeholderImage.jpg";
 import Notification from "@/public/icons/Notification.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { uploadImage } from "@/lib/Helper";
+import { useRouter } from "next/router";
 
 export default function Header() {
+  const link = useRouter().pathname;
   const { data } = useQuery("currentUser", getCurrentUser);
+  const [projectImageUrl, setProjectImageUrl] = useState();
+  const [projectDefaultImageUrl, setProjectDefaultImageUrl] = useState(localStorage.getItem("projectDefaultImageUrl"));
+
+  useEffect(() => {
+    if(link === "/dashboard") {
+    setInterval(() => {
+
+    setProjectImageUrl(localStorage.getItem("projectImageUrl"));
+    }, 1);
+  } else {
+    setProjectImageUrl(projectDefaultImageUrl);
+  }
+
+  }, [projectDefaultImageUrl, link]);
 
   const handleSignOut = () => {
     localStorage.removeItem("Token");
@@ -52,6 +68,7 @@ export default function Header() {
           {/* TODO*/}
           {/* <input type="file" accept="image/*" onChange={handleImageUpload} /> */}
         </h1>
+        <Image src={projectImageUrl} alt="logo" width={200} height={200} className="w-24 h-14" />
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-3">
             <div className="flex flex-col items-end">
