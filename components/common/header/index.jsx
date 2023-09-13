@@ -67,7 +67,7 @@ export default function Header() {
           {/* TODO*/}
           {/* <input type="file" accept="image/*" onChange={handleImageUpload} /> */}
         </h1>
-        <Image src={projectImageUrl} alt="logo" width={200} height={200} className="w-24 h-14" />
+        {projectImageUrl && <Image src={projectImageUrl} alt="logo" width={200} height={200} className="w-24 h-14" />}
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-3">
             <div className="flex flex-col items-end">
