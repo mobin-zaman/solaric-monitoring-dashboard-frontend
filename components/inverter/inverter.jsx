@@ -111,7 +111,7 @@ export default function Project({ inverterId }) {
           </div>
         </div>
         <div className="bg-white rounded-md shadow-md p-6">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <p className="text-gray-700 text-sm font-medium select-none">
                 Device Serial Number:

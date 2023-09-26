@@ -28,7 +28,7 @@ export default function SideBar() {
 
   return (
     <>
-      <div className="w-[5.5rem] h-full bg-white border-r-2 border-gray-300 space-y-10 text-[#25476A] font-semibold pt-16">
+      <div className="w-[6rem] h-full bg-white border-r-2 border-gray-300 space-y-10 text-[#25476A] font-semibold pt-16">
         {/* <div className="flex items-center justify-center py-2">
           <Image src={logo} alt="logo" className="w-16" />
         </div> */}
@@ -37,7 +37,7 @@ export default function SideBar() {
           <Link href="/dashboard">
             <FontAwesomeIcon
               icon={faHouse}
-              className={`w-5 h-5 ${link === "/dashboard" ? "text-[#38EB1A]" : ""}`}
+              className={`w-6 h-6 ${link === "/dashboard" ? "text-[#38EB1A]" : ""}`}
               title="Dashboard"
             />
           </Link>
@@ -46,7 +46,7 @@ export default function SideBar() {
               {/* <Image src={Users} alt="Users" className="w-5" /> */}
               <FontAwesomeIcon
                 icon={faUserGroup}
-                className={`w-5 h-5 ${
+                className={`w-6 h-6 ${
                   link === "/user" ? "text-[#38EB1A]" : ""
                 }`}
                 title="User"
@@ -58,7 +58,7 @@ export default function SideBar() {
               {/* <Image src={Projects} alt="Projects" className="w-6" /> */}
               <FontAwesomeIcon
                 icon={faCubesStacked}
-                className={`w-5 h-5 ${
+                className={`w-6 h-6 ${
                   link === "/project"
                     ? "text-[#38EB1A]"
                     : link === "/project/[projectId]"
@@ -73,7 +73,7 @@ export default function SideBar() {
             <Link href="/inverter">
               <FontAwesomeIcon
                 icon={faMicrochip}
-                className={`w-5 h-5 ${
+                className={`w-6 h-6 ${
                   link === "/inverter"
                     ? "text-[#38EB1A]"
                     : link === "/inverter/[inverterId]"
@@ -88,7 +88,7 @@ export default function SideBar() {
             <Link href="/meter">
               <FontAwesomeIcon
                 icon={faCalculator}
-                className={`w-5 h-5 ${
+                className={`w-6 h-6 ${
                   link === "/meter"
                     ? "text-[#38EB1A]"
                     : link === "/meter/[meterId]"
@@ -103,7 +103,7 @@ export default function SideBar() {
             <Link href="/export">
               <FontAwesomeIcon
                 icon={faFileArrowUp}
-                className={`w-5 h-5 ${
+                className={`w-6 h-6 ${
                   link === "/export"
                     ? "text-[#38EB1A]"
                     : ""
@@ -113,9 +113,9 @@ export default function SideBar() {
             </Link>
           )}
           {/* <Image src={Message} alt="Message" className="w-5" /> */}
-          {/* <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5" /> */}
+          {/* <FontAwesomeIcon icon={faEnvelope} className="w-6 h-6" /> */}
           {/* <Image src={Settings} alt="Settings" className="w-5" /> */}
-          {/* <FontAwesomeIcon icon={faGear} className="w-5 h-5" /> */}
+          {/* <FontAwesomeIcon icon={faGear} className="w-6 h-6" /> */}
         </div>
       </div>
     </>

@@ -349,7 +349,7 @@ export default function HistoricalPeakPower({
           <div className="flex justify-end items-center space-x-5">
             <div className="flex rounded-md bg-gray-200">
               <button
-                className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${
+                className={`flex items-center justify-center h-6 px-2 text-xs sm:text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${
                   peakPowerOpen
                     ? "bg-[#39B54A] text-white"
                     : "bg-white text-[#39B54A]"
@@ -359,7 +359,7 @@ export default function HistoricalPeakPower({
                 Peak Power
               </button>
               <button
-                className={`flex items-center justify-center h-6 p-2 text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${
+                className={`flex items-center justify-center h-6 px-2 text-xs sm:text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${
                   sunHoursOpen
                     ? "bg-[#39B54A] text-white"
                     : "bg-white text-[#39B54A]"
@@ -420,7 +420,7 @@ export default function HistoricalPeakPower({
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
-                <YAxis />
+                <YAxis tickFormatter={(value) => `${value} KW`} />
                 <Tooltip />
                 {/* <Legend /> */}
                 <Bar dataKey="sunHours" fill="#82ca9d" barSize={30} />

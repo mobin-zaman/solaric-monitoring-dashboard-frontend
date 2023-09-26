@@ -149,18 +149,24 @@ export default function Users() {
           {!isLoading && !isError && !searchResultEmpty && (
             <div className="space-y-1 select-none bg-white text-[#25476A] font-semibold rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
-                <div className="grid grid-cols-10 col-span-11">
-                  <div className="flex justify-center col-span-6 lg:col-span-4">
+                <div className="grid grid-cols-11 col-span-11">
+                  <div className="flex justify-center col-span-7 sm:col-span-6 md:col-span-4 lg:col-span-3">
                     Name
                   </div>
-                  <div className="flex items-center justify-center space-x-1.5 col-span-2 lg:col-span-1">
+                  <div className="flex items-center justify-center space-x-1.5 col-span-2 sm:col-span-3 md:col-span-2 lg:col-span-1">
                     <span>Status</span>
                     {/* <FontAwesomeIcon icon={faArrowDown} /> */}
                   </div>
-                  <div className="hidden lg:block lg:col-span-4">
-                    <div className="flex justify-center">Email</div>
+                  <div className="hidden md:block md:col-span-3 xl:col-span-2">
+                    <div className="flex justify-center">User</div>
                   </div>
-                  <div className="flex justify-center col-span-2 lg:col-span-1">
+                  <div className="hidden lg:block lg:col-span-3 xl:col-span-2">
+                    <div className="flex justify-center">Project</div>
+                  </div>
+                  <div className="hidden xl:block lg:col-span-2">
+                    <div className="flex justify-center">Company</div>
+                  </div>
+                  <div className="flex justify-center col-span-2 sm:col-span-2 lg:col-span-1">
                     Role
                   </div>
                   {/* <div className="hidden xl:block"><div className="flex justify-center">Address</div></div> */}
@@ -181,14 +187,14 @@ export default function Users() {
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
                 >
                   <div
-                    className="grid grid-cols-10 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    className="grid grid-cols-11 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
                     onClick={() => handleEditUser(user)}
                   >
-                    <div className="flex items-center font-medium space-x-2 px-5 col-span-6 lg:col-span-4">
+                    <div className="flex items-center font-medium space-x-2 px-5 col-span-7 sm:col-span-6 md:col-span-4 lg:col-span-3">
                       <Image
                         src={placeholderImage}
                         alt="logo"
-                        className="w-12 rounded-full"
+                        className="w-14 h-14 rounded-full"
                       />
                       <div>
                         <div className="select-text font-semibold">
@@ -200,7 +206,7 @@ export default function Users() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex justify-center col-span-2 lg:col-span-1">
+                    <div className="flex justify-center col-span-2 sm:col-span-3 md:col-span-2 lg:col-span-1">
                       {user.status === "ACTIVE" ? (
                         <div className="flex items-center space-x-2">
                           <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
@@ -217,12 +223,27 @@ export default function Users() {
                         </div>
                       )}
                     </div>
-                    <div className="hidden lg:block lg:col-span-4">
+                    <div className="hidden md:block md:col-span-3 xl:col-span-2 text-center">
+                      <div className="flex items-center justify-center select-all text-sm">
+                        {user?.userName || "N/A"}
+                      </div>
+                    </div>
+                    <div className="hidden lg:block lg:col-span-3 xl:col-span-2 text-center">
+                      <div className="flex items-center justify-center select-all text-sm">
+                        {user?.projectName || "N/A"}
+                      </div>
+                    </div>
+                    <div className="hidden xl:block lg:col-span-2 text-center">
+                      <div className="flex items-center justify-center select-all text-sm">
+                        {user?.companyName || "N/A"}
+                      </div>
+                    </div>
+                    {/* <div className="hidden lg:block lg:col-span-3">
                       <div className="flex items-center justify-center select-all text-sm">
                         {user?.email || "N/A"}
                       </div>
-                    </div>
-                    <div className="flex justify-center items-center col-span-2 lg:col-span-1">
+                    </div> */}
+                    <div className="flex justify-center items-center col-span-2 sm:col-span-2 lg:col-span-1">
                       {user.role === "ADMIN" ? (
                         <div className="px-2 py-1 bg-[#66C38B] text-white text-sm font-medium rounded-md">
                           Admin
@@ -276,10 +297,10 @@ export default function Users() {
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
                 >
                   <div
-                    className="grid grid-cols-10 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    className="grid grid-cols-11 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
                     onClick={() => handleEditUser(user)}
                   >
-                    <div className="flex items-center font-medium space-x-2 px-5 col-span-6 lg:col-span-4">
+                    <div className="flex items-center font-medium space-x-2 px-5 col-span-7 sm:col-span-6 md:col-span-4 lg:col-span-3">
                       <Image
                         src={placeholderImage}
                         alt="logo"
@@ -295,7 +316,7 @@ export default function Users() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex justify-center col-span-2 lg:col-span-1">
+                    <div className="flex justify-center col-span-2 sm:col-span-3 md:col-span-2 lg:col-span-1">
                       {user.status === "ACTIVE" ? (
                         <div className="flex items-center space-x-2">
                           <div className="w-2 h-2 bg-[#38EB1A] rounded-full"></div>
@@ -312,12 +333,27 @@ export default function Users() {
                         </div>
                       )}
                     </div>
-                    <div className="hidden lg:block lg:col-span-4">
+                    <div className="hidden md:block md:col-span-3 xl:col-span-2 text-center">
+                      <div className="flex items-center justify-center select-all text-sm">
+                        {user?.userName || "N/A"}
+                      </div>
+                    </div>
+                    <div className="hidden lg:block lg:col-span-3 xl:col-span-2 text-center">
+                      <div className="flex items-center justify-center select-all text-sm">
+                        {user?.projectName || "N/A"}
+                      </div>
+                    </div>
+                    <div className="hidden xl:block lg:col-span-2 text-center">
+                      <div className="flex items-center justify-center select-all text-sm">
+                        {user?.companyName || "N/A"}
+                      </div>
+                    </div>
+                    {/* <div className="hidden lg:block lg:col-span-3">
                       <div className="flex items-center justify-center select-all text-sm">
                         {user?.email || "N/A"}
                       </div>
-                    </div>
-                    <div className="flex justify-center items-center col-span-2 lg:col-span-1">
+                    </div> */}
+                    <div className="flex justify-center items-center col-span-2 sm:col-span-2 lg:col-span-1">
                       {user.role === "ADMIN" ? (
                         <div className="px-2 py-1 bg-[#66C38B] text-white text-sm font-medium rounded-md">
                           Admin

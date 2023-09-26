@@ -308,7 +308,9 @@ export default function DailyView({
     }
     return null;
   };
-
+console.log(uniqueYears1,storeYearMonth1,storeYearMonthDay1, "Ffffffffffffffffffffffff")
+console.log(selectedYear1,selectedMonth1,selectedDay1, "Ffffffffffffffffffffffff")
+console.log("..............................")
   return (
     <>
       <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5">
@@ -374,7 +376,7 @@ export default function DailyView({
         </div>
         <div className="w-full h-full pb-6 rounded-md relative text-xs font-semibold">
           {/* Add the div element to display Generation and Sun Hours */}
-          <div className="flex flex-col justify-between mb-2 absolute top-8 left-20 bg-white p-2 rounded-md space-y-0.5">
+          <div className="flex flex-col justify-between mb-2 absolute top-4 left-14 text-[0.55rem] bg-white p-2 rounded-md space-y-0.5">
             <div className="flex items-center space-x-2">
               <span className="">Generation:</span>
               <span className="">

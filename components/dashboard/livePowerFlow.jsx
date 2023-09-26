@@ -163,7 +163,7 @@ export default function LivePowerFlow({
                           2
                         )}
                       </span>
-                      <div className="w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-24 sm:w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -175,7 +175,7 @@ export default function LivePowerFlow({
                   ) : null}
                   {LivePowerFlowDataStore?.currentMeterPower?.import ? (
                     <div className="flex flex-col items-center justify-center ">
-                      <div className="w-36 2xl:w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                      <div className="w-24 sm:w-36 2xl:w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-red-600 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -202,7 +202,7 @@ export default function LivePowerFlow({
                 <div className="flex items-center justify-center col-span-2">
                   {LivePowerFlowDataStore?.currentInverterPower ? (
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-24 sm:w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 0 ? "reset-width" : ""
@@ -220,7 +220,7 @@ export default function LivePowerFlow({
                 </div>
                 <div className="flex items-center justify-center">
                   <Image
-                    src="/LivePowerFlow/33.png"
+                    src="/LivePowerFlow/61.png"
                     alt="impact1"
                     width={130}
                     height={100}
@@ -302,7 +302,7 @@ export default function LivePowerFlow({
                 <div className="col-span-7 flex items-center justify-center">
                   <div className="flex items-center justify-center">
                     <Image
-                      src="/LivePowerFlow/44.png"
+                      src="/LivePowerFlow/60.png"
                       alt="impact1"
                       width={130}
                       height={100}
@@ -334,7 +334,7 @@ export default function LivePowerFlow({
                           2
                         )}
                       </span>
-                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-24 sm:w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -346,7 +346,7 @@ export default function LivePowerFlow({
                   ) : null}
                   {LivePowerFlowDataStore?.currentMeterPower?.import ? (
                     <div className="flex flex-col items-center justify-center ">
-                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                      <div className="w-24 sm:w-36 2xl:w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-red-600 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -373,7 +373,7 @@ export default function LivePowerFlow({
                 <div className="flex items-center justify-center col-span-2">
                   {LivePowerFlowDataStore?.currentInverterPower ? (
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-24 sm:w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 0 ? "reset-width" : ""
@@ -391,7 +391,7 @@ export default function LivePowerFlow({
                 </div>
                 <div className="flex items-center justify-center">
                   <Image
-                    src="/LivePowerFlow/33.png"
+                    src="/LivePowerFlow/63.png"
                     alt="impact1"
                     width={130}
                     height={100}
@@ -473,7 +473,7 @@ export default function LivePowerFlow({
                 <div className="col-span-7 flex items-center justify-center">
                   <div className="flex items-center justify-center">
                     <Image
-                      src="/LivePowerFlow/44.png"
+                      src="/LivePowerFlow/62.png"
                       alt="impact1"
                       width={130}
                       height={100}
@@ -505,7 +505,7 @@ export default function LivePowerFlow({
                           2
                         )}
                       </span>
-                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-24 sm:w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -517,7 +517,7 @@ export default function LivePowerFlow({
                   ) : null}
                   {LivePowerFlowDataStore?.currentMeterPower?.import ? (
                     <div className="flex flex-col items-center justify-center ">
-                      <div className="w-36 2xl:w-44 2xl:w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
+                      <div className="w-24 sm:w-36 2xl:w-44 h-2.5 bg-gray-300 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-red-600 transition-all duration-300 ${
                             value0 === 100 ? "reset-width" : ""
@@ -544,7 +544,7 @@ export default function LivePowerFlow({
                 <div className="flex items-center justify-center col-span-2">
                   {LivePowerFlowDataStore?.currentInverterPower ? (
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
+                      <div className="w-24 sm:w-36 2xl:w-44 h-2.5 bg-green-600 rounded-md overflow-hidden relative">
                         <div
                           className={`h-full bg-gray-300 transition-all duration-300 ${
                             value0 === 0 ? "reset-width" : ""

@@ -62,12 +62,16 @@ export default function Header() {
     <>
       <div className="w-full h-16 bg-white flex justify-between space-x-6 items-center px-5 border-b-2 border-gray-300 text-[#25476A] font-semibold tracking-wide">
         <h1 className="text-[#39B54A] font-semibold text-md flex space-x-2 items-center justify-center">
+          <div className="flex items-center justify-center space-x-2 text-lg text-green-700">
           <FontAwesomeIcon icon={faBuilding} />
-          <span className="text-sm ">{data?.companyName.toUpperCase()}</span>
+          <span>{data?.companyName.toUpperCase()}</span>
+          </div>
           {/* TODO*/}
           {/* <input type="file" accept="image/*" onChange={handleImageUpload} /> */}
-        </h1>
-        {projectImageUrl && <Image src={projectImageUrl} alt="logo" width={200} height={200} className="w-24 h-14" />}
+        </h1>{data?.role === "USER" ? 
+        projectImageUrl && <Image src={projectImageUrl} alt="logo" width={200} height={200} className="w-24 h-14" />
+        : <Image src="/logo.png" alt="logo" width={200} height={200} className="w-24 h-8" />
+        }
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-3">
             <div className="flex flex-col items-end">

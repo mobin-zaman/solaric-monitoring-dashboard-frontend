@@ -302,7 +302,6 @@ export default function Project({ projectId }) {
               </li>
             </ul>
           </div>
-          <div className="space-y-1.5">
             <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
               <div className="flex items-center space-x-3 select-none">
                 <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
@@ -348,7 +347,8 @@ export default function Project({ projectId }) {
                 />
               )}
             </div>
-            <div className="bg-white rounded-md shadow-md flex">
+        </div>
+        <div className="bg-white rounded-md shadow-md flex">
               <Image
                 src={data?.meta?.stationImage || "/Placeholder.png"}
                 width={2000}
@@ -357,9 +357,9 @@ export default function Project({ projectId }) {
                 className="w-64 h-68 rounded-l-md object-cover"
               />
               <div className="flex space-x-3 p-6 w-full">
-                <div className="grid grid-cols-3 gap-4 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-1 w-full">
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Owner Name:
                     </p>
                     <p className="text-gray-700">
@@ -367,7 +367,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Contact:
                     </p>
                     <p className="text-gray-700">
@@ -375,7 +375,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Address:
                     </p>
                     <p className="text-gray-700">
@@ -383,17 +383,17 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Funding Type:
                     </p>
                     <div className="flex items-center space-x-2">
-                      <span className="text-gray-700 font-medium select-none">
+                      <span className="text-gray-700">
                         {data?.fundingType}
                       </span>
                     </div>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Type:
                     </p>
                     <p className="text-gray-700">
@@ -410,7 +410,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Installed Capacity (Wp):
                     </p>
                     <p className="text-gray-700">
@@ -418,7 +418,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Tarrif:
                     </p>
                     <p className="text-gray-700">
@@ -426,7 +426,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Dollar Rate:
                     </p>
                     <p className="text-gray-700">
@@ -434,7 +434,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Export Meter Serial Number:
                     </p>
                     <p className="text-gray-700">
@@ -444,7 +444,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Import Meter Serial Number:
                     </p>
                     <p className="text-gray-700">
@@ -454,13 +454,13 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Total Users:
                     </p>
                     <p className="text-gray-700"> {data?.users?.length || 0}</p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Total Companies:
                     </p>
                     <p className="text-gray-700">
@@ -468,7 +468,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Total Inverter:
                     </p>
                     <p className="text-gray-700">
@@ -476,7 +476,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Created Date & Time:
                     </p>
                     <p className="text-gray-700">
@@ -484,7 +484,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Updated Date & Time:
                     </p>
                     <p className="text-gray-700">
@@ -492,7 +492,7 @@ export default function Project({ projectId }) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-700 text-sm font-medium select-none">
+                    <p className="text-gray-700 text-sm font-semibold select-none">
                       Description:
                     </p>
                     <textarea
@@ -504,8 +504,6 @@ export default function Project({ projectId }) {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
         <div className="grid grid-cols-1 select-none">
           <div className="flex justify-between items-center bg-[#2e5984] rounded-t-md p-3">
             <div className="flex items-center space-x-3">
@@ -791,67 +789,63 @@ export default function Project({ projectId }) {
           {!fakeLoader ? (
             <div className="p-3 space-y-1.5 bg-white rounded-b-md">
               <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
-                <div className="grid grid-cols-12 items-center h-9">
-                  <div className="flex justify-center col-span-4 xl:col-span-3">
-                    Device Serial Number
-                  </div>
-                  <div className="flex justify-center col-span-2">
-                    Device Id
-                  </div>
-                  <div className="flex justify-center col-span-2">Capacity</div>
-                  <div className="hidden xl:block col-span-1">
-                    <div className="flex justify-center">Code</div>
-                  </div>
-                  <div className="flex justify-center col-span-2">
-                    Project Id
-                  </div>
-                  <div className="flex justify-center col-span-2">
-                    Building Id
-                  </div>
+              <div className="grid grid-cols-12 items-center h-9">
+                <div className="flex justify-center col-span-5 lg:col-span-4 xl:col-span-3">
+                  Serial Number
                 </div>
+                <div className="flex justify-center col-span-4 md:col-span-3 lg:col-span-2">Device Id</div>
+                <div className="justify-center col-span-2 hidden lg:block text-center">Capacity</div>
+                <div className="hidden xl:block col-span-1">
+                  <div className="flex justify-center">Code</div>
+                </div>
+                <div className="flex justify-center col-span-3 md:col-span-2">Project</div>
+                <div className="justify-center col-span-2 hidden md:block text-center">
+                  Building
+                </div>
+              </div>
               </div>
               <div className="space-y-1.5 h-64 overflow-y-auto">
                 {data?.inverters?.map((inverter) => (
-                  <div
-                    key={Math.random()}
-                    className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A] p-4 hover:bg-gray-300 cursor-pointer hover:rounded-l-md"
-                    onClick={() => handleInverterClick(inverter?.id)}
-                  >
-                    <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-4 xl:col-span-3">
-                      <div className="select-none font-semibold">
-                        {inverter.deviceSn}
-                      </div>
-                      <div className="select-none text-xs flex items-center space-x-1">
-                        <span>Id:</span>
-                        <span>{inverter.id}</span>
-                      </div>
-                    </div>
-                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                      <span>{inverter?.deviceId}</span>
-                    </div>
-                    <div className="flex justify-center select-all text-sm col-span-2">
-                      {inverter?.capacity ? (
-                        <span>{inverter?.capacity} kWp</span>
-                      ) : (
-                        "N/A"
-                      )}
-                    </div>
-                    <div className="select-all text-sm hidden xl:block col-span-1">
-                      <div className="flex justify-center">
-                        {inverter?.code ? inverter.code : "N/A"}
-                      </div>
-                    </div>
-                    <div className="flex col-span-2">
-                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                        {inverter?.projectId || "N/A"}
-                      </span>
-                    </div>
-                    <div className="flex col-span-2">
-                      <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                        {inverter?.buildingId || "N/A"}
-                      </span>
-                    </div>
+                <div
+                key={Math.random()}
+                className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A] p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                onClick={() => handleInverterClick(inverter?.id)}
+                              >
+                <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-5 lg:col-span-4 xl:col-span-3">
+                  <div className="select-none font-semibold">
+                    {inverter.deviceSn}
                   </div>
+                  <div className="select-none text-xs flex items-center space-x-1">
+                    <span>Id:</span>
+                    <span>{inverter.id}</span>
+                  </div>
+                </div>
+                <div className="flex justify-center select-none space-x-1 text-sm col-span-4 md:col-span-3 lg:col-span-2">
+                  <span>{inverter?.deviceId}</span>
+                </div>
+                <div className="justify-center select-all text-sm col-span-2 hidden lg:block text-center">
+                  {inverter?.capacity ? (
+                    <span>{inverter?.capacity} kWp</span>
+                  ) : (
+                    "N/A"
+                  )}
+                </div>
+                <div className="select-all text-sm hidden xl:block col-span-1">
+                  <div className="flex justify-center">
+                    {inverter?.code ? inverter.code : "N/A"}
+                  </div>
+                </div>
+                <div className="flex col-span-3 md:col-span-2">
+                  <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                    {inverter?.projectId || "N/A"}
+                  </span>
+                </div>
+                <div className="col-span-2 hidden md:block text-center">
+                  <span className="w-full truncate text-center select-all text-gray-700 text-sm">
+                    {inverter?.buildingId || "N/A"}
+                  </span>
+                </div>
+              </div>
                 ))}
               </div>
             </div>

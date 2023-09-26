@@ -111,19 +111,19 @@ export default function Meters() {
               <div className="grid grid-cols-12 items-center h-9 text-sm md:text-base">
                 <div className="grid grid-cols-12 col-span-11 items-center h-9">
                   <div className="flex justify-center col-span-2">Id</div>
-                  <div className="flex justify-center col-span-2">
-                    Import Code
-                  </div>
-                  <div className="flex justify-center col-span-2">
-                    Export Code
-                  </div>
-                  <div className="flex justify-center col-span-2">
+                  <div className="flex justify-center col-span-5 md:col-span-3 xl:col-span-2">
                     Import Serial Number
                   </div>
-                  <div className="flex justify-center col-span-2">
+                  <div className="flex justify-center col-span-5 md:col-span-3 xl:col-span-2">
                     Export Serial Number
                   </div>
-                  <div className="flex justify-center col-span-2">
+                  <div className="col-span-2 hidden md:block text-center">
+                    Import Code
+                  </div>
+                  <div className="col-span-2 hidden md:block text-center">
+                    Export Code
+                  </div>
+                  <div className="col-span-2 hidden xl:block text-center">
                     Building Id
                   </div>
                 </div>
@@ -149,23 +149,23 @@ export default function Meters() {
                     <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-2">
                       <div className="select-none">{meter.id}</div>
                     </div>
-                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                      <span>{meter?.importMeterCode || "N/A"}</span>
-                    </div>
-                    <div className="flex justify-center select-all text-sm col-span-2">
-                      {meter?.exportMeterCode || "N/A"}
-                    </div>
-                    <div className="select-all text-sm hidden xl:block col-span-2">
+                    <div className="select-all text-sm col-span-5 md:col-span-3 xl:col-span-2">
                       <div className="flex justify-center">
                         {meter?.importMeterSerialNumber || "N/A"}
                       </div>
                     </div>
-                    <div className="flex col-span-2">
+                    <div className="flex col-span-5 md:col-span-3 xl:col-span-2">
                       <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                         {meter?.exportMeterSerialNumber || "N/A"}
                       </span>
                     </div>
-                    <div className="flex col-span-2">
+                    <div className=" justify-center select-none space-x-1 text-sm col-span-2 hidden md:block text-center">
+                      <span>{meter?.importMeterCode || "N/A"}</span>
+                    </div>
+                    <div className=" justify-center select-all text-sm col-span-2 hidden md:block text-center">
+                      {meter?.exportMeterCode || "N/A"}
+                    </div>
+                    <div className="col-span-2 hidden xl:block text-center">
                       <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                         {meter?.buildingId || "N/A"}
                       </span>
@@ -208,23 +208,23 @@ export default function Meters() {
                     <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-2">
                       <div className="select-none">{meter.id}</div>
                     </div>
-                    <div className="flex justify-center select-none space-x-1 text-sm col-span-2">
-                      <span>{meter?.importMeterCode || "N/A"}</span>
-                    </div>
-                    <div className="flex justify-center select-all text-sm col-span-2">
-                      {meter?.exportMeterCode || "N/A"}
-                    </div>
-                    <div className="select-all text-sm hidden xl:block col-span-2">
+                    <div className="select-all text-sm col-span-5 md:col-span-3 xl:col-span-2">
                       <div className="flex justify-center">
                         {meter?.importMeterSerialNumber || "N/A"}
                       </div>
                     </div>
-                    <div className="flex col-span-2">
+                    <div className="flex col-span-5 md:col-span-3 xl:col-span-2">
                       <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                         {meter?.exportMeterSerialNumber || "N/A"}
                       </span>
                     </div>
-                    <div className="flex col-span-2">
+                    <div className=" justify-center select-none space-x-1 text-sm col-span-2 hidden md:block text-center">
+                      <span>{meter?.importMeterCode || "N/A"}</span>
+                    </div>
+                    <div className=" justify-center select-all text-sm col-span-2 hidden md:block text-center">
+                      {meter?.exportMeterCode || "N/A"}
+                    </div>
+                    <div className="col-span-2 hidden xl:block text-center">
                       <span className="w-full truncate text-center select-all text-gray-700 text-sm">
                         {meter?.buildingId || "N/A"}
                       </span>

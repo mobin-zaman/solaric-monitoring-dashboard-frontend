@@ -5,7 +5,7 @@ import Historical1 from "./historical1";
 import Impact from "./impact";
 import { useState, useRef, useEffect, use } from "react";
 import { useQuery, useMutation } from "react-query";
-import ReactLoading from "react-loading";
+import Image from "next/image";
 
 import {
   getProjects,
@@ -53,19 +53,17 @@ export default function Index() {
     if (allProject) {
       setSelectedOption(allProject[0]?.name);
       setSelectedOptionId(allProject[0]?.id);
-      if (allProject[0]?.imageUrl === null || allProject[0]?.imageUrl === "" || allProject[0]?.imageUrl === undefined) {
+      if (
+        allProject[0]?.imageUrl === null ||
+        allProject[0]?.imageUrl === "" ||
+        allProject[0]?.imageUrl === undefined
+      ) {
         localStorage.setItem("projectImageUrl", "");
       } else {
-        localStorage.setItem(
-          "projectImageUrl",
-          allProject[0]?.imageUrl
-        );
-        localStorage.setItem(
-          "projectDefaultImageUrl",
-          allProject[0]?.imageUrl
-        );
+        localStorage.setItem("projectImageUrl", allProject[0]?.imageUrl);
+        localStorage.setItem("projectDefaultImageUrl", allProject[0]?.imageUrl);
       }
-  
+
       setFirstProjectForDefaultViewId(allProject[0]?.id);
     }
   }, [allProject]);
@@ -88,12 +86,7 @@ export default function Index() {
   const selectOption = (id, name, imageUrl) => {
     if (imageUrl === null || imageUrl === "" || imageUrl === undefined) {
       localStorage.setItem("projectImageUrl", "");
-    } else
-      localStorage.setItem(
-        "projectImageUrl",
-        imageUrl
-      );
-
+    } else localStorage.setItem("projectImageUrl", imageUrl);
 
     setSelectedOptionId(id);
     setSelectedOption(name);
@@ -1142,7 +1135,13 @@ export default function Index() {
                         <li
                           key={option.id}
                           className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() => selectOption(option?.id, option?.name, option?.imageUrl)}
+                          onClick={() =>
+                            selectOption(
+                              option?.id,
+                              option?.name,
+                              option?.imageUrl
+                            )
+                          }
                         >
                           {option?.name}
                         </li>
@@ -1153,7 +1152,13 @@ export default function Index() {
                         <li
                           key={option.id}
                           className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate"
-                          onClick={() => selectOption(option?.id, option?.name, option?.imageUrl)}
+                          onClick={() =>
+                            selectOption(
+                              option?.id,
+                              option?.name,
+                              option?.imageUrl
+                            )
+                          }
                         >
                           {option?.name}
                         </li>
@@ -1356,45 +1361,11 @@ export default function Index() {
                   )}
                 </div>
               )}
-              {/* <select
-              className="w-36 p-1 border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none"
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option value="Project" selected disabled>
-                Project
-              </option>
-              <option value="ADMIN">Admin</option>
-              <option value="ENGINEER">Engineer</option>
-              <option value="USER">User</option>
-            </select>
-            <select
-              className="w-36 p-1 border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none"
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option value="Company" selected disabled>
-                Company
-              </option>
-              <option value="ADMIN">Admin</option>
-              <option value="ENGINEER">Engineer</option>
-              <option value="USER">User</option>
-            </select>
-            <select
-              className="w-36 p-1 border border-[#168636] rounded-md ring-0 focus:ring-0 focus:outline-none"
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option value="Building" selected disabled>
-                Building
-              </option>
-              <option value="ADMIN">Admin</option>
-              <option value="ENGINEER">Engineer</option>
-              <option value="USER">User</option>
-            </select> */}
             </div>
           </div>
         </div>
-        {/* {loading ? <> */}
-        <div className="grid grid-cols-12 gap-2">
-          <div className="col-span-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
+          <div className="md:col-span-7 lg:col-span-4">
             <Historical1
               historicalDataForProject={mainHistoricalTableData}
               historicalDataForProjectSunHrsBarChartData={
@@ -1407,7 +1378,7 @@ export default function Index() {
               selectedOptionIdInverter={selectedOptionIdInverter}
             />
           </div>
-          <div className="col-span-5">
+          <div className="col-span-5 hidden lg:block">
             <DailyView
               dailyViewData={mainDailyViewData}
               collectTimeForInverterHourlyData={
@@ -1420,21 +1391,38 @@ export default function Index() {
               selectedOptionIdInverter={selectedOptionIdInverter}
             />
           </div>
-          <div className="col-span-3">
-            <Impact selectedOptionId={selectedOptionId}
+          <div className="md:col-span-5 lg:col-span-3">
+            <Impact
+              selectedOptionId={selectedOptionId}
               selectedOptionIdCompany={selectedOptionIdCompany}
               selectedOptionIdBuilding={selectedOptionIdBuilding}
-              selectedOptionIdInverter={selectedOptionIdInverter} />
+              selectedOptionIdInverter={selectedOptionIdInverter}
+            />
           </div>
         </div>
-        <div className="grid grid-cols-12 gap-2">
-          <div className="col-span-6">
-            <LivePowerFlow selectedOptionId={selectedOptionId}
+        <div className="grid-cols-1 block lg:hidden">
+            <DailyView
+              dailyViewData={mainDailyViewData}
+              collectTimeForInverterHourlyData={
+                collectTimeForInverterHourlyData
+              }
+              firstProjectForDefaultViewId={firstProjectForDefaultViewId}
+              selectedOptionId={selectedOptionId}
               selectedOptionIdCompany={selectedOptionIdCompany}
               selectedOptionIdBuilding={selectedOptionIdBuilding}
-              selectedOptionIdInverter={selectedOptionIdInverter} />
+              selectedOptionIdInverter={selectedOptionIdInverter}
+            />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+          <div className="col-span-1">
+            <LivePowerFlow
+              selectedOptionId={selectedOptionId}
+              selectedOptionIdCompany={selectedOptionIdCompany}
+              selectedOptionIdBuilding={selectedOptionIdBuilding}
+              selectedOptionIdInverter={selectedOptionIdInverter}
+            />
           </div>
-          <div className="col-span-6">
+          <div className="col-span-1">
             <Historical
               historicalDataForProject={mainHistoricalTableData}
               historicalDataForProjectSunHrsBarChartData={
@@ -1448,7 +1436,10 @@ export default function Index() {
             />
           </div>
         </div>
-        {/* </> : <div className="flex items-center justify-center text-black pt-10"><ReactLoading type="spokes" color="#25476A" height={50} width={50} /></div>} */}
+        <div className="flex items-end justify-end space-x-1 pb-3">
+        <span className="font-bold text-green-700 text-sm italic">Powered by</span>
+        <Image src="/logo.png" alt="logo" width={80} height={100} />
+        </div>
       </div>
     </>
   );
