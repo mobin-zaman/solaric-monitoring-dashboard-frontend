@@ -28,7 +28,7 @@ export default function SideBar() {
 
   return (
     <>
-      <div className="w-[6rem] h-full bg-white border-r-2 border-gray-300 space-y-10 text-[#25476A] font-semibold pt-16">
+      <div className="w-[6rem] h-full bg-white border-r-2 border-gray-300 space-y-10 text-gray-700 font-semibold pt-32">
         {/* <div className="flex items-center justify-center py-2">
           <Image src={logo} alt="logo" className="w-16" />
         </div> */}
@@ -37,7 +37,7 @@ export default function SideBar() {
           <Link href="/dashboard">
             <FontAwesomeIcon
               icon={faHouse}
-              className={`w-6 h-6 ${link === "/dashboard" ? "text-[#38EB1A]" : ""}`}
+              className={`w-[1.3rem] h-[1.3rem] ${link === "/dashboard" ? "text-green-700" : ""}`}
               title="Dashboard"
             />
           </Link>
@@ -46,8 +46,8 @@ export default function SideBar() {
               {/* <Image src={Users} alt="Users" className="w-5" /> */}
               <FontAwesomeIcon
                 icon={faUserGroup}
-                className={`w-6 h-6 ${
-                  link === "/user" ? "text-[#38EB1A]" : ""
+                className={`w-[1.3rem] h-[1.3rem] ${
+                  link === "/user" ? "text-green-700" : ""
                 }`}
                 title="User"
               />
@@ -58,11 +58,11 @@ export default function SideBar() {
               {/* <Image src={Projects} alt="Projects" className="w-6" /> */}
               <FontAwesomeIcon
                 icon={faCubesStacked}
-                className={`w-6 h-6 ${
+                className={`w-[1.3rem] h-[1.3rem] ${
                   link === "/project"
-                    ? "text-[#38EB1A]"
+                    ? "text-green-700"
                     : link === "/project/[projectId]"
-                    ? "text-[#38EB1A]"
+                    ? "text-green-700"
                     : ""
                 }`}
                 title="Project"
@@ -73,11 +73,11 @@ export default function SideBar() {
             <Link href="/inverter">
               <FontAwesomeIcon
                 icon={faMicrochip}
-                className={`w-6 h-6 ${
+                className={`w-[1.3rem] h-[1.3rem] ${
                   link === "/inverter"
-                    ? "text-[#38EB1A]"
+                    ? "text-green-700"
                     : link === "/inverter/[inverterId]"
-                    ? "text-[#38EB1A]"
+                    ? "text-green-700"
                     : ""
                 }`}
                 title="Inverter"
@@ -88,11 +88,11 @@ export default function SideBar() {
             <Link href="/meter">
               <FontAwesomeIcon
                 icon={faCalculator}
-                className={`w-6 h-6 ${
+                className={`w-[1.3rem] h-[1.3rem] ${
                   link === "/meter"
-                    ? "text-[#38EB1A]"
+                    ? "text-green-700"
                     : link === "/meter/[meterId]"
-                    ? "text-[#38EB1A]"
+                    ? "text-green-700"
                     : ""
                 }`}
                 title="Meter"
@@ -103,9 +103,9 @@ export default function SideBar() {
             <Link href="/export">
               <FontAwesomeIcon
                 icon={faFileArrowUp}
-                className={`w-6 h-6 ${
+                className={`w-[1.3rem] h-[1.3rem] ${
                   link === "/export"
-                    ? "text-[#38EB1A]"
+                    ? "text-green-700"
                     : ""
                 }`}
                 title="Meter"
@@ -113,9 +113,9 @@ export default function SideBar() {
             </Link>
           )}
           {/* <Image src={Message} alt="Message" className="w-5" /> */}
-          {/* <FontAwesomeIcon icon={faEnvelope} className="w-6 h-6" /> */}
+          {/* <FontAwesomeIcon icon={faEnvelope} className="w-[1.3rem] h-[1.3rem]" /> */}
           {/* <Image src={Settings} alt="Settings" className="w-5" /> */}
-          {/* <FontAwesomeIcon icon={faGear} className="w-6 h-6" /> */}
+          {/* <FontAwesomeIcon icon={faGear} className="w-[1.3rem] h-[1.3rem]" /> */}
         </div>
       </div>
     </>

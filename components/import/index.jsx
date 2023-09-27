@@ -25,7 +25,7 @@ export default function Index() {
     <>
       <div className="space-y-1.5 relative select-none">
         <div className="space-y-1.5 -top-1.5 z-50 bg-gray-200 pt-0.5">
-          <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
+          <div className="flex items-center justify-between bg-gray-700 rounded-md p-3.5">
             <div className="flex items-center space-x-3 select-none">
               <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
                 Import
@@ -33,11 +33,11 @@ export default function Index() {
             </div>
           </div>
           <div
-            className="flex items-center bg-white rounded-md text-[#25476A] p-3.5"
+            className="flex items-center bg-white rounded-md text-[#25476A] p-3.5 text-sm"
           >
             <input type="file" onChange={(e) => setFile(e.target.files[0])} />
             <button
-              className="bg-teal-500 text-white rounded-md px-3 py-1.5 space-x-2 flex items-center"
+              className="bg-gray-500 text-white rounded-md px-3 py-1.5 space-x-2 flex items-center"
               onClick={handleFile}
             >
               <FontAwesomeIcon icon={faUpload} />

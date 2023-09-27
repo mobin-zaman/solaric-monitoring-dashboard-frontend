@@ -37,34 +37,36 @@ export default function HistoricalPeakPower({
       setCollectionKey({
         project: selectedOptionId,
       });
-    } else if (
-      selectedOptionId &&
-      selectedOptionIdCompany &&
-      !selectedOptionIdBuilding &&
-      !selectedOptionIdInverter
-    ) {
-      setCollectionKey({
-        company: selectedOptionIdCompany,
-      });
-    } else if (
-      selectedOptionId &&
-      selectedOptionIdCompany &&
-      selectedOptionIdBuilding &&
-      !selectedOptionIdInverter
-    ) {
-      setCollectionKey({
-        building: selectedOptionIdBuilding,
-      });
-    } else if (
-      selectedOptionId &&
-      selectedOptionIdCompany &&
-      selectedOptionIdBuilding &&
-      selectedOptionIdInverter
-    ) {
-      setCollectionKey({
-        inverter: selectedOptionIdInverter,
-      });
-    }
+    } 
+    
+    // else if (
+    //   selectedOptionId &&
+    //   selectedOptionIdCompany &&
+    //   !selectedOptionIdBuilding &&
+    //   !selectedOptionIdInverter
+    // ) {
+    //   setCollectionKey({
+    //     company: selectedOptionIdCompany,
+    //   });
+    // } else if (
+    //   selectedOptionId &&
+    //   selectedOptionIdCompany &&
+    //   selectedOptionIdBuilding &&
+    //   !selectedOptionIdInverter
+    // ) {
+    //   setCollectionKey({
+    //     building: selectedOptionIdBuilding,
+    //   });
+    // } else if (
+    //   selectedOptionId &&
+    //   selectedOptionIdCompany &&
+    //   selectedOptionIdBuilding &&
+    //   selectedOptionIdInverter
+    // ) {
+    //   setCollectionKey({
+    //     inverter: selectedOptionIdInverter,
+    //   });
+    // }
   }, [
     selectedOptionId,
     selectedOptionIdCompany,
@@ -342,6 +344,25 @@ export default function HistoricalPeakPower({
     }, 1000);
   }, []);
 
+  const [loading1, setLoading1] = useState(true);
+
+  useEffect(() => {
+    // Start a timer that calls setLoading1(false) every 2 seconds
+    const timer = setInterval(() => {
+      if (!historicalPeakPowerDataIsLoading) {
+        setLoading1(false);
+      } else {
+        setLoading1(true);
+      }
+    }, 2000);
+
+    // Cleanup the timer when the component unmounts
+    return () => {
+      clearInterval(timer);
+    };
+  }, [historicalPeakPowerDataIsLoading]);
+
+
   return (
     <>
       <div className="flex flex-col col-span-5 h-full">
@@ -420,7 +441,7 @@ export default function HistoricalPeakPower({
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
-                <YAxis tickFormatter={(value) => `${value} KW`} />
+                <YAxis domain={[0, 6]} tickFormatter={(value) => `${value} KW`} />
                 <Tooltip />
                 {/* <Legend /> */}
                 <Bar dataKey="sunHours" fill="#82ca9d" barSize={30} />

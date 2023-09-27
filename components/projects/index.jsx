@@ -16,6 +16,8 @@ import {
   faMagnifyingGlass,
   faHouse,
   faCubesStacked,
+  faArrowUpWideShort,
+  faArrowDownShortWide,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
@@ -110,6 +112,55 @@ export default function Users() {
     }
   }, [projectDeleted]);
 
+  const [sortKey, setSortKey] = useState(null);
+  const [ascending, setAscending] = useState(true);
+
+  const handleSort = (key) => {
+    if (sortKey === key) {
+      // Toggle ascending/descending order if the same column is clicked
+      setAscending(!ascending);
+    } else {
+      // Set the new sorting column and default to ascending order
+      setSortKey(key);
+      setAscending(true);
+    }
+  };
+
+  // Sort the data based on the current sorting criteria
+  const sortedData = data?.slice().sort((a, b) => {
+    if (sortKey === "name") {
+      // For strings (Device Id, code, serial number)
+      const valueA = a[sortKey] || "";
+      const valueB = b[sortKey] || "";
+      return ascending
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    } else if (sortKey === "solarmanPlantId") {
+      // For numeric columns (Device Id, capacity)
+      const valueA = Number(a[sortKey]);
+      const valueB = Number(b[sortKey]);
+      return ascending ? valueA - valueB : valueB - valueA;
+    } else {
+      return 0;
+    }
+  });
+
+  const sortedSearchData = searchResult?.slice().sort((a, b) => {
+    if (sortKey === "name") {
+      const valueA = a[sortKey] || "";
+      const valueB = b[sortKey] || "";
+      return ascending
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    } else if (sortKey === "solarmanPlantId") {
+      const valueA = Number(a[sortKey]);
+      const valueB = Number(b[sortKey]);
+      return ascending ? valueA - valueB : valueB - valueA;
+    } else {
+      return 0;
+    }
+  });
+
   return (
     <>
       <div className="space-y-1.5 relative select-none">
@@ -139,7 +190,7 @@ export default function Users() {
             </ul>
           </div>
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
+            <div className="flex items-center justify-between bg-gray-700 rounded-md p-3.5">
               <div className="flex items-center space-x-3 select-none">
                 <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
                   Projects
@@ -179,13 +230,31 @@ export default function Users() {
               )}
             </div>
             {!isLoading && !isError && !searchResultEmpty && (
-              <div className="text-white bg-[#2e5984] font-medium rounded-md p-1.5">
+              <div className="text-white bg-gray-600 font-medium rounded-md p-1.5">
                 <div className="grid grid-cols-12 items-center h-9 text-sm md:text-base">
-                  <div className="flex justify-center col-span-7 sm:col-span-5 lg:col-span-4 xl:col-span-3">
-                    Name
+                  <div
+                    className="flex justify-center items-center col-span-7 sm:col-span-5 lg:col-span-4 xl:col-span-3 space-x-1"
+                    onClick={() => handleSort("name")}
+                  >
+                    <span>Name</span>
+                    {sortKey === "name" &&
+                      (ascending ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
                   </div>
-                  <div className="flex justify-center col-span-4 sm:col-span-3 lg:col-span-2">
-                    Solarman Plant Id
+                  <div
+                    className="flex justify-center items-center col-span-4 sm:col-span-3 lg:col-span-2 space-x-1"
+                    onClick={() => handleSort("solarmanPlantId")}
+                  >
+                    <span>Solarman Plant Id </span>
+                    {sortKey === "solarmanPlantId" &&
+                      (ascending ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
                   </div>
                   <div className="hidden lg:block col-span-2 xl:col-span-1">
                     <div className="flex justify-center">Capacity</div>
@@ -209,7 +278,7 @@ export default function Users() {
             {!searchResultEmpty &&
               searchResult?.length > 0 &&
               searchOn &&
-              searchResult?.map((project) => (
+              sortedSearchData?.map((project) => (
                 <div
                   key={Math.random()}
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
@@ -254,9 +323,7 @@ export default function Users() {
                     </div>
                     <div className="hidden xl:block xl:col-span-2">
                       <div className="flex justify-center select-all text-sm">
-                        {project?.fundingType
-                          ? project.fundingType
-                          : "N/A"}
+                        {project?.fundingType ? project.fundingType : "N/A"}
                       </div>
                     </div>
                     <div className="hidden lg:block col-span-3">
@@ -292,7 +359,7 @@ export default function Users() {
 
             {!searchResultEmpty &&
               !searchOn &&
-              data?.map((project) => (
+              sortedData?.map((project) => (
                 <div
                   key={Math.random()}
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
@@ -337,9 +404,7 @@ export default function Users() {
                     </div>
                     <div className="hidden xl:block xl:col-span-2">
                       <div className="flex justify-center select-all text-sm">
-                        {project?.fundingType
-                          ? project.fundingType
-                          : "N/A"}
+                        {project?.fundingType ? project.fundingType : "N/A"}
                       </div>
                     </div>
                     <div className="hidden lg:block col-span-3">

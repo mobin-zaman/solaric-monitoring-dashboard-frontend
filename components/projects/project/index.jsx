@@ -14,6 +14,8 @@ import {
   faMicrochip,
   faPenToSquare,
   faRotate,
+  faArrowUpWideShort,
+  faArrowDownShortWide,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
@@ -269,6 +271,120 @@ export default function Project({ projectId }) {
     }
   }, [mutation, fakeLoader]);
 
+  const [sortKey, setSortKey] = useState(null);
+  const [ascending, setAscending] = useState(true);
+
+  const handleSort = (key) => {
+    if (sortKey === key) {
+      // Toggle ascending/descending order if the same column is clicked
+      setAscending(!ascending);
+    } else {
+      // Set the new sorting column and default to ascending order
+      setSortKey(key);
+      setAscending(true);
+    }
+  };
+
+  // Sort the data based on the current sorting criteria
+  const sortedData = data?.inverters?.slice().sort((a, b) => {
+    if (sortKey === "deviceSn" || sortKey === "code") {
+      // For strings (Device Id, code, serial number)
+      const valueA = a[sortKey] || "";
+      const valueB = b[sortKey] || "";
+      return ascending
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    } else if (sortKey === "deviceId" || sortKey === "capacity") {
+      // For numeric columns (Device Id, capacity)
+      const valueA = Number(a[sortKey]);
+      const valueB = Number(b[sortKey]);
+      return ascending ? valueA - valueB : valueB - valueA;
+    } else {
+      return 0;
+    }
+  });
+
+  //company sort
+  const [sortKeyCompany, setSortKeyCompany] = useState(null);
+  const [ascendingCompany, setAscendingCompany] = useState(true);
+
+  const handleSortCompany = (key) => {
+    if (sortKeyCompany === key) {
+      // Toggle ascending/descending order if the same column is clicked
+      setAscendingCompany(!ascendingCompany);
+    } else {
+      // Set the new sorting column and default to ascending order
+      setSortKeyCompany(key);
+      setAscendingCompany(true);
+    }
+  };
+
+  // Sort the data based on the current sorting criteria
+  const sortedDataCompany = data?.companies?.slice().sort((a, b) => {
+    if (sortKeyCompany === 'name' || sortKeyCompany === 'code') {
+      // For strings (Device Id, code, serial number)
+      const valueA = a[sortKeyCompany] || '';
+      const valueB = b[sortKeyCompany] || '';
+      return ascendingCompany ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+    } else if (sortKeyCompany === 'id') {
+      // For numeric columns (Device Id, capacity)
+      const valueA = Number(a[sortKeyCompany]);
+      const valueB = Number(b[sortKeyCompany]);
+      return ascendingCompany ? valueA - valueB : valueB - valueA;
+    } else {
+      return 0;
+    }
+  });
+
+  const sortedSearchDataCompany = searchResultCompany?.slice().sort((a, b) => {
+    if (sortKeyCompany === 'name' || sortKeyCompany === 'code') {
+      // For strings (Device Id, code, serial number)
+      const valueA = a[sortKeyCompany] || '';
+      const valueB = b[sortKeyCompany] || '';
+      return ascendingCompany ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+    } else if (sortKeyCompany === 'id') {
+      // For numeric columns (Device Id, capacity)
+      const valueA = Number(a[sortKeyCompany]);
+      const valueB = Number(b[sortKeyCompany]);
+      return ascendingCompany ? valueA - valueB : valueB - valueA;
+    } else {
+      return 0;
+    }
+  });
+
+  // user sort
+  const [sortKeyUser, setSortKeyUser] = useState(null);
+  const [ascendingUser, setAscendingUser] = useState(true);
+
+  const handleSortUser = (key) => {
+    if (sortKeyUser === key) {
+      // Toggle ascending/descending order if the same column is clicked
+      setAscendingUser(!ascendingUser);
+    } else {
+      // Set the new sorting column and default to ascending order
+      setSortKeyUser(key);
+      setAscendingUser(true);
+    }
+  };
+
+  // Sort the data based on the current sorting criteria
+  const sortedDataUser = data?.users?.slice().sort((a, b) => {
+    if (sortKeyUser === 'name') {
+      // For strings (Name)
+      const valueA = a?.user?.name || '';
+      const valueB = b?.user?.name || '';
+      return ascendingUser ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+    } else if (sortKeyUser === 'id') {
+      // For numeric columns (ID)
+      const valueA = Number(a?.user?.id || 0);
+      const valueB = Number(b?.user?.id || 0);
+      return ascendingUser ? valueA - valueB : valueB - valueA;
+    } else {
+      return 0;
+    }
+  });
+  
+
   return (
     <>
       <div className="space-y-1.5 relative">
@@ -302,208 +418,200 @@ export default function Project({ projectId }) {
               </li>
             </ul>
           </div>
-            <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
-              <div className="flex items-center space-x-3 select-none">
-                <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
-                  Project Overview
-                </h1>
-                <div className="flex space-x-3">
-                  <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md">
-                    <span>{data?.name}</span>
-                  </div>
-                  <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
-                    <span>Id:</span>
-                    <span>{data?.solarmanPlantId}</span>
-                    <button
-                      className="text-[#25476A]"
-                      onClick={() =>
-                        handleCopyButton({
-                          solarmanPlantId: data?.solarmanPlantId,
-                        })
-                      }
-                    >
-                      {solarmanPlantIdCopy ? (
-                        <FontAwesomeIcon icon={faCopy} />
-                      ) : (
-                        <FontAwesomeIcon icon={faClipboard} />
-                      )}
-                    </button>
-                  </div>
+          <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
+            <div className="flex items-center space-x-3 select-none">
+              <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
+                Project Overview
+              </h1>
+              <div className="flex space-x-3">
+                <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md">
+                  <span>{data?.name}</span>
+                </div>
+                <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
+                  <span>Id:</span>
+                  <span>{data?.solarmanPlantId}</span>
+                  <button
+                    className="text-[#25476A]"
+                    onClick={() =>
+                      handleCopyButton({
+                        solarmanPlantId: data?.solarmanPlantId,
+                      })
+                    }
+                  >
+                    {solarmanPlantIdCopy ? (
+                      <FontAwesomeIcon icon={faCopy} />
+                    ) : (
+                      <FontAwesomeIcon icon={faClipboard} />
+                    )}
+                  </button>
                 </div>
               </div>
-              <button
-                className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
-                onClick={() => setUpdateProjectModalOpen(true)}
-              >
-                <span className="">Edit</span>
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </button>
-
-              {updateProjectModalOpen && (
-                <UpdateProjectModal
-                  editProjectData={data}
-                  updateProjectModalOpen={setUpdateProjectModalOpen}
-                  projectUpdated={setProjectUpdated}
-                />
-              )}
             </div>
+            <button
+              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
+              onClick={() => setUpdateProjectModalOpen(true)}
+            >
+              <span className="">Edit</span>
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </button>
+
+            {updateProjectModalOpen && (
+              <UpdateProjectModal
+                editProjectData={data}
+                updateProjectModalOpen={setUpdateProjectModalOpen}
+                projectUpdated={setProjectUpdated}
+              />
+            )}
+          </div>
         </div>
         <div className="bg-white rounded-md shadow-md flex">
-              <Image
-                src={data?.meta?.stationImage || "/Placeholder.png"}
-                width={2000}
-                height={2000}
-                alt="logo"
-                className="w-64 h-68 rounded-l-md object-cover"
-              />
-              <div className="flex space-x-3 p-6 w-full">
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-1 w-full">
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Owner Name:
-                    </p>
-                    <p className="text-gray-700">
-                      {data?.meta?.ownerName || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Contact:
-                    </p>
-                    <p className="text-gray-700">
-                      {data?.meta?.Contact || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Address:
-                    </p>
-                    <p className="text-gray-700">
-                      {data?.meta?.locationAddress || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Funding Type:
-                    </p>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-gray-700">
-                        {data?.fundingType}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Type:
-                    </p>
-                    <p className="text-gray-700">
-                      {" "}
-                      {data?.meta?.type
-                        .replace(/_/g, " ") // Replace all '_' with ' '
-                        .split(" ")
-                        .map(
-                          (word) =>
-                            word.charAt(0).toUpperCase() +
-                            word.slice(1).toLowerCase()
-                        )
-                        .join(" ")}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Installed Capacity (Wp):
-                    </p>
-                    <p className="text-gray-700">
-                      {data?.meta?.installedCapacity.toFixed(1) || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Tarrif:
-                    </p>
-                    <p className="text-gray-700">
-                      {data?.tarrif?.toFixed(0) || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Dollar Rate:
-                    </p>
-                    <p className="text-gray-700">
-                      {data?.dollarRate?.toFixed(2) || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Export Meter Serial Number:
-                    </p>
-                    <p className="text-gray-700">
-                      {Math.round(data?.exportMeterSerialNumber || 0)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Import Meter Serial Number:
-                    </p>
-                    <p className="text-gray-700">
-                      {Math.round(data?.importMeterSerialNumber || 0)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Total Users:
-                    </p>
-                    <p className="text-gray-700"> {data?.users?.length || 0}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Total Companies:
-                    </p>
-                    <p className="text-gray-700">
-                      {data?.companies?.length || 0}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Total Inverter:
-                    </p>
-                    <p className="text-gray-700">
-                      {data?.inverters?.length || 0}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Created Date & Time:
-                    </p>
-                    <p className="text-gray-700">
-                      <FormatDateTime dateString={data?.createdAt} />
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Updated Date & Time:
-                    </p>
-                    <p className="text-gray-700">
-                      <FormatDateTime dateString={data?.updatedAt} />
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 text-sm font-semibold select-none">
-                      Description:
-                    </p>
-                    <textarea
-                      className="bg-gray-200 px-2 flex w-full h-6 rounded-md text-gray-700"
-                      value={data?.description || ""}
-                      disabled
-                    />
-                  </div>
+          <Image
+            src={data?.meta?.stationImage || "/Placeholder.png"}
+            width={2000}
+            height={2000}
+            alt="logo"
+            className="w-64 h-68 rounded-l-md object-cover"
+          />
+          <div className="flex space-x-3 p-6 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-1 w-full">
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Owner Name:
+                </p>
+                <p className="text-gray-700">
+                  {data?.meta?.ownerName || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Contact:
+                </p>
+                <p className="text-gray-700">{data?.meta?.Contact || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Address:
+                </p>
+                <p className="text-gray-700">
+                  {data?.meta?.locationAddress || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Funding Type:
+                </p>
+                <div className="flex items-center space-x-2">
+                  <span className="text-gray-700">{data?.fundingType}</span>
                 </div>
               </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Type:
+                </p>
+                <p className="text-gray-700">
+                  {" "}
+                  {data?.meta?.type
+                    .replace(/_/g, " ") // Replace all '_' with ' '
+                    .split(" ")
+                    .map(
+                      (word) =>
+                        word.charAt(0).toUpperCase() +
+                        word.slice(1).toLowerCase()
+                    )
+                    .join(" ")}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Installed Capacity (Wp):
+                </p>
+                <p className="text-gray-700">
+                  {data?.meta?.installedCapacity.toFixed(1) || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Tarrif:
+                </p>
+                <p className="text-gray-700">
+                  {data?.tarrif?.toFixed(0) || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Dollar Rate:
+                </p>
+                <p className="text-gray-700">
+                  {data?.dollarRate?.toFixed(2) || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Export Meter Serial Number:
+                </p>
+                <p className="text-gray-700">
+                  {Math.round(data?.exportMeterSerialNumber || 0)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Import Meter Serial Number:
+                </p>
+                <p className="text-gray-700">
+                  {Math.round(data?.importMeterSerialNumber || 0)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Total Users:
+                </p>
+                <p className="text-gray-700"> {data?.users?.length || 0}</p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Total Companies:
+                </p>
+                <p className="text-gray-700">{data?.companies?.length || 0}</p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Total Inverter:
+                </p>
+                <p className="text-gray-700">{data?.inverters?.length || 0}</p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Created Date & Time:
+                </p>
+                <p className="text-gray-700">
+                  <FormatDateTime dateString={data?.createdAt} />
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Updated Date & Time:
+                </p>
+                <p className="text-gray-700">
+                  <FormatDateTime dateString={data?.updatedAt} />
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-700 text-sm font-semibold select-none">
+                  Description:
+                </p>
+                <textarea
+                  className="bg-gray-200 px-2 flex w-full h-6 rounded-md text-gray-700"
+                  value={data?.description || ""}
+                  disabled
+                />
+              </div>
             </div>
+          </div>
+        </div>
         <div className="grid grid-cols-1 select-none">
           <div className="flex justify-between items-center bg-[#2e5984] rounded-t-md p-3">
             <div className="flex items-center space-x-3">
@@ -511,7 +619,7 @@ export default function Project({ projectId }) {
                 Users
               </span>
               <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
-                <span>{data?.users ? data?.users?.length : 0}</span>{" "}
+                <span>{data?.users ? data?.users?.length : 0}</span>
                 <span>{data?.users?.length > 1 ? "Users" : "User"}</span>
               </div>
             </div>
@@ -527,8 +635,14 @@ export default function Project({ projectId }) {
             <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
                 <div className="grid grid-cols-10 col-span-11">
-                  <div className="flex justify-center col-span-6 lg:col-span-4">
-                    Name
+                  <div className="flex justify-center items-center col-span-6 lg:col-span-4 space-x-1" onClick={() => handleSortUser("name")}>
+                    <span>Name</span>
+                    {sortKeyUser === "name" &&
+                      (ascendingUser ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
                   </div>
                   <div className="flex items-center justify-center space-x-1.5 col-span-2 lg:col-span-1">
                     <span>Status</span>
@@ -546,7 +660,7 @@ export default function Project({ projectId }) {
               </div>
             </div>
             <div className="space-y-1.5 h-64 overflow-y-auto">
-              {data?.users?.map((user) => (
+              {sortedDataUser?.map((user) => (
                 <div
                   className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
                   key={Math.random()}
@@ -664,11 +778,23 @@ export default function Project({ projectId }) {
             <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
                 <div className="grid grid-cols-12 items-center col-span-11">
-                  <div className="flex items-center justify-center col-span-9">
-                    Name
+                  <div className="flex items-center justify-center col-span-9 space-x-1"onClick={() => handleSortCompany("name")}>
+                    <span>Name</span>
+                    {sortKeyCompany === "name" &&
+                      (ascendingCompany ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
                   </div>
-                  <div className="flex items-center justify-center col-span-3">
-                    Code
+                  <div className="flex items-center justify-center col-span-3 space-x-1"onClick={() => handleSortCompany("code")}>
+                    <span>Code</span>
+                    {sortKeyCompany === "code" &&
+                      (ascendingCompany ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
                   </div>
                 </div>
                 <div className="col-span-1"></div>
@@ -676,7 +802,7 @@ export default function Project({ projectId }) {
             </div>
             <div className="space-y-1.5 h-64 overflow-y-auto">
               {searchResultCompany?.length >= 0
-                ? searchResultCompany?.map((company) => (
+                ? sortedSearchDataCompany?.map((company) => (
                     <div
                       className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
                       key={Math.random()}
@@ -719,7 +845,7 @@ export default function Project({ projectId }) {
                       </div>
                     </div>
                   ))
-                : data?.companies?.map((company) => (
+                : sortedDataCompany?.map((company) => (
                     <div
                       className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A]"
                       key={Math.random()}
@@ -788,64 +914,79 @@ export default function Project({ projectId }) {
           </div>
           {!fakeLoader ? (
             <div className="p-3 space-y-1.5 bg-white rounded-b-md">
-              <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
-              <div className="grid grid-cols-12 items-center h-9">
-                <div className="flex justify-center col-span-5 lg:col-span-4 xl:col-span-3">
-                  Serial Number
+              <div className={`text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5 ${sortedData?.length >= 5 ? 'pr-7' : ''}`}>
+                <div className="grid grid-cols-12 items-center h-9">
+                  <div
+                    className="flex justify-center items-center col-span-7 md:col-span-5 lg:col-span-4 xl:col-span-3 space-x-1"
+                    onClick={() => handleSort("deviceSn")}
+                  >
+                                <span>Serial Number</span> {sortKey === 'deviceSn' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
+
+                  </div>
+                  <div
+                    className="flex justify-center items-center col-span-5 md:col-span-4 lg:col-span-2 space-x-1"
+                    onClick={() => handleSort("deviceId")}
+                  >
+                                 <span>Device Id</span> {sortKey === 'deviceId' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
+
+                  </div>
+                  <div
+                    className="col-span-3 xl:col-span-2 hidden lg:block text-center"
+                    onClick={() => handleSort("capacity")}
+                  >
+                                 <span>Capacity</span> {sortKey === 'capacity' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
+
+                  </div>
+                  <div className="hidden xl:block col-span-2 text-center">
+                    <div
+                      className="flex justify-center items-center space-x-1"
+                      onClick={() => handleSort("code")}
+                    >
+                                  <span>Code</span> {sortKey === 'code' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
+
+                    </div>
+                  </div>
+                  <div className="col-span-3 hidden md:block text-center">
+                    Building
+                  </div>
                 </div>
-                <div className="flex justify-center col-span-4 md:col-span-3 lg:col-span-2">Device Id</div>
-                <div className="justify-center col-span-2 hidden lg:block text-center">Capacity</div>
-                <div className="hidden xl:block col-span-1">
-                  <div className="flex justify-center">Code</div>
-                </div>
-                <div className="flex justify-center col-span-3 md:col-span-2">Project</div>
-                <div className="justify-center col-span-2 hidden md:block text-center">
-                  Building
-                </div>
-              </div>
               </div>
               <div className="space-y-1.5 h-64 overflow-y-auto">
-                {data?.inverters?.map((inverter) => (
-                <div
-                key={Math.random()}
-                className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A] p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
-                onClick={() => handleInverterClick(inverter?.id)}
-                              >
-                <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-5 lg:col-span-4 xl:col-span-3">
-                  <div className="select-none font-semibold">
-                    {inverter.deviceSn}
+                {sortedData?.map((inverter) => (
+                  <div
+                    key={Math.random()}
+                    className="grid grid-cols-12 items-center bg-gray-200 rounded-md text-[#25476A] p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    onClick={() => handleInverterClick(inverter?.id)}
+                  >
+                    <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-7 md:col-span-5 lg:col-span-4 xl:col-span-3">
+                      <div className="select-none font-semibold">
+                        {inverter.deviceSn}
+                      </div>
+                      <div className="select-none text-xs flex items-center space-x-1">
+                        <span>Id:</span>
+                        <span>{inverter.id}</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-center select-none space-x-1 text-sm col-span-5 md:col-span-4 lg:col-span-2">
+                      <span>{inverter?.deviceId}</span>
+                    </div>
+                    <div className="justify-center select-all text-sm col-span-3 xl:col-span-2 hidden lg:block text-center">
+                      {inverter?.capacity ? (
+                        <span>{inverter?.capacity} kWp</span>
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                    <div className="select-all text-sm hidden xl:block col-span-2 text-center">
+                      <div className="flex justify-center">
+                        {inverter?.code ? inverter.code : "N/A"}
+                      </div>
+                    </div>
+                    <div className="col-span-3 hidden md:block w-full truncate text-center select-all text-gray-700 text-sm">
+                        {inverter?.buildingId || "N/A"}
+                   
+                    </div>
                   </div>
-                  <div className="select-none text-xs flex items-center space-x-1">
-                    <span>Id:</span>
-                    <span>{inverter.id}</span>
-                  </div>
-                </div>
-                <div className="flex justify-center select-none space-x-1 text-sm col-span-4 md:col-span-3 lg:col-span-2">
-                  <span>{inverter?.deviceId}</span>
-                </div>
-                <div className="justify-center select-all text-sm col-span-2 hidden lg:block text-center">
-                  {inverter?.capacity ? (
-                    <span>{inverter?.capacity} kWp</span>
-                  ) : (
-                    "N/A"
-                  )}
-                </div>
-                <div className="select-all text-sm hidden xl:block col-span-1">
-                  <div className="flex justify-center">
-                    {inverter?.code ? inverter.code : "N/A"}
-                  </div>
-                </div>
-                <div className="flex col-span-3 md:col-span-2">
-                  <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                    {inverter?.projectId || "N/A"}
-                  </span>
-                </div>
-                <div className="col-span-2 hidden md:block text-center">
-                  <span className="w-full truncate text-center select-all text-gray-700 text-sm">
-                    {inverter?.buildingId || "N/A"}
-                  </span>
-                </div>
-              </div>
                 ))}
               </div>
             </div>

@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { getDailyViewCollectTime, getDailyViewData } from "@/lib/Helper";
+import ReactLoading from 'react-loading';
 
 export default function DailyView({
   selectedOptionIdInverter,
@@ -29,34 +30,36 @@ export default function DailyView({
       setCollectionKey({
         project: selectedOptionId,
       });
-    } else if (
-      selectedOptionId &&
-      selectedOptionIdCompany &&
-      !selectedOptionIdBuilding &&
-      !selectedOptionIdInverter
-    ) {
-      setCollectionKey({
-        company: selectedOptionIdCompany,
-      });
-    } else if (
-      selectedOptionId &&
-      selectedOptionIdCompany &&
-      selectedOptionIdBuilding &&
-      !selectedOptionIdInverter
-    ) {
-      setCollectionKey({
-        building: selectedOptionIdBuilding,
-      });
-    } else if (
-      selectedOptionId &&
-      selectedOptionIdCompany &&
-      selectedOptionIdBuilding &&
-      selectedOptionIdInverter
-    ) {
-      setCollectionKey({
-        inverter: selectedOptionIdInverter,
-      });
-    }
+    } 
+    
+    // else if (
+    //   selectedOptionId &&
+    //   selectedOptionIdCompany &&
+    //   !selectedOptionIdBuilding &&
+    //   !selectedOptionIdInverter
+    // ) {
+    //   setCollectionKey({
+    //     company: selectedOptionIdCompany,
+    //   });
+    // } else if (
+    //   selectedOptionId &&
+    //   selectedOptionIdCompany &&
+    //   selectedOptionIdBuilding &&
+    //   !selectedOptionIdInverter
+    // ) {
+    //   setCollectionKey({
+    //     building: selectedOptionIdBuilding,
+    //   });
+    // } else if (
+    //   selectedOptionId &&
+    //   selectedOptionIdCompany &&
+    //   selectedOptionIdBuilding &&
+    //   selectedOptionIdInverter
+    // ) {
+    //   setCollectionKey({
+    //     inverter: selectedOptionIdInverter,
+    //   });
+    // }
   }, [
     selectedOptionId,
     selectedOptionIdCompany,
@@ -222,20 +225,37 @@ export default function DailyView({
 
   useEffect(() => {
     if (!DailyViewDataIsLoading && DailyViewData) {
-      setStoreDailyViewData(
-        DailyViewData["data"]?.frameDataArray?.map((frameItem) => ({
-          MW: frameItem.value,
-          collectTime: new Date(
-            new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
-              6 * 60 * 60 * 1000
-            // + 50 * 60 * 1000
-          ).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
-        }))
-      );
+      const filteredData = DailyViewData["data"]?.frameDataArray?.filter((frameItem) => {
+        const collectTime = new Date(
+          new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
+          6 * 60 * 60 * 1000
+        );
+        return collectTime.getHours() >= 0 && collectTime.getHours() <= 23;
+      });
+  
+      const formattedData = Array.from({ length: 24 }, (_, hour) => {
+        const hourString = hour === 0 ? '12' : (hour > 12 ? (hour - 12).toString() : hour.toString());
+        const amPm = hour >= 12 ? 'PM' : 'AM';
+        const dataPoint = filteredData.find((frameItem) => {
+          const frameHour = new Date(
+            `2000-01-01T${frameItem.collectTime}`
+          ).getHours();
+          return frameHour === hour;
+        });
+        return {
+          MW: dataPoint ? dataPoint.value : 0,
+          collectTime: `${hourString}:00 ${amPm}`,
+        };
+      });
+  
+      setStoreDailyViewData(formattedData);
       setGenerationData(DailyViewData["data"]?.generation?.toFixed(2));
       setSunHoursData(DailyViewData["data"]?.sunHrs?.toFixed(2));
     }
   }, [DailyViewData, DailyViewDataIsLoading]);
+  
+  
+  
 
   useEffect(() => {
     console.log("storeDailyViewData", storeDailyViewData);
@@ -308,15 +328,33 @@ export default function DailyView({
     }
     return null;
   };
-console.log(uniqueYears1,storeYearMonth1,storeYearMonthDay1, "Ffffffffffffffffffffffff")
-console.log(selectedYear1,selectedMonth1,selectedDay1, "Ffffffffffffffffffffffff")
-console.log("..............................")
+
+  const [loading1, setLoading1] = useState(true);
+
+  useEffect(() => {
+    // Start a timer that calls setLoading1(false) every 2 seconds
+    const timer = setInterval(() => {
+      if (!DailyViewDataIsLoading) {
+        setLoading1(false);
+      } else {
+        setLoading1(true);
+      }
+    }, 2000);
+
+    // Cleanup the timer when the component unmounts
+    return () => {
+      clearInterval(timer);
+    };
+  }, [DailyViewDataIsLoading]); // Dependency array can be empty if this effect runs only once
+
+
   return (
     <>
       <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5">
-        Daily Generation
+        Daily Generation {loading1 && <ReactLoading type="bubbles" color="white" height={20}  className="flex items-center justify-center" />}
       </div>
-      <div className="w-full h-96 bg-white p-3 rounded-b-md border border-gray-300">
+      <div className="w-full h-96 bg-white p-3 rounded-b-md border border-gray-300 text-center">
+      {!loading1 && <>
         <div className="flex items-center justify-center">
           {/* <FontAwesomeIcon icon={faRotate} /> */}
           <div className="flex space-x-4">
@@ -395,6 +433,7 @@ console.log("..............................")
             style={{ width: "100%", height: "100%" }}
             className="text-xs font-semibold"
           >
+
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 width={730}
@@ -412,7 +451,7 @@ console.log("..............................")
                     <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="collectTime" />
+                <XAxis dataKey="collectTime" ticks={storeDailyViewData.map((dataPoint) => dataPoint.collectTime)} />
                 <YAxis tickFormatter={(value) => `${value} kw`} />
                 <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip content={<CustomTooltip />} />
@@ -433,27 +472,7 @@ console.log("..............................")
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </div>
-        {/* <div className="flex items-center justify-center space-x-3">
-          <div className="flex items-center justify-center bg-[#8884d8] rounded-md px-3 py-2 select-none space-x-1">
-            <span className="text-sm font-semibold text-white">
-              Generation :
-            </span>
-            <span className="text-sm font-semibold text-white">
-              {generationData}
-            </span>
-            <span className="text-sm font-semibold text-white">MWh</span>
-          </div>
-          <div className="flex items-center justify-center bg-[#8884d8] rounded-md px-3 py-2 select-none space-x-1">
-            <span className="text-sm font-semibold text-white">
-              Sun Hours :
-            </span>
-            <span className="text-sm font-semibold text-white">
-              {sunHoursData}
-            </span>
-            <span className="text-sm font-semibold text-white">H</span>
-          </div>
-        </div> */}
+        </div></>}
       </div>
     </>
   );

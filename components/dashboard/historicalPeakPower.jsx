@@ -40,34 +40,36 @@ export default function HistoricalPeakPower({
       setCollectionKey({
         project: selectedOptionId,
       });
-    } else if (
-      selectedOptionId &&
-      selectedOptionIdCompany &&
-      !selectedOptionIdBuilding &&
-      !selectedOptionIdInverter
-    ) {
-      setCollectionKey({
-        company: selectedOptionIdCompany,
-      });
-    } else if (
-      selectedOptionId &&
-      selectedOptionIdCompany &&
-      selectedOptionIdBuilding &&
-      !selectedOptionIdInverter
-    ) {
-      setCollectionKey({
-        building: selectedOptionIdBuilding,
-      });
-    } else if (
-      selectedOptionId &&
-      selectedOptionIdCompany &&
-      selectedOptionIdBuilding &&
-      selectedOptionIdInverter
-    ) {
-      setCollectionKey({
-        inverter: selectedOptionIdInverter,
-      });
-    }
+    } 
+    
+    // else if (
+    //   selectedOptionId &&
+    //   selectedOptionIdCompany &&
+    //   !selectedOptionIdBuilding &&
+    //   !selectedOptionIdInverter
+    // ) {
+    //   setCollectionKey({
+    //     company: selectedOptionIdCompany,
+    //   });
+    // } else if (
+    //   selectedOptionId &&
+    //   selectedOptionIdCompany &&
+    //   selectedOptionIdBuilding &&
+    //   !selectedOptionIdInverter
+    // ) {
+    //   setCollectionKey({
+    //     building: selectedOptionIdBuilding,
+    //   });
+    // } else if (
+    //   selectedOptionId &&
+    //   selectedOptionIdCompany &&
+    //   selectedOptionIdBuilding &&
+    //   selectedOptionIdInverter
+    // ) {
+    //   setCollectionKey({
+    //     inverter: selectedOptionIdInverter,
+    //   });
+    // }
   }, [
     selectedOptionId,
     selectedOptionIdCompany,

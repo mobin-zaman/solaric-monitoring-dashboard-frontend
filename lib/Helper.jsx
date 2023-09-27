@@ -964,7 +964,6 @@ export const postFile = async (data) => {
     file: data
   }
 
-  console.log({ data });
   const response = await todoApi.post(`/project/excel-upload`, d, {
     headers: {
       "Content-Type": "multipart/form-data",

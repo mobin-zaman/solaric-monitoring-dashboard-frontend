@@ -53,6 +53,7 @@ export default function Index() {
     if (allProject) {
       setSelectedOption(allProject[0]?.name);
       setSelectedOptionId(allProject[0]?.id);
+      localStorage.setItem("selectedProjectId", allProject[0]?.id);
       if (
         allProject[0]?.imageUrl === null ||
         allProject[0]?.imageUrl === "" ||
@@ -90,6 +91,7 @@ export default function Index() {
 
     setSelectedOptionId(id);
     setSelectedOption(name);
+    localStorage.setItem("selectedProjectId", id);
     setIsOpen(false);
     setInputValue("");
     setSelectedOptionCompany("Select Company");
@@ -181,6 +183,7 @@ export default function Index() {
   const selectOptionCompany = (id, name) => {
     setSelectedOptionIdCompany(id);
     setSelectedOptionCompany(name);
+    localStorage.setItem("selectedCompanyId", id);
     setIsOpenCompany(false);
     setInputValueCompany("");
     setSelectedOptionBuilding("Select Building");
@@ -276,6 +279,7 @@ export default function Index() {
   const selectOptionBuilding = (id, name) => {
     setSelectedOptionIdBuilding(id);
     setSelectedOptionBuilding(name);
+    localStorage.setItem("selectedBuildingId", id);
     setIsOpenBuilding(false);
     setInputValueBuilding("");
     setSelectedOptionInverter("Select Inverter");
@@ -368,6 +372,7 @@ export default function Index() {
   const selectOptionInverter = (id, deviceSn) => {
     setSelectedOptionIdInverter(id);
     setSelectedOptionInverter(deviceSn);
+    localStorage.setItem("selectedInverterId", id);
     setIsOpenInverter(false);
     setInputValueInverter("");
   };
@@ -1048,14 +1053,12 @@ export default function Index() {
     dailyDataForDefault,
   ]);
 
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    if (dailyDataForDefault && historicalDataForDefaultSunHrsBarChartData) {
-      setTimeout(() => {
-        setLoading(true);
-      }, 2000);
-    }
-  }, [dailyDataForDefault, historicalDataForDefaultSunHrsBarChartData]);
+  // const [loading, setLoading] = useState(false);
+  // useEffect(() => {
+  //     setTimeout(() => {
+  //       setLoading(true);
+  //     }, 10000);
+  // }, []);
 
   const [
     collectTimeForInverterHourlyData,
@@ -1200,6 +1203,9 @@ export default function Index() {
                           placeholder="Search..."
                         />
                       </li>
+                      <li className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate" onClick={() => selectOptionCompany(null, "Select Company", null)}>
+                        All
+                      </li>
                       {!searchResultEmptyCompany &&
                         searchResult1Company?.length > 0 &&
                         searchOnCompany &&
@@ -1265,6 +1271,9 @@ export default function Index() {
                           placeholder="Search..."
                         />
                       </li>
+                      <li className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate" onClick={() => selectOptionBuilding(null, "Select Building")}>
+                        All
+                      </li>
                       {!searchResultEmptyBuilding &&
                         searchResult1Building?.length > 0 &&
                         searchOnBuilding &&
@@ -1329,6 +1338,9 @@ export default function Index() {
                           className="border border-gray-300 w-full p-1 text-sm rounded-md"
                           placeholder="Search..."
                         />
+                      </li>
+                      <li className="px-2 p-1 border-t cursor-pointer hover:bg-gray-100 text-sm w-full truncate" onClick={() => selectOptionInverter(null, "Select Inverter")}>
+                        All
                       </li>
                       {!searchResultEmptyInverter &&
                         searchResult1Inverter?.length > 0 &&

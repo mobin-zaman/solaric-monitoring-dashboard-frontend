@@ -1,5 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass,
+  faArrowUpWideShort,
+  faArrowDownShortWide,
+ } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "react-query";
 import { getInverters, searchInverter } from "@/lib/Helper";
 import { useState } from "react";
@@ -49,12 +52,58 @@ export default function Users() {
     }
   };
 
+  const [sortKey, setSortKey] = useState(null);
+  const [ascending, setAscending] = useState(true);
+
+  const handleSort = (key) => {
+    if (sortKey === key) {
+      // Toggle ascending/descending order if the same column is clicked
+      setAscending(!ascending);
+    } else {
+      // Set the new sorting column and default to ascending order
+      setSortKey(key);
+      setAscending(true);
+    }
+  };
+
+  // Sort the data based on the current sorting criteria
+  const sortedData = data?.slice().sort((a, b) => {
+    if (sortKey === 'deviceSn' || sortKey === 'code') {
+      // For strings (Device Id, code, serial number)
+      const valueA = a[sortKey] || '';
+      const valueB = b[sortKey] || '';
+      return ascending ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+    } else if (sortKey === 'deviceId' || sortKey === 'capacity') {
+      // For numeric columns (Device Id, capacity)
+      const valueA = Number(a[sortKey]);
+      const valueB = Number(b[sortKey]);
+      return ascending ? valueA - valueB : valueB - valueA;
+    } else {
+      return 0;
+    }
+  });
+
+  const sortedSearchData = searchResult?.slice().sort((a, b) => {
+    if (sortKey === 'deviceSn' || sortKey === 'code') {
+      const valueA = a[sortKey] || '';
+      const valueB = b[sortKey] || '';
+      return ascending ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+    } else if (sortKey === 'deviceId' || sortKey === 'capacity') {
+      const valueA = Number(a[sortKey]);
+      const valueB = Number(b[sortKey]);
+      return ascending ? valueA - valueB : valueB - valueA;
+    } else {
+      return 0;
+    }
+  });
+
+
   return (
     <>
       <div className="space-y-1.5 relative select-none">
         <div className="space-y-1.5 sticky -top-1.5 z-50 bg-gray-200 pt-0.5">
           <div
-            className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5"
+            className="flex items-center justify-between bg-gray-700 rounded-md p-3.5"
           >
             <div className="flex items-center space-x-3 select-none">
               <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
@@ -83,20 +132,40 @@ export default function Users() {
             </div>
           </div>
           {!isLoading && !isError && !searchResultEmpty && (
-            <div className="text-white bg-[#25476A] font-medium rounded-md p-1.5">
+            <div className="text-white bg-gray-600 font-medium rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
-                <div className="flex justify-center col-span-5 lg:col-span-4 xl:col-span-3">
-                  Serial Number
-                </div>
-                <div className="flex justify-center col-span-4 md:col-span-3 lg:col-span-2">Device Id</div>
-                <div className="justify-center col-span-2 hidden lg:block text-center">Capacity</div>
-                <div className="hidden xl:block col-span-1">
-                  <div className="flex justify-center">Code</div>
-                </div>
-                <div className="flex justify-center col-span-3 md:col-span-2">Project</div>
-                <div className="justify-center col-span-2 hidden md:block text-center">
-                  Building
-                </div>
+              <div
+            className="flex justify-center items-center col-span-5 lg:col-span-4 xl:col-span-3 cursor-pointer space-x-1"
+            onClick={() => handleSort('deviceSn')}
+          >
+            <span>Serial Number</span> {sortKey === 'deviceSn' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
+          </div>
+          <div
+            className="flex justify-center items-center col-span-4 md:col-span-3 lg:col-span-2 cursor-pointer space-x-1"
+            onClick={() => handleSort('deviceId')}
+          >
+             <span>Device Id</span> {sortKey === 'deviceId' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
+          </div>
+          <div
+            className="col-span-2 hidden lg:block text-center cursor-pointer"
+            onClick={() => handleSort('capacity')}
+          >
+             <span>Capacity</span> {sortKey === 'capacity' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
+          </div>
+          <div className="hidden xl:block col-span-1">
+            <div className="flex justify-center items-center cursor-pointer space-x-1" onClick={() => handleSort('code')}>
+            <span>Code</span> {sortKey === 'code' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
+            </div>
+          </div>
+          <div
+            className="flex justify-center col-span-3 md:col-span-2 cursor-pointer"          >
+            Project
+          </div>
+          <div
+            className="justify-center col-span-2 hidden md:block text-center cursor-pointer"
+          >
+            Building
+          </div>
               </div>
             </div>
           )}
@@ -106,7 +175,7 @@ export default function Users() {
             {!searchResultEmpty &&
               searchResult?.length > 0 &&
               searchOn &&
-              searchResult?.map((inverter) => (
+              sortedSearchData?.map((inverter) => (
                 <div
                   key={Math.random()}
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
@@ -161,7 +230,7 @@ export default function Users() {
 
             {!searchResultEmpty &&
               !searchOn &&
-              data?.map((inverter) => (
+              sortedData?.map((inverter) => (
                 <div
                   key={Math.random()}
                   className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
