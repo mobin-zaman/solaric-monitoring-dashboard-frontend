@@ -28,6 +28,7 @@ export default function HistoricalPeakPower({
   selectedOptionIdBuilding,
   selectedOptionIdInverter,
 }) {
+  const [ projectForCollectTime, setProjectForCollectTime ] = useState();
   const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
@@ -40,36 +41,36 @@ export default function HistoricalPeakPower({
       setCollectionKey({
         project: selectedOptionId,
       });
-    } 
-    
-    // else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   !selectedOptionIdBuilding &&
-    //   !selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     company: selectedOptionIdCompany,
-    //   });
-    // } else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   selectedOptionIdBuilding &&
-    //   !selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     building: selectedOptionIdBuilding,
-    //   });
-    // } else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   selectedOptionIdBuilding &&
-    //   selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     inverter: selectedOptionIdInverter,
-    //   });
-    // }
+      setProjectForCollectTime(selectedOptionId);
+    }
+    else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        company: selectedOptionIdCompany,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        building: selectedOptionIdBuilding,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        inverter: selectedOptionIdInverter,
+      });
+    }
   }, [
     selectedOptionId,
     selectedOptionIdCompany,
@@ -99,10 +100,10 @@ export default function HistoricalPeakPower({
     isLoading: DailyViewCollectTimeIsLoading,
     error: DailyViewCollectTimeError,
   } = useQuery(
-    ["DailyViewCollectTime", collectionKey],
-    () => getDailyViewCollectTime(collectionKey),
+    ["DailyViewCollectTime", projectForCollectTime],
+    () => getDailyViewCollectTime(projectForCollectTime),
     {
-      enabled: !!collectionKey,
+      enabled: !!projectForCollectTime,
       onSuccess: (data) => {
         console.log("data", data);
       },
@@ -347,106 +348,116 @@ export default function HistoricalPeakPower({
     }, 1000);
   }, []);
 
+  const [loading1, setLoading1] = useState(true);
+
+  useEffect(() => {
+    // Start a timer that calls setLoading1(false) every 2 seconds
+    const timer = setInterval(() => {
+      if (!historicalPeakPowerDataIsLoading) {
+        setLoading1(false);
+      } else {
+        setLoading1(true);
+      }
+    }, 2000);
+
+    // Cleanup the timer when the component unmounts
+    return () => {
+      clearInterval(timer);
+    };
+  }, [historicalPeakPowerDataIsLoading]);
+
   return (
     <>
-      <div className="flex flex-col col-span-5 h-full">
-        <div className="flex items-center justify-center">
-          <div className="flex justify-end items-center space-x-3">
-            <div className="flex rounded-md bg-gray-200">
-              <button
-                className={`flex items-center justify-center h-6 p-2 text-xs sm:text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${
-                  peakPowerOpen
-                    ? "bg-[#39B54A] text-white"
-                    : "bg-white text-[#39B54A]"
-                }`}
-                onClick={() => handlePeakPowerOpen()}
-              >
-                Peak Power
-              </button>
-              <button
-                className={`flex items-center justify-center h-6 p-2 text-xs sm:text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${
-                  sunHoursOpen
-                    ? "bg-[#39B54A] text-white"
-                    : "bg-white text-[#39B54A]"
-                }`}
-                onClick={() => handleSunHoursOpen()}
-              >
-                Sun Hours
-              </button>
+      <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg h-10 text-center space-x-1">
+        <span>Historical Peak Power / Sun-Hrs</span>{" "}
+        {loading1 && <ReactLoading type="bubbles" color="white" height={60} />}
+      </div>
+      <div className="flex flex-col col-span-5 w-full h-96 bg-white p-3 rounded-b-lg border border-gray-300">
+        {!loading1 && (
+          <>
+            <div className="flex items-center justify-center">
+              <div className="flex justify-end items-center space-x-3">
+                <div className="flex rounded-md bg-gray-200">
+                  <button
+                    className={`flex items-center justify-center h-6 p-2 text-xs sm:text-sm font-semibold rounded-l-md select-none border border-[#39B54A] ${
+                      peakPowerOpen
+                        ? "bg-[#39B54A] text-white"
+                        : "bg-white text-[#39B54A]"
+                    }`}
+                    onClick={() => handlePeakPowerOpen()}
+                  >
+                    Peak Power
+                  </button>
+                  <button
+                    className={`flex items-center justify-center h-6 p-2 text-xs sm:text-sm font-semibold rounded-r-md select-none border border-[#39B54A] ${
+                      sunHoursOpen
+                        ? "bg-[#39B54A] text-white"
+                        : "bg-white text-[#39B54A]"
+                    }`}
+                    onClick={() => handleSunHoursOpen()}
+                  >
+                    Sun Hours
+                  </button>
+                </div>
+                <select
+                  className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                  value={selectedYear}
+                  onChange={(e) => {
+                    setSelectedYear(e.target.value);
+                  }}
+                >
+                  <option disabled>Year</option>
+                  {uniqueYears?.map((item, Index) => {
+                    return (
+                      <option key={Index} value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+                </select>
+                <select
+                  className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                  value={selectedMonth}
+                  onChange={(e) => {
+                    setSelectedMonth(e.target.value);
+                  }}
+                >
+                  <option>Month</option>
+                  {storeYearMonth1.map((item1, index) => {
+                    if (item1.split("-")[0] === selectedYear) {
+                      return (
+                        <option key={index} value={item1.split("-")[1]}>
+                          {digitToMonth(item1.split("-")[1])}
+                        </option>
+                      );
+                    }
+                    return null; // Make sure to return null when conditions are not met
+                  })}
+                </select>
+              </div>
             </div>
-            <select
-              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={selectedYear}
-              onChange={(e) => {
-                setSelectedYear(e.target.value);
-              }}
-            >
-              <option disabled>Year</option>
-              {uniqueYears?.map((item, Index) => {
-                return (
-                  <option key={Index} value={item}>
-                    {item}
-                  </option>
-                );
-              })}
-            </select>
-            <select
-              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={selectedMonth}
-              onChange={(e) => {
-                setSelectedMonth(e.target.value);
-              }}
-            >
-              <option>Month</option>
-              {storeYearMonth1.map((item1, index) => {
-                if (item1.split("-")[0] === selectedYear) {
-                  return (
-                    <option key={index} value={item1.split("-")[1]}>
-                      {digitToMonth(item1.split("-")[1])}
-                    </option>
-                  );
-                }
-                return null; // Make sure to return null when conditions are not met
-              })}
-            </select>
-          </div>
-        </div>
-
-        <div
-          className="flex items-center justify-center text-xs font-semibold"
-          style={{ width: "100%", height: "100%" }}
-        >
-          {fakeLoader ? (
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                width={500}
-                height={300}
-                data={storeHistoricalPeakPowerData}
-                margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis tickFormatter={(value) => `${value} KW`} />
-                <Tooltip />
-                {/* <Legend /> */}
-                <Bar dataKey="peakPower" fill="#82ca9d" barSize={30} />
-              </BarChart>
-            </ResponsiveContainer>
-          ) : (
             <div
-              width="100%"
-              height="100%"
-              className="flex items-center justify-center border w-full h-full"
+              className="flex items-center justify-center text-xs font-semibold"
+              style={{ width: "100%", height: "100%" }}
             >
-              <ReactLoading
-                type="spokes"
-                color="#25476A"
-                height={50}
-                width={50}
-              />
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={storeHistoricalPeakPowerData}
+                  margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis tickFormatter={(value) => `${value} KW`} />
+                  <Tooltip />
+                  {/* <Legend /> */}
+                  <Bar dataKey="peakPower" fill="#82ca9d" barSize={30} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </>
   );

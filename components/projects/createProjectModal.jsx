@@ -1,6 +1,6 @@
 //Completed: Yes
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faCubesStacked } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { postProject } from "@/lib/Helper";
@@ -55,32 +55,29 @@ export default function AddUserModal({
 
   return (
     <>
-      <div className="flex items-center bg-opacity-10 backdrop-filter backdrop-blur-sm bg-gray-300 fixed inset-0 z-50">
+          <div className="flex items-center bg-opacity-10 backdrop-filter backdrop-blur-sm bg-gray-700 fixed inset-0 z-50">
         <div className="grid grid-cols-1 bg-gray-50 rounded-md items-center relative mx-auto w-[20rem] sm:w-[24rem] space-y-5 shadow-md border border-gray-300">
-          <div className="flex items-center justify-between bg-gray-200 rounded-t-md px-6 py-3">
-            <span className="text-[#25476A] font-semibold text-lg">
-              Project Add
+          <div className="flex items-center justify-between bg-gray-700 rounded-t-md px-6 py-3">
+            <span className="text-gray-200 font-semibold text-lg">
+            Add New Project
             </span>
             <button
               className="opacity-80"
               onClick={() => createProjectModalOpen(false)}
             >
-              <FontAwesomeIcon
-                icon={faXmark}
-                className="text-yellow-800"
-              />
+              <FontAwesomeIcon icon={faXmark} className="text-gray-200" />
             </button>
           </div>
           <div className="px-6 pb-6 space-y-10">
-            <div className="flex flex-col space-y-5">
-              <div className="text-[#373737] font-medium text-sm space-x-1">
-                <div className="font-medium text-lg text-[#25476A] space-x-0.5">
+          <div className="flex flex-col space-y-3">
+          <div className="text-gray-800 font-medium text-sm space-x-1">
+                <div className="font-medium text-base text-gray-800 space-x-0.5">
                   <span>Name</span>
                   <span className="text-red-500">*</span>
                 </div>
-                <div className="flex items-center border-b-2 border-[#25476A]">
-                  <input
-                    className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                <div className="flex items-center border-b-2 border-gray-800">
+                <input
+                    className="w-full h-10 px-2 text-md text-gray-800 placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
                     type="text"
                     placeholder="Enter project name"
                     value={name}
@@ -88,30 +85,29 @@ export default function AddUserModal({
                   />
                 </div>
               </div>
-              <div className="text-[#373737] font-medium text-sm space-x-1">
-                <div className="font-medium text-lg text-[#25476A] space-x-0.5">
+              <div className="text-gray-800 font-medium text-sm space-x-1">
+                <div className="font-medium text-base text-gray-800 space-x-0.5">
                   <span>Solarman Plant Id</span>
                   <span className="text-red-500">*</span>
                 </div>
-                <div className="flex items-center border-b-2 border-[#25476A]">
-                  <input
-                    className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-                    type="number"
+                <div className="flex items-center border-b-2 border-gray-800">
+                <input
+                    className="w-full h-10 px-2 text-md text-gray-800 placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
+                    type="text"
                     placeholder="Enter Solarman Plant Id"
                     value={solarmanPlantId}
                     onChange={(e) => setSolarmanPlantId(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="text-[#373737] font-medium text-sm space-x-1">
-                <div className="font-medium text-lg text-[#25476A] space-x-0.5">
+              <div className="text-gray-800 font-medium text-sm space-x-1">
+                <div className="font-medium text-base text-gray-800 space-x-0.5">
                   <span>Funding Type</span>
                   <span className="text-red-500">*</span>
                   </div>
-                <div className="flex items-center border-b-2 border-[#25476A]">
                   <select
-                    className="w-full h-10 px-2 text-md text-[#373737] placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-                    value={fundingType}
+                className="w-full h-10 border-b-2 border-gray-800 bg-transparent p-2 ring-0 focus:ring-0 focus:outline-none"
+                value={fundingType}
                     onChange={(e) => setFundingType(e.target.value)}
                   >
                     <option disabled>Select Funding Type</option>
@@ -119,17 +115,16 @@ export default function AddUserModal({
                     <option value="OPEX">OPEX</option>
                   </select>
                   </div>
-                  </div>
             </div>
             <div className="flex justify-between items-center">
               <div className="text-red-700 text-sm h-8 flex justify-center items-center">
                 {errorMessage}
               </div>
               <button
-                className="flex items-center justify-center px-5 h-8 text-md font-semibold text-white bg-teal-500 hover:bg-teal-400 rounded-md"
+                className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1"
                 onClick={handleCreateProject}
               >
-                <span>Add</span>
+                                <FontAwesomeIcon icon={faCubesStacked} />                <span className="">Add Project</span>
               </button>
             </div>
           </div>

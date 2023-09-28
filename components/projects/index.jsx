@@ -51,7 +51,7 @@ export default function Users() {
   };
 
   const handleClickProject = (project) => {
-    router.push(`/project/${project.id}`);
+    router.push(`/projects/${project.id}`);
   };
 
   const handleSearch = (e) => {
@@ -164,7 +164,7 @@ export default function Users() {
   return (
     <>
       <div className="space-y-1.5 relative select-none">
-        <div className="sticky -top-0 z-50 bg-gray-200 rounded-b-md">
+        <div className="sticky -top-0 z-50 bg-white rounded-b-md">
           <div className="text-sm breadcrumbs text-[#25476A] pl-1">
             <ul>
               <li>
@@ -178,7 +178,7 @@ export default function Users() {
                 </Link>
               </li>
               <li>
-                <Link href="/project">
+                <Link href="/projects">
                   <FontAwesomeIcon
                     icon={faCubesStacked}
                     className={`w-4 h-4`}
@@ -192,34 +192,33 @@ export default function Users() {
           <div className="space-y-1.5">
             <div className="flex items-center justify-between bg-gray-700 rounded-md p-3.5">
               <div className="flex items-center space-x-3 select-none">
-                <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
-                  Projects
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide">                  PROJECTS
                 </h1>
-                <p className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
-                  {data?.length} {data?.length < 2 ? "project" : "projects"}
+                <p className="text-green-700 text-xs bg-gray-200 px-2.5 h-7 flex items-center justify-center rounded-xl">
+                  {data?.length} {data?.length < 2 ? "Project" : "Projects"}
                 </p>
               </div>
               <div className="space-x-2 md:space-x-5 flex items-center">
                 <div className="relative">
                   <input
                     type="text"
-                    className="w-48 md:w-56 h-8 lg:w-72 placeholder:text-xs md:placeholder:text-sm rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm focus:outline-none focus:ring-0"
+                    className="w-48 md:w-56 h-7 lg:w-72 placeholder:text-xs rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm focus:outline-none focus:ring-0"
                     placeholder="Search by name"
                     onChange={handleSearch}
                   />
-                  <div className="absolute top-1.5 right-2.5">
-                    <FontAwesomeIcon
-                      icon={faMagnifyingGlass}
-                      className="text-gray-400"
-                    />
-                  </div>
+                <div className="absolute top-0.5 right-2.5">
+                  <FontAwesomeIcon
+                    icon={faMagnifyingGlass}
+                    className="text-gray-400 text-xs"
+                  />
+                </div>
                 </div>
                 <button
-                  className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-teal-500 hover:bg-teal-400 rounded-md space-x-1"
-                  onClick={() => setCreateProjectModalOpen(true)}
+                className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1"
+                onClick={() => setCreateProjectModalOpen(true)}
                 >
-                  <span>Add</span>
-                  <FontAwesomeIcon icon={faPlus} />
+                  <FontAwesomeIcon icon={faCubesStacked} />
+                  <span>Add Project</span>
                 </button>
               </div>
               {createProjectModalOpen && (
@@ -230,8 +229,8 @@ export default function Users() {
               )}
             </div>
             {!isLoading && !isError && !searchResultEmpty && (
-              <div className="text-white bg-gray-600 font-medium rounded-md p-1.5">
-                <div className="grid grid-cols-12 items-center h-9 text-sm md:text-base">
+            <div className="space-y-1 select-none bg-gray-600 text-gray-200 font-medium rounded-md p-1.5">
+            <div className="grid grid-cols-12 items-center h-9 text-sm md:text-base">
                   <div
                     className="flex justify-center items-center col-span-7 sm:col-span-5 lg:col-span-4 xl:col-span-3 space-x-1"
                     onClick={() => handleSort("name")}
@@ -278,13 +277,13 @@ export default function Users() {
             {!searchResultEmpty &&
               searchResult?.length > 0 &&
               searchOn &&
-              sortedSearchData?.map((project) => (
+              sortedSearchData?.map((project, index) => (
                 <div
                   key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
+                  className={`grid grid-cols-12 items-center rounded-md text-gray-700 border-2 ${index % 2 === 0 ? "bg-gray-100 border-gray-200" : "bg-gray-200 border-gray-300"} `}
                 >
                   <div
-                    className="grid grid-cols-11 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    className="grid grid-cols-11 col-span-11 border-r border-gray-300 items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
                     onClick={() => handleClickProject(project)}
                   >
                     <div className="flex items-center font-medium space-x-2 px-5 col-span-7 sm:col-span-5 lg:col-span-4 xl:col-span-3">
@@ -359,13 +358,13 @@ export default function Users() {
 
             {!searchResultEmpty &&
               !searchOn &&
-              sortedData?.map((project) => (
+              sortedData?.map((project, index) => (
                 <div
                   key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
+                  className={`grid grid-cols-12 items-center rounded-md text-gray-700 border ${index % 2 === 0 ? "bg-gray-100 border-gray-200" : "bg-gray-200 border-gray-300"} `}
                 >
                   <div
-                    className="grid grid-cols-11 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    className={`grid grid-cols-11 col-span-11 border-r border-gray-300 items-center p-2 cursor-pointer hover:rounded-l-md ${index % 2 === 0 ? "hover:bg-gray-200" : "hover:bg-gray-300"} `}
                     onClick={() => handleClickProject(project)}
                   >
                     <div className="flex items-center font-medium space-x-2 px-5 col-span-7 sm:col-span-5 lg:col-span-4 xl:col-span-3">

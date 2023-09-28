@@ -3,7 +3,7 @@ import logo from "@/public/Icon.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHouse,
-  faUserGroup,
+  faUsers,
   faEnvelope,
   faGear,
   faCalculator,
@@ -42,73 +42,73 @@ export default function SideBar() {
             />
           </Link>
           {data?.role === "ADMIN" && (
-            <Link href="/user">
+            <Link href="/users">
               {/* <Image src={Users} alt="Users" className="w-5" /> */}
               <FontAwesomeIcon
-                icon={faUserGroup}
+                icon={faUsers}
                 className={`w-[1.3rem] h-[1.3rem] ${
-                  link === "/user" ? "text-green-700" : ""
+                  link === "/users" ? "text-green-700" : ""
                 }`}
-                title="User"
+                title="Users"
               />
             </Link>
           )}
           {data?.role === "ADMIN" && (
-            <Link href="/project">
+            <Link href="/projects">
               {/* <Image src={Projects} alt="Projects" className="w-6" /> */}
               <FontAwesomeIcon
                 icon={faCubesStacked}
                 className={`w-[1.3rem] h-[1.3rem] ${
-                  link === "/project"
+                  link === "/projects"
                     ? "text-green-700"
-                    : link === "/project/[projectId]"
+                    : link === "/projects/[projectId]"
                     ? "text-green-700"
                     : ""
                 }`}
-                title="Project"
+                title="Projects"
               />
             </Link>
           )}
                     {data?.role === "ADMIN" && (
-            <Link href="/inverter">
+            <Link href="/inverters">
               <FontAwesomeIcon
                 icon={faMicrochip}
                 className={`w-[1.3rem] h-[1.3rem] ${
-                  link === "/inverter"
+                  link === "/inverters"
                     ? "text-green-700"
-                    : link === "/inverter/[inverterId]"
+                    : link === "/inverters/[inverterId]"
                     ? "text-green-700"
                     : ""
                 }`}
-                title="Inverter"
+                title="Inverters"
               />
             </Link>
           )}
                               {data?.role === "ADMIN" && (
-            <Link href="/meter">
+            <Link href="/meters">
               <FontAwesomeIcon
                 icon={faCalculator}
                 className={`w-[1.3rem] h-[1.3rem] ${
-                  link === "/meter"
+                  link === "/meters"
                     ? "text-green-700"
-                    : link === "/meter/[meterId]"
+                    : link === "/meters/[meterId]"
                     ? "text-green-700"
                     : ""
                 }`}
-                title="Meter"
+                title="Meters"
               />
             </Link>
           )}
                                         {data?.role === "ADMIN" && (
-            <Link href="/export">
+            <Link href="/import">
               <FontAwesomeIcon
                 icon={faFileArrowUp}
                 className={`w-[1.3rem] h-[1.3rem] ${
-                  link === "/export"
+                  link === "/import"
                     ? "text-green-700"
                     : ""
                 }`}
-                title="Meter"
+                title="Import"
               />
             </Link>
           )}

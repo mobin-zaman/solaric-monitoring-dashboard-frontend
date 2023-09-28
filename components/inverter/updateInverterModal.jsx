@@ -1,27 +1,23 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
-import { updateMeter } from "@/lib/Helper";
+import { useMutation } from "react-query";
+import { updateInverter } from "@/lib/Helper";
 
-export default function UpdateMeterModal({
-  updateMeterModalOpen,
-  meterUpdated,
-  meterData,
+export default function AddUserModal({
+  editInverterModalOpen,
+  inverterEdited,
+  editInverterData,
 }) {
-  console
-  const queryClient = useQueryClient();
   const [errorMessage, setErrorMessage] = useState("");
-  const [importMeterCode, setImportMeterCode] = useState(meterData?.importMeterCode);
-  const [exportMeterCode, setExportMeterCode] = useState(meterData?.exportMeterCode);
-  const [importMeterSerialNumber, setImportMeterSerialNumber] = useState(meterData?.importMeterSerialNumber);
-  const [exportMeterSerialNumber, setExportMeterSerialNumber] = useState(meterData?.exportMeterSerialNumber);
+  const [capacity, setCapacity] = useState(editInverterData?.capacity || "");
+  const [code, setCode] = useState(editInverterData?.code || "");
+  const [note, setNote] = useState(editInverterData?.note || "");
 
-  const mutation = useMutation(updateMeter, {
+  const mutation = useMutation(updateInverter, {
     onSuccess: () => {
-      meterUpdated(true);
-      updateMeterModalOpen(false);
-      queryClient.invalidateQueries("meter");
+      inverterEdited(true);
+      editInverterModalOpen(false);
     },
     onError: (error) => {
       setErrorMessage(error.response.data.message);
@@ -30,13 +26,20 @@ export default function UpdateMeterModal({
 
   const handleAddUser = (e) => {
     e.preventDefault();
+    // userEdited(false);
+    // setErrorMessage("");
+    // if (!capacity || !code) {
+    //   setErrorMessage("Please fill all the fields");
+    //   return;
+    // }
+
+    // console.log(capacity, parseInt(capacity));
 
     mutation.mutate({
-      meterId: parseInt(meterData?.id),
-      importMeterCode,
-      exportMeterCode,
-      importMeterSerialNumber,
-      exportMeterSerialNumber,
+      inverterId: parseInt(editInverterData?.id),
+      capacity: parseFloat(capacity),
+      code: code,
+      note: note,
     });
   };
 
@@ -46,94 +49,84 @@ export default function UpdateMeterModal({
         <div className="grid grid-cols-1 bg-gray-50 rounded-md items-center relative mx-auto w-[20rem] sm:w-[24rem] space-y-5 shadow-md border border-gray-300">
           <div className="flex items-center justify-between bg-gray-700 rounded-t-md px-6 py-3">
             <span className="text-gray-200 font-semibold text-lg">
-              Meter Update
+              Inverter Update
             </span>
             <button
               className="opacity-80"
-              onClick={() => updateMeterModalOpen(false)}
+              onClick={() => editInverterModalOpen(false)}
             >
               <FontAwesomeIcon icon={faXmark} className="text-gray-200" />
             </button>
           </div>
           <div className="px-6 pb-6 space-y-10">
             <div className="text-gray-800 text-sm font-semibold bg-gray-200 px-2 h-8 flex items-center justify-center rounded-md space-x-1 shadow-md">
-              <span>Meter Id:</span>
-              <span>{meterData?.id}</span>
+              <span>Device Serial Number:</span>
+              <span>{editInverterData?.deviceSn}</span>
             </div>
+
             <div className="flex flex-col space-y-5">
               <div className="text-gray-800 font-medium text-sm space-x-1">
                 <div className="font-medium text-base text-gray-800 space-x-0.5">
-                  <span>Import Meter Code</span>
-                  <span className="text-red-500">*</span>
+                  Capacity
                 </div>
                 <div className="flex items-center border-b-2 border-gray-800">
                   <input
                     className="w-full h-10 px-2 text-md text-gray-800 placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-                    type="text"
-                    placeholder="Enter import meter code"
-                    value={importMeterCode}
-                    onChange={(e) => setImportMeterCode(e.target.value)}
+                    type="number"
+                    placeholder="Enter capacity"
+                    value={capacity}
+                    onChange={(e) => setCapacity(e.target.value)}
                   />
                 </div>
               </div>
+
               <div className="text-gray-800 font-medium text-sm space-x-1">
                 <div className="font-medium text-base text-gray-800 space-x-0.5">
-                  <span>Export Meter Code</span>
-                  <span className="text-red-500">*</span>
+                  Code
                 </div>
                 <div className="flex items-center border-b-2 border-gray-800">
                   <input
                     className="w-full h-10 px-2 text-md text-gray-800 placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
                     type="text"
-                    placeholder="Enter export meter code"
-                    value={exportMeterCode}
-                    onChange={(e) => setExportMeterCode(e.target.value)}
+                    placeholder="Enter code"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
                   />
                 </div>
               </div>
+
               <div className="text-gray-800 font-medium text-sm space-x-1">
                 <div className="font-medium text-base text-gray-800 space-x-0.5">
-                  <span>Import Meter Serial Number</span>
-                  <span className="text-red-500">*</span>
+                  Note
                 </div>
                 <div className="flex items-center border-b-2 border-gray-800">
                   <input
                     className="w-full h-10 px-2 text-md text-gray-800 placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-                    type="text"
-                    placeholder="Enter import meter serial number"
-                    value={importMeterSerialNumber}
-                    onChange={(e) => setImportMeterSerialNumber(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="text-gray-800 font-medium text-sm space-x-1">
-                <div className="font-medium text-base text-gray-800 space-x-0.5">
-                  <span>Export Meter Serial Number</span>
-                  <span className="text-red-500">*</span>
-                </div>
-                <div className="flex items-center border-b-2 border-gray-800">
-                  <input
-                    className="w-full h-10 px-2 text-md text-gray-800 placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-                    type="text"
-                    placeholder="Enter export meter serial number"
-                    value={exportMeterSerialNumber}
-                    onChange={(e) => setExportMeterSerialNumber(e.target.value)}
-                  />
+                    placeholder="Enter note"
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                  ></input>
                 </div>
               </div>
             </div>
-            <div className="flex justify-between items-center">
-              <div className="text-red-700 text-sm h-8 flex justify-center items-center">
-                {errorMessage}
-              </div>
 
+            <div className="flex justify-between items-center">
+              <div className="text-red-700 text-sm">
+                {errorMessage ===
+                "The email address is already in use by another account."
+                  ? "The email address is already used."
+                  : errorMessage}
+              </div>
+            </div>
+            <div className="flex justify-end items-center">
               <button
                 className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1 border border-gray-300 hover:border-gray-400 focus:border-gray-400 focus:outline-none"
                 onClick={handleAddUser}
-            > <FontAwesomeIcon icon={faPenToSquare} />
-              <span className="">Update Meter</span>
-            
-            </button>
+              >
+                {" "}
+                <FontAwesomeIcon icon={faPenToSquare} />
+                <span className="">Update Meter</span>
+              </button>
             </div>
           </div>
         </div>

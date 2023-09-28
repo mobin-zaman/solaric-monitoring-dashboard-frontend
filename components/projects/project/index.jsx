@@ -402,7 +402,7 @@ export default function Project({ projectId }) {
                 </Link>
               </li>
               <li>
-                <Link href="/project">
+                <Link href="/projects">
                   <FontAwesomeIcon
                     icon={faCubesStacked}
                     className={`w-4 h-4`}
@@ -412,7 +412,7 @@ export default function Project({ projectId }) {
                 </Link>
               </li>
               <li>
-                <Link href={`/project/${data?.id}`}>
+                <Link href={`/projects/${data?.id}`}>
                   <span className="">{data?.name}</span>
                 </Link>
               </li>

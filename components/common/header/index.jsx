@@ -60,9 +60,9 @@ export default function Header() {
 
   return (
     <>
-      <div className="w-full h-16 bg-white flex justify-between space-x-6 items-center px-5 border-b-2 border-gray-300 text-[#25476A] font-semibold tracking-wide">
+      <div className="w-full h-16 bg-white flex justify-between space-x-6 items-center px-5 border-b border-gray-300 text-gray-700 font-semibold tracking-wide select-none">
         <h1 className="text-[#39B54A] font-semibold text-md flex space-x-2 items-center justify-center">
-          <div className="flex items-center justify-center space-x-2 text-lg text-green-700">
+          <div className="flex items-center justify-center space-x-2 text-lg text-gray-700">
           <FontAwesomeIcon icon={faBuilding} />
           <span>{data?.companyName.toUpperCase()}</span>
           </div>
@@ -83,7 +83,7 @@ export default function Header() {
               <Image
                 src={placeholderImage}
                 alt="logo"
-                className="w-10 rounded-full border-2 border-[#25476A]"
+                className="w-10 rounded-full border-2 border-gray-700"
               />
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function Header() {
           </div> */}
             <button
               onClick={handleSignOut}
-              className="text-[#25476A] rounded-md text-lg flex items-center"
+              className="text-gray-700 rounded-md text-lg flex items-center"
             >
               <FontAwesomeIcon icon={faRightFromBracket} />
               {/* <span>Sign Out</span> */}

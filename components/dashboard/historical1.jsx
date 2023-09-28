@@ -8,6 +8,7 @@ import {
 import { useQuery } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
+import ReactLoading from 'react-loading';
 
 export default function Historical({
   historicalDataForProject,
@@ -17,6 +18,8 @@ export default function Historical({
   selectedOptionIdCompany,
   selectedOptionId,
 }) {
+  const [ projectForCollectTime, setProjectForCollectTime ] = useState();
+
   const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
@@ -29,36 +32,37 @@ export default function Historical({
       setCollectionKey({
         project: selectedOptionId,
       });
+      setProjectForCollectTime(selectedOptionId);
     } 
     
-    // else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   !selectedOptionIdBuilding &&
-    //   !selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     company: selectedOptionIdCompany,
-    //   });
-    // } else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   selectedOptionIdBuilding &&
-    //   !selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     building: selectedOptionIdBuilding,
-    //   });
-    // } else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   selectedOptionIdBuilding &&
-    //   selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     inverter: selectedOptionIdInverter,
-    //   });
-    // }
+    else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        company: selectedOptionIdCompany,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        building: selectedOptionIdBuilding,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        inverter: selectedOptionIdInverter,
+      });
+    }
   }, [
     selectedOptionId,
     selectedOptionIdCompany,
@@ -88,10 +92,10 @@ export default function Historical({
     isLoading: DailyViewCollectTimeIsLoading,
     error: DailyViewCollectTimeError,
   } = useQuery(
-    ["DailyViewCollectTime", collectionKey],
-    () => getDailyViewCollectTime(collectionKey),
+    ["DailyViewCollectTime", projectForCollectTime],
+    () => getDailyViewCollectTime(projectForCollectTime),
     {
-      enabled: !!collectionKey,
+      enabled: !!projectForCollectTime,
       onSuccess: (data) => {
         console.log("data", data);
       },
@@ -265,12 +269,32 @@ export default function Historical({
     }
   };
 
+  const [loading1, setLoading1] = useState(true);
+
+  useEffect(() => {
+    // Start a timer that calls setLoading1(false) every 2 seconds
+    const timer = setInterval(() => {
+      if (!HistoricalDataWithDateKeyIsLoading) {
+        setLoading1(false);
+      } else {
+        setLoading1(true);
+      }
+    }, 2000);
+
+    // Cleanup the timer when the component unmounts
+    return () => {
+      clearInterval(timer);
+    };
+  }, [HistoricalDataWithDateKeyIsLoading]); // Dependency array can be empty if this effect runs only once
+
   return (
     <>
-              <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5">
-              Historical Generation (MWH)
+              <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg h-10 space-x-1">
+            <span> Historical Generation (MWH)</span>{loading1 && <ReactLoading type="bubbles" color="white" height={60} />}
+          
           </div>
       <div className="w-full h-96 bg-white p-3 rounded-b-lg space-y-2.5 border border-gray-300">
+      {!loading1 && 
         <div className="flex flex-col justify-center items-center col-span-3 space-y-3">
           <div className="flex space-x-4">
             {/* <button
@@ -463,7 +487,7 @@ export default function Historical({
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> }
       </div>
     </>
   );

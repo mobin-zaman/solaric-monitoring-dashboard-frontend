@@ -3,10 +3,17 @@ import {
   faTrashCan,
   faPenToSquare,
   faArrowDown,
-  faPlus,
+  faUserPlus,
   faMagnifyingGlass,
   faArrowUpWideShort,
   faArrowDownShortWide,
+  faHouse,
+  faUserGroup,
+  faEnvelope,
+  faGear,
+  faCalculator,
+  faCubesStacked,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation } from "react-query";
 import { getUsers, searchUser } from "@/lib/Helper";
@@ -15,8 +22,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import placeholderImage from "@/public/placeholderImage.jpg";
 import DeleteUserModal from "./deleteUserModal";
-import EditUserModal from "./editUserModal";
+import EditUserModal from "./updateUserModal";
 import Id from "@/public/icons/Id.png";
+import Link from "next/link";
 
 export default function Users() {
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
@@ -139,7 +147,32 @@ export default function Users() {
 
   return (
     <>
-      <div className="space-y-1.5">
+      <div className="space-y-1.5 relative select-none">
+        <div className="sticky -top-0 z-50 bg-white rounded-b-md">
+          <div className="text-sm breadcrumbs text-[#25476A] pl-1">
+            <ul>
+              <li>
+                <Link href="/dashboard">
+                  <FontAwesomeIcon
+                    icon={faHouse}
+                    className={`w-4 h-4`}
+                    title="Dashboard"
+                  />
+                  <span className="ml-2">Dashboard</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/users">
+                  <FontAwesomeIcon
+                    icon={faUsers}
+                    className={`w-4 h-4`}
+                    title="Users"
+                  />
+                  <span className="ml-2">Users</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
         <div className="space-y-1.5">
           <div
             className={`flex items-center justify-between bg-gray-700 rounded-md p-3.5 ${
@@ -147,34 +180,38 @@ export default function Users() {
             }`}
           >
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
-                Users
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center"> 
+                            <FontAwesomeIcon
+                    icon={faUsers}
+                    className={`w-5 h-5`}
+                    title="Users"
+                  />
+               <span>Users</span>
               </h1>
-              <p className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md">
-                {data?.length} {data?.length < 2 ? "user" : "users"}
+              <p className="text-gray-800 text-xs bg-gray-200 px-2.5 h-7 flex items-center justify-center rounded-xl">
+                {data?.length} {data?.length < 2 ? "User" : "Users"}
               </p>
             </div>
             <div className="space-x-2 md:space-x-5 flex items-center">
               <div className="relative">
                 <input
                   type="text"
-                  className="w-48 md:w-56 h-8 lg:w-72 placeholder:text-xs md:placeholder:text-sm rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm focus:outline-none focus:ring-0"
+                  className="w-48 md:w-56 h-7 lg:w-72 placeholder:text-xs rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm focus:outline-none focus:ring-0"
                   placeholder="Search by name or email"
                   onChange={handleSearch}
                 />
-                <div className="absolute top-1.5 right-2.5">
+                <div className="absolute top-0.5 right-2.5">
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
-                    className="text-gray-400"
+                    className="text-gray-400 text-xs"
                   />
                 </div>
               </div>
               <button
-                className="flex h-8 items-center justify-center px-2.5 text-sm text-white font-semibold bg-[#39B54A] rounded-md select-none space-x-1"
+                className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1"
                 onClick={() => setAddUserModalOpen(true)}
               >
-                <span className="">Add User</span>
-                <FontAwesomeIcon icon={faPlus} />
+                <FontAwesomeIcon icon={faUserPlus} />                <span className="">Add User</span>
               </button>
             </div>
             {addUserModalOpen && (
@@ -194,7 +231,7 @@ export default function Users() {
             )}
           </div>
           {!isLoading && !isError && !searchResultEmpty && (
-            <div className="space-y-1 select-none bg-white text-[#25476A] font-semibold rounded-md p-1.5">
+            <div className="space-y-1 select-none bg-gray-600 text-gray-200 font-medium rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
                 <div className="grid grid-cols-11 col-span-11">
                   <div className="flex justify-center items-center col-span-7 sm:col-span-6 md:col-span-4 lg:col-span-3 space-x-1" onClick={() => handleSort('name')}>
@@ -229,18 +266,19 @@ export default function Users() {
             </div>
           )}
         </div>
+        </div>
         {!isLoading && !isError && (
           <div className="space-y-1.5">
             {!searchResultEmpty &&
               sortedSearchData?.length > 0 &&
               searchOn &&
-              searchResult1?.map((user) => (
+              sortedSearchData?.map((user, index) => (
                 <div
                   key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
+                  className={`grid grid-cols-12 items-center rounded-md text-gray-700 border ${index % 2 === 0 ? "bg-gray-100 border-gray-200" : "bg-gray-200 border-gray-300"} `}
                 >
                   <div
-                    className="grid grid-cols-11 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    className={`grid grid-cols-11 col-span-11 border-r border-gray-300 items-center p-2 cursor-pointer hover:rounded-l-md ${index % 2 === 0 ? "hover:bg-gray-200" : "hover:bg-gray-300"} `}
                     onClick={() => handleEditUser(user)}
                   >
                     <div className="flex items-center font-medium space-x-2 px-5 col-span-7 sm:col-span-6 md:col-span-4 lg:col-span-3">
@@ -344,13 +382,13 @@ export default function Users() {
 
             {!searchResultEmpty &&
               !searchOn &&
-              sortedData?.map((user) => (
+              sortedData?.map((user, index) => (
                 <div
                   key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A]"
+                  className={`grid grid-cols-12 items-center rounded-md text-gray-700 border ${index % 2 === 0 ? "bg-gray-100 border-gray-200" : "bg-gray-200 border-gray-300"} `}
                 >
                   <div
-                    className="grid grid-cols-11 col-span-11 border-r items-center p-2 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                    className={`grid grid-cols-11 col-span-11 border-r border-gray-300 items-center p-2 cursor-pointer hover:rounded-l-md ${index % 2 === 0 ? "hover:bg-gray-200" : "hover:bg-gray-300"} `}
                     onClick={() => handleEditUser(user)}
                   >
                     <div className="flex items-center font-medium space-x-2 px-5 col-span-7 sm:col-span-6 md:col-span-4 lg:col-span-3">

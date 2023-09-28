@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
+import ReactLoading from 'react-loading';
 
 export default function Impact({
   selectedOptionIdInverter,
@@ -15,6 +16,7 @@ export default function Impact({
   selectedOptionIdCompany,
   selectedOptionId,
 }) {
+  const [projectForCollectTime, setProjectForCollectTime] = useState();
   const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
@@ -27,36 +29,36 @@ export default function Impact({
       setCollectionKey({
         project: selectedOptionId,
       });
+      setProjectForCollectTime(selectedOptionId);
     } 
-    
-    // else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   !selectedOptionIdBuilding &&
-    //   !selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     company: selectedOptionIdCompany,
-    //   });
-    // } else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   selectedOptionIdBuilding &&
-    //   !selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     building: selectedOptionIdBuilding,
-    //   });
-    // } else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   selectedOptionIdBuilding &&
-    //   selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     inverter: selectedOptionIdInverter,
-    //   });
-    // }
+    else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        company: selectedOptionIdCompany,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        building: selectedOptionIdBuilding,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        inverter: selectedOptionIdInverter,
+      });
+    }
   }, [
     selectedOptionId,
     selectedOptionIdCompany,
@@ -86,10 +88,10 @@ export default function Impact({
     isLoading: DailyViewCollectTimeIsLoading,
     error: DailyViewCollectTimeError,
   } = useQuery(
-    ["DailyViewCollectTime", collectionKey],
-    () => getDailyViewCollectTime(collectionKey),
+    ["DailyViewCollectTime", projectForCollectTime],
+    () => getDailyViewCollectTime(projectForCollectTime),
     {
-      enabled: !!collectionKey,
+      enabled: !!projectForCollectTime,
       onSuccess: (data) => {
         console.log("data", data);
       },
@@ -299,11 +301,31 @@ export default function Impact({
     }
   };
 
+  const [loading1, setLoading1] = useState(true);
+
+  useEffect(() => {
+    // Start a timer that calls setLoading1(false) every 2 seconds
+    const timer = setInterval(() => {
+      if (!ImpactDataWithDateKeyIsLoading) {
+        setLoading1(false);
+      } else {
+        setLoading1(true);
+      }
+    }, 2000);
+
+    // Cleanup the timer when the component unmounts
+    return () => {
+      clearInterval(timer);
+    };
+  }, [ImpactDataWithDateKeyIsLoading]);
+
+
   return (
     <>
       {" "}
-      <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5 space-x-2">
-        <span>Impact</span>
+      <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg h-10 space-x-1">
+        <span>Impact</span> 
+        {loading1 ? <ReactLoading type="bubbles" color="white" height={60} /> :
         <button onClick={() => handleDefaultData()}>
           <FontAwesomeIcon
             icon={faGlobe}
@@ -313,9 +335,10 @@ export default function Impact({
                 : "bg-orange-500 text-white border-orange-500"
             }`}
           />
-        </button>
+        </button>}
       </div>
       <div className="w-full bg-white p-3 rounded-b-lg space-y-2.5 h-96 border border-gray-300">
+      {!loading1 && <>
         <div className="flex space-x-4 lg:space-x-1 xl:space-x-4 items-center justify-center h-6">
           <select
             className="flex items-center justify-center px-2 xl:px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
@@ -446,6 +469,7 @@ export default function Impact({
             </span>
           </div>
         </div>
+      </> }
       </div>
     </>
   );

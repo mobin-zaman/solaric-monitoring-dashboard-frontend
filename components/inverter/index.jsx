@@ -1,12 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass,
+import {
+  faMagnifyingGlass,
   faArrowUpWideShort,
   faArrowDownShortWide,
- } from "@fortawesome/free-solid-svg-icons";
+  faHouse,
+  faMicrochip,
+} from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "react-query";
 import { getInverters, searchInverter } from "@/lib/Helper";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Users() {
   const router = useRouter();
@@ -23,7 +27,7 @@ export default function Users() {
   );
 
   const handleClickInverter = (inverterId) => {
-    router.push(`/inverter/${inverterId}`);
+    router.push(`/inverters/${inverterId}`);
   };
 
   const handleSearch = (e) => {
@@ -68,12 +72,14 @@ export default function Users() {
 
   // Sort the data based on the current sorting criteria
   const sortedData = data?.slice().sort((a, b) => {
-    if (sortKey === 'deviceSn' || sortKey === 'code') {
+    if (sortKey === "deviceSn" || sortKey === "code") {
       // For strings (Device Id, code, serial number)
-      const valueA = a[sortKey] || '';
-      const valueB = b[sortKey] || '';
-      return ascending ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-    } else if (sortKey === 'deviceId' || sortKey === 'capacity') {
+      const valueA = a[sortKey] || "";
+      const valueB = b[sortKey] || "";
+      return ascending
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    } else if (sortKey === "deviceId" || sortKey === "capacity") {
       // For numeric columns (Device Id, capacity)
       const valueA = Number(a[sortKey]);
       const valueB = Number(b[sortKey]);
@@ -84,11 +90,13 @@ export default function Users() {
   });
 
   const sortedSearchData = searchResult?.slice().sort((a, b) => {
-    if (sortKey === 'deviceSn' || sortKey === 'code') {
-      const valueA = a[sortKey] || '';
-      const valueB = b[sortKey] || '';
-      return ascending ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-    } else if (sortKey === 'deviceId' || sortKey === 'capacity') {
+    if (sortKey === "deviceSn" || sortKey === "code") {
+      const valueA = a[sortKey] || "";
+      const valueB = b[sortKey] || "";
+      return ascending
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    } else if (sortKey === "deviceId" || sortKey === "capacity") {
       const valueA = Number(a[sortKey]);
       const valueB = Number(b[sortKey]);
       return ascending ? valueA - valueB : valueB - valueA;
@@ -97,88 +105,139 @@ export default function Users() {
     }
   });
 
-
   return (
     <>
       <div className="space-y-1.5 relative select-none">
-        <div className="space-y-1.5 sticky -top-1.5 z-50 bg-gray-200 pt-0.5">
-          <div
-            className="flex items-center justify-between bg-gray-700 rounded-md p-3.5"
-          >
+        <div className="sticky -top-0 z-50 bg-white rounded-b-md">
+          <div className="text-sm breadcrumbs text-[#25476A] pl-1">
+            <ul>
+              <li>
+                <Link href="/dashboard">
+                  <FontAwesomeIcon
+                    icon={faHouse}
+                    className={`w-4 h-4`}
+                    title="Dashboard"
+                  />
+                  <span className="ml-2">Dashboard</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/Inverters">
+                  <FontAwesomeIcon
+                    icon={faMicrochip}
+                    className={`w-4 h-4`}
+                    title="Dashboard"
+                  />
+                  <span className="ml-2">Inverters</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between bg-gray-700 rounded-md p-3.5">
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
-                Inverter
-              </h1>
-              {!isLoading && (
-                <p className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
-                  <span>{data?.length}</span>
-                  <span>{data?.length < 2 ? "inverter" : "inverters"}</span>
-                </p>
-              )}
-            </div>
-            <div className="relative">
-              <input
-                type="text"
-                className="w-48 md:w-56 h-8 lg:w-72 placeholder:text-xs md:placeholder:text-sm rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm focus:outline-none focus:ring-0"
-                placeholder="Search by serial number"
-                onChange={handleSearch}
-              />
-              <div className="absolute top-1.5 right-2.5">
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  className="text-gray-400"
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1">
+              <FontAwesomeIcon
+                    icon={faMicrochip}
+                    className={`w-5 h-5`}
+                    title="Meters"
+                  />
+<span>                  Inverters</span>
+                </h1>
+                {!isLoading && (
+              <p className="text-gray-800 text-xs bg-gray-200 px-2.5 h-7 flex items-center justify-center rounded-xl">
+              {data?.length} {data?.length < 2 ? "Inverters" : "Inverters"}
+                  </p>
+                )}
+              </div>
+              <div className="relative">
+                <input
+                  type="text"
+                  className="w-48 md:w-56 h-7 lg:w-72 placeholder:text-xs rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm focus:outline-none focus:ring-0"
+                  placeholder="Search by serial number"
+                  onChange={handleSearch}
                 />
+                <div className="absolute top-0.5 right-2.5">
+                  <FontAwesomeIcon
+                    icon={faMagnifyingGlass}
+                    className="text-gray-400 text-xs"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          {!isLoading && !isError && !searchResultEmpty && (
-            <div className="text-white bg-gray-600 font-medium rounded-md p-1.5">
-              <div className="grid grid-cols-12 items-center h-9">
-              <div
-            className="flex justify-center items-center col-span-5 lg:col-span-4 xl:col-span-3 cursor-pointer space-x-1"
-            onClick={() => handleSort('deviceSn')}
-          >
-            <span>Serial Number</span> {sortKey === 'deviceSn' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
-          </div>
-          <div
-            className="flex justify-center items-center col-span-4 md:col-span-3 lg:col-span-2 cursor-pointer space-x-1"
-            onClick={() => handleSort('deviceId')}
-          >
-             <span>Device Id</span> {sortKey === 'deviceId' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
-          </div>
-          <div
-            className="col-span-2 hidden lg:block text-center cursor-pointer"
-            onClick={() => handleSort('capacity')}
-          >
-             <span>Capacity</span> {sortKey === 'capacity' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
-          </div>
-          <div className="hidden xl:block col-span-1">
-            <div className="flex justify-center items-center cursor-pointer space-x-1" onClick={() => handleSort('code')}>
-            <span>Code</span> {sortKey === 'code' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
-            </div>
-          </div>
-          <div
-            className="flex justify-center col-span-3 md:col-span-2 cursor-pointer"          >
-            Project
-          </div>
-          <div
-            className="justify-center col-span-2 hidden md:block text-center cursor-pointer"
-          >
-            Building
-          </div>
+            {!isLoading && !isError && !searchResultEmpty && (
+              <div className="text-white bg-gray-600 font-medium rounded-md p-1.5">
+                <div className="grid grid-cols-12 items-center h-9">
+                  <div
+                    className="flex justify-center items-center col-span-5 lg:col-span-4 xl:col-span-3 cursor-pointer space-x-1"
+                    onClick={() => handleSort("deviceSn")}
+                  >
+                    <span>Serial Number</span>{" "}
+                    {sortKey === "deviceSn" &&
+                      (ascending ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
+                  </div>
+                  <div
+                    className="flex justify-center items-center col-span-4 md:col-span-3 lg:col-span-2 cursor-pointer space-x-1"
+                    onClick={() => handleSort("deviceId")}
+                  >
+                    <span>Device Id</span>{" "}
+                    {sortKey === "deviceId" &&
+                      (ascending ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
+                  </div>
+                  <div
+                    className="col-span-2 hidden lg:block text-center cursor-pointer"
+                    onClick={() => handleSort("capacity")}
+                  >
+                    <span>Capacity</span>{" "}
+                    {sortKey === "capacity" &&
+                      (ascending ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
+                  </div>
+                  <div className="hidden xl:block col-span-1">
+                    <div
+                      className="flex justify-center items-center cursor-pointer space-x-1"
+                      onClick={() => handleSort("code")}
+                    >
+                      <span>Code</span>{" "}
+                      {sortKey === "code" &&
+                        (ascending ? (
+                          <FontAwesomeIcon icon={faArrowUpWideShort} />
+                        ) : (
+                          <FontAwesomeIcon icon={faArrowDownShortWide} />
+                        ))}
+                    </div>
+                  </div>
+                  <div className="flex justify-center col-span-3 md:col-span-2 cursor-pointer">
+                    Project
+                  </div>
+                  <div className="justify-center col-span-2 hidden md:block text-center cursor-pointer">
+                    Building
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         {!isLoading && !isError && (
           <div className="space-y-1.5">
             {!searchResultEmpty &&
               searchResult?.length > 0 &&
               searchOn &&
-              sortedSearchData?.map((inverter) => (
+              sortedSearchData?.map((inverter, index) => (
                 <div
                   key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                  className={`grid grid-cols-12 items-center rounded-md text-gray-700 border border-gray-300 p-4 ${index % 2 === 0 ? "bg-gray-100 border-gray-200 hover:bg-gray-200" : "bg-gray-200 border-gray-300 hover:bg-gray-300"} `}
                   onClick={() => handleClickInverter(inverter?.id)}
                 >
                   <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-5 lg:col-span-4 xl:col-span-3">
@@ -230,10 +289,11 @@ export default function Users() {
 
             {!searchResultEmpty &&
               !searchOn &&
-              sortedData?.map((inverter) => (
+              sortedData?.map((inverter, index) => (
                 <div
-                  key={Math.random()}
-                  className="grid grid-cols-12 items-center bg-white rounded-md text-[#25476A] p-4 hover:bg-[#F3F4F6] cursor-pointer hover:rounded-l-md"
+                  key={Math.random()}           
+
+                  className={`grid grid-cols-12 items-center rounded-md text-gray-700 border border-gray-300 p-4 ${index % 2 === 0 ? "bg-gray-100 border-gray-200 hover:bg-gray-200" : "bg-gray-200 border-gray-300 hover:bg-gray-300"} `}
                   onClick={() => handleClickInverter(inverter?.id)}
                 >
                   <div className="flex items-center justify-center font-medium space-x-2 px-5 col-span-5 lg:col-span-4 xl:col-span-3">

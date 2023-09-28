@@ -31,7 +31,7 @@ export default function Projects() {
   if (isLoading === true) {
     return (
       <>
-        <div className="flex h-screen bg-gray-200">
+        <div className="flex h-screen">
           <SideBar />
           <div className="w-full h-full">
             <Header />

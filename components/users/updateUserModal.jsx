@@ -1,63 +1,73 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useMutation } from "react-query";
-import { postUser } from "@/lib/Helper";
+import { useMutation, useQueryClient } from "react-query";
+import { updateUser } from "@/lib/Helper";
 
-export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("ADMIN");
-  const [companyName, setCompanyName] = useState("");
-  const [address, setAddress] = useState("");
+export default function AddUserModal({
+  editUserModalOpen,
+  editUserData,
+  userEdited,
+}) {
+  const queryClient = useQueryClient();
+  const [name, setName] = useState(editUserData?.name || "");
+  const [email, setEmail] = useState(editUserData?.email || "");
+  const [role, setRole] = useState(editUserData?.role || "");
+  const [statusValue, setStatusValue] = useState(
+    editUserData?.status === "ACTIVE" ? true : false
+  );
+  console.log(statusValue);
+  const [companyName, setCompanyName] = useState(editUserData?.companyName || "");
+  const [address, setAddress] = useState(editUserData?.address || "");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const mutation = useMutation(postUser, {
+  const mutation = useMutation(updateUser, {
     onSuccess: () => {
-      newUserCreated(true);
-      addUserModalOpen(false);
+      userEdited(true);
+      editUserModalOpen(false);
+      queryClient.invalidateQueries("currentUser");
     },
     onError: (error) => {
       setErrorMessage(error.response.data.message);
     },
   });
 
-  const addNewUser = (e) => {
-    newUserCreated(false);
+  const handleEditUser = (e) => {
+    e.preventDefault();
+    userEdited(false);
     setErrorMessage("");
-    if (!name || !email || !password || !confirmPassword || !role || !companyName || !address) {
+    setErrorMessage("");
+    if (!name || !email || !role || !companyName || !address) {
       setErrorMessage("Please fill all the fields");
       return;
     }
-    if (password !== confirmPassword) {
-      setErrorMessage("Password do not match");
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   setErrorMessage("Password do not match");
+    //   return;
+    // }
     mutation.mutate({
+      id: parseInt(editUserData.id),
       name,
       email,
-      password,
       role,
-      address,
       companyName,
+      address,
+      status: statusValue ? "ACTIVE" : "DISABLED",
     });
   };
 
   return (
     <>
 
-
-          <div className="flex items-center bg-opacity-10 backdrop-filter backdrop-blur-sm bg-gray-700 fixed inset-0 z-50">
+<div className="flex items-center bg-opacity-10 backdrop-filter backdrop-blur-sm bg-gray-700 fixed inset-0 z-50">
         <div className="grid grid-cols-1 bg-gray-50 rounded-md items-center relative mx-auto w-[20rem] sm:w-[24rem] space-y-5 shadow-md border border-gray-300">
           <div className="flex items-center justify-between bg-gray-700 rounded-t-md px-6 py-3">
             <span className="text-gray-200 font-semibold text-lg">
-            Add New User
+            User Update
             </span>
             <button
               className="opacity-80"
-              onClick={() => addUserModalOpen(false)}
+              onClick={() => editUserModalOpen(false)}
             >
               <FontAwesomeIcon icon={faXmark} className="text-gray-200" />
             </button>
@@ -91,36 +101,6 @@ export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
                   placeholder="Enter user email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="text-gray-800 font-medium text-sm space-x-1">
-                <div className="font-medium text-base text-gray-800 space-x-0.5">
-                  <span>Password</span>
-                  <span className="text-red-500">*</span>
-                </div>
-                <div className="flex items-center border-b-2 border-gray-800">
-                <input
-                    className="w-full h-10 px-2 text-md text-gray-800 placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-                    type="password"
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="text-gray-800 font-medium text-sm space-x-1">
-                <div className="font-medium text-base text-gray-800 space-x-0.5">
-                  <span>Confirm Password</span>
-                  <span className="text-red-500">*</span>
-                </div>
-                <div className="flex items-center border-b-2 border-gray-800">
-                <input
-                    className="w-full h-10 px-2 text-md text-gray-800 placeholder-[#727272] bg-transparent ring-0 focus:ring-0 focus:outline-none"
-                    type="password"
-                  placeholder="Enter confirm password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -177,15 +157,15 @@ export default function AddUserModal({ addUserModalOpen, newUserCreated }) {
                 : errorMessage}
             </div>
             <button
-                className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1"
-                onClick={addNewUser}
-                >
-                <FontAwesomeIcon icon={faUserPlus} />                <span className="">Add User</span>
-              </button>
+                className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1 border border-gray-300 hover:border-gray-400 focus:border-gray-400 focus:outline-none"
+                onClick={handleEditUser}
+                > <FontAwesomeIcon icon={faPenToSquare} />
+                <span className="">Update Meter</span>
+            </button>
+          </div>
           </div>
         </div>
       </div>
-      
-</div>    </>
+    </>
   );
 }

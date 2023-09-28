@@ -18,6 +18,7 @@ export default function DailyView({
   selectedOptionIdCompany,
   selectedOptionId,
 }) {
+  const [ projectForCollectTime, setProjectForCollectTime ] = useState();
   const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
@@ -30,36 +31,36 @@ export default function DailyView({
       setCollectionKey({
         project: selectedOptionId,
       });
+      setProjectForCollectTime(selectedOptionId);
     } 
-    
-    // else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   !selectedOptionIdBuilding &&
-    //   !selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     company: selectedOptionIdCompany,
-    //   });
-    // } else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   selectedOptionIdBuilding &&
-    //   !selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     building: selectedOptionIdBuilding,
-    //   });
-    // } else if (
-    //   selectedOptionId &&
-    //   selectedOptionIdCompany &&
-    //   selectedOptionIdBuilding &&
-    //   selectedOptionIdInverter
-    // ) {
-    //   setCollectionKey({
-    //     inverter: selectedOptionIdInverter,
-    //   });
-    // }
+    else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      !selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        company: selectedOptionIdCompany,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      !selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        building: selectedOptionIdBuilding,
+      });
+    } else if (
+      selectedOptionId &&
+      selectedOptionIdCompany &&
+      selectedOptionIdBuilding &&
+      selectedOptionIdInverter
+    ) {
+      setCollectionKey({
+        inverter: selectedOptionIdInverter,
+      });
+    }
   }, [
     selectedOptionId,
     selectedOptionIdCompany,
@@ -89,10 +90,10 @@ export default function DailyView({
     isLoading: DailyViewCollectTimeIsLoading,
     error: DailyViewCollectTimeError,
   } = useQuery(
-    ["DailyViewCollectTime", collectionKey],
-    () => getDailyViewCollectTime(collectionKey),
+    ["DailyViewCollectTime", projectForCollectTime],
+    () => getDailyViewCollectTime(projectForCollectTime),
     {
-      enabled: !!collectionKey,
+      enabled: !!projectForCollectTime,
       onSuccess: (data) => {
         console.log("data", data);
       },
@@ -350,8 +351,8 @@ export default function DailyView({
 
   return (
     <>
-      <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5">
-        Daily Generation {loading1 && <ReactLoading type="bubbles" color="white" height={20}  className="flex items-center justify-center" />}
+      <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg h-10 space-x-1">
+        <span>Daily Generation</span>{loading1 && <ReactLoading type="bubbles" color="white" height={60} />}
       </div>
       <div className="w-full h-96 bg-white p-3 rounded-b-md border border-gray-300 text-center">
       {!loading1 && <>

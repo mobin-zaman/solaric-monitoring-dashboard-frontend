@@ -3,13 +3,16 @@ import {
   faPenToSquare,
   faCopy,
   faClipboard,
+  faHouse,
+  faMicrochip,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { getInverter, searchCompany } from "@/lib/Helper";
-import EditInverterModal from "./editInverterModal";
+import EditInverterModal from "./updateInverterModal";
 import { useRouter } from "next/router";
 import FormatDateTime from "@/lib/FormatDateTime";
+import Link from "next/link";
 
 export default function Project({ inverterId }) {
   const [editInverterModalOpen, setEditInverterModalOpen] = useState(false);
@@ -68,37 +71,54 @@ export default function Project({ inverterId }) {
 
   return (
     <>
-      <div className="space-y-1.5 relative">
-        <div className="sticky -top-1.5 z-50 bg-gray-200 pt-0.5 select-none shadow-md">
-          <div
-            className={`flex items-center justify-between bg-[#25476A] rounded-md py-3.5 px-6 ${
-              isLoading ? "animate-pulse" : "animate-pulse"
-            }`}
-          >
+      <div className="space-y-1.5 relative select-none">
+        <div className="sticky -top-0 z-50 bg-white rounded-b-md">
+          <div className="text-sm breadcrumbs text-[#25476A] pl-1">
+            <ul>
+              <li>
+                <Link href="/dashboard">
+                  <FontAwesomeIcon
+                    icon={faHouse}
+                    className={`w-4 h-4`}
+                    title="Dashboard"
+                  />
+                  <span className="ml-2">Dashboard</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/Inverters">
+                  <FontAwesomeIcon
+                    icon={faMicrochip}
+                    className={`w-4 h-4`}
+                    title="Inverters"
+                  />
+                  <span className="ml-2">Inverters</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
-                Inverter Overview
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center"> 
+                            <FontAwesomeIcon
+                    icon={faMicrochip}
+                    className={`w-5 h-5`}
+                    title="Inverters"
+                  />
+               <span>Inverter Overview</span>
               </h1>
-              <div className="flex space-x-3">
-                <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
+              <div className="flex space-x-3">                
+                <div className="text-gray-800 text-xs bg-gray-200 px-2.5 h-7 flex items-center justify-center rounded-xl space-x-1">
                   <span>Id:</span>
                   <span>{inverterId}</span>
-                  <button onClick={() => handleCopy({ inverterId: data?.id })}>
-                    {projectIdCopy ? (
-                      <FontAwesomeIcon icon={faCopy} />
-                    ) : (
-                      <FontAwesomeIcon icon={faClipboard} />
-                    )}
-                  </button>
                 </div>
               </div>
             </div>
             <button
-              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
-              onClick={() => setEditInverterModalOpen(true)}
-            >
-              <span className="">Edit</span>
-              <FontAwesomeIcon icon={faPenToSquare} />
+                className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1"
+                onClick={() => setEditInverterModalOpen(true)}
+                > <FontAwesomeIcon icon={faPenToSquare} />
+                <span className="">Update Inverter</span>
             </button>
 
             {editInverterModalOpen && (
@@ -110,58 +130,51 @@ export default function Project({ inverterId }) {
             )}
           </div>
         </div>
-        <div className="bg-white rounded-md shadow-md p-6">
+        <div className="bg-white rounded-md border border-gray-300 shadow-md p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <p className="text-gray-700 text-sm font-medium select-none">
+              <p className="text-gray-700 text-sm font-semibold select-none">
                 Device Serial Number:
               </p>
               <div className="flex items-center space-x-2">
-                <span className="text-[#25476A] font-semibold select-none">
+                <span className="text-[#25476A] font-semibold select-none text-sm">
                   {data?.deviceSn}
                 </span>
-                <button className="text-[#25476A] hover:text-blue-500">
-                  {solarmanPlantIdCopy ? (
-                    <FontAwesomeIcon icon={faCopy} />
-                  ) : (
-                    <FontAwesomeIcon icon={faClipboard} />
-                  )}
-                </button>
               </div>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium select-none">Device Id:</p>
-              <p className="text-gray-700">{data?.deviceId || "N/A"}</p>
+              <p className="text-gray-700 text-sm font-semibold select-none">Device Id:</p>
+              <p className="text-gray-700 text-sm">{data?.deviceId || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium select-none">Code:</p>
-              <p className="text-gray-700">{data?.code || "N/A"}</p>
+              <p className="text-gray-700 text-sm font-semibold select-none">Code:</p>
+              <p className="text-gray-700 text-sm">{data?.code || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium select-none">Capacity:</p>
-              <p className="text-gray-700">{data?.capacity || "N/A"}</p>
+              <p className="text-gray-700 text-sm font-semibold select-none">Capacity:</p>
+              <p className="text-gray-700 text-sm">{data?.capacity || "N/A"} kWp</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium select-none">Project:</p>
-              <p className="text-gray-700">{data?.project?.name || "N/A"}</p>
+              <p className="text-gray-700 text-sm font-semibold select-none">Project:</p>
+              <p className="text-gray-700 text-sm">{data?.project?.name || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium select-none">Building:</p>
-              <p className="text-gray-700">{data?.building?.name || "N/A"}</p>
+              <p className="text-gray-700 text-sm font-semibold select-none">Building:</p>
+              <p className="text-gray-700 text-sm">{data?.building?.name || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium select-none">
+              <p className="text-gray-700 text-sm font-semibold select-none">
                 Created Date & Time:
               </p>
-              <p className="text-gray-700">
+              <p className="text-gray-700 text-sm">
                 <FormatDateTime dateString={data?.createdAt} />
               </p>
             </div>
             <div>
-              <p className="text-gray-700 text-sm font-medium select-none">
+              <p className="text-gray-700 text-sm font-semibold select-none">
                 Updated Date & Time:
               </p>
-              <p className="text-gray-700">
+              <p className="text-gray-700 text-sm">
                 <FormatDateTime dateString={data?.updatedAt} />
               </p>
             </div>

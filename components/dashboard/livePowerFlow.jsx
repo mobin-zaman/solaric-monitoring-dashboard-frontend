@@ -1,20 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrashCan,
-  faPenToSquare,
-  faArrowDown,
-  faPlus,
-  faMagnifyingGlass,
-  faEye,
-  faCopy,
-  faIdCard,
-  faClipboard,
-  faRotate,
-} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { getLivePowerFlowData } from "../../lib/Helper";
 import { useQuery } from "react-query";
+import ReactLoading from 'react-loading';
 
 export default function LivePowerFlow({
   selectedOptionIdInverter,
@@ -135,12 +123,32 @@ export default function LivePowerFlow({
     }
   }, [value1]);
 
+
+  const [loading1, setLoading1] = useState(true);
+
+  useEffect(() => {
+    // Start a timer that calls setLoading1(false) every 2 seconds
+    const timer = setInterval(() => {
+      if (!LivePowerFlowIsLoading) {
+        setLoading1(false);
+      } else {
+        setLoading1(true);
+      }
+    }, 2000);
+
+    // Cleanup the timer when the component unmounts
+    return () => {
+      clearInterval(timer);
+    };
+  }, [LivePowerFlowIsLoading]);
+
   return (
     <>
-          <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg py-1.5">
-          Live Power Flow
+          <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg h-10 space-x-1">
+          <span>Live Power Flow</span>{loading1 && <ReactLoading type="bubbles" color="white" height={60} />}
           </div>
           <div className="w-full h-96 bg-white p-3 rounded-b-lg border border-gray-300 flex items-center justify-center">
+          {!loading1 && <>
         {selectedOptionId &&
           !selectedOptionIdCompany &&
           !selectedOptionIdBuilding &&
@@ -660,6 +668,7 @@ export default function LivePowerFlow({
           selectedOptionIdInverter && (
             <div className="w-full h-[19.5rem] grid"></div>
           )} */}
+          </>}
       </div>
     </>
   );

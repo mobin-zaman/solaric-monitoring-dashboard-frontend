@@ -785,12 +785,12 @@ export const getInverterHourData = async (data) => {
 };
 
 // Api call for get daily view collect time
-export const getDailyViewCollectTime = async (collectionKey) => {
-  const key = Object.keys(collectionKey)[0];
-  const id = collectionKey[key];
+export const getDailyViewCollectTime = async (projectForCollectTime) => {
+  // const key = Object.keys(collectionKey)[0];
+  // const id = collectionKey[key];
 
   const response = await todoApi.get(
-    `/dashboard/daily-view/${key}/collect-times/${id}`,
+    `/dashboard/daily-view/project/collect-times/${projectForCollectTime}`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("Token")}`,
