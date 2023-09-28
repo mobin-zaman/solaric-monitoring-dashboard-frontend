@@ -122,7 +122,7 @@ export default function Project({ projectId }) {
 
   // Handle click for company in project to redirect to company page
   const handleCompanyClick = (companyId) => {
-    router.push(`/company/${companyId}`);
+    router.push(`/companies/${companyId}`);
   };
 
   // Handle search for company in project
@@ -418,41 +418,30 @@ export default function Project({ projectId }) {
               </li>
             </ul>
           </div>
-          <div className="flex items-center justify-between bg-[#25476A] rounded-md p-3.5">
+          <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
-                Project Overview
-              </h1>
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">  
+                            <FontAwesomeIcon
+                    icon={faCubesStacked}
+                    className={`w-5 h-5`}
+                    title="Meters"
+                  />               <span>Project Overview</span>
+                </h1>
               <div className="flex space-x-3">
-                <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md">
+                <p className="text-gray-800 text-xs bg-gray-200 px-2.5 h-7 flex items-center justify-center rounded-xl">
                   <span>{data?.name}</span>
-                </div>
-                <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
+                </p>
+                <p className="text-gray-800 text-xs bg-gray-200 px-2.5 h-7 flex items-center justify-center rounded-xl">
                   <span>Id:</span>
                   <span>{data?.solarmanPlantId}</span>
-                  <button
-                    className="text-[#25476A]"
-                    onClick={() =>
-                      handleCopyButton({
-                        solarmanPlantId: data?.solarmanPlantId,
-                      })
-                    }
-                  >
-                    {solarmanPlantIdCopy ? (
-                      <FontAwesomeIcon icon={faCopy} />
-                    ) : (
-                      <FontAwesomeIcon icon={faClipboard} />
-                    )}
-                  </button>
-                </div>
+                </p>
               </div>
             </div>
             <button
-              className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
-              onClick={() => setUpdateProjectModalOpen(true)}
-            >
-              <span className="">Edit</span>
-              <FontAwesomeIcon icon={faPenToSquare} />
+                className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1"
+                onClick={() => setUpdateProjectModalOpen(true)}
+                > <FontAwesomeIcon icon={faPenToSquare} />
+                <span className="">Update Project</span>
             </button>
 
             {updateProjectModalOpen && (
@@ -475,10 +464,10 @@ export default function Project({ projectId }) {
           <div className="flex space-x-3 p-6 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-1 w-full">
               <div>
-                <p className="text-gray-700 text-sm font-semibold select-none">
+              <p className="text-gray-700 text-sm font-semibold select-none">
                   Owner Name:
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   {data?.meta?.ownerName || "N/A"}
                 </p>
               </div>
@@ -486,13 +475,13 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Contact:
                 </p>
-                <p className="text-gray-700">{data?.meta?.Contact || "N/A"}</p>
+                <p className="text-gray-700 text-sm">{data?.meta?.Contact || "N/A"}</p>
               </div>
               <div>
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Address:
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   {data?.meta?.locationAddress || "N/A"}
                 </p>
               </div>
@@ -500,7 +489,7 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Funding Type:
                 </p>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 text-sm">
                   <span className="text-gray-700">{data?.fundingType}</span>
                 </div>
               </div>
@@ -508,7 +497,7 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Type:
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   {" "}
                   {data?.meta?.type
                     .replace(/_/g, " ") // Replace all '_' with ' '
@@ -525,7 +514,7 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Installed Capacity (Wp):
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   {data?.meta?.installedCapacity.toFixed(1) || "N/A"}
                 </p>
               </div>
@@ -533,7 +522,7 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Tarrif:
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   {data?.tarrif?.toFixed(0) || "N/A"}
                 </p>
               </div>
@@ -541,7 +530,7 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Dollar Rate:
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   {data?.dollarRate?.toFixed(2) || "N/A"}
                 </p>
               </div>
@@ -549,7 +538,7 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Export Meter Serial Number:
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   {Math.round(data?.exportMeterSerialNumber || 0)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
@@ -559,7 +548,7 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Import Meter Serial Number:
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   {Math.round(data?.importMeterSerialNumber || 0)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
@@ -569,25 +558,25 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Total Users:
                 </p>
-                <p className="text-gray-700"> {data?.users?.length || 0}</p>
+                <p className="text-gray-700 text-sm"> {data?.users?.length || 0}</p>
               </div>
               <div>
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Total Companies:
                 </p>
-                <p className="text-gray-700">{data?.companies?.length || 0}</p>
+                <p className="text-gray-700 text-sm">{data?.companies?.length || 0}</p>
               </div>
               <div>
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Total Inverter:
                 </p>
-                <p className="text-gray-700">{data?.inverters?.length || 0}</p>
+                <p className="text-gray-700 text-sm">{data?.inverters?.length || 0}</p>
               </div>
               <div>
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Created Date & Time:
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   <FormatDateTime dateString={data?.createdAt} />
                 </p>
               </div>
@@ -595,29 +584,29 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Updated Date & Time:
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 text-sm">
                   <FormatDateTime dateString={data?.updatedAt} />
                 </p>
               </div>
-              <div>
+              {/* <div>
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Description:
                 </p>
                 <textarea
-                  className="bg-gray-200 px-2 flex w-full h-6 rounded-md text-gray-700"
+                  className="bg-gray-200 px-2 flex w-full h-6 rounded-md text-gray-700 text-sm"
                   value={data?.description || ""}
                   disabled
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
         <div className="grid grid-cols-1 select-none">
-          <div className="flex justify-between items-center bg-[#2e5984] rounded-t-md p-3">
-            <div className="flex items-center space-x-3">
-              <span className="text-lg font-semibold tracking-wide text-white">
+        <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
+            <div className="flex items-center space-x-3 select-none">
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">  
                 Users
-              </span>
+              </h1>
               <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
                 <span>{data?.users ? data?.users?.length : 0}</span>
                 <span>{data?.users?.length > 1 ? "Users" : "User"}</span>
@@ -738,11 +727,11 @@ export default function Project({ projectId }) {
           </div>
         </div>
         <div className="grid grid-cols-1 select-none">
-          <div className="flex justify-between items-center bg-[#2e5984] rounded-t-md p-3">
-            <div className="flex items-center space-x-3">
-              <span className="text-lg font-semibold tracking-wide text-white">
+        <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
+            <div className="flex items-center space-x-3 select-none">
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">  
                 Companies
-              </span>
+              </h1>
               <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
                 <span>{data?.companies ? data?.companies?.length : 0}</span>{" "}
                 <span>
@@ -892,11 +881,11 @@ export default function Project({ projectId }) {
           </div>
         </div>
         <div className="grid grid-cols-1 select-none">
-          <div className="flex justify-between items-center bg-[#2e5984] rounded-t-md p-3">
-            <div className="flex items-center space-x-3">
-              <span className="text-lg font-semibold tracking-wide text-white">
+        <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
+            <div className="flex items-center space-x-3 select-none">
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">  
                 Inverters
-              </span>
+              </h1>
               <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
                 <span>{data?.inverters ? data?.inverters?.length : 0}</span>{" "}
                 <span>

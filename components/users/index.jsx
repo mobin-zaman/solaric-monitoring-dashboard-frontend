@@ -174,17 +174,13 @@ export default function Users() {
             </ul>
           </div>
         <div className="space-y-1.5">
-          <div
-            className={`flex items-center justify-between bg-gray-700 rounded-md p-3.5 ${
-              isLoading ? "animate-pulse" : ""
-            }`}
-          >
-            <div className="flex items-center space-x-3 select-none">
+        <div className="flex items-center justify-between bg-gray-700 rounded-md p-3.5">
+              <div className="flex items-center space-x-3 select-none">
               <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center"> 
                             <FontAwesomeIcon
                     icon={faUsers}
                     className={`w-5 h-5`}
-                    title="Users"
+                    title="Meters"
                   />
                <span>Users</span>
               </h1>

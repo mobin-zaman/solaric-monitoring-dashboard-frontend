@@ -62,7 +62,7 @@ export default function Index() {
                     className={`w-5 h-5`}
                     title="Meters"
                   />
-                  <span>IMPORT</span>
+                  <span>Import</span>
                 </h1>
               </div>
             </div>
