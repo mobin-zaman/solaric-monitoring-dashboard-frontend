@@ -234,7 +234,8 @@ export default function DailyView({
         return collectTime.getHours() >= 3 && collectTime.getHours() <= 20;
       });
   
-      const formattedData = Array.from({ length: 24 }, (_, hour) => {
+      const formattedData = Array.from({ length: 18 }, (_, index) => {
+        const hour = index + 3;
         const hourString = hour === 0 ? '12' : (hour > 12 ? (hour - 12).toString() : hour.toString());
         const amPm = hour >= 12 ? 'PM' : 'AM';
         const dataPoint = filteredData.find((frameItem) => {
@@ -248,13 +249,16 @@ export default function DailyView({
           collectTime: `${hourString}:00 ${amPm}`,
         };
 
+        // if(result)
+
         
         return result;
       });
 
 
   
-      setStoreDailyViewData(formattedData.filter((item) => item.MW !== 0));
+      // setStoreDailyViewData(formattedData.filter((item) => item.MW !== ));
+       setStoreDailyViewData(formattedData);
       setGenerationData(DailyViewData["data"]?.generation?.toFixed(2));
       setSunHoursData(DailyViewData["data"]?.sunHrs?.toFixed(2));
     }
