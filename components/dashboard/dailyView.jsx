@@ -248,9 +248,8 @@ export default function DailyView({
           collectTime: `${hourString}:00 ${amPm}`,
         };
 
-        if(result.MW !== 0) {
-          return result;
-        }
+        
+        return result;
       });
   
       setStoreDailyViewData(formattedData);
