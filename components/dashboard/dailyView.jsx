@@ -251,8 +251,10 @@ export default function DailyView({
         
         return result;
       });
+
+
   
-      setStoreDailyViewData(formattedData);
+      setStoreDailyViewData(formattedData.filter((item) => item.MW !== 0));
       setGenerationData(DailyViewData["data"]?.generation?.toFixed(2));
       setSunHoursData(DailyViewData["data"]?.sunHrs?.toFixed(2));
     }
