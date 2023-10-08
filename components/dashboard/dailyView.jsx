@@ -243,10 +243,14 @@ export default function DailyView({
           ).getHours();
           return frameHour === hour;
         });
-        return {
+        const result = {
           MW: dataPoint ? dataPoint.value : 0,
           collectTime: `${hourString}:00 ${amPm}`,
         };
+
+        if(result.MW !== 0) {
+          return result;
+        }
       });
   
       setStoreDailyViewData(formattedData);
