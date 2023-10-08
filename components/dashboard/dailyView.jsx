@@ -231,7 +231,7 @@ export default function DailyView({
           new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
           6 * 60 * 60 * 1000
         );
-        return collectTime.getHours() >= 0 && collectTime.getHours() <= 23;
+        return collectTime.getHours() >= 3 && collectTime.getHours() <= 20;
       });
   
       const formattedData = Array.from({ length: 24 }, (_, hour) => {
