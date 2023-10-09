@@ -234,7 +234,7 @@ export default function DailyView({
         return collectTime.getHours() >= 3 && collectTime.getHours() <= 20;
       });
   
-      const formattedData = Array.from({ length: 18 }, (_, index) => {
+      const formattedData = Array.from({ length: 24 }, (_, index) => {
         const hour = index + 3;
         const hourString = hour === 0 ? '12' : (hour > 12 ? (hour - 12).toString() : hour.toString());
         const amPm = hour >= 12 ? 'PM' : 'AM';
