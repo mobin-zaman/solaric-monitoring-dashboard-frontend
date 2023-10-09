@@ -233,6 +233,7 @@ export default function DailyView({
         );
         return collectTime.getHours() >= 3 && collectTime.getHours() <= 20;
       });
+      console.log({filteredData})
   
       const formattedData = Array.from({ length: 24 }, (_, index) => {
         const hour = index + 3;
