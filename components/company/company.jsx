@@ -48,7 +48,6 @@ export default function Project({ companyId }) {
   const [updateCompanyModalOpen, setUpdateCompanyModalOpen] = useState(false);
   const [companyUpdated, setCompanyUpdated] = useState(false);
 
-
   const { data, isLoading, error, refetch } = useQuery(
     ["company", companyId],
     () => getCompany(companyId),
@@ -105,7 +104,7 @@ export default function Project({ companyId }) {
     }
   };
   const handleBuildingClick = (buildingId) => {
-    router.push(`/building/${buildingId}`);
+    router.push(`/buildings/${buildingId}`);
   };
 
   const handleDelete = (id) => {
@@ -133,7 +132,7 @@ export default function Project({ companyId }) {
     }
   };
 
-  // Notify for company updated 
+  // Notify for company updated
   const notifyForCompanyUpdated = () => {
     toast.success("Company updated successfully", {
       position: toast.POSITION.TOP_RIGHT,
@@ -148,7 +147,6 @@ export default function Project({ companyId }) {
       setCompanyUpdated(false);
     }
   }, [companyUpdated]);
-
 
   return (
     <>
@@ -190,9 +188,9 @@ export default function Project({ companyId }) {
         <div className="bg-[#25476A] rounded-md p-3.5">
           <div className="flex items-center justify-between space-x-3 select-none">
             <div className="flex items-center space-x-2">
-            <h1 className="text-xl font-semibold text-white tracking-wide">
-              Company Overview
-            </h1>
+              <h1 className="text-xl font-semibold text-white tracking-wide">
+                Company Overview
+              </h1>
               <div className="text-[#25476A] text-md bg-gray-200 py-1 px-4 rounded-md space-x-1 flex items-center">
                 <span>{data?.name}</span>
               </div>
@@ -207,8 +205,8 @@ export default function Project({ companyId }) {
                   )}
                 </button>
               </div>
-              </div>
-              <button
+            </div>
+            <button
               className="flex items-center justify-center px-4 h-8 text-sm font-semibold text-white bg-[#EF4444] hover:bg-[#DC2626] rounded-md space-x-1"
               onClick={() => setUpdateCompanyModalOpen(true)}
             >
