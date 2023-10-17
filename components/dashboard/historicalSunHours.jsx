@@ -39,8 +39,7 @@ export default function HistoricalPeakPower({
         project: selectedOptionId,
       });
       setProjectForCollectTime(selectedOptionId);
-    }
-    else if (
+    } else if (
       selectedOptionId &&
       selectedOptionIdCompany &&
       !selectedOptionIdBuilding &&
@@ -448,7 +447,7 @@ export default function HistoricalPeakPower({
                   <XAxis dataKey="name" />
                   <YAxis
                     domain={[0, 6]}
-                    tickFormatter={(value) => `${value} KW`}
+                    tickFormatter={(value) => `${value}`}
                   />
                   <Tooltip />
                   {/* <Legend /> */}
