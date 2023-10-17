@@ -18,15 +18,13 @@ export default function Header() {
   const [projectImageUrl, setProjectImageUrl] = useState();
 
   useEffect(() => {
-    if(link === "/dashboard") {
-    setInterval(() => {
-
-    setProjectImageUrl(localStorage.getItem("projectImageUrl"));
-    }, 1);
-  } else {
-    setProjectImageUrl(localStorage.getItem("projectDefaultImageUrl"));
-  }
-
+    if (link === "/dashboard") {
+      setInterval(() => {
+        setProjectImageUrl(localStorage.getItem("projectImageUrl"));
+      }, 1);
+    } else {
+      setProjectImageUrl(localStorage.getItem("projectDefaultImageUrl"));
+    }
   }, [link]);
 
   const handleSignOut = () => {
@@ -35,23 +33,23 @@ export default function Header() {
     window.location.href = "/";
   };
 
-  const [base64ImageData, setBase64ImageData] = useState('');
+  const [base64ImageData, setBase64ImageData] = useState("");
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
-  
+
     if (file) {
       const reader = new FileReader();
       reader.onload = async (e) => {
-        const base64Data = e.target.result.split(',')[1]; // Extract base64 portion
+        const base64Data = e.target.result.split(",")[1]; // Extract base64 portion
         setBase64ImageData(e.target.result);
-  
+
         try {
           const response = await uploadImage(base64Data);
-          console.log('Uploaded image data:', response);
+          console.log("Uploaded image data:", response);
           // Do something with the uploaded image data, such as displaying it or further processing
         } catch (error) {
-          console.error('Error uploading image:', error);
+          console.error("Error uploading image:", error);
         }
       };
       reader.readAsDataURL(file);
@@ -63,15 +61,31 @@ export default function Header() {
       <div className="w-full h-16 bg-white flex justify-between space-x-6 items-center px-5 border-b border-gray-300 text-gray-700 font-semibold tracking-wide select-none">
         <h1 className="text-[#39B54A] font-semibold text-md flex space-x-2 items-center justify-center">
           <div className="flex items-center justify-center space-x-2 text-lg text-gray-700">
-          <FontAwesomeIcon icon={faBuilding} />
-          <span>{data?.companyName.toUpperCase()}</span>
+            <FontAwesomeIcon icon={faBuilding} />
+            <span>{data?.companyName.toUpperCase()}</span>
           </div>
           {/* TODO*/}
           {/* <input type="file" accept="image/*" onChange={handleImageUpload} /> */}
-        </h1>{data?.role === "USER" ? 
-        projectImageUrl && <Image src={projectImageUrl} alt="logo" width={200} height={200} className="w-24 h-14" />
-        : <Image src="/logo.png" alt="logo" width={200} height={200} className="w-24 h-8" />
-        }
+        </h1>
+        {data?.role === "USER" ? (
+          projectImageUrl && (
+            <Image
+              src={projectImageUrl}
+              alt="logo"
+              width={180}
+              height={180}
+              className="w-16 sm:w-28 md:w-48"
+            />
+          )
+        ) : (
+          <Image
+            src="/logo.png"
+            alt="logo"
+            width={200}
+            height={200}
+            className="w-24 h-8"
+          />
+        )}
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-3">
             <div className="flex flex-col items-end">
