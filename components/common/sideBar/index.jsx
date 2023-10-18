@@ -9,7 +9,8 @@ import {
   faCalculator,
   faCubesStacked,
   faMicrochip,
-  faFileArrowUp
+  faFileArrowUp,
+  faFileArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
 import Home from "@/public/icons/Home.png";
 import Users from "@/public/icons/Users.png";
@@ -37,7 +38,9 @@ export default function SideBar() {
           <Link href="/dashboard">
             <FontAwesomeIcon
               icon={faHouse}
-              className={`w-[1.3rem] h-[1.3rem] ${link === "/dashboard" ? "text-green-700" : ""}`}
+              className={`w-[1.3rem] h-[1.3rem] ${
+                link === "/dashboard" ? "text-green-700" : ""
+              }`}
               title="Dashboard"
             />
           </Link>
@@ -69,7 +72,7 @@ export default function SideBar() {
               />
             </Link>
           )}
-                    {data?.role === "ADMIN" && (
+          {data?.role === "ADMIN" && (
             <Link href="/inverters">
               <FontAwesomeIcon
                 icon={faMicrochip}
@@ -84,7 +87,7 @@ export default function SideBar() {
               />
             </Link>
           )}
-                              {data?.role === "ADMIN" && (
+          {data?.role === "ADMIN" && (
             <Link href="/meters">
               <FontAwesomeIcon
                 icon={faCalculator}
@@ -99,16 +102,25 @@ export default function SideBar() {
               />
             </Link>
           )}
-                                        {data?.role === "ADMIN" && (
+          {data?.role === "ADMIN" && (
             <Link href="/import">
               <FontAwesomeIcon
                 icon={faFileArrowUp}
                 className={`w-[1.3rem] h-[1.3rem] ${
-                  link === "/import"
-                    ? "text-green-700"
-                    : ""
+                  link === "/import" ? "text-green-700" : ""
                 }`}
                 title="Import"
+              />
+            </Link>
+          )}
+          {data?.role === "ADMIN" && (
+            <Link href="/export">
+              <FontAwesomeIcon
+                icon={faFileArrowDown}
+                className={`w-[1.3rem] h-[1.3rem] ${
+                  link === "/export" ? "text-green-700" : ""
+                }`}
+                title="Export"
               />
             </Link>
           )}

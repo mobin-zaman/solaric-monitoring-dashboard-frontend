@@ -133,7 +133,7 @@ export default function Project({ buildingId }) {
   };
 
   const handleInverterClick = (inverterId) => {
-    router.push(`/inverter/${inverterId}`);
+    router.push(`/inverters/${inverterId}`);
   };
 
   // const handleDelete = (id) => {

@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { getDailyViewCollectTime, getDailyViewData } from "@/lib/Helper";
-import ReactLoading from 'react-loading';
+import ReactLoading from "react-loading";
 
 export default function DailyView({
   selectedOptionIdInverter,
@@ -18,7 +18,7 @@ export default function DailyView({
   selectedOptionIdCompany,
   selectedOptionId,
 }) {
-  const [ projectForCollectTime, setProjectForCollectTime ] = useState();
+  const [projectForCollectTime, setProjectForCollectTime] = useState();
   const [collectionKey, setCollectionKey] = useState({});
 
   useEffect(() => {
@@ -32,8 +32,7 @@ export default function DailyView({
         project: selectedOptionId,
       });
       setProjectForCollectTime(selectedOptionId);
-    } 
-    else if (
+    } else if (
       selectedOptionId &&
       selectedOptionIdCompany &&
       !selectedOptionIdBuilding &&
@@ -67,23 +66,6 @@ export default function DailyView({
     selectedOptionIdBuilding,
     selectedOptionIdInverter,
   ]);
-
-  const [defaultData, setDefaultData] = useState(true);
-
-  // const {
-  //   data: HistoricalData,
-  //   isLoading: HistoricalDataIsLoading,
-  //   error: HistoricalDataError,
-  // } = useQuery(
-  //   ["HistoricalData", collectionKey],
-  //   () => getHistoricalData(collectionKey),
-  //   {
-  //     enabled: !!collectionKey && defaultData,
-  //     onSuccess: (data) => {
-  //       console.log("data", data);
-  //     },
-  //   }
-  // );
 
   const {
     data: DailyViewCollectTimeData,
@@ -152,10 +134,6 @@ export default function DailyView({
     }
   }, [DailyViewCollectTimeData, DailyViewCollectTimeIsLoading]);
 
-  // function removeDuplicatesFromArray(arr) {
-  //   return [...new Set(arr)];
-  // }
-
   function removeDuplicatesMonthsFromArray(arr) {
     return [...new Set(arr?.map((item) => item.split("-")[0]))];
   }
@@ -163,7 +141,6 @@ export default function DailyView({
   useEffect(() => {
     setUniqueYears1(removeDuplicatesFromArray(yearsFromData));
     setUniqueMonths1(removeDuplicatesMonthsFromArray(monthsFromData));
-    // setUniqueDays1(removeDuplicatesFromArray(daysFromData));
   }, [yearsFromData, monthsFromData, daysFromData]);
 
   const [selectedYear1, setSelectedYear1] = useState("");
@@ -226,19 +203,26 @@ export default function DailyView({
 
   useEffect(() => {
     if (!DailyViewDataIsLoading && DailyViewData) {
-      const filteredData = DailyViewData["data"]?.frameDataArray?.filter((frameItem) => {
-        const collectTime = new Date(
-          new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
-          6 * 60 * 60 * 1000
-        );
-        return collectTime.getHours() >= 3 && collectTime.getHours() <= 20;
-      });
-      console.log({filteredData})
-  
+      const filteredData = DailyViewData["data"]?.frameDataArray?.filter(
+        (frameItem) => {
+          const collectTime = new Date(
+            new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
+              6 * 60 * 60 * 1000
+          );
+          return collectTime.getHours() >= 3 && collectTime.getHours() <= 20;
+        }
+      );
+      console.log({ filteredData });
+
       const formattedData = Array.from({ length: 24 }, (_, index) => {
         const hour = index + 3;
-        const hourString = hour === 0 ? '12' : (hour > 12 ? (hour - 12).toString() : hour.toString());
-        const amPm = hour >= 12 ? 'PM' : 'AM';
+        const hourString =
+          hour === 0
+            ? "12"
+            : hour > 12
+            ? (hour - 12).toString()
+            : hour.toString();
+        const amPm = hour >= 12 ? "PM" : "AM";
         const dataPoint = filteredData.find((frameItem) => {
           const frameHour = new Date(
             `2000-01-01T${frameItem.collectTime}`
@@ -252,21 +236,15 @@ export default function DailyView({
 
         // if(result)
 
-        
         return result;
       });
 
-
-  
       // setStoreDailyViewData(formattedData.filter((item) => item.MW !== ));
-       setStoreDailyViewData(formattedData);
+      setStoreDailyViewData(formattedData);
       setGenerationData(DailyViewData["data"]?.generation?.toFixed(2));
       setSunHoursData(DailyViewData["data"]?.sunHrs?.toFixed(2));
     }
   }, [DailyViewData, DailyViewDataIsLoading]);
-  
-  
-  
 
   useEffect(() => {
     console.log("storeDailyViewData", storeDailyViewData);
@@ -275,21 +253,6 @@ export default function DailyView({
   useEffect(() => {
     localStorage.setItem("date", dateKey);
   }, [dateKey]);
-
-  useEffect(() => {
-    // const sortedYears = uniqueYears1.sort(); // Sort the uniqueYears1 array
-    // setSelectedYear1(sortedYears[0]);
-    // const sortedMonths = uniqueMonths1.sort(); // Sort the uniqueMonths1 array
-    // setSelectedMonth1(sortedMonths[0]);
-    // const sortedDays = monthsFromData
-    //   ?.map((item, Index) => {
-    //     if (item.split("-")[0] === sortedMonths[0]) {
-    //       return item.split("-")[1];
-    //     }
-    //   })
-    //   .sort();
-    //   setSelectedDay1(sortedDays[0]);
-  }, [selectedOptionId, uniqueYears1, uniqueMonths1, monthsFromData]);
 
   const digitToMonth = (digit) => {
     switch (digit) {
@@ -358,132 +321,155 @@ export default function DailyView({
     };
   }, [DailyViewDataIsLoading]); // Dependency array can be empty if this effect runs only once
 
-
   return (
     <>
       <div className="text-md font-bold tracking-wide text-white border border-gray-600 flex items-center justify-center bg-gray-600 rounded-t-lg h-10 space-x-1">
-        <span>Daily Generation</span>{loading1 && <ReactLoading type="bubbles" color="white" height={60} />}
+        <span>Daily Generation</span>
+        {loading1 && <ReactLoading type="bubbles" color="white" height={60} />}
       </div>
       <div className="w-full h-96 bg-white p-3 rounded-b-md border border-gray-300 text-center">
-      {!loading1 && <>
-        <div className="flex items-center justify-center">
-          {/* <FontAwesomeIcon icon={faRotate} /> */}
-          <div className="flex space-x-4">
-            <select
-              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={selectedYear1}
-              onChange={(e) => setSelectedYear1(e.target.value)}
-            >
-              <option disabled>Year</option>
-              {uniqueYears1?.map((item, Index) => {
-                return (
-                  <option key={Index} value={item}>
-                    {item}
-                  </option>
-                );
-              })}
-            </select>
-            <select
-              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={selectedMonth1}
-              onChange={(e) => setSelectedMonth1(e.target.value)}
-            >
-              <option disabled>Month</option>
-              {storeYearMonth1.map((item1, index) => {
-                if (item1.split("-")[0] === selectedYear1) {
-                  return (
-                    <option key={index} value={item1.split("-")[1]}>
-                      {digitToMonth(item1.split("-")[1])}
-                    </option>
-                  );
-                }
-                return null; // Make sure to return null when conditions are not met
-              })}
-            </select>
-            <select
-              className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
-              value={selectedDay1}
-              onChange={(e) => setSelectedDay1(e.target.value)}
-            >
-              <option disabled>Day</option>
-              {storeYearMonthDay1
-                .filter(
-                  (item1) =>
-                    item1.split("-")[0] === selectedYear1 &&
-                    item1.split("-")[1] === selectedMonth1
-                )
-                .map((item1) => item1.split("-")[2]) // Extract day values
-                .sort((a, b) => a.localeCompare(b)) // Sort day values
-                .reverse() // Reverse the array order
-                .map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
-            </select>
-          </div>
-        </div>
-        <div className="w-full h-full pb-6 rounded-md relative text-xs font-semibold">
-          {/* Add the div element to display Generation and Sun Hours */}
-          <div className="flex flex-col justify-between mb-2 absolute top-4 left-14 text-[0.55rem] bg-white p-2 rounded-md space-y-0.5">
-            <div className="flex items-center space-x-2">
-              <span className="">Generation:</span>
-              <span className="">
-                {(Math.round(generationData * 100) / 100)
-                  .toFixed(2)
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                MWH
-              </span>
+        {!loading1 && (
+          <>
+            <div className="flex items-center justify-center">
+              {/* <FontAwesomeIcon icon={faRotate} /> */}
+              <div className="flex space-x-4">
+                <select
+                  className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                  value={selectedYear1}
+                  onChange={(e) => setSelectedYear1(e.target.value)}
+                >
+                  <option disabled>Year</option>
+                  {uniqueYears1?.map((item, Index) => {
+                    return (
+                      <option key={Index} value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+                </select>
+                <select
+                  className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                  value={selectedMonth1}
+                  onChange={(e) => setSelectedMonth1(e.target.value)}
+                >
+                  <option disabled>Month</option>
+                  {storeYearMonth1.map((item1, index) => {
+                    if (item1.split("-")[0] === selectedYear1) {
+                      return (
+                        <option key={index} value={item1.split("-")[1]}>
+                          {digitToMonth(item1.split("-")[1])}
+                        </option>
+                      );
+                    }
+                    return null; // Make sure to return null when conditions are not met
+                  })}
+                </select>
+                <select
+                  className="flex items-center justify-center px-2.5 h-6 text-sm text-[#25476A] bg-white border-2 border-[#25476A] rounded-md select-none"
+                  value={selectedDay1}
+                  onChange={(e) => setSelectedDay1(e.target.value)}
+                >
+                  <option disabled>Day</option>
+                  {storeYearMonthDay1
+                    .filter(
+                      (item1) =>
+                        item1.split("-")[0] === selectedYear1 &&
+                        item1.split("-")[1] === selectedMonth1
+                    )
+                    .map((item1) => item1.split("-")[2]) // Extract day values
+                    .sort((a, b) => a.localeCompare(b)) // Sort day values
+                    .reverse() // Reverse the array order
+                    .map((item, index) => (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                </select>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="">Sun Hours:</span>
-              <span className="">{sunHoursData} Hrs.</span>
-            </div>
-          </div>
-          <div
-            style={{ width: "100%", height: "100%" }}
-            className="text-xs font-semibold"
-          >
-
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                width={730}
-                height={250}
-                data={storeDailyViewData}
-                margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
+            <div className="w-full h-full pb-6 rounded-md relative text-xs font-semibold">
+              {/* Add the div element to display Generation and Sun Hours */}
+              <div className="flex flex-col justify-between mb-2 absolute top-4 left-14 text-[0.55rem] bg-white p-2 rounded-md space-y-0.5">
+                <div className="flex items-center space-x-2">
+                  <span className="">Generation:</span>
+                  <span className="">
+                    {(Math.round(generationData * 100) / 100)
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                    MWH
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="">Sun Hours:</span>
+                  <span className="">{sunHoursData} Hrs.</span>
+                </div>
+              </div>
+              <div
+                style={{ width: "100%", height: "100%" }}
+                className="text-xs font-semibold"
               >
-                <defs>
-                  <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="collectTime" ticks={storeDailyViewData.map((dataPoint) => dataPoint.collectTime)} />
-                <YAxis tickFormatter={(value) => `${value} kw`} />
-                <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip content={<CustomTooltip />} />
-                <Area
-                  type="monotone"
-                  dataKey={"MW"}
-                  stroke="#8884d8"
-                  fillOpacity={1}
-                  fill="url(#colorUv)"
-                />
-                {/* <Area
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart
+                    width={730}
+                    height={250}
+                    data={storeDailyViewData}
+                    margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
+                  >
+                    <defs>
+                      <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                        <stop
+                          offset="5%"
+                          stopColor="#8884d8"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#8884d8"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                      <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                        <stop
+                          offset="5%"
+                          stopColor="#82ca9d"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#82ca9d"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <XAxis
+                      dataKey="collectTime"
+                      ticks={storeDailyViewData.map(
+                        (dataPoint) => dataPoint.collectTime
+                      )}
+                    />
+                    <YAxis tickFormatter={(value) => `${value} kw`} />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area
+                      type="monotone"
+                      dataKey={"MW"}
+                      stroke="#8884d8"
+                      fillOpacity={1}
+                      fill="url(#colorUv)"
+                    />
+                    {/* <Area
                   type="monotone"
                   dataKey="pv"
                   stroke="#82ca9d"
                   fillOpacity={1}
                   fill="url(#colorPv)"
                 /> */}
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div></>}
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

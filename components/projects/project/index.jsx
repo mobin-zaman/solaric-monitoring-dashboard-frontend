@@ -159,7 +159,7 @@ export default function Project({ projectId }) {
 
   // Handle click for inverter in project to redirect to inverter page
   const handleInverterClick = (inverterId) => {
-    router.push(`/inverter/${inverterId}`);
+    router.push(`/inverters/${inverterId}`);
   };
 
   // Notify for user created from project
@@ -321,12 +321,14 @@ export default function Project({ projectId }) {
 
   // Sort the data based on the current sorting criteria
   const sortedDataCompany = data?.companies?.slice().sort((a, b) => {
-    if (sortKeyCompany === 'name' || sortKeyCompany === 'code') {
+    if (sortKeyCompany === "name" || sortKeyCompany === "code") {
       // For strings (Device Id, code, serial number)
-      const valueA = a[sortKeyCompany] || '';
-      const valueB = b[sortKeyCompany] || '';
-      return ascendingCompany ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-    } else if (sortKeyCompany === 'id') {
+      const valueA = a[sortKeyCompany] || "";
+      const valueB = b[sortKeyCompany] || "";
+      return ascendingCompany
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    } else if (sortKeyCompany === "id") {
       // For numeric columns (Device Id, capacity)
       const valueA = Number(a[sortKeyCompany]);
       const valueB = Number(b[sortKeyCompany]);
@@ -337,12 +339,14 @@ export default function Project({ projectId }) {
   });
 
   const sortedSearchDataCompany = searchResultCompany?.slice().sort((a, b) => {
-    if (sortKeyCompany === 'name' || sortKeyCompany === 'code') {
+    if (sortKeyCompany === "name" || sortKeyCompany === "code") {
       // For strings (Device Id, code, serial number)
-      const valueA = a[sortKeyCompany] || '';
-      const valueB = b[sortKeyCompany] || '';
-      return ascendingCompany ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-    } else if (sortKeyCompany === 'id') {
+      const valueA = a[sortKeyCompany] || "";
+      const valueB = b[sortKeyCompany] || "";
+      return ascendingCompany
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    } else if (sortKeyCompany === "id") {
       // For numeric columns (Device Id, capacity)
       const valueA = Number(a[sortKeyCompany]);
       const valueB = Number(b[sortKeyCompany]);
@@ -369,12 +373,14 @@ export default function Project({ projectId }) {
 
   // Sort the data based on the current sorting criteria
   const sortedDataUser = data?.users?.slice().sort((a, b) => {
-    if (sortKeyUser === 'name') {
+    if (sortKeyUser === "name") {
       // For strings (Name)
-      const valueA = a?.user?.name || '';
-      const valueB = b?.user?.name || '';
-      return ascendingUser ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-    } else if (sortKeyUser === 'id') {
+      const valueA = a?.user?.name || "";
+      const valueB = b?.user?.name || "";
+      return ascendingUser
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    } else if (sortKeyUser === "id") {
       // For numeric columns (ID)
       const valueA = Number(a?.user?.id || 0);
       const valueB = Number(b?.user?.id || 0);
@@ -383,7 +389,6 @@ export default function Project({ projectId }) {
       return 0;
     }
   });
-  
 
   return (
     <>
@@ -420,13 +425,14 @@ export default function Project({ projectId }) {
           </div>
           <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">  
-                            <FontAwesomeIcon
-                    icon={faCubesStacked}
-                    className={`w-5 h-5`}
-                    title="Meters"
-                  />               <span>Project Overview</span>
-                </h1>
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">
+                <FontAwesomeIcon
+                  icon={faCubesStacked}
+                  className={`w-5 h-5`}
+                  title="Meters"
+                />{" "}
+                <span>Project Overview</span>
+              </h1>
               <div className="flex space-x-3">
                 <p className="text-gray-800 text-xs bg-gray-200 px-2.5 h-7 flex items-center justify-center rounded-xl">
                   <span>{data?.name}</span>
@@ -438,10 +444,12 @@ export default function Project({ projectId }) {
               </div>
             </div>
             <button
-                className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1"
-                onClick={() => setUpdateProjectModalOpen(true)}
-                > <FontAwesomeIcon icon={faPenToSquare} />
-                <span className="">Update Project</span>
+              className="flex h-7 items-center justify-center px-2.5 text-xs text-gray-800 font-semibold bg-gray-200 rounded-md select-none space-x-1"
+              onClick={() => setUpdateProjectModalOpen(true)}
+            >
+              {" "}
+              <FontAwesomeIcon icon={faPenToSquare} />
+              <span className="">Update Project</span>
             </button>
 
             {updateProjectModalOpen && (
@@ -464,7 +472,7 @@ export default function Project({ projectId }) {
           <div className="flex space-x-3 p-6 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-1 w-full">
               <div>
-              <p className="text-gray-700 text-sm font-semibold select-none">
+                <p className="text-gray-700 text-sm font-semibold select-none">
                   Owner Name:
                 </p>
                 <p className="text-gray-700 text-sm">
@@ -475,7 +483,9 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Contact:
                 </p>
-                <p className="text-gray-700 text-sm">{data?.meta?.Contact || "N/A"}</p>
+                <p className="text-gray-700 text-sm">
+                  {data?.meta?.Contact || "N/A"}
+                </p>
               </div>
               <div>
                 <p className="text-gray-700 text-sm font-semibold select-none">
@@ -558,19 +568,26 @@ export default function Project({ projectId }) {
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Total Users:
                 </p>
-                <p className="text-gray-700 text-sm"> {data?.users?.length || 0}</p>
+                <p className="text-gray-700 text-sm">
+                  {" "}
+                  {data?.users?.length || 0}
+                </p>
               </div>
               <div>
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Total Companies:
                 </p>
-                <p className="text-gray-700 text-sm">{data?.companies?.length || 0}</p>
+                <p className="text-gray-700 text-sm">
+                  {data?.companies?.length || 0}
+                </p>
               </div>
               <div>
                 <p className="text-gray-700 text-sm font-semibold select-none">
                   Total Inverter:
                 </p>
-                <p className="text-gray-700 text-sm">{data?.inverters?.length || 0}</p>
+                <p className="text-gray-700 text-sm">
+                  {data?.inverters?.length || 0}
+                </p>
               </div>
               <div>
                 <p className="text-gray-700 text-sm font-semibold select-none">
@@ -602,9 +619,9 @@ export default function Project({ projectId }) {
           </div>
         </div>
         <div className="grid grid-cols-1 select-none">
-        <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
+          <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">  
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">
                 Users
               </h1>
               <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
@@ -624,7 +641,10 @@ export default function Project({ projectId }) {
             <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
                 <div className="grid grid-cols-10 col-span-11">
-                  <div className="flex justify-center items-center col-span-6 lg:col-span-4 space-x-1" onClick={() => handleSortUser("name")}>
+                  <div
+                    className="flex justify-center items-center col-span-6 lg:col-span-4 space-x-1"
+                    onClick={() => handleSortUser("name")}
+                  >
                     <span>Name</span>
                     {sortKeyUser === "name" &&
                       (ascendingUser ? (
@@ -727,9 +747,9 @@ export default function Project({ projectId }) {
           </div>
         </div>
         <div className="grid grid-cols-1 select-none">
-        <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
+          <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">  
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">
                 Companies
               </h1>
               <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
@@ -767,7 +787,10 @@ export default function Project({ projectId }) {
             <div className="text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5">
               <div className="grid grid-cols-12 items-center h-9">
                 <div className="grid grid-cols-12 items-center col-span-11">
-                  <div className="flex items-center justify-center col-span-9 space-x-1"onClick={() => handleSortCompany("name")}>
+                  <div
+                    className="flex items-center justify-center col-span-9 space-x-1"
+                    onClick={() => handleSortCompany("name")}
+                  >
                     <span>Name</span>
                     {sortKeyCompany === "name" &&
                       (ascendingCompany ? (
@@ -776,7 +799,10 @@ export default function Project({ projectId }) {
                         <FontAwesomeIcon icon={faArrowDownShortWide} />
                       ))}
                   </div>
-                  <div className="flex items-center justify-center col-span-3 space-x-1"onClick={() => handleSortCompany("code")}>
+                  <div
+                    className="flex items-center justify-center col-span-3 space-x-1"
+                    onClick={() => handleSortCompany("code")}
+                  >
                     <span>Code</span>
                     {sortKeyCompany === "code" &&
                       (ascendingCompany ? (
@@ -881,9 +907,9 @@ export default function Project({ projectId }) {
           </div>
         </div>
         <div className="grid grid-cols-1 select-none">
-        <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
+          <div className="flex items-center justify-between bg-gray-700 rounded-md p-3">
             <div className="flex items-center space-x-3 select-none">
-              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">  
+              <h1 className="text-lg font-semibold text-gray-200 tracking-wide space-x-1 flex items-center">
                 Inverters
               </h1>
               <div className="text-[#373737] text-sm bg-gray-300 px-2 h-8 flex items-center justify-center rounded-md space-x-1">
@@ -903,36 +929,60 @@ export default function Project({ projectId }) {
           </div>
           {!fakeLoader ? (
             <div className="p-3 space-y-1.5 bg-white rounded-b-md">
-              <div className={`text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5 ${sortedData?.length >= 5 ? 'pr-7' : ''}`}>
+              <div
+                className={`text-[#25476A] bg-gray-200 font-medium rounded-md p-1.5 ${
+                  sortedData?.length >= 5 ? "pr-7" : ""
+                }`}
+              >
                 <div className="grid grid-cols-12 items-center h-9">
                   <div
                     className="flex justify-center items-center col-span-7 md:col-span-5 lg:col-span-4 xl:col-span-3 space-x-1"
                     onClick={() => handleSort("deviceSn")}
                   >
-                                <span>Serial Number</span> {sortKey === 'deviceSn' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
-
+                    <span>Serial Number</span>{" "}
+                    {sortKey === "deviceSn" &&
+                      (ascending ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
                   </div>
                   <div
                     className="flex justify-center items-center col-span-5 md:col-span-4 lg:col-span-2 space-x-1"
                     onClick={() => handleSort("deviceId")}
                   >
-                                 <span>Device Id</span> {sortKey === 'deviceId' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
-
+                    <span>Device Id</span>{" "}
+                    {sortKey === "deviceId" &&
+                      (ascending ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
                   </div>
                   <div
                     className="col-span-3 xl:col-span-2 hidden lg:block text-center"
                     onClick={() => handleSort("capacity")}
                   >
-                                 <span>Capacity</span> {sortKey === 'capacity' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
-
+                    <span>Capacity</span>{" "}
+                    {sortKey === "capacity" &&
+                      (ascending ? (
+                        <FontAwesomeIcon icon={faArrowUpWideShort} />
+                      ) : (
+                        <FontAwesomeIcon icon={faArrowDownShortWide} />
+                      ))}
                   </div>
                   <div className="hidden xl:block col-span-2 text-center">
                     <div
                       className="flex justify-center items-center space-x-1"
                       onClick={() => handleSort("code")}
                     >
-                                  <span>Code</span> {sortKey === 'code' && (ascending ? <FontAwesomeIcon icon={faArrowUpWideShort} /> : <FontAwesomeIcon icon={faArrowDownShortWide} />)}
-
+                      <span>Code</span>{" "}
+                      {sortKey === "code" &&
+                        (ascending ? (
+                          <FontAwesomeIcon icon={faArrowUpWideShort} />
+                        ) : (
+                          <FontAwesomeIcon icon={faArrowDownShortWide} />
+                        ))}
                     </div>
                   </div>
                   <div className="col-span-3 hidden md:block text-center">
@@ -972,8 +1022,7 @@ export default function Project({ projectId }) {
                       </div>
                     </div>
                     <div className="col-span-3 hidden md:block w-full truncate text-center select-all text-gray-700 text-sm">
-                        {inverter?.buildingId || "N/A"}
-                   
+                      {inverter?.buildingId || "N/A"}
                     </div>
                   </div>
                 ))}
