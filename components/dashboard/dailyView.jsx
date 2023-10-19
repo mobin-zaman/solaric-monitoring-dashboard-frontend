@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { getDailyViewCollectTime, getDailyViewData } from "@/lib/Helper";
 import ReactLoading from "react-loading";
+import moment from "moment";
 
 export default function DailyView({
   selectedOptionIdInverter,
@@ -203,40 +204,11 @@ export default function DailyView({
 
   useEffect(() => {
     if (!DailyViewDataIsLoading && DailyViewData) {
-      const filteredData = DailyViewData["data"]?.frameDataArray?.filter(
-        (frameItem) => {
-          const collectTime = new Date(
-            new Date(`2000-01-01T${frameItem.collectTime}`).getTime() +
-              6 * 60 * 60 * 1000
-          );
-          return collectTime.getHours() >= 3 && collectTime.getHours() <= 20;
-        }
-      );
-      console.log({ filteredData });
-
-      const formattedData = Array.from({ length: 24 }, (_, index) => {
-        const hour = index + 3;
-        const hourString =
-          hour === 0
-            ? "12"
-            : hour > 12
-            ? (hour - 12).toString()
-            : hour.toString();
-        const amPm = hour >= 12 ? "PM" : "AM";
-        const dataPoint = filteredData.find((frameItem) => {
-          const frameHour = new Date(
-            `2000-01-01T${frameItem.collectTime}`
-          ).getHours();
-          return frameHour === hour;
-        });
-        const result = {
-          MW: dataPoint ? dataPoint.value : 0,
-          collectTime: `${hourString}:00 ${amPm}`,
+      const formattedData = DailyViewData?.data?.frameDataArray?.map((item) => {
+        return {
+          collectTime: moment(item.collectTime, "HH:mm:ss").format("hh:mm A"),
+          value: item.value,
         };
-
-        // if(result)
-
-        return result;
       });
 
       // setStoreDailyViewData(formattedData.filter((item) => item.MW !== ));
@@ -288,13 +260,13 @@ export default function DailyView({
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       // Extract the necessary data from the payload
-      const { collectTime, MW } = payload[0].payload;
+      const { collectTime, value } = payload[0].payload;
 
       // Custom tooltip content
       return (
         <div className="custom-tooltip bg-white px-5 py-3 text-sm rounded-md border-2 border-gray-300 space-y-0.5">
           <p>{`Time: ${collectTime}`}</p>
-          <p>{`${Math.round(MW)
+          <p>{`${Math.round(value)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} KW`}</p>
         </div>
@@ -410,10 +382,10 @@ export default function DailyView({
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart
-                    width={730}
+                    width={800}
                     height={250}
                     data={storeDailyViewData}
-                    margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
+                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                   >
                     <defs>
                       <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
@@ -441,29 +413,17 @@ export default function DailyView({
                         />
                       </linearGradient>
                     </defs>
-                    <XAxis
-                      dataKey="collectTime"
-                      ticks={storeDailyViewData.map(
-                        (dataPoint) => dataPoint.collectTime
-                      )}
-                    />
-                    <YAxis tickFormatter={(value) => `${value} kw`} />
+                    <XAxis interval={2} dataKey="collectTime" includeHidden />
+                    <YAxis />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip content={<CustomTooltip />} />
                     <Area
                       type="monotone"
-                      dataKey={"MW"}
+                      dataKey="value"
                       stroke="#8884d8"
                       fillOpacity={1}
                       fill="url(#colorUv)"
                     />
-                    {/* <Area
-                  type="monotone"
-                  dataKey="pv"
-                  stroke="#82ca9d"
-                  fillOpacity={1}
-                  fill="url(#colorPv)"
-                /> */}
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
