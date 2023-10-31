@@ -211,6 +211,8 @@ export default function DailyView({
         };
       });
 
+      console.log({formattedData})
+
       // setStoreDailyViewData(formattedData.filter((item) => item.MW !== ));
       setStoreDailyViewData(formattedData);
       setGenerationData(DailyViewData["data"]?.generation?.toFixed(2));
@@ -413,7 +415,7 @@ export default function DailyView({
                         />
                       </linearGradient>
                     </defs>
-                    <XAxis interval={2} dataKey="collectTime" includeHidden />
+                    <XAxis interval={5} dataKey="collectTime" includeHidden />
                     <YAxis />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip content={<CustomTooltip />} />
