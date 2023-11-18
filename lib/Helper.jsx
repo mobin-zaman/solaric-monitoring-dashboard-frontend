@@ -3,7 +3,7 @@ import { data } from "autoprefixer";
 import axios from "axios";
 
 //local url
-export const BASE_URL = "http://localhost:3789"; // API URL
+export const BASE_URL = "http://119.148.39.221:3789"; // API URL
 // export const BASE_URL = "http://localhost:3789"; // IMAGE URL
 
 //axios instance for api calls with base url and headers
