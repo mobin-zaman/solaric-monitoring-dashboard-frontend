@@ -2,9 +2,8 @@ import { async } from "@firebase/util";
 import { data } from "autoprefixer";
 import axios from "axios";
 
-//local url
-export const BASE_URL = "http://localhost:3789"; // API URL
-// export const BASE_URL = "http://localhost:3789"; // IMAGE URL
+// API base URL — from env (see .env.example). Never hardcode.
+export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3789";
 
 //axios instance for api calls with base url and headers
 const todoApi = axios.create({
@@ -942,7 +941,7 @@ export const getLivePowerFlowData = async (collectionKey) => {
 
 // Api call for upload image to imgbb
 export const uploadImage = async (data) => {
-  const apiKey = "NEXT_PUBLIC_IMGBB_API_KEY";
+  const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
   const apiUrl = "https://api.imgbb.com/1/upload";
 
   const formData = new FormData();
